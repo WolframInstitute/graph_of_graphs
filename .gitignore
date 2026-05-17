@@ -1,2 +1,4 @@
 __pycache__/
 *.pyc
+gog_nauty_bridge.dylib
+gog_nauty_bridge.so

@@ -2,8 +2,9 @@
 """Generate the graph-of-graphs of cubic multigraphs under Whitehead moves.
 
 This is deliberately independent of Sage.  By default, canonical labelling is
-delegated to Brendan McKay's nauty/Traces through ``dreadnaut``.  Loops and
-multiple edges are encoded as a coloured simple incidence graph:
+delegated to Brendan McKay's nauty/Traces, preferably through the in-process
+native bridge and otherwise through ``dreadnaut``.  Loops and multiple edges are
+encoded as a coloured simple incidence graph:
 
 * original vertices form one colour class;
 * non-loop edge objects form a second colour class;
@@ -23,13 +24,16 @@ unlabelled resolutions, and the result is canonicalized.
 from __future__ import annotations
 
 import argparse
+import ctypes
 import itertools
 import json
 import math
+import os
 import re
 import shutil
 import subprocess
 from collections import defaultdict, deque
+from dataclasses import dataclass
 from typing import Dict, Iterable, Iterator, List, Sequence, Set, Tuple
 
 try:  # The user's older code used the third-party multiprocess package.
@@ -44,6 +48,31 @@ Matrix = List[List[int]]
 
 DEFAULT_BACKEND = "auto"
 DEFAULT_NAUTY_MODE = "traces"
+NATIVE_BRIDGE_BASENAMES = (
+    "gog_nauty_bridge.dylib",
+    "gog_nauty_bridge.so",
+)
+
+
+@dataclass(frozen=True)
+class Transition:
+    """Concrete Whitehead transition data.
+
+    ``canonical_order`` maps target canonical coordinates to raw target vertex
+    coordinates, which are still the source canonical coordinates immediately
+    after the local graph rewrite.  Thus a settled target field is obtained by
+    ``f_target[a] = f_raw[canonical_order[a]]``.
+    """
+
+    source: Code
+    target: Code
+    edge_id: int
+    source_edge: Edge
+    resolution_id: int
+    averaged_endpoints: Edge
+    canonical_order: Tuple[int, ...]
+    raw_to_canonical: Tuple[int, ...]
+    trivial_loop: bool = False
 
 # OEIS A005967: number of isomorphism classes of connected 3-regular
 # multigraphs of order 2n, loops allowed.
@@ -208,6 +237,11 @@ def fallback_color_classes(matrix: Matrix) -> List[List[int]]:
 
 
 def python_canonical_code_from_matrix(matrix: Matrix) -> Code:
+    code, _order = python_canonical_code_and_order_from_matrix(matrix)
+    return code
+
+
+def python_canonical_code_and_order_from_matrix(matrix: Matrix) -> Tuple[Code, Tuple[int, ...]]:
     """Return an exact fallback isomorphism-invariant code.
 
     The returned tuple is the lexicographically smallest upper-triangular code
@@ -222,17 +256,78 @@ def python_canonical_code_from_matrix(matrix: Matrix) -> Code:
     classes = fallback_color_classes(matrix)
     permutation_blocks = [itertools.permutations(cls) for cls in classes]
     best: Code | None = None
+    best_order: Tuple[int, ...] | None = None
     for choice in itertools.product(*permutation_blocks):
         order = tuple(v for block in choice for v in block)
         code = code_from_matrix(matrix, order)
         if best is None or code < best:
             best = code
+            best_order = order
     assert best is not None
-    return best
+    assert best_order is not None
+    return best, best_order
 
 
 def nauty_available() -> bool:
     return shutil.which("dreadnaut") is not None
+
+
+_native_bridge: ctypes.CDLL | None = None
+_native_bridge_error: str | None = None
+
+
+def _native_bridge_candidates() -> Iterator[str]:
+    override = os.environ.get("GOG_NAUTY_BRIDGE")
+    if override:
+        yield override
+    here = os.path.dirname(os.path.abspath(__file__))
+    for basename in NATIVE_BRIDGE_BASENAMES:
+        yield os.path.join(here, basename)
+
+
+def _load_native_bridge() -> ctypes.CDLL:
+    global _native_bridge, _native_bridge_error
+    if _native_bridge is not None:
+        return _native_bridge
+
+    errors: List[str] = []
+    for path in _native_bridge_candidates():
+        if not os.path.exists(path):
+            continue
+        try:
+            lib = ctypes.CDLL(path)
+            lib.gog_nauty_bridge_version.argtypes = []
+            lib.gog_nauty_bridge_version.restype = ctypes.c_int
+            lib.gog_canonicalize_traces.argtypes = [
+                ctypes.c_int,
+                ctypes.POINTER(ctypes.c_int),
+                ctypes.c_int,
+                ctypes.POINTER(ctypes.c_int),
+                ctypes.POINTER(ctypes.c_int),
+                ctypes.c_char_p,
+                ctypes.c_size_t,
+            ]
+            lib.gog_canonicalize_traces.restype = ctypes.c_int
+            if lib.gog_nauty_bridge_version() != 1:
+                raise RuntimeError("unsupported native bridge ABI version")
+            _native_bridge = lib
+            _native_bridge_error = None
+            return lib
+        except OSError as exc:
+            errors.append(f"{path}: {exc}")
+        except RuntimeError as exc:
+            errors.append(f"{path}: {exc}")
+
+    _native_bridge_error = "; ".join(errors) if errors else "native bridge library not found"
+    raise RuntimeError(_native_bridge_error)
+
+
+def native_bridge_available() -> bool:
+    try:
+        _load_native_bridge()
+        return True
+    except RuntimeError:
+        return False
 
 
 def _incidence_graph_for_nauty(matrix: Matrix) -> Tuple[List[Set[int]], List[List[int]]]:
@@ -301,6 +396,14 @@ def nauty_canonical_code_from_matrix(
     matrix: Matrix,
     mode: str = DEFAULT_NAUTY_MODE,
 ) -> Code:
+    code, _order = nauty_canonical_code_and_order_from_matrix(matrix, mode)
+    return code
+
+
+def nauty_canonical_code_and_order_from_matrix(
+    matrix: Matrix,
+    mode: str = DEFAULT_NAUTY_MODE,
+) -> Tuple[Code, Tuple[int, ...]]:
     """Canonical code using nauty/Traces on a coloured incidence graph.
 
     The returned code is still the upper-triangular adjacency tuple of the
@@ -357,7 +460,59 @@ def nauty_canonical_code_from_matrix(
             "nauty colour partition did not keep original vertices in the first cell:\n"
             f"mapping={canonical_to_old}\noutput:\n{result.stdout}"
         )
-    return code_from_matrix(matrix, original_order)
+    order = tuple(original_order)
+    return code_from_matrix(matrix, order), order
+
+
+def native_canonical_code_and_order_from_matrix(matrix: Matrix) -> Tuple[Code, Tuple[int, ...]]:
+    """Canonical code via the in-process nauty/Traces bridge."""
+
+    lib = _load_native_bridge()
+    n = len(matrix)
+    code = code_from_matrix(matrix)
+    code_array = (ctypes.c_int * len(code))(*code)
+    out_code = (ctypes.c_int * len(code))()
+    out_order = (ctypes.c_int * n)()
+    err = ctypes.create_string_buffer(4096)
+
+    rc = lib.gog_canonicalize_traces(
+        n,
+        code_array,
+        len(code),
+        out_code,
+        out_order,
+        err,
+        len(err),
+    )
+    if rc != 0:
+        message = err.value.decode("utf-8", errors="replace") or "native bridge failed"
+        raise RuntimeError(message)
+    return tuple(out_code), tuple(out_order)
+
+
+def native_canonical_code_from_matrix(matrix: Matrix) -> Code:
+    code, _order = native_canonical_code_and_order_from_matrix(matrix)
+    return code
+
+
+def canonical_code_and_order_from_matrix(
+    matrix: Matrix,
+    backend: str = DEFAULT_BACKEND,
+    nauty_mode: str = DEFAULT_NAUTY_MODE,
+) -> Tuple[Code, Tuple[int, ...]]:
+    if backend not in {"auto", "native", "nauty", "python"}:
+        raise ValueError("backend must be one of: auto, native, nauty, python")
+    if backend == "native":
+        return native_canonical_code_and_order_from_matrix(matrix)
+    if backend == "python":
+        return python_canonical_code_and_order_from_matrix(matrix)
+    if backend == "nauty":
+        return nauty_canonical_code_and_order_from_matrix(matrix, nauty_mode)
+    if native_bridge_available():
+        return native_canonical_code_and_order_from_matrix(matrix)
+    if nauty_available():
+        return nauty_canonical_code_and_order_from_matrix(matrix, nauty_mode)
+    return python_canonical_code_and_order_from_matrix(matrix)
 
 
 def canonical_code_from_matrix(
@@ -365,15 +520,8 @@ def canonical_code_from_matrix(
     backend: str = DEFAULT_BACKEND,
     nauty_mode: str = DEFAULT_NAUTY_MODE,
 ) -> Code:
-    if backend not in {"auto", "nauty", "python"}:
-        raise ValueError("backend must be one of: auto, nauty, python")
-    if backend == "python":
-        return python_canonical_code_from_matrix(matrix)
-    if backend == "nauty":
-        return nauty_canonical_code_from_matrix(matrix, nauty_mode)
-    if nauty_available():
-        return nauty_canonical_code_from_matrix(matrix, nauty_mode)
-    return python_canonical_code_from_matrix(matrix)
+    code, _order = canonical_code_and_order_from_matrix(matrix, backend, nauty_mode)
+    return code
 
 
 def canonical_code_from_edges(
@@ -410,13 +558,21 @@ def _edges_from_stubs(
     return edges
 
 
-def whitehead_neighbors(
+def _inverse_order(order: Sequence[int]) -> Tuple[int, ...]:
+    inverse = [0] * len(order)
+    for canonical_index, raw_index in enumerate(order):
+        inverse[raw_index] = canonical_index
+    return tuple(inverse)
+
+
+def whitehead_transitions(
     code: Code,
     n: int,
     backend: str = DEFAULT_BACKEND,
     nauty_mode: str = DEFAULT_NAUTY_MODE,
-) -> Set[Code]:
-    """Return canonical neighbours obtained by unlabelled Whitehead moves."""
+    include_trivial_loops: bool = True,
+) -> List[Transition]:
+    """Return concrete Whitehead transition records from one canonical class."""
 
     matrix = matrix_from_code(code, n)
     edges = edges_from_matrix(matrix)
@@ -426,10 +582,27 @@ def whitehead_neighbors(
     for stub, vertex in enumerate(stub_vertex):
         incident[vertex].append(stub)
 
-    neighbours: Set[Code] = set()
+    transitions: List[Transition] = []
+    identity_order = tuple(range(n))
     for edge_id, (su, sv) in enumerate(edge_stubs):
         u, v = stub_vertex[su], stub_vertex[sv]
+        source_edge = (u, v) if u <= v else (v, u)
         if u == v:
+            if include_trivial_loops:
+                for resolution_id in (0, 1):
+                    transitions.append(
+                        Transition(
+                            source=code,
+                            target=code,
+                            edge_id=edge_id,
+                            source_edge=source_edge,
+                            resolution_id=resolution_id,
+                            averaged_endpoints=source_edge,
+                            canonical_order=identity_order,
+                            raw_to_canonical=identity_order,
+                            trivial_loop=True,
+                        )
+                    )
             continue
 
         u_other = [s for s in incident[u] if s != su]
@@ -445,7 +618,7 @@ def whitehead_neighbors(
             ((u_other[0], v_other[1]), (u_other[1], v_other[0])),
         )
 
-        for u_pair, v_pair in resolutions:
+        for resolution_id, (u_pair, v_pair) in enumerate(resolutions):
             new_stub_vertex = list(stub_vertex)
             new_stub_vertex[su] = u
             new_stub_vertex[sv] = v
@@ -457,9 +630,42 @@ def whitehead_neighbors(
             new_edges = _edges_from_stubs(new_stub_vertex, edge_stubs)
             new_matrix = matrix_from_edges(n, new_edges)
             validate_cubic_connected(new_matrix)
-            neighbours.add(canonical_code_from_matrix(new_matrix, backend, nauty_mode))
+            target_code, order = canonical_code_and_order_from_matrix(
+                new_matrix,
+                backend,
+                nauty_mode,
+            )
+            transitions.append(
+                Transition(
+                    source=code,
+                    target=target_code,
+                    edge_id=edge_id,
+                    source_edge=source_edge,
+                    resolution_id=resolution_id,
+                    averaged_endpoints=source_edge,
+                    canonical_order=order,
+                    raw_to_canonical=_inverse_order(order),
+                )
+            )
 
-    return neighbours
+    return transitions
+
+
+def whitehead_neighbors(
+    code: Code,
+    n: int,
+    backend: str = DEFAULT_BACKEND,
+    nauty_mode: str = DEFAULT_NAUTY_MODE,
+) -> Set[Code]:
+    """Return canonical neighbours obtained by unlabelled Whitehead moves."""
+    transitions = whitehead_transitions(
+        code,
+        n,
+        backend,
+        nauty_mode,
+        include_trivial_loops=False,
+    )
+    return {transition.target for transition in transitions}
 
 
 def initial_code(
@@ -473,6 +679,11 @@ def initial_code(
 def _expand_worker(args: Tuple[Code, int, str, str]) -> Set[Code]:
     code, n, backend, nauty_mode = args
     return whitehead_neighbors(code, n, backend, nauty_mode)
+
+
+def _expand_transition_worker(args: Tuple[Code, int, str, str]) -> List[Transition]:
+    code, n, backend, nauty_mode = args
+    return whitehead_transitions(code, n, backend, nauty_mode)
 
 
 def _edge_key(a: Code, b: Code) -> Tuple[Code, Code]:
@@ -542,6 +753,74 @@ def generate_graph_of_graph(
     return stored, gog_edges, complete
 
 
+def generate_graph_of_graph_with_transitions(
+    n: int,
+    jobs: int | None = None,
+    max_classes: int | None = None,
+    backend: str = DEFAULT_BACKEND,
+    nauty_mode: str = DEFAULT_NAUTY_MODE,
+) -> Tuple[Set[Code], Set[Tuple[Code, Code]], List[Transition], bool]:
+    """Breadth-first generation, preserving concrete transition records."""
+
+    start = initial_code(n, backend, nauty_mode)
+    stored: Set[Code] = {start}
+    frontier: Set[Code] = {start}
+    gog_edges: Set[Tuple[Code, Code]] = set()
+    transitions: List[Transition] = []
+    complete = True
+
+    print("Stored | Frontier | New | GoG edges | Transitions")
+
+    def handle_results(frontier_list: List[Code], results: List[List[Transition]]) -> None:
+        nonlocal stored, frontier, gog_edges, transitions, complete
+        generated = {transition.target for result in results for transition in result}
+        new = generated - stored
+        if max_classes is not None and len(stored) + len(new) > max_classes:
+            quota = max(0, max_classes - len(stored))
+            new = set(sorted(new)[:quota])
+            complete = False
+
+        allowed = stored | new
+        for source, result in zip(frontier_list, results):
+            for transition in result:
+                if transition.target not in allowed:
+                    continue
+                transitions.append(transition)
+                if transition.target != source:
+                    gog_edges.add(_edge_key(source, transition.target))
+
+        print(
+            f"{len(stored):6d} | {len(frontier):8d} | {len(new):3d} | "
+            f"{len(gog_edges):9d} | {len(transitions):11d}"
+        )
+        stored.update(new)
+        frontier = new
+
+    if jobs == 1:
+        while frontier:
+            frontier_list = sorted(frontier)
+            results = [
+                _expand_transition_worker((code, n, backend, nauty_mode))
+                for code in frontier_list
+            ]
+            handle_results(frontier_list, results)
+            if not complete:
+                break
+    else:
+        with Pool(processes=jobs) as pool:
+            while frontier:
+                frontier_list = sorted(frontier)
+                results = pool.map(
+                    _expand_transition_worker,
+                    [(code, n, backend, nauty_mode) for code in frontier_list],
+                )
+                handle_results(frontier_list, results)
+                if not complete:
+                    break
+
+    return stored, gog_edges, transitions, complete
+
+
 def code_to_string(code: Code) -> str:
     return ",".join(str(x) for x in code)
 
@@ -573,6 +852,57 @@ def save_json(
         out.write("\n")
 
 
+def save_transition_json(
+    path: str,
+    n: int,
+    nodes: Set[Code],
+    edges: Set[Tuple[Code, Code]],
+    transitions: Sequence[Transition],
+    complete: bool,
+) -> None:
+    ordered_nodes = sorted(nodes)
+    index = {code: i for i, code in enumerate(ordered_nodes)}
+    transition_data = []
+    for transition in transitions:
+        if transition.source not in index or transition.target not in index:
+            continue
+        transition_data.append(
+            {
+                "source": index[transition.source],
+                "target": index[transition.target],
+                "edge_id": transition.edge_id,
+                "source_edge": list(transition.source_edge),
+                "resolution_id": transition.resolution_id,
+                "averaged_endpoints": list(transition.averaged_endpoints),
+                "canonical_order": list(transition.canonical_order),
+                "raw_to_canonical": list(transition.raw_to_canonical),
+                "trivial_loop": transition.trivial_loop,
+            }
+        )
+
+    data = {
+        "N": n,
+        "complete": complete,
+        "expected_node_count_A005967": known_vertex_count(n),
+        "node_count": len(ordered_nodes),
+        "edge_count": len(edges),
+        "transition_count": len(transition_data),
+        "expected_transition_count_if_complete": (
+            len(ordered_nodes) * 3 * n if complete else None
+        ),
+        "nodes": [code_to_string(code) for code in ordered_nodes],
+        "edges": [
+            [index[a], index[b]]
+            for a, b in sorted(edges)
+            if a in index and b in index
+        ],
+        "transitions": transition_data,
+    }
+    with open(path, "w", encoding="utf-8") as out:
+        json.dump(data, out, separators=(",", ":"))
+        out.write("\n")
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("N", type=int, help="number of vertices, necessarily even")
@@ -590,9 +920,12 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--backend",
-        choices=("auto", "nauty", "python"),
+        choices=("auto", "native", "nauty", "python"),
         default=DEFAULT_BACKEND,
-        help="canonical labelling backend; auto uses nauty/Traces when available",
+        help=(
+            "canonical labelling backend; auto tries the native nauty bridge, "
+            "then dreadnaut, then the Python fallback"
+        ),
     )
     parser.add_argument(
         "--nauty-mode",
@@ -601,20 +934,49 @@ def parse_args() -> argparse.Namespace:
         help="dreadnaut engine used by the nauty backend",
     )
     parser.add_argument("--save", help="write the generated GoG as JSON")
+    parser.add_argument(
+        "--save-transitions",
+        help="write concrete Rule A transition records as compact JSON",
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    nodes, edges, complete = generate_graph_of_graph(
-        args.N,
-        jobs=args.jobs,
-        max_classes=args.max_classes,
-        backend=args.backend,
-        nauty_mode=args.nauty_mode,
-    )
+    transitions: List[Transition] | None = None
+    if args.save_transitions:
+        nodes, edges, transitions, complete = generate_graph_of_graph_with_transitions(
+            args.N,
+            jobs=args.jobs,
+            max_classes=args.max_classes,
+            backend=args.backend,
+            nauty_mode=args.nauty_mode,
+        )
+    else:
+        nodes, edges, complete = generate_graph_of_graph(
+            args.N,
+            jobs=args.jobs,
+            max_classes=args.max_classes,
+            backend=args.backend,
+            nauty_mode=args.nauty_mode,
+        )
     status = "complete" if complete else "partial"
     print(f"{status}: {len(nodes)} classes, {len(edges)} GoG edges")
+    if transitions is not None:
+        expected_transitions = len(nodes) * 3 * args.N if complete else None
+        transition_verdict = (
+            "OK" if expected_transitions == len(transitions) else "MISMATCH"
+        )
+        if expected_transitions is None:
+            transition_verdict = "partial/not checked"
+        print(
+            f"Rule A transition records: {len(transitions)}"
+            + (
+                f" expected {expected_transitions} ({transition_verdict})"
+                if expected_transitions is not None
+                else f" ({transition_verdict})"
+            )
+        )
     expected = known_vertex_count(args.N)
     if expected is not None:
         verdict = "OK" if complete and len(nodes) == expected else "partial/not checked"
@@ -624,6 +986,10 @@ def main() -> None:
     if args.save:
         save_json(args.save, args.N, nodes, edges, complete)
         print(f"wrote {args.save}")
+    if args.save_transitions:
+        assert transitions is not None
+        save_transition_json(args.save_transitions, args.N, nodes, edges, transitions, complete)
+        print(f"wrote {args.save_transitions}")
 
 
 if __name__ == "__main__":
