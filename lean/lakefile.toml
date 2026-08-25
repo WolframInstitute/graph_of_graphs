@@ -1,0 +1,6 @@
+name = "gog_verification"
+version = "0.1.0"
+defaultTargets = ["GogVerification"]
+
+[[lean_lib]]
+name = "GogVerification"
