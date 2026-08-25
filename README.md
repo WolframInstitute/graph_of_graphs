@@ -1,73 +1,158 @@
 # Whitehead field dynamics and reconfiguration graphs
 
 This repository studies Whitehead moves on connected cubic multigraphs and a
-scalar averaging field transported along those moves. Loops and parallel edges
-are allowed. The project combines a theory manuscript, exact finite
-enumeration, spectral diagnostics, and a small Lean verification layer.
+scalar field averaged along the rewritten carrier edge. Loops and parallel
+edges are allowed. The project combines a mathematical manuscript, exact
+finite enumeration, spectral diagnostics, a Wolfram notebook edition, and a
+small Lean verification layer.
 
-The phrase “graph of graphs” is ambiguous here. Four objects are kept separate:
+This is a research repository, not a package release. Claims have different
+evidence levels: proofs in the manuscript, deductions using named external
+inputs, complete finite computations, machine-checked finite algebra, and open
+conjectures. The [claim-status ledger](docs/status.rst) records those boundaries.
 
-| Case | Object |
+## Start here
+
+| Artifact | Role |
 |---|---|
-| 1 | A carrier cubic multigraph and its vertex-valued averaging field. |
-| 2 | Li’s fixed-labelled simple graph of Whitehead moves. |
-| 3 | GDPK’s unlabelled directed move-slot multigraph and reversible Rule-A chain. |
-| 4 | The unlabelled simple support obtained by removing self-targets and multiplicity. |
+| [`whitehead-field-dynamics.tex`](whitehead-field-dynamics.tex) | Canonical editable manuscript and source of record. |
+| [`whitehead-field-dynamics.pdf`](whitehead-field-dynamics.pdf) | PDF built from the canonical LaTeX source. |
+| [`whitehead-field-dynamics.nb`](whitehead-field-dynamics.nb) | MathNotebook edition generated from the LaTeX source. |
+| [`docs/`](docs/) | Project guide, conventions, evidence status, and reproducibility instructions. |
+| [`gog_generate.py`](gog_generate.py) and analysis scripts | Exact finite enumeration and diagnostics. |
+| [`lean/`](lean/) | Lean/Std proofs of a deliberately limited finite-algebra layer. |
 
-Their clocks, stationary laws, Laplacians, and path counts are different. See
-the [four-object dictionary](docs/overview.rst) before comparing results.
+The notebook is a committed derived artifact. Its build requires an exact
+LaTeX round trip before replacing the file; the LaTeX manuscript remains the
+authority when the two formats are synchronized.
 
-## Documentation
+## Four objects that must not be conflated
 
-The Sphinx sources use plain reStructuredText and require no MyST plugin.
+“Graph of graphs” refers to several related but inequivalent objects here.
+
+| Case | State space | One-step convention | Natural law or operator |
+|---|---|---|---|
+| 1. Carrier field | A cubic multigraph `G` and a field `f` on its vertices | Average one carrier-edge pair, perform a Whitehead rewrite, then settle coordinates | Carrier Laplacian and a specified Rule-A or Rule-B lift |
+| 2. Fixed-labelled simple GoG | Cubic multigraphs on the fixed vertex set `[N]` | Keep distinct nonself labelled targets from four endpoint-oriented moves | Degree-stationary simple walk, or a padded symmetric `6N` clock |
+| 3. GDPK multiplicity chain | Unlabelled isomorphism classes | Retain two resolutions per edge object, including multiplicity and loop holding slots | `P_A(G,H)=m(G,H)/(3N)` and the configuration-model quotient law |
+| 4. Unlabelled simple support | The same classes as Case 3 | Collapse positive nonself multiplicity to one support edge | Degree `q(G)` and Rule B, with `pi_B` proportional to `q(G)` |
+
+Cases 3 and 4 share reachability after self-targets are removed, but they do
+not share path counts, transition probabilities, stationary measures,
+conductance, or normalized spectra. Case 2 has a different state space and a
+different raw move clock. Case 1 is a field cocycle over a chosen base chain,
+not another scalar walk on a graph of graphs. See the
+[full convention dictionary](docs/overview.rst) before comparing results.
+
+## Standard verification
+
+The ordinary repository check builds the paper and documentation, checks the
+Lean project, and compiles every Python entry point:
 
 ```sh
 python3 -m pip install -r docs/requirements.txt
-make -C docs html
+make check
 ```
 
-Open `docs/_build/html/index.html`. The
-[theorem-status page](docs/status.rst) separates proved results, conditional
-results, finite computations, and conjectures.
+Requirements are:
 
-## Canonical manuscript
+- Python 3;
+- a TeX distribution providing `latexmk` and `pdflatex`;
+- Sphinx 8 or 9 for the documentation;
+- Lean through the toolchain pinned in `lean/lean-toolchain`.
 
-The current synthesis is `whitehead-field-dynamics.tex`; its complete
-finite-enumeration section records the reproducible data boundary.
+The Wolfram notebook checks are intentionally separate because they require a
+licensed local Wolfram installation and launch the Mathematica front end.
 
-```sh
-latexmk -pdf -interaction=nonstopmode -halt-on-error \
-  whitehead-field-dynamics.tex
+## Wolfram notebook edition
+
+The notebook is built with
+[WolframInstitute/MathNotebook](https://github.com/WolframInstitute/MathNotebook).
+This repository pins MathNotebook `0.1.24`; the paclet requires Wolfram
+Language 14.3 or newer and is currently experimental.
+
+Install the pinned-compatible paclet from a Wolfram kernel:
+
+```wolfram
+PacletInstall[
+  "https://www.wolframcloud.com/obj/hajek_pavel/MathNotebook.paclet",
+  ForceVersionInstall -> True
+]
+Needs["WolframInstitute`MathNotebook`"]
 ```
 
-## Computation
-
-Generate a complete unlabelled transition table at a modest size:
+On the current macOS setup, rebuild and front-end-check the notebook with:
 
 ```sh
-mkdir -p artifacts
+make notebook
+make notebook-check
+```
+
+On another installation, provide the kernel path explicitly:
+
+```sh
+make notebook WOLFRAM_KERNEL=/path/to/WolframKernel
+make notebook-check WOLFRAM_KERNEL=/path/to/WolframKernel
+```
+
+The build script:
+
+- converts sectioning, theorem environments, proofs, lists, citations, and
+  mathematics into native notebook cells;
+- expands the manuscript's private LaTeX macros for display while retaining
+  their original `SourceTeX`;
+- adds display-only title and author cells;
+- presents bibliography accents and URLs cleanly while retaining each original
+  `\bibitem` payload;
+- assigns deterministic notebook cell identifiers for reviewable rebuilds;
+- rejects visible raw-math and `$Failed` artifacts;
+- saves, reopens, and requires an exact UTF-8 LaTeX round trip.
+
+The front-end check resolves `MathNotebook/PlainArticle.nb`, renders a temporary
+PDF, and repeats the exact round-trip test after notebook normalization. Details
+and the notebook editing policy are in the [notebook guide](docs/notebook.rst).
+
+## Computational reproduction
+
+For a modest complete unlabelled table, run:
+
+```sh
+mkdir -p artifacts/csv
 python3 gog_generate.py 8 --backend auto --jobs 1 \
   --save artifacts/gog_N8.json \
   --save-transitions artifacts/transitions_N8.json
-python3 gog_edge_model_experiments.py artifacts/transitions_N8.json
-python3 gog_support_feature_analysis.py artifacts/transitions_N8.json
+
+python3 gog_edge_model_experiments.py \
+  artifacts/transitions_N8.json \
+  --csv-dir artifacts/csv \
+  --summary-json artifacts/edge-summary-N8.json
+
+python3 gog_support_feature_analysis.py \
+  artifacts/transitions_N8.json \
+  --max-cycle 4 --eigenvalues 6 \
+  --summary-json artifacts/feature-summary-N8.json
 ```
 
-Production canonical labelling uses nauty/Traces when available; NumPy and
-SciPy are needed for the spectral analyses. Full unlabelled enumeration through
-`N=14` contains 21,096 classes and is substantially more expensive than the example.
-See [the computational guide](docs/computation.rst) for all scripts and outputs.
+The generator itself has a pure-Python fallback. Production canonical
+labelling should use nauty/Traces; the spectral consumers require NumPy and
+SciPy. A complete `N=8` run has 71 classes and 1,704 Rule-A slot records.
+Enumeration through `N=14` has 21,096 classes and 886,032 slot records, so the
+largest runs are not quick-start commands. See the
+[computational guide](docs/computation.rst) for backends, file contracts,
+expected counts, and interpretation guardrails.
 
-## Lean verification
+## Editing discipline
 
-```sh
-cd lean
-lake build
-```
+When changing a result:
 
-The Lean project uses exact rational arithmetic and proves finite averaging
-identities, affine covariance, pullback algebra for supplied coordinate
-permutations, the `K4`/`Q3` consensus schedules, and a three-state dyadic
-obstruction. It does not formalize Whitehead enumeration, the construction of
-settlements, stationary laws, asymptotics, or Lyapunov exponents. See
-[the formalization boundary](docs/formalization.rst).
+1. name which of the four objects it concerns;
+2. state the move clock, operator normalization, and stationary law;
+3. distinguish a proof from an external input, finite computation, or
+   conjecture;
+4. state the settlement convention for a transported-field claim;
+5. update the status ledger and reproducibility notes with the manuscript;
+6. rebuild the PDF and notebook before committing synchronized artifacts.
+
+Generated enumeration tables and local diagnostics belong under `artifacts/`,
+which is ignored by Git. The source papers motivating the project are retained
+under `sources-gdpk/` and `sources-li/` for local comparison.

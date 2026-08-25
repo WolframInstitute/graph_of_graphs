@@ -1,0 +1,2 @@
+# Wolfram notebooks are generated artifacts with non-semantic line wrapping.
+*.nb binary
