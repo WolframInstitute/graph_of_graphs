@@ -17,8 +17,10 @@ scriptFile = If[StringQ[$InputFileName] && $InputFileName =!= "",
 repositoryDirectory = DirectoryName[DirectoryName[scriptFile]];
 sourceFile = FileNameJoin[{repositoryDirectory, "whitehead-field-dynamics.tex"}];
 notebookFile = FileNameJoin[{repositoryDirectory, "whitehead-field-dynamics.nb"}];
+visualsFile = FileNameJoin[{repositoryDirectory, "scripts", "notebook_visuals.wl"}];
 
 If[! FileExistsQ[sourceFile], fail["source file not found: " <> sourceFile]];
+If[! FileExistsQ[visualsFile], fail["visual layer not found: " <> visualsFile]];
 If[$VersionNumber < $minimumWolframVersion,
   fail["Wolfram Language 14.3 or newer is required; found " <> $Version]
 ];
@@ -105,6 +107,7 @@ expandInnerProduct[text_String] := Module[
 ];
 
 $simpleMacroExpansions = {
+  RegularExpression["([0-9])\\\\,([0-9])"] -> "$1{,}$2",
   RegularExpression["\\\\Specsing(?![A-Za-z])"] ->
     "\\operatorname{Spec}_{\\mathrm{sing}}",
   RegularExpression["\\\\Spec(?![A-Za-z])"] -> "\\operatorname{Spec}",
@@ -247,6 +250,88 @@ displayReferenceCell[cell_] := cell;
 notebook = notebook /. Notebook[documentCells_, options___] :>
   Notebook[displayReferenceCell /@ documentCells, options];
 
+(* MathNotebook deliberately preserves unsupported prose commands as literal
+   text.  This manuscript uses a few of them for layout and code typography.
+   Give those cells a clean notebook display while carrying their complete
+   original TeX through the paclet's verbatim whole-cell export channel. *)
+$proseDisplayRules = {
+  RegularExpression["\\\\path\\{([^{}]*)\\}"] -> "$1",
+  RegularExpression["\\\\texttt\\{([^{}]*)\\}"] -> "$1",
+  RegularExpression["\\\\emph\\{([^{}]*)\\}"] -> "$1",
+  "\\\\_" -> "_",
+  "\\\\#" -> "#",
+  "~" -> FromCharacterCode[160],
+  "\n{\\small" ~~ EndOfString -> "",
+  StartOfString ~~ "}\n" -> ""
+};
+
+cleanDisplayString[text_String] := StringReplace[text, $proseDisplayRules];
+
+displayProseContent[text_String] := Module[{paragraph},
+  paragraph = StringCases[
+    text,
+    StartOfString ~~ "\\paragraph{" ~~ title : Except["}"] .. ~~ "}\n" ~~
+      body___ ~~ EndOfString :> {title, body},
+    1
+  ];
+  If[
+    paragraph === {},
+    cleanDisplayString[text],
+    TextData[{
+      StyleBox[paragraph[[1, 1]], FontWeight -> "Bold"],
+      "\n",
+      cleanDisplayString[paragraph[[1, 2]]]
+    }]
+  ]
+];
+displayProseContent[TextData[parts_]] := TextData[
+  Replace[parts, text_String :> cleanDisplayString[text], {1}]
+];
+displayProseContent[content_] := content;
+
+displayProseCell[cell : Cell[content_, style_String, options___]] := Module[
+  {displayedContent, originalLaTeX, displayed},
+  displayedContent = displayProseContent[content];
+  If[SameQ[displayedContent, content], Return[cell]];
+  originalLaTeX = cellToLaTeXFunction[cell];
+  If[! StringQ[originalLaTeX], fail["could not preserve cleaned prose source"]];
+  displayed = Cell[displayedContent, style, options];
+  WolframInstitute`MathNotebook`PackageScope`retagged[
+    displayed,
+    <|"BibliographyTeX" -> originalLaTeX|>
+  ]
+];
+displayProseCell[cell_] := cell;
+
+notebook = notebook /. Notebook[documentCells_, options___] :>
+  Notebook[displayProseCell /@ documentCells, options];
+
+(* Enrich the faithful article conversion with native, presentation-only
+   Wolfram graphics.  Every added cell carries MathNotebook's Suppressed tag,
+   so the canonical LaTeX export remains byte-exact. *)
+visualsLoaded = Quiet[Check[Get[visualsFile], $Failed]];
+If[visualsLoaded === $Failed ||
+    ! NameQ["GogNotebookVisuals`EnrichNotebook"],
+  fail["the notebook visual layer could not be loaded"]
+];
+notebook = Quiet[
+  Check[GogNotebookVisuals`EnrichNotebook[notebook], $Failed]
+];
+If[Head[notebook] =!= Notebook,
+  fail["the visual layer did not return a Notebook"]
+];
+requiredVisualIDs = {
+  "GoGVisualAbstract", "GoGWhiteheadMove", "GoGConsensusSchedules",
+  "GoGEnumerationGrowth"
+};
+requiredPresentationIDs = Join[
+  {"GoGBanner", "GoGNavigation"},
+  requiredVisualIDs
+];
+If[! AllTrue[requiredPresentationIDs, ! FreeQ[notebook, #] &],
+  fail["one or more required notebook presentation elements are absent"]
+];
+
 (* MathNotebook and Export create fresh ExpressionUUID values on every build.
    The serialized .nb repeats those values in its cache outline, so normalize
    the unique UUIDs in first-occurrence order after export.  Equal-length
@@ -371,6 +456,17 @@ unconvertedMath = Select[
 If[unconvertedMath =!= {},
   fail[ToString[Length[unconvertedMath]] <> " cells still contain visible raw math"]
 ];
+rawProseMarkers = {"{\\small", "\\paragraph{", "\\path{", "\\texttt{"};
+unconvertedProse = Select[
+  visibleByCell,
+  AnyTrue[#, StringContainsQ[#, Alternatives @@ rawProseMarkers] &] &
+];
+If[unconvertedProse =!= {},
+  fail[
+    ToString[Length[unconvertedProse]] <>
+      " cells still contain visible unsupported prose commands"
+  ]
+];
 If[! FreeQ[cells, text_String /; StringContainsQ[text, "$Failed"]],
   fail["the notebook contains a visible $Failed conversion artifact"]
 ];
@@ -397,8 +493,10 @@ Print[<|
   "Cells" -> Length[cells],
   "Styles" -> styles,
   "InlineMathCells" ->
-    Count[cells, Cell[_BoxData, ___], Infinity] - Count[cells, Cell[_BoxData, ___]],
-  "DisplayMathCells" -> Count[cells, Cell[_BoxData, ___]],
+    Count[cells, Cell[_BoxData, "InlineFormula", ___], Infinity],
+  "DisplayMathCells" ->
+    Count[cells, Cell[_BoxData, "DisplayFormula", ___]],
+  "NotebookVisuals" -> Length[requiredVisualIDs],
   "Buttons" -> Count[cells, _ButtonBox, Infinity],
   "DeterministicUUIDs" -> deterministicUUIDCount,
   "NotebookSHA256" ->

@@ -54,6 +54,14 @@ measurement = Quiet[
         "RenderedPDF" -> pdf,
         "RenderedPDFBytes" ->
           If[FileExistsQ[renderedPDF], FileByteCount[renderedPDF], 0],
+        "PresentationElements" -> Count[
+          {
+            "GoGBanner", "GoGNavigation", "GoGVisualAbstract",
+            "GoGWhiteheadMove", "GoGConsensusSchedules",
+            "GoGEnumerationGrowth"
+          },
+          id_ /; ! FreeQ[notebook, id]
+        ],
         "ExactLaTeXRoundTrip" ->
           (WolframInstitute`MathNotebook`ExportLaTeXDocument[notebook] === source)
       |>
@@ -74,6 +82,9 @@ If[! StringContainsQ[
 ];
 If[measurement["RenderedPDFBytes"] <= 0,
   fail["the front end did not render a PDF"]
+];
+If[measurement["PresentationElements"] =!= 6,
+  fail["front-end normalization lost a required presentation element"]
 ];
 If[! TrueQ[measurement["ExactLaTeXRoundTrip"]],
   fail["front-end normalization changed the LaTeX round trip"]

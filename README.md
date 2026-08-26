@@ -17,14 +17,16 @@ conjectures. The [claim-status ledger](docs/status.rst) records those boundaries
 |---|---|
 | [`whitehead-field-dynamics.tex`](whitehead-field-dynamics.tex) | Canonical editable manuscript and source of record. |
 | [`whitehead-field-dynamics.pdf`](whitehead-field-dynamics.pdf) | PDF built from the canonical LaTeX source. |
-| [`whitehead-field-dynamics.nb`](whitehead-field-dynamics.nb) | MathNotebook edition generated from the LaTeX source. |
+| [`whitehead-field-dynamics.nb`](whitehead-field-dynamics.nb) | Generated MathNotebook article with native diagrams, data graphics, and section navigation. |
 | [`docs/`](docs/) | Project guide, conventions, evidence status, and reproducibility instructions. |
 | [`gog_generate.py`](gog_generate.py) and analysis scripts | Exact finite enumeration and diagnostics. |
 | [`lean/`](lean/) | Lean/Std proofs of a deliberately limited finite-algebra layer. |
 
-The notebook is a committed derived artifact. Its build requires an exact
-LaTeX round trip before replacing the file; the LaTeX manuscript remains the
-authority when the two formats are synchronized.
+The notebook is a committed derived artifact, not a second manuscript source.
+Its build requires an exact LaTeX round trip before replacing the file. A
+separate deterministic presentation layer adds a visual abstract, a local
+Whitehead-move diagram, exact consensus schedules, an enumeration-growth plot,
+and clickable section navigation without adding anything to the exported TeX.
 
 ## Four objects that must not be conflated
 
@@ -102,15 +104,34 @@ The build script:
 - expands the manuscript's private LaTeX macros for display while retaining
   their original `SourceTeX`;
 - adds display-only title and author cells;
+- cleans unsupported prose-formatting commands for display while preserving
+  their complete original cell-level TeX;
 - presents bibliography accents and URLs cleanly while retaining each original
   `\bibitem` payload;
+- loads [`scripts/notebook_visuals.wl`](scripts/notebook_visuals.wl), which adds
+  the banner, eight section links, and four source-suppressed native Wolfram
+  visualizations;
+- verifies that every required presentation element is present;
 - assigns deterministic notebook cell identifiers for reviewable rebuilds;
-- rejects visible raw-math and `$Failed` artifacts;
+- rejects visible raw-math, unsupported prose commands, and `$Failed`
+  artifacts;
 - saves, reopens, and requires an exact UTF-8 LaTeX round trip.
 
 The front-end check resolves `MathNotebook/PlainArticle.nb`, renders a temporary
-PDF, and repeats the exact round-trip test after notebook normalization. Details
-and the notebook editing policy are in the [notebook guide](docs/notebook.rst).
+PDF, confirms that all six presentation components survived notebook
+normalization, and repeats the exact round-trip test.
+
+MathNotebook is the only visualization paclet required by the article build.
+The figures use built-in `Graphics`, `GraphicsRow`, `Grid`, and notebook boxes so
+their multigraph and move-slot semantics stay explicit and the output remains
+editable. The repository audit also identifies
+[WolframInstitute/Hypergraph](https://github.com/WolframInstitute/Hypergraph)
+and
+[WolframInstitute/DiagrammaticComputation](https://github.com/WolframInstitute/DiagrammaticComputation)
+as useful optional tools for exploratory rewrite and compositional diagrams;
+they are intentionally not runtime dependencies. The rationale, rejected
+alternatives, and notebook editing policy are in the
+[notebook guide](docs/notebook.rst).
 
 ## Computational reproduction
 
