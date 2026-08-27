@@ -3,12 +3,15 @@
 (* Build the canonical MathNotebook artifact and fail on any fidelity loss. *)
 
 $requiredMathNotebookVersion = "0.1.24";
+$requiredGogFieldDynamicsVersion = "0.1.0";
 $minimumWolframVersion = 14.3;
 
 fail[message_String] := (
   WriteString["stderr", "MathNotebook build failed: " <> message <> "\n"];
   Exit[1]
 );
+
+progress[message_String] := Print["MathNotebook build: " <> message];
 
 scriptFile = If[StringQ[$InputFileName] && $InputFileName =!= "",
   ExpandFileName[$InputFileName],
@@ -18,9 +21,15 @@ repositoryDirectory = DirectoryName[DirectoryName[scriptFile]];
 sourceFile = FileNameJoin[{repositoryDirectory, "whitehead-field-dynamics.tex"}];
 notebookFile = FileNameJoin[{repositoryDirectory, "whitehead-field-dynamics.nb"}];
 visualsFile = FileNameJoin[{repositoryDirectory, "scripts", "notebook_visuals.wl"}];
+paperPacletDirectory = FileNameJoin[
+  {repositoryDirectory, "Wolfram", "GogFieldDynamics"}
+];
 
 If[! FileExistsQ[sourceFile], fail["source file not found: " <> sourceFile]];
 If[! FileExistsQ[visualsFile], fail["visual layer not found: " <> visualsFile]];
+If[! DirectoryQ[paperPacletDirectory],
+  fail["paper paclet not found: " <> paperPacletDirectory]
+];
 If[$VersionNumber < $minimumWolframVersion,
   fail["Wolfram Language 14.3 or newer is required; found " <> $Version]
 ];
@@ -31,6 +40,74 @@ If[StringQ[developmentPaclet] && developmentPaclet =!= "",
     fail["MATHNOTEBOOK_PACLET_DIR is not a directory: " <> developmentPaclet]
   ];
   PacletDirectoryLoad[ExpandFileName[developmentPaclet]];
+];
+
+Quiet[
+  Check[
+    PacletDirectoryLoad[paperPacletDirectory],
+    fail["the local GogFieldDynamics paclet directory could not be loaded"]
+  ]
+];
+Quiet[
+  Check[
+    Needs["GogFieldDynamics`"],
+    fail["the local GogFieldDynamics context could not be loaded"]
+  ]
+];
+paperPaclet = Quiet[Check[PacletObject["GogFieldDynamics"], $Failed]];
+If[Head[paperPaclet] =!= PacletObject,
+  fail["the GogFieldDynamics paclet could not be resolved"]
+];
+paperPacletVersion = paperPaclet["Version"];
+If[paperPacletVersion =!= $requiredGogFieldDynamicsVersion,
+  fail[
+    "GogFieldDynamics " <> $requiredGogFieldDynamicsVersion <>
+    " is required; found " <> ToString[paperPacletVersion]
+  ]
+];
+smallModelValidation = Quiet[
+  Check[GogFieldDynamics`GogValidateSmallModels[], $Failed]
+];
+If[
+  ! AssociationQ[smallModelValidation] ||
+    ! TrueQ[smallModelValidation["Valid"]],
+  fail["the bundled small graph-of-graphs models failed validation"]
+];
+progress["preboxing the self-contained diffusion lab"];
+diffusionExplorerBoxes = Quiet[
+  Check[
+    ToBoxes[GogFieldDynamics`GogDiffusionExplorer[], StandardForm],
+    $Failed
+  ]
+];
+If[
+  diffusionExplorerBoxes === $Failed ||
+    ! AnyTrue[
+      Cases[diffusionExplorerBoxes, _String, Infinity],
+      StringContainsQ[#, "GRAPH-OF-GRAPHS DIFFUSION LAB"] &
+    ],
+  fail["the diffusion explorer could not be boxed"]
+];
+
+If[Quiet[Check[PacletFind["WolframInstitute/MathNotebook"], {}]] === {},
+  mathNotebookRepository = FileNameJoin[
+    {$UserBaseDirectory, "Paclets", "Repository"}
+  ];
+  mathNotebookCandidates = If[
+    DirectoryQ[mathNotebookRepository],
+    Select[
+      FileNames[
+        "WolframInstitute__MathNotebook-*",
+        mathNotebookRepository
+      ],
+      DirectoryQ
+    ],
+    {}
+  ];
+  Scan[
+    Function[path, Quiet[Check[PacletDirectoryLoad[path], Null]]],
+    mathNotebookCandidates
+  ];
 ];
 
 Quiet[
@@ -151,7 +228,49 @@ source = Quiet[Check[ReadString[sourceStream], $Failed]];
 Close[sourceStream];
 If[! StringQ[source], fail["could not read " <> sourceFile]];
 
-notebook = Quiet[
+forceReconversion = Environment["MATHNOTEBOOK_FORCE_RECONVERT"] === "1";
+cachedNotebook = If[
+  ! forceReconversion && FileExistsQ[notebookFile],
+  Quiet[Check[Get[notebookFile], $Failed]],
+  $Failed
+];
+cachedRoundTrip = If[
+  Head[cachedNotebook] === Notebook,
+  Quiet[
+    Check[
+      WolframInstitute`MathNotebook`ExportLaTeXDocument[cachedNotebook],
+      $Failed
+    ]
+  ],
+  $Failed
+];
+usingCachedNotebook = cachedRoundTrip === source;
+
+ClearAll[ungroupNotebookCells, ungroupNotebookCell];
+ungroupNotebookCells[documentCells_List] := Flatten[
+  ungroupNotebookCell /@ documentCells,
+  1
+];
+ungroupNotebookCell[
+  Cell[CellGroupData[groupCells_List, _], ___]
+] := ungroupNotebookCells[groupCells];
+ungroupNotebookCell[cell_Cell] := {cell};
+
+stripPresentationCells[Notebook[documentCells_List, options___]] := Notebook[
+  Select[
+    ungroupNotebookCells[documentCells],
+    FreeQ[#, "GoGNotebookVisual"] &
+  ],
+  options
+];
+
+If[
+  usingCachedNotebook,
+  progress["using the exact-round-trip conversion cache"];
+  notebook = stripPresentationCells[cachedNotebook],
+  (
+  progress["running a full LaTeX conversion"];
+  notebook = Quiet[
   Check[
     WolframInstitute`MathNotebook`PackageScope`latexToNotebook[source],
     $Failed
@@ -305,32 +424,48 @@ displayProseCell[cell_] := cell;
 
 notebook = notebook /. Notebook[documentCells_, options___] :>
   Notebook[displayProseCell /@ documentCells, options];
+  )
+];
 
 (* Enrich the faithful article conversion with native, presentation-only
    Wolfram graphics.  Every added cell carries MathNotebook's Suppressed tag,
    so the canonical LaTeX export remains byte-exact. *)
+progress["adding the native presentation layer"];
 visualsLoaded = Quiet[Check[Get[visualsFile], $Failed]];
 If[visualsLoaded === $Failed ||
     ! NameQ["GogNotebookVisuals`EnrichNotebook"],
   fail["the notebook visual layer could not be loaded"]
 ];
+progress["constructing presentation cells"];
 notebook = Quiet[
-  Check[GogNotebookVisuals`EnrichNotebook[notebook], $Failed]
+  Check[
+    GogNotebookVisuals`EnrichNotebook[notebook, diffusionExplorerBoxes],
+    $Failed
+  ]
 ];
 If[Head[notebook] =!= Notebook,
   fail["the visual layer did not return a Notebook"]
 ];
+progress["checking presentation identifiers"];
 requiredVisualIDs = {
   "GoGVisualAbstract", "GoGWhiteheadMove", "GoGConsensusSchedules",
-  "GoGEnumerationGrowth"
+  "GoGDiffusionLab", "GoGEnumerationGrowth"
 };
 requiredPresentationIDs = Join[
   {"GoGBanner", "GoGNavigation"},
   requiredVisualIDs
 ];
-If[! AllTrue[requiredPresentationIDs, ! FreeQ[notebook, #] &],
-  fail["one or more required notebook presentation elements are absent"]
+missingPresentationIDs = Select[
+  requiredPresentationIDs,
+  FreeQ[notebook, #] &
 ];
+If[missingPresentationIDs =!= {},
+  fail[
+    "required notebook presentation elements are absent: " <>
+    StringRiffle[missingPresentationIDs, ", "]
+  ]
+];
+progress["normalizing in-memory cell identifiers"];
 
 (* MathNotebook and Export create fresh ExpressionUUID values on every build.
    The serialized .nb repeats those values in its cache outline, so normalize
@@ -373,6 +508,7 @@ notebook = notebook /. Notebook[documentCells_List, options___] :>
     ],
     uuidFromSeed["notebook-root"]
   ];
+progress["checking the in-memory LaTeX round trip"];
 
 $uuidPattern = RegularExpression[
   "[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-" <>
@@ -423,6 +559,7 @@ If[roundTrip =!= source,
     ToString[If[StringQ[roundTrip], StringLength[roundTrip], 0]] <> ")"
   ]
 ];
+progress["checking visible cell content"];
 
 ClearAll[visibleStrings];
 visibleStrings[text_String] := {text};
@@ -471,12 +608,25 @@ If[! FreeQ[cells, text_String /; StringContainsQ[text, "$Failed"]],
   fail["the notebook contains a visible $Failed conversion artifact"]
 ];
 
-saved = Quiet[Check[Export[notebookFile, notebook, "NB"], $Failed]];
+progress["serializing the notebook"];
+saved = Quiet[
+  Check[
+    UsingFrontEnd[
+      saveObject = NotebookPut[notebook];
+      NotebookSave[saveObject, notebookFile];
+      NotebookClose[saveObject];
+      notebookFile
+    ],
+    $Failed
+  ]
+];
 If[saved =!= notebookFile || ! FileExistsQ[notebookFile],
   fail["could not save " <> notebookFile]
 ];
+progress["normalizing serialized identifiers"];
 deterministicUUIDCount = normalizeSerializedUUIDs[notebookFile];
 
+progress["reopening and checking the saved artifact"];
 reopened = Quiet[Check[Get[notebookFile], $Failed]];
 If[Head[reopened] =!= Notebook, fail["the saved file does not reopen as a Notebook expression"]];
 savedRoundTrip = Quiet[
@@ -490,6 +640,7 @@ Print[<|
   "Notebook" -> notebookFile,
   "WolframVersion" -> $Version,
   "MathNotebookVersion" -> mathNotebookVersion,
+  "GogFieldDynamicsVersion" -> paperPacletVersion,
   "Cells" -> Length[cells],
   "Styles" -> styles,
   "InlineMathCells" ->

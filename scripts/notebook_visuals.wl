@@ -46,6 +46,17 @@ graphicCell[expression_, id_String] := presentationCell[
   TextAlignment -> Center
 ];
 
+interactiveCellFromBoxes[boxes_, id_String] := presentationCell[
+  BoxData[boxes],
+  "Text",
+  id,
+  ShowCellBracket -> False,
+  CellMargins -> {{8, 8}, {18, 8}},
+  Background -> White,
+  ShowStringCharacters -> False,
+  TextAlignment -> Center
+];
+
 captionCell[_Integer, text_String, id_String] := presentationCell[
   TextData[{text}],
   "Caption",
@@ -496,7 +507,7 @@ k4Graphic[activeEdges_List, color_] := Module[
   ]
 ];
 
-k4ScheduleGraphic[] := GraphicsRow[
+k4ScheduleGraphic[] := Row[
   {
     k4Graphic[{{1, 2}, {3, 4}}, $blue],
     Graphics[
@@ -507,8 +518,7 @@ k4ScheduleGraphic[] := GraphicsRow[
     ],
     k4Graphic[{{1, 3}, {2, 4}}, $orange]
   },
-  Spacings -> 4,
-  ImageSize -> {155, 70}
+  Spacer[4]
 ];
 
 cubeGraphic[] := Module[
@@ -770,7 +780,7 @@ insertAfterFirst[cells_List, test_, additions_List] := Module[
   ]
 ];
 
-enrichCells[inputCells_List] := Module[{cells},
+enrichCells[inputCells_List, diffusionBoxes_] := Module[{cells},
   cells = inputCells;
   cells = insertAfterFirst[
     cells,
@@ -820,11 +830,30 @@ enrichCells[inputCells_List] := Module[{cells},
   ];
   cells = insertAfterFirst[
     cells,
+    (sectionCellQ[#, "Results for the three graphs of moves"] &),
+    {
+      interactiveCellFromBoxes[
+        diffusionBoxes,
+        "GoGDiffusionLab"
+      ],
+      captionCell[
+        4,
+        "A playable exact diffusion on the complete N=2,4,6 unlabelled " <>
+        "quotients.  Blue fill is probability mass; the orange ring and " <>
+        "trail are one sampled path.  SetReplace repeats singleton-hypergraph " <>
+        "rules by Rule-A slot multiplicity and uses one rule per Rule-B " <>
+        "support neighbour.",
+        "GoGDiffusionLabCaption"
+      ]
+    }
+  ];
+  cells = insertAfterFirst[
+    cells,
     (sectionCellQ[#, "Complete finite enumeration"] &),
     {
       graphicCell[enumerationFigure[], "GoGEnumerationGrowth"],
       captionCell[
-        4,
+        5,
         "Complete unlabelled class and Rule-A slot counts through N=14.  The " <>
         "logarithmic axis makes the computational growth visible without " <>
         "turning finite evidence into an asymptotic claim.",
@@ -836,8 +865,15 @@ enrichCells[inputCells_List] := Module[{cells},
 ];
 
 EnrichNotebook[notebook_Notebook] :=
-  notebook /. Notebook[cells_List, options___] :>
-    Notebook[enrichCells[cells], options];
+  EnrichNotebook[
+    notebook,
+    ToBoxes[GogFieldDynamics`GogDiffusionExplorer[], StandardForm]
+  ];
+
+EnrichNotebook[
+  Notebook[cells_List, options___],
+  diffusionBoxes_
+] := Notebook[enrichCells[cells, diffusionBoxes], options];
 
 End[];
 EndPackage[];

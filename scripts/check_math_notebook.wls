@@ -16,9 +16,50 @@ repositoryDirectory = DirectoryName[DirectoryName[scriptFile]];
 sourceFile = FileNameJoin[{repositoryDirectory, "whitehead-field-dynamics.tex"}];
 notebookFile = FileNameJoin[{repositoryDirectory, "whitehead-field-dynamics.nb"}];
 renderedPDF = FileNameJoin[{$TemporaryDirectory, "whitehead-field-dynamics-notebook-check.pdf"}];
+paperPacletDirectory = FileNameJoin[
+  {repositoryDirectory, "Wolfram", "GogFieldDynamics"}
+];
 
 If[! FileExistsQ[sourceFile], fail["source file not found: " <> sourceFile]];
 If[! FileExistsQ[notebookFile], fail["notebook file not found: " <> notebookFile]];
+If[! DirectoryQ[paperPacletDirectory], fail["paper paclet not found"]];
+
+Quiet[
+  Check[
+    PacletDirectoryLoad[paperPacletDirectory];
+    Needs["GogFieldDynamics`"],
+    fail["the local GogFieldDynamics paclet could not be loaded"]
+  ]
+];
+smallModelValidation = Quiet[
+  Check[GogFieldDynamics`GogValidateSmallModels[], $Failed]
+];
+If[
+  ! AssociationQ[smallModelValidation] ||
+    ! TrueQ[smallModelValidation["Valid"]],
+  fail["the bundled small graph-of-graphs models failed validation"]
+];
+
+If[Quiet[Check[PacletFind["WolframInstitute/MathNotebook"], {}]] === {},
+  mathNotebookRepository = FileNameJoin[
+    {$UserBaseDirectory, "Paclets", "Repository"}
+  ];
+  mathNotebookCandidates = If[
+    DirectoryQ[mathNotebookRepository],
+    Select[
+      FileNames[
+        "WolframInstitute__MathNotebook-*",
+        mathNotebookRepository
+      ],
+      DirectoryQ
+    ],
+    {}
+  ];
+  Scan[
+    Function[path, Quiet[Check[PacletDirectoryLoad[path], Null]]],
+    mathNotebookCandidates
+  ];
+];
 
 Quiet[
   Check[
@@ -39,6 +80,7 @@ measurement = Quiet[
   Check[
     UsingFrontEnd[
       notebookObject = NotebookOpen[notebookFile, Visible -> False];
+      Pause[6];
       notebook = NotebookGet[notebookObject];
       styleDefinitions = CurrentValue[notebookObject, StyleDefinitions];
       textFontSize = CurrentValue[
@@ -58,10 +100,16 @@ measurement = Quiet[
           {
             "GoGBanner", "GoGNavigation", "GoGVisualAbstract",
             "GoGWhiteheadMove", "GoGConsensusSchedules",
-            "GoGEnumerationGrowth"
+            "GoGDiffusionLab", "GoGEnumerationGrowth"
           },
           id_ /; ! FreeQ[notebook, id]
         ],
+        "DiffusionDefinitionsEmbedded" ->
+          (! FreeQ[
+            notebook,
+            HoldPattern[GogFieldDynamics`Private`$smallModelCache]
+          ]),
+        "SetReplaceVersion" -> GogFieldDynamics`GogSetReplaceVersion[],
         "ExactLaTeXRoundTrip" ->
           (WolframInstitute`MathNotebook`ExportLaTeXDocument[notebook] === source)
       |>
@@ -83,8 +131,11 @@ If[! StringContainsQ[
 If[measurement["RenderedPDFBytes"] <= 0,
   fail["the front end did not render a PDF"]
 ];
-If[measurement["PresentationElements"] =!= 6,
+If[measurement["PresentationElements"] =!= 7,
   fail["front-end normalization lost a required presentation element"]
+];
+If[! TrueQ[measurement["DiffusionDefinitionsEmbedded"]],
+  fail["the diffusion lab is missing its self-contained definitions"]
 ];
 If[! TrueQ[measurement["ExactLaTeXRoundTrip"]],
   fail["front-end normalization changed the LaTeX round trip"]

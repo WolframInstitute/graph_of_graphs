@@ -2,14 +2,15 @@
 
 This repository studies Whitehead moves on connected cubic multigraphs and a
 scalar field averaged along the rewritten carrier edge. Loops and parallel
-edges are allowed. The project combines a mathematical manuscript, exact
-finite enumeration, spectral diagnostics, a Wolfram notebook edition, and a
-small Lean verification layer.
+edges are allowed. The project combines a mathematical manuscript, complete
+finite enumeration, spectral diagnostics, a computational Wolfram article,
+and a deliberately small Lean verification layer.
 
-This is a research repository, not a package release. Claims have different
-evidence levels: proofs in the manuscript, deductions using named external
-inputs, complete finite computations, machine-checked finite algebra, and open
-conjectures. The [claim-status ledger](docs/status.rst) records those boundaries.
+This is a research repository, not a package release. Results have different
+evidence levels: manuscript proofs, deductions from named external inputs,
+complete finite computations, machine-checked finite algebra, and open
+conjectures. The [claim-status ledger](docs/status.rst) records those
+boundaries.
 
 ## Start here
 
@@ -17,16 +18,16 @@ conjectures. The [claim-status ledger](docs/status.rst) records those boundaries
 |---|---|
 | [`whitehead-field-dynamics.tex`](whitehead-field-dynamics.tex) | Canonical editable manuscript and source of record. |
 | [`whitehead-field-dynamics.pdf`](whitehead-field-dynamics.pdf) | PDF built from the canonical LaTeX source. |
-| [`whitehead-field-dynamics.nb`](whitehead-field-dynamics.nb) | Generated MathNotebook article with native diagrams, data graphics, and section navigation. |
+| [`whitehead-field-dynamics.nb`](whitehead-field-dynamics.nb) | Generated MathNotebook article with native figures and a playable graph-of-graphs diffusion lab. |
+| [`Wolfram/GogFieldDynamics/`](Wolfram/GogFieldDynamics/) | Repo-local companion paclet for exact small quotients, diffusion, and SetReplace trajectories. |
 | [`docs/`](docs/) | Project guide, conventions, evidence status, and reproducibility instructions. |
 | [`gog_generate.py`](gog_generate.py) and analysis scripts | Exact finite enumeration and diagnostics. |
-| [`lean/`](lean/) | Lean/Std proofs of a deliberately limited finite-algebra layer. |
+| [`lean/`](lean/) | Lean/Std proofs of a limited finite-algebra boundary. |
 
 The notebook is a committed derived artifact, not a second manuscript source.
-Its build requires an exact LaTeX round trip before replacing the file. A
-separate deterministic presentation layer adds a visual abstract, a local
-Whitehead-move diagram, exact consensus schedules, an enumeration-growth plot,
-and clickable section navigation without adding anything to the exported TeX.
+Its build must export byte-for-byte to the canonical UTF-8 LaTeX before it can
+replace the file. Source-suppressed cells add navigation, five native visuals,
+and the interactive lab without changing exported TeX.
 
 ## Four objects that must not be conflated
 
@@ -36,44 +37,46 @@ and clickable section navigation without adding anything to the exported TeX.
 |---|---|---|---|
 | 1. Carrier field | A cubic multigraph `G` and a field `f` on its vertices | Average one carrier-edge pair, perform a Whitehead rewrite, then settle coordinates | Carrier Laplacian and a specified Rule-A or Rule-B lift |
 | 2. Fixed-labelled simple GoG | Cubic multigraphs on the fixed vertex set `[N]` | Keep distinct nonself labelled targets from four endpoint-oriented moves | Degree-stationary simple walk, or a padded symmetric `6N` clock |
-| 3. GDPK multiplicity chain | Unlabelled isomorphism classes | Retain two resolutions per edge object, including multiplicity and loop holding slots | `P_A(G,H)=m(G,H)/(3N)` and the configuration-model quotient law |
+| 3. GDPK multiplicity chain | Unlabelled isomorphism classes | Retain two resolutions per edge object, including multiplicity and holding slots | `P_A(G,H)=m(G,H)/(3N)` and the configuration-model quotient law |
 | 4. Unlabelled simple support | The same classes as Case 3 | Collapse positive nonself multiplicity to one support edge | Degree `q(G)` and Rule B, with `pi_B` proportional to `q(G)` |
 
-Cases 3 and 4 share reachability after self-targets are removed, but they do
-not share path counts, transition probabilities, stationary measures,
-conductance, or normalized spectra. Case 2 has a different state space and a
-different raw move clock. Case 1 is a field cocycle over a chosen base chain,
-not another scalar walk on a graph of graphs. See the
-[full convention dictionary](docs/overview.rst) before comparing results.
+Cases 3 and 4 share reachability after self-targets are removed, but not path
+counts, probabilities, stationary measures, conductance, or normalized
+spectra. Case 2 has a different state space and move clock. Case 1 is a field
+cocycle over a chosen base chain, not another scalar walk on the quotient. See
+the [convention dictionary](docs/overview.rst) before comparing results.
 
-## Standard verification
+## Verification
 
-The ordinary repository check builds the paper and documentation, checks the
-Lean project, and compiles every Python entry point:
+The ordinary repository check builds the paper and Sphinx documentation,
+checks Lean, compiles every Python entry point, and regenerates the committed
+small Wolfram models in memory:
 
 ```sh
 python3 -m pip install -r docs/requirements.txt
 make check
 ```
 
-Requirements are:
+It requires Python 3, a TeX distribution with `latexmk` and `pdflatex`, Sphinx
+8 or 9, and the Lean toolchain pinned in `lean/lean-toolchain`.
 
-- Python 3;
-- a TeX distribution providing `latexmk` and `pdflatex`;
-- Sphinx 8 or 9 for the documentation;
-- Lean through the toolchain pinned in `lean/lean-toolchain`.
+Wolfram checks are separate because they require a licensed local installation
+and a front end:
 
-The Wolfram notebook checks are intentionally separate because they require a
-licensed local Wolfram installation and launch the Mathematica front end.
+```sh
+make notebook
+make notebook-check
+```
 
-## Wolfram notebook edition
+`make notebook-check` also runs the small-model regeneration check and seven
+companion-paclet tests, including a real SetReplace trajectory.
 
-The notebook is built with
-[WolframInstitute/MathNotebook](https://github.com/WolframInstitute/MathNotebook).
-This repository pins MathNotebook `0.1.24`; the paclet requires Wolfram
-Language 14.3 or newer and is currently experimental.
+## Wolfram computational article
 
-Install the pinned-compatible paclet from a Wolfram kernel:
+The article conversion uses
+[WolframInstitute/MathNotebook](https://github.com/WolframInstitute/MathNotebook)
+`0.1.24` and Wolfram Language 14.3 or newer. Install the pinned-compatible
+MathNotebook paclet from a Wolfram kernel:
 
 ```wolfram
 PacletInstall[
@@ -83,59 +86,57 @@ PacletInstall[
 Needs["WolframInstitute`MathNotebook`"]
 ```
 
-On the current macOS setup, rebuild and front-end-check the notebook with:
+The repo-local `GogFieldDynamics` paclet is loaded directly by the build; it
+does not need to be installed globally. It bundles complete `N=2,4,6`
+unlabelled quotient data derived from `gog_generate.py` and provides exact
+Rule-A and Rule-B matrices, rational diffusion, native random paths, and a
+singleton-hypergraph bridge to
+[WolframInstitute/SetReplace](https://github.com/WolframInstitute/SetReplace).
+
+In the lab:
+
+- blue node fill is the exact distribution after `t` quotient steps;
+- the orange ring and trail are one sampled trajectory;
+- Rule A repeats a SetReplace rule once per resolution slot, so duplicates and
+  holding events retain their exact multiplicity;
+- Rule B uses one rule per distinct nonself support neighbour;
+- exact matrix diffusion remains separate from the sample path.
+
+SetReplace is optional for opening the article and using exact/native
+diffusion. It is required by `make notebook-paclet-check` and therefore by the
+full `make notebook-check` used on this audited installation. The validated
+local version is `0.3.196`.
+
+The build adds a banner, eight section links, a visual abstract, the local
+Whitehead move, exact consensus schedules, the diffusion lab, and enumeration
+growth. It verifies all presentation IDs, rejects visible conversion debris,
+normalizes cell UUIDs, saves through the Mathematica front end, reopens the
+artifact, and requires exact LaTeX export both before and after saving. The
+current notebook has 520 article cells, 723 inline formula cells, 159 display
+formula cells, and five notebook-only visuals.
+
+When the committed notebook already exports exactly to the current source, the
+builder reuses that faithful conversion after removing old presentation cells.
+This makes visual-only rebuilds fast without weakening the source contract.
+Force a cold conversion after changing importer behavior with:
 
 ```sh
-make notebook
-make notebook-check
+MATHNOTEBOOK_FORCE_RECONVERT=1 make notebook
 ```
 
-On another installation, provide the kernel path explicitly:
+Use a different kernel path when necessary:
 
 ```sh
 make notebook WOLFRAM_KERNEL=/path/to/WolframKernel
 make notebook-check WOLFRAM_KERNEL=/path/to/WolframKernel
 ```
 
-The build script:
-
-- converts sectioning, theorem environments, proofs, lists, citations, and
-  mathematics into native notebook cells;
-- expands the manuscript's private LaTeX macros for display while retaining
-  their original `SourceTeX`;
-- adds display-only title and author cells;
-- cleans unsupported prose-formatting commands for display while preserving
-  their complete original cell-level TeX;
-- presents bibliography accents and URLs cleanly while retaining each original
-  `\bibitem` payload;
-- loads [`scripts/notebook_visuals.wl`](scripts/notebook_visuals.wl), which adds
-  the banner, eight section links, and four source-suppressed native Wolfram
-  visualizations;
-- verifies that every required presentation element is present;
-- assigns deterministic notebook cell identifiers for reviewable rebuilds;
-- rejects visible raw-math, unsupported prose commands, and `$Failed`
-  artifacts;
-- saves, reopens, and requires an exact UTF-8 LaTeX round trip.
-
-The front-end check resolves `MathNotebook/PlainArticle.nb`, renders a temporary
-PDF, confirms that all six presentation components survived notebook
-normalization, and repeats the exact round-trip test.
-
-MathNotebook is the only visualization paclet required by the article build.
-The figures use built-in `Graphics`, `GraphicsRow`, `Grid`, and notebook boxes so
-their multigraph and move-slot semantics stay explicit and the output remains
-editable. The repository audit also identifies
-[WolframInstitute/Hypergraph](https://github.com/WolframInstitute/Hypergraph)
-and
-[WolframInstitute/DiagrammaticComputation](https://github.com/WolframInstitute/DiagrammaticComputation)
-as useful optional tools for exploratory rewrite and compositional diagrams;
-they are intentionally not runtime dependencies. The rationale, rejected
-alternatives, and notebook editing policy are in the
-[notebook guide](docs/notebook.rst).
+The detailed paclet boundary, visualization-tool audit, editing policy, and
+troubleshooting notes are in the [notebook guide](docs/notebook.rst).
 
 ## Computational reproduction
 
-For a modest complete unlabelled table, run:
+For a modest complete unlabelled table:
 
 ```sh
 mkdir -p artifacts/csv
@@ -154,26 +155,23 @@ python3 gog_support_feature_analysis.py \
   --summary-json artifacts/feature-summary-N8.json
 ```
 
-The generator itself has a pure-Python fallback. Production canonical
-labelling should use nauty/Traces; the spectral consumers require NumPy and
-SciPy. A complete `N=8` run has 71 classes and 1,704 Rule-A slot records.
-Enumeration through `N=14` has 21,096 classes and 886,032 slot records, so the
-largest runs are not quick-start commands. See the
-[computational guide](docs/computation.rst) for backends, file contracts,
-expected counts, and interpretation guardrails.
+The generator has a pure-Python fallback; production canonical labelling
+should use nauty/Traces. A complete `N=8` run has 71 classes and 1,704 Rule-A
+slot records. Enumeration through `N=14` has 21,096 classes and 886,032 slot
+records. See the [computational guide](docs/computation.rst) for backends, file
+contracts, expected counts, and interpretation guardrails.
 
 ## Editing discipline
 
 When changing a result:
 
 1. name which of the four objects it concerns;
-2. state the move clock, operator normalization, and stationary law;
-3. distinguish a proof from an external input, finite computation, or
-   conjecture;
+2. state the move clock, normalization, and stationary law;
+3. distinguish proof, external input, finite computation, and conjecture;
 4. state the settlement convention for a transported-field claim;
 5. update the status ledger and reproducibility notes with the manuscript;
 6. rebuild the PDF and notebook before committing synchronized artifacts.
 
-Generated enumeration tables and local diagnostics belong under `artifacts/`,
-which is ignored by Git. The source papers motivating the project are retained
-under `sources-gdpk/` and `sources-li/` for local comparison.
+Edit notebook presentation code in `scripts/notebook_visuals.wl` or the
+`GogFieldDynamics` paclet, never by hand in the generated `.nb`. Generated
+large tables and local diagnostics belong under ignored `artifacts/`.
