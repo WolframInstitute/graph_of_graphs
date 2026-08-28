@@ -10,8 +10,9 @@ resolutions for every edge object.  Thus every source has exactly ``3*N``
 slots (including the two trivial slots on a loop).  The script compares:
 
 * Rule A: choose one of those compressed resolution slots uniformly;
-* Rule B1: choose a distinct non-self target class uniformly, then choose a
-  retained resolution record to that target uniformly.
+* Rule B: give every distinct non-self target one of the ``3*N`` ticks and
+  use every unused tick as a holding event;
+* the Rule-B jump chain: condition Rule B on making a non-self move.
 
 This is deliberately not an experiment on Li's labelled simple graph, which
 has a different vertex set and four labelled moves per non-loop edge.  The
@@ -260,7 +261,11 @@ def markov_gap_rule_a(
     return float(1.0 - second)
 
 
-def markov_gap_rule_b(simple_edges: Sequence[tuple[int, int]], count: int) -> float:
+def markov_gap_rule_b_jump(
+    simple_edges: Sequence[tuple[int, int]], count: int
+) -> float:
+    """Gap of the degree-normalized chain obtained by conditioning on a move."""
+
     if count <= 1:
         return 0.0
     degrees = np.zeros(count, dtype=float)
@@ -444,46 +449,100 @@ def analyze(model: ModelData) -> tuple[list[dict[str, float | int]], dict[str, f
         collision_nonself = sum(m * (m - 1) // 2 for m in nonself.values())
         multiplicity_histogram.update(nonself.values())
 
-        tv_full = 0.5 * self_slots / slot_count
-        tv_conditional = 0.0
+        tv_a_vs_b_jump = 0.5 * self_slots / slot_count
+        tv_a_conditional_vs_b_jump = 0.0
+        tv_a_vs_b_fixed = 0.5 * abs(
+            self_slots / slot_count - (1.0 - q / slot_count)
+        )
+        tv_a_vs_b_fixed += 0.5 * sum(
+            abs(m / slot_count - 1.0 / slot_count) for m in nonself.values()
+        )
         if q:
-            tv_full += 0.5 * sum(abs(m / slot_count - 1.0 / q) for m in nonself.values())
+            tv_a_vs_b_jump += 0.5 * sum(
+                abs(m / slot_count - 1.0 / q) for m in nonself.values()
+            )
             if nonself_slots:
-                tv_conditional = 0.5 * sum(
+                tv_a_conditional_vs_b_jump = 0.5 * sum(
                     abs(m / nonself_slots - 1.0 / q) for m in nonself.values()
                 )
-                conditional_chi2 = (
+                conditional_chi2_vs_b_jump = (
                     q * (nonself_slots + 2 * collision_nonself) / (nonself_slots**2)
                     - 1.0
                 )
             else:
-                conditional_chi2 = math.nan
+                conditional_chi2_vs_b_jump = math.nan
         else:
-            tv_full = math.nan
-            tv_conditional = math.nan
-            conditional_chi2 = math.nan
+            tv_a_vs_b_jump = math.nan
+            tv_a_conditional_vs_b_jump = math.nan
+            conditional_chi2_vs_b_jump = math.nan
 
-        b_edge_weights = np.zeros(edge_objects, dtype=float)
+        b_jump_edge_weights = np.zeros(edge_objects, dtype=float)
         if q:
             for item in transitions:
                 target = int(item["target"])
                 if target == source:
                     continue
                 edge_id = int(item["edge_id"])
-                b_edge_weights[edge_id] += 1.0 / (q * counts[target])
-            if not math.isclose(float(np.sum(b_edge_weights)), 1.0, rel_tol=1e-12, abs_tol=1e-12):
-                raise ValueError(f"Rule B edge weights for source {source} do not sum to one")
+                b_jump_edge_weights[edge_id] += 1.0 / (q * counts[target])
+            if not math.isclose(
+                float(np.sum(b_jump_edge_weights)),
+                1.0,
+                rel_tol=1e-12,
+                abs_tol=1e-12,
+            ):
+                raise ValueError(
+                    f"Rule-B jump-chain edge weights for source {source} "
+                    "do not sum to one"
+                )
+        b_fixed_edge_weights = b_jump_edge_weights * (q / slot_count)
+        if not math.isclose(
+            float(np.sum(b_fixed_edge_weights)),
+            q / slot_count,
+            rel_tol=1e-12,
+            abs_tol=1e-12,
+        ):
+            raise ValueError(
+                f"fixed-clock Rule-B active weight for source {source} "
+                "does not equal q/(3N)"
+            )
 
         uniform_edge_weights = np.full(edge_objects, 1.0 / edge_objects)
-        edge_weight_tv = 0.5 * float(np.sum(np.abs(b_edge_weights - uniform_edge_weights))) if q else math.nan
-        zero_b_edges = int(np.sum(b_edge_weights < 1e-15)) if q else edge_objects
-        max_b_edge_ratio = float(np.max(b_edge_weights) * edge_objects) if q else math.nan
+        jump_edge_weight_tv = (
+            0.5
+            * float(np.sum(np.abs(b_jump_edge_weights - uniform_edge_weights)))
+            if q
+            else math.nan
+        )
+        zero_b_edges = (
+            int(np.sum(b_jump_edge_weights < 1e-15)) if q else edge_objects
+        )
+        max_b_jump_edge_ratio = (
+            float(np.max(b_jump_edge_weights) * edge_objects) if q else math.nan
+        )
 
         base_laplacian = laplacian_from_edge_weights(n, edges, np.ones(edge_objects))
         base_gap = spectral_gap(base_laplacian)
         rule_a_field_gap = (2.0 / slot_count) * base_gap
-        rule_b_field_gap = spectral_gap(laplacian_from_edge_weights(n, edges, b_edge_weights)) if q else 0.0
-        gap_ratio = rule_b_field_gap / rule_a_field_gap if rule_a_field_gap else math.nan
+        rule_b_jump_field_gap = (
+            spectral_gap(
+                laplacian_from_edge_weights(n, edges, b_jump_edge_weights)
+            )
+            if q
+            else 0.0
+        )
+        rule_b_fixed_field_gap = spectral_gap(
+            laplacian_from_edge_weights(n, edges, b_fixed_edge_weights)
+        )
+        fixed_gap_ratio = (
+            rule_b_fixed_field_gap / rule_a_field_gap
+            if rule_a_field_gap
+            else math.nan
+        )
+        jump_gap_ratio = (
+            rule_b_jump_field_gap / rule_a_field_gap
+            if rule_a_field_gap
+            else math.nan
+        )
 
         loops = sum(matrix[i][i] for i in range(n))
         parallel_excess = sum(
@@ -509,16 +568,19 @@ def analyze(model: ModelData) -> tuple[list[dict[str, float | int]], dict[str, f
                 "max_target_multiplicity": max(counts.values()),
                 "collision_all": collision_all,
                 "collision_nonself": collision_nonself,
-                "tv_A_vs_B_full": tv_full,
-                "tv_A_cond_nonself_vs_B": tv_conditional,
-                "chi2_A_cond_nonself_vs_B": conditional_chi2,
-                "edge_weight_tv_B_vs_uniform": edge_weight_tv,
-                "zero_B_edge_objects": zero_b_edges,
-                "max_B_edge_weight_ratio": max_b_edge_ratio,
+                "tv_A_vs_B_fixed": tv_a_vs_b_fixed,
+                "tv_A_vs_B_jump": tv_a_vs_b_jump,
+                "tv_A_cond_nonself_vs_B_jump": tv_a_conditional_vs_b_jump,
+                "chi2_A_cond_nonself_vs_B_jump": conditional_chi2_vs_b_jump,
+                "edge_weight_tv_B_jump_vs_A": jump_edge_weight_tv,
+                "zero_B_active_edge_objects": zero_b_edges,
+                "max_B_jump_edge_weight_ratio": max_b_jump_edge_ratio,
                 "base_cubic_gap": base_gap,
                 "rule_A_field_gap": rule_a_field_gap,
-                "rule_B_field_gap": rule_b_field_gap,
-                "field_gap_ratio_B_over_A": gap_ratio,
+                "rule_B_fixed_field_gap": rule_b_fixed_field_gap,
+                "rule_B_jump_field_gap": rule_b_jump_field_gap,
+                "field_gap_ratio_B_fixed_over_A": fixed_gap_ratio,
+                "field_gap_ratio_B_jump_over_A": jump_gap_ratio,
                 "loops": loops,
                 "parallel_excess": parallel_excess,
                 "bridges": bridge_count,
@@ -530,8 +592,9 @@ def analyze(model: ModelData) -> tuple[list[dict[str, float | int]], dict[str, f
     pi_a, balance_residual, sym_asymmetry = reconstruct_rule_a_stationary(model.target_counts)
     q_values = np.array([float(row["q_nonself"]) for row in rows])
     labelled_q_values = np.array([float(row["q_labelled_simple"]) for row in rows])
-    pi_b = q_values / float(np.sum(q_values))
     uniform = np.full(node_count, 1.0 / node_count)
+    support_volume = float(np.sum(q_values))
+    pi_b_jump = q_values / support_volume if support_volume else uniform
     # The current two-resolution GDPK law is the configuration-model law
     # pi_cfg(G) proportional to 1/(|Aut_vertices(G)| D(G)), where D is the
     # loop/parallel-edge denominator.  Multiplication by D recovers the class
@@ -552,18 +615,33 @@ def analyze(model: ModelData) -> tuple[list[dict[str, float | int]], dict[str, f
     bridged_mask = bridge_counts > 0
     bridgeless_mask = ~bridged_mask
     bridge_side = column("largest_bridge_small_side")
-    field_ratio = column("field_gap_ratio_B_over_A")
+    fixed_field_ratio = column("field_gap_ratio_B_fixed_over_A")
+    jump_field_ratio = column("field_gap_ratio_B_jump_over_A")
     corr_deficit_collision = safe_correlation(deficit, collision)
     corr_deficit_loops = safe_correlation(deficit, loops)
-    corr_ratio_bridge = safe_correlation(field_ratio, bridge_side)
+    corr_fixed_ratio_bridge = safe_correlation(fixed_field_ratio, bridge_side)
+    corr_jump_ratio_bridge = safe_correlation(jump_field_ratio, bridge_side)
 
     bridge_boundary_edges = sum(
         bool(bridged_mask[u]) != bool(bridged_mask[v]) for u, v in model.simple_edges
     )
     bridged_support_volume = float(np.sum(q_values[bridged_mask]))
     bridgeless_support_volume = float(np.sum(q_values[bridgeless_mask]))
-    rule_b_bridge_conductance = bridge_boundary_edges / min(
+    smaller_support_volume = min(
         bridged_support_volume, bridgeless_support_volume
+    )
+    rule_b_jump_bridge_conductance = (
+        bridge_boundary_edges / smaller_support_volume
+        if smaller_support_volume
+        else math.nan
+    )
+    bridged_class_count = int(np.sum(bridged_mask))
+    bridgeless_class_count = node_count - bridged_class_count
+    smaller_class_count = min(bridged_class_count, bridgeless_class_count)
+    rule_b_fixed_bridge_conductance = (
+        bridge_boundary_edges / (slot_count * smaller_class_count)
+        if smaller_class_count
+        else math.nan
     )
     bridged_pi_a_mass = float(np.sum(pi_a[bridged_mask]))
     rule_a_bridge_flow = 0.0
@@ -576,11 +654,15 @@ def analyze(model: ModelData) -> tuple[list[dict[str, float | int]], dict[str, f
         )
         max_bridged_escape_slots = max(max_bridged_escape_slots, escape_slots)
         rule_a_bridge_flow += pi_a[source] * escape_slots / slot_count
-    rule_a_bridge_conductance = rule_a_bridge_flow / min(
-        bridged_pi_a_mass, 1.0 - bridged_pi_a_mass
+    smaller_rule_a_mass = min(bridged_pi_a_mass, 1.0 - bridged_pi_a_mass)
+    rule_a_bridge_conductance = (
+        rule_a_bridge_flow / smaller_rule_a_mass
+        if smaller_rule_a_mass
+        else math.nan
     )
 
     multiplicity_pairs = sum(multiplicity_histogram.values())
+    simple_gap = simple_combinatorial_gap(model.simple_edges, node_count)
     summary: dict[str, float | int] = {
         "N": n,
         "node_count": node_count,
@@ -591,7 +673,8 @@ def analyze(model: ModelData) -> tuple[list[dict[str, float | int]], dict[str, f
         "q_uniform_max": int(np.max(q_values)),
         "q_over_slots_uniform": float(np.mean(q_values) / slot_count),
         "q_piA_mean": weighted_mean(q_values, pi_a),
-        "q_piB_mean": weighted_mean(q_values, pi_b),
+        "q_piB_fixed_mean": float(np.mean(q_values)),
+        "q_piB_jump_mean": weighted_mean(q_values, pi_b_jump),
         "q_simple_piLabel_mean": weighted_mean(q_values, pi_label),
         "q_labelled_uniform_class_mean": float(np.mean(labelled_q_values)),
         "q_labelled_uniform_class_min": int(np.min(labelled_q_values)),
@@ -604,7 +687,8 @@ def analyze(model: ModelData) -> tuple[list[dict[str, float | int]], dict[str, f
             labelled_q_values, pi_label
         )
         / (6 * n),
-        "tv_piA_piB": 0.5 * float(np.sum(np.abs(pi_a - pi_b))),
+        "tv_piA_piB_fixed": 0.5 * float(np.sum(np.abs(pi_a - uniform))),
+        "tv_piA_piB_jump": 0.5 * float(np.sum(np.abs(pi_a - pi_b_jump))),
         "tv_piA_uniform": 0.5 * float(np.sum(np.abs(pi_a - uniform))),
         "tv_piA_piLabel": 0.5 * float(np.sum(np.abs(pi_a - pi_label))),
         "collision_uniform_mean": float(np.mean(collision)),
@@ -615,170 +699,224 @@ def analyze(model: ModelData) -> tuple[list[dict[str, float | int]], dict[str, f
         "q_bridgeless_mean": float(np.mean(q_values[bridgeless_mask])),
         "bridged_class_fraction": float(np.mean(bridged_mask)),
         "bridged_piA_mass": bridged_pi_a_mass,
-        "bridged_piB_mass": float(np.sum(pi_b[bridged_mask])),
-        "bridged_support_volume_fraction": float(
-            np.sum(q_values[bridged_mask]) / np.sum(q_values)
+        "bridged_piB_fixed_mass": float(np.mean(bridged_mask)),
+        "bridged_piB_jump_mass": float(np.sum(pi_b_jump[bridged_mask])),
+        "bridged_support_volume_fraction": (
+            float(np.sum(q_values[bridged_mask]) / support_volume)
+            if support_volume
+            else math.nan
         ),
         "bridge_boundary_edges": bridge_boundary_edges,
         "max_bridged_escape_slots": max_bridged_escape_slots,
         "rule_A_bridge_conductance": rule_a_bridge_conductance,
-        "rule_B_bridge_conductance": rule_b_bridge_conductance,
+        "rule_B_fixed_bridge_conductance": rule_b_fixed_bridge_conductance,
+        "rule_B_jump_bridge_conductance": rule_b_jump_bridge_conductance,
         "self_probability_uniform": float(np.mean(column("self_slots")) / slot_count),
-        "tv_A_B_full_uniform": float(np.nanmean(column("tv_A_vs_B_full"))),
-        "tv_Acond_B_uniform": float(np.nanmean(column("tv_A_cond_nonself_vs_B"))),
-        "chi2_Acond_B_uniform": float(
-            np.nanmean(column("chi2_A_cond_nonself_vs_B"))
+        "tv_A_B_fixed_uniform": float(np.nanmean(column("tv_A_vs_B_fixed"))),
+        "tv_A_B_jump_uniform": float(np.nanmean(column("tv_A_vs_B_jump"))),
+        "tv_Acond_B_jump_uniform": float(
+            np.nanmean(column("tv_A_cond_nonself_vs_B_jump"))
         ),
-        "edge_weight_tv_uniform": float(np.nanmean(column("edge_weight_tv_B_vs_uniform"))),
-        "zero_B_field_gap_count": int(np.sum(column("rule_B_field_gap") < 1e-12)),
-        "field_gap_ratio_uniform": float(np.nanmean(field_ratio)),
-        "field_gap_ratio_piA": weighted_mean(field_ratio, pi_a),
-        "field_gap_ratio_piB": weighted_mean(field_ratio, pi_b),
+        "chi2_Acond_B_jump_uniform": float(
+            np.nanmean(column("chi2_A_cond_nonself_vs_B_jump"))
+        ),
+        "edge_weight_tv_B_jump_vs_A_uniform": float(
+            np.nanmean(column("edge_weight_tv_B_jump_vs_A"))
+        ),
+        "zero_B_fixed_field_gap_count": int(
+            np.sum(column("rule_B_fixed_field_gap") < 1e-12)
+        ),
+        "zero_B_jump_field_gap_count": int(
+            np.sum(column("rule_B_jump_field_gap") < 1e-12)
+        ),
+        "field_gap_ratio_B_fixed_over_A_uniform": float(
+            np.nanmean(fixed_field_ratio)
+        ),
+        "field_gap_ratio_B_fixed_over_A_piA": weighted_mean(
+            fixed_field_ratio, pi_a
+        ),
+        "field_gap_ratio_B_fixed_over_A_piB_fixed": weighted_mean(
+            fixed_field_ratio, uniform
+        ),
+        "field_gap_ratio_B_jump_over_A_uniform": float(
+            np.nanmean(jump_field_ratio)
+        ),
+        "field_gap_ratio_B_jump_over_A_piA": weighted_mean(
+            jump_field_ratio, pi_a
+        ),
+        "field_gap_ratio_B_jump_over_A_piB_jump": weighted_mean(
+            jump_field_ratio, pi_b_jump
+        ),
         "multiplicity_gt1_fraction": (
-            sum(count for m, count in multiplicity_histogram.items() if m > 1) / multiplicity_pairs
+            sum(count for m, count in multiplicity_histogram.items() if m > 1)
+            / multiplicity_pairs
+            if multiplicity_pairs
+            else math.nan
         ),
         "max_nonself_multiplicity": max(multiplicity_histogram) if multiplicity_histogram else 0,
         "balance_log_residual": balance_residual,
         "symmetric_transform_asymmetry": sym_asymmetry,
         "rule_A_markov_gap": markov_gap_rule_a(model.target_counts, pi_a),
-        "rule_B_markov_gap": markov_gap_rule_b(model.simple_edges, node_count),
-        "li_unlabelled_combinatorial_gap": simple_combinatorial_gap(
+        "rule_B_fixed_markov_gap": simple_gap / slot_count,
+        "rule_B_jump_markov_gap": markov_gap_rule_b_jump(
             model.simple_edges, node_count
         ),
+        "li_unlabelled_combinatorial_gap": simple_gap,
         "corr_deficit_collision_pearson": corr_deficit_collision[0],
         "corr_deficit_collision_spearman": corr_deficit_collision[1],
         "corr_deficit_loops_pearson": corr_deficit_loops[0],
         "corr_deficit_loops_spearman": corr_deficit_loops[1],
-        "corr_field_ratio_bridge_side_pearson": corr_ratio_bridge[0],
-        "corr_field_ratio_bridge_side_spearman": corr_ratio_bridge[1],
+        "corr_fixed_field_ratio_bridge_side_pearson": corr_fixed_ratio_bridge[0],
+        "corr_fixed_field_ratio_bridge_side_spearman": corr_fixed_ratio_bridge[1],
+        "corr_jump_field_ratio_bridge_side_pearson": corr_jump_ratio_bridge[0],
+        "corr_jump_field_ratio_bridge_side_spearman": corr_jump_ratio_bridge[1],
     }
 
     for i, row in enumerate(rows):
         row["pi_A"] = float(pi_a[i])
-        row["pi_B"] = float(pi_b[i])
+        row["pi_B_fixed"] = float(uniform[i])
+        row["pi_B_jump"] = float(pi_b_jump[i])
         row["pi_labelled_uniform"] = float(pi_label[i])
 
     return rows, summary
 
 
-def print_report(path: str, rows: list[dict[str, float | int]], summary: dict[str, float | int]) -> None:
+def print_report(
+    path: str,
+    rows: list[dict[str, float | int]],
+    summary: dict[str, float | int],
+) -> None:
     n = int(summary["N"])
     print()
     print(f"=== {path}: N={n} carrier vertices ===")
     print(
-        "edge models: Li-labelled simple has <=6N raw labelled moves; "
-        "this table is GDPK unlabelled multiplicity with exactly 3N slots; "
-        "Rule B uses its deduplicated non-self support"
+        "Rule A uses all 3N resolution slots. Fixed-clock Rule B gives each "
+        "distinct nonself target probability 1/(3N) and holds with the "
+        "remaining probability. B jump is Rule B conditioned on moving."
     )
     print(
         f"classes={summary['node_count']} slots/source={summary['slot_count_per_source']} "
-        f"simple_edges={summary['simple_edge_count']}"
+        f"simple support edges={summary['simple_edge_count']}"
     )
     print(
-        "simple q: "
+        "distinct nonself targets q(G), over uniformly chosen classes: "
         f"mean/min/max={summary['q_uniform_mean']:.8g}/"
-        f"{summary['q_uniform_min']}/{summary['q_uniform_max']} "
-        f"mean/(3N)={summary['q_over_slots_uniform']:.8g}"
+        f"{summary['q_uniform_min']}/{summary['q_uniform_max']}; "
+        f"mean holding probability for Rule B="
+        f"{1.0 - float(summary['q_over_slots_uniform']):.8g}"
     )
     print(
-        "mean q under stationary laws: "
-        f"uniform classes={summary['q_uniform_mean']:.8g} "
-        f"GDPK={summary['q_piA_mean']:.8g} RuleB={summary['q_piB_mean']:.8g} "
+        "mean q(G) under stationary laws: "
+        f"Rule A={summary['q_piA_mean']:.8g}; "
+        f"Rule B={summary['q_piB_fixed_mean']:.8g}; "
+        f"B jump={summary['q_piB_jump_mean']:.8g}; "
         f"uniform-labelled projection={summary['q_simple_piLabel_mean']:.8g}"
     )
     print(
         "Li-labelled simple degree (one representative per unlabelled class): "
         f"mean/min/max={summary['q_labelled_uniform_class_mean']:.8g}/"
         f"{summary['q_labelled_uniform_class_min']}/"
-        f"{summary['q_labelled_uniform_class_max']} "
+        f"{summary['q_labelled_uniform_class_max']}; "
         f"mean/(6N raw moves)={summary['q_labelled_over_raw_moves_uniform_class']:.8g}; "
-        f"uniform-labelled mean={summary['q_labelled_piLabel_mean']:.8g} "
-        f"ratio={summary['q_labelled_piLabel_over_raw_moves']:.8g}"
+        f"uniform-labelled mean={summary['q_labelled_piLabel_mean']:.8g}"
     )
     print(
-        f"TV(piA,piB)={summary['tv_piA_piB']:.8g} "
-        f"TV(piA,uniform)={summary['tv_piA_uniform']:.8g} "
-        f"TV(piA,uniform-labelled projection)={summary['tv_piA_piLabel']:.8g}"
+        "total-variation distance from Rule-A stationarity: "
+        f"Rule B={summary['tv_piA_piB_fixed']:.8g}; "
+        f"B jump={summary['tv_piA_piB_jump']:.8g}; "
+        f"uniform-labelled projection={summary['tv_piA_piLabel']:.8g}"
     )
     print(
-        f"collision C1: mean={summary['collision_uniform_mean']:.8g} "
+        "repeated Rule-A targets: "
+        f"mean unordered slot collisions={summary['collision_uniform_mean']:.8g}; "
         f"mean/N={summary['collision_per_N_uniform']:.8g}; "
-        f"nonself support pairs with multiplicity>1={summary['multiplicity_gt1_fraction']:.8g}; "
-        f"max multiplicity={summary['max_nonself_multiplicity']}"
+        f"fraction of nonself source-target pairs with multiplicity > 1="
+        f"{summary['multiplicity_gt1_fraction']:.8g}; "
+        f"maximum multiplicity={summary['max_nonself_multiplicity']}"
     )
     print(
         "bridge split: "
-        f"mean C1/N bridged/bridgeless="
+        f"mean collisions/N, bridged/bridgeless="
         f"{summary['collision_per_N_bridged']:.8g}/"
         f"{summary['collision_per_N_bridgeless']:.8g}; "
-        f"mean q bridged/bridgeless={summary['q_bridged_mean']:.8g}/"
+        f"mean q, bridged/bridgeless={summary['q_bridged_mean']:.8g}/"
         f"{summary['q_bridgeless_mean']:.8g}; "
-        f"bridged class/support-volume fractions="
-        f"{summary['bridged_class_fraction']:.8g}/"
-        f"{summary['bridged_support_volume_fraction']:.8g}"
+        f"bridged fraction under Rule B/B jump="
+        f"{summary['bridged_piB_fixed_mass']:.8g}/"
+        f"{summary['bridged_piB_jump_mass']:.8g}"
     )
     print(
-        "bridge cut: "
-        f"boundary support edges={summary['bridge_boundary_edges']} "
-        f"max Rule-A escape slots/source={summary['max_bridged_escape_slots']}; "
-        f"conductance RuleA/RuleB={summary['rule_A_bridge_conductance']:.8g}/"
-        f"{summary['rule_B_bridge_conductance']:.8g}"
+        "conductance of the bridged/bridgeless cut: "
+        f"Rule A={summary['rule_A_bridge_conductance']:.8g}; "
+        f"Rule B={summary['rule_B_fixed_bridge_conductance']:.8g}; "
+        f"B jump={summary['rule_B_jump_bridge_conductance']:.8g}; "
+        f"boundary support edges={summary['bridge_boundary_edges']}"
     )
     print(
-        f"mean self probability under Rule A={summary['self_probability_uniform']:.8g}; "
-        f"mean TV(A,B)={summary['tv_A_B_full_uniform']:.8g}; "
-        f"mean TV(A|nonself,B)={summary['tv_Acond_B_uniform']:.8g}"
+        "mean total-variation distance between one-step rows: "
+        f"A versus Rule B={summary['tv_A_B_fixed_uniform']:.8g}; "
+        f"A versus B jump={summary['tv_A_B_jump_uniform']:.8g}; "
+        f"A conditioned on moving versus B jump="
+        f"{summary['tv_Acond_B_jump_uniform']:.8g}"
     )
     print(
-        "conditional multiplicity divergence: "
-        f"mean chi^2(A|nonself || B)={summary['chi2_Acond_B_uniform']:.8g}"
+        "mean chi-square divergence of A conditioned on moving from B jump="
+        f"{summary['chi2_Acond_B_jump_uniform']:.8g}"
     )
     print(
-        f"field edge-weight mean TV(B,uniform)={summary['edge_weight_tv_uniform']:.8g}; "
-        f"zero Rule-B weighted gaps={summary['zero_B_field_gap_count']}"
+        "carriers whose expected field-update Laplacian has second "
+        "eigenvalue zero: "
+        f"Rule B={summary['zero_B_fixed_field_gap_count']}; "
+        f"B jump={summary['zero_B_jump_field_gap_count']}"
     )
     print(
-        "field gap ratio B/A: "
-        f"uniform={summary['field_gap_ratio_uniform']:.8g} "
-        f"piA={summary['field_gap_ratio_piA']:.8g} "
-        f"piB={summary['field_gap_ratio_piB']:.8g}"
+        "mean ratio to the Rule-A field-update eigenvalue: "
+        f"Rule B={summary['field_gap_ratio_B_fixed_over_A_uniform']:.8g}; "
+        f"B jump={summary['field_gap_ratio_B_jump_over_A_uniform']:.8g}"
     )
     print(
-        f"base-chain Markov gaps: RuleA={summary['rule_A_markov_gap']:.8g} "
-        f"RuleB={summary['rule_B_markov_gap']:.8g}; "
-        f"Li-unlabelled combinatorial lambda2="
-        f"{summary['li_unlabelled_combinatorial_gap']:.8g}"
+        "base-chain spectral gaps: "
+        f"Rule A={summary['rule_A_markov_gap']:.8g}; "
+        f"Rule B=lambda2(Lsupport)/(3N)="
+        f"{summary['rule_B_fixed_markov_gap']:.8g}; "
+        f"B jump={summary['rule_B_jump_markov_gap']:.8g}; "
+        f"lambda2(Lsupport)={summary['li_unlabelled_combinatorial_gap']:.8g}"
     )
     print(
-        f"reciprocity residual(log)={summary['balance_log_residual']:.3g}; "
+        f"Rule-A detailed-balance log residual={summary['balance_log_residual']:.3g}; "
         f"symmetric-transform asymmetry={summary['symmetric_transform_asymmetry']:.3g}"
     )
     print(
-        "corr((3N-q), C1) Pearson/Spearman="
+        "correlation of (3N-q) with slot collisions, Pearson/Spearman="
         f"{summary['corr_deficit_collision_pearson']:.6g}/"
         f"{summary['corr_deficit_collision_spearman']:.6g}; "
-        "corr((3N-q), loops)="
+        "with loops="
         f"{summary['corr_deficit_loops_pearson']:.6g}/"
         f"{summary['corr_deficit_loops_spearman']:.6g}"
     )
     print(
-        "corr(field gap ratio B/A, largest bridge side) Pearson/Spearman="
-        f"{summary['corr_field_ratio_bridge_side_pearson']:.6g}/"
-        f"{summary['corr_field_ratio_bridge_side_spearman']:.6g}"
+        "correlation of field-eigenvalue ratio with largest bridge side, "
+        "Pearson/Spearman: "
+        f"Rule B={summary['corr_fixed_field_ratio_bridge_side_pearson']:.6g}/"
+        f"{summary['corr_fixed_field_ratio_bridge_side_spearman']:.6g}; "
+        f"B jump={summary['corr_jump_field_ratio_bridge_side_pearson']:.6g}/"
+        f"{summary['corr_jump_field_ratio_bridge_side_spearman']:.6g}"
     )
 
     for name in (
         "q_nonself",
         "q_labelled_simple",
         "collision_all",
-        "tv_A_vs_B_full",
-        "edge_weight_tv_B_vs_uniform",
-        "field_gap_ratio_B_over_A",
+        "tv_A_vs_B_fixed",
+        "tv_A_vs_B_jump",
+        "field_gap_ratio_B_fixed_over_A",
+        "field_gap_ratio_B_jump_over_A",
         "loops",
         "bridges",
         "largest_bridge_small_side",
     ):
-        print(f"  {name}: {summarize_array(np.array([float(row[name]) for row in rows]))}")
+        values = np.array([float(row[name]) for row in rows])
+        print(f"  {name}: {summarize_array(values)}")
 
 
 def write_csv(path: str, rows: Iterable[dict[str, float | int]]) -> None:

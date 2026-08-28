@@ -231,7 +231,7 @@ labPanel[
   ruleText = If[
     rule === "A",
     "resolution slots · multiplicity · holding retained",
-    "distinct nonself targets · uniform simple support"
+    "one tick per distinct target · unused ticks hold · uniform class law"
   ];
 
   Framed[
@@ -384,7 +384,7 @@ GogDiffusionExplorer[OptionsPattern[]] := Module[
                 labControlLabel["CHAIN"],
                 SetterBar[
                   Dynamic[rule, (rule = #; step = 0; signature = None) &],
-                  {"A" -> "Rule A", "B" -> "Rule B"}
+                  {"A" -> "Rule A", "B" -> "Rule B · fixed clock"}
                 ]
               },
               {

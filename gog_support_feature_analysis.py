@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Measure local-feature bottlenecks in the unlabelled Whitehead support.
+"""Measure local-feature cuts in the unlabelled Whitehead support.
 
-The same class indicator has three different Rayleigh quotients:
+For each class indicator, the script divides its one-step Dirichlet energy by
+its stationary variance for four related operators:
 
-* the combinatorial Laplacian of Li's unlabelled simple GoG;
-* the normalized simple-neighbour Rule-B walk;
-* the reversible GDPK/Rule-A multiplicity chain.
+* the reversible GDPK/Rule-A multiplicity chain;
+* fixed-clock Rule B, with one of ``3*N`` ticks per support neighbour;
+* the degree-normalized Rule-B jump chain, obtained by conditioning on moving;
+* the combinatorial Laplacian of Li's unlabelled simple GoG.
 
 Inputs are complete transition JSON files emitted by ``gog_generate.py``.
 Cycle length one means a loop, length two means a parallel-edge pair, and
@@ -42,8 +44,10 @@ def smallest_eigenvalues(matrix: sparse.csr_matrix, count: int) -> list[float]:
     return [float(max(0.0, value)) for value in values]
 
 
-def low_spectra(model, pi_a: np.ndarray, q: np.ndarray, count: int) -> dict[str, list[float]]:
-    """Build the three symmetric Laplacians on the common class set."""
+def low_spectra(
+    model, pi_a: np.ndarray, q: np.ndarray, count: int
+) -> dict[str, list[float]]:
+    """Build the four symmetric Laplacians on the common class set."""
 
     node_count = len(model.codes)
     slot_count = 3 * model.n
@@ -92,8 +96,9 @@ def low_spectra(model, pi_a: np.ndarray, q: np.ndarray, count: int) -> dict[str,
 
     return {
         "rule_A": smallest_eigenvalues(a_laplacian, count),
-        "rule_B": smallest_eigenvalues(b_laplacian, count),
-        "combinatorial": smallest_eigenvalues(c_laplacian, count),
+        "rule_B_fixed": smallest_eigenvalues(c_laplacian / slot_count, count),
+        "rule_B_jump": smallest_eigenvalues(b_laplacian, count),
+        "support_combinatorial": smallest_eigenvalues(c_laplacian, count),
     }
 
 
@@ -152,13 +157,16 @@ def analyze(path: str, max_cycle: int, eigenvalue_count: int) -> dict[str, objec
     node_count = len(model.codes)
     slot_count = 3 * model.n
     q = np.array(
-        [sum(1 for target in row if target != source) for source, row in enumerate(model.target_counts)],
+        [
+            sum(1 for target in row if target != source)
+            for source, row in enumerate(model.target_counts)
+        ],
         dtype=float,
     )
     total_volume = float(np.sum(q))
-    pi_b = q / total_volume
     pi_a, balance_residual, _asymmetry = reconstruct_rule_a_stationary(model.target_counts)
     uniform = np.full(node_count, 1.0 / node_count)
+    pi_b_jump = q / total_volume if total_volume else uniform
 
     matrices = [matrix_from_code(code, model.n) for code in model.codes]
     masks = [
@@ -176,7 +184,8 @@ def analyze(path: str, max_cycle: int, eigenvalue_count: int) -> dict[str, objec
         complement_volume = total_volume - volume
 
         a_mass = float(np.sum(pi_a[mask]))
-        b_mass = volume / total_volume
+        b_fixed_mass = class_count / node_count
+        b_jump_mass = volume / total_volume if total_volume else b_fixed_mass
         a_flow = 0.0
         for source in np.flatnonzero(mask):
             a_flow += sum(
@@ -185,17 +194,22 @@ def analyze(path: str, max_cycle: int, eigenvalue_count: int) -> dict[str, objec
                 if not mask[target]
             )
 
-        combinatorial_rayleigh = (
+        combinatorial_energy_over_variance = (
             boundary * node_count / (class_count * complement_count)
             if class_count and complement_count
             else math.nan
         )
-        rule_b_rayleigh = (
+        rule_b_fixed_energy_over_variance = (
+            combinatorial_energy_over_variance / slot_count
+            if class_count and complement_count
+            else math.nan
+        )
+        rule_b_jump_energy_over_variance = (
             boundary * total_volume / (volume * complement_volume)
             if volume and complement_volume
             else math.nan
         )
-        rule_a_rayleigh = (
+        rule_a_energy_over_variance = (
             a_flow / (a_mass * (1.0 - a_mass))
             if 0.0 < a_mass < 1.0
             else math.nan
@@ -205,16 +219,26 @@ def analyze(path: str, max_cycle: int, eigenvalue_count: int) -> dict[str, objec
                 "cycle_length": length,
                 "class_fraction": class_count / node_count,
                 "boundary_edges": boundary,
-                "boundary_per_feature_class": boundary / class_count if class_count else math.nan,
+                "boundary_per_feature_class": (
+                    boundary / class_count if class_count else math.nan
+                ),
                 "mean_q_feature": volume / class_count if class_count else math.nan,
                 "mean_q_complement": (
                     complement_volume / complement_count if complement_count else math.nan
                 ),
                 "pi_A_mass": a_mass,
-                "pi_B_mass": b_mass,
-                "combinatorial_rayleigh": combinatorial_rayleigh,
-                "rule_B_normalized_rayleigh": rule_b_rayleigh,
-                "rule_A_rayleigh": rule_a_rayleigh,
+                "pi_B_fixed_mass": b_fixed_mass,
+                "pi_B_jump_mass": b_jump_mass,
+                "support_laplacian_energy_over_variance": (
+                    combinatorial_energy_over_variance
+                ),
+                "rule_B_fixed_energy_over_variance": (
+                    rule_b_fixed_energy_over_variance
+                ),
+                "rule_B_jump_energy_over_variance": (
+                    rule_b_jump_energy_over_variance
+                ),
+                "rule_A_energy_over_variance": rule_a_energy_over_variance,
             }
         )
 
@@ -222,9 +246,18 @@ def analyze(path: str, max_cycle: int, eigenvalue_count: int) -> dict[str, objec
         "N": model.n,
         "node_count": node_count,
         "balance_log_residual": balance_residual,
-        "uniform_feature_covariance_min_eigenvalue": covariance_min_eigenvalue(masks, uniform),
-        "pi_A_feature_covariance_min_eigenvalue": covariance_min_eigenvalue(masks, pi_a),
-        "pi_B_feature_covariance_min_eigenvalue": covariance_min_eigenvalue(masks, pi_b),
+        "uniform_feature_covariance_min_eigenvalue": covariance_min_eigenvalue(
+            masks, uniform
+        ),
+        "pi_A_feature_covariance_min_eigenvalue": covariance_min_eigenvalue(
+            masks, pi_a
+        ),
+        "pi_B_fixed_feature_covariance_min_eigenvalue": (
+            covariance_min_eigenvalue(masks, uniform)
+        ),
+        "pi_B_jump_feature_covariance_min_eigenvalue": (
+            covariance_min_eigenvalue(masks, pi_b_jump)
+        ),
         "low_eigenvalues": low_spectra(model, pi_a, q, eigenvalue_count),
         "features": feature_rows,
     }
@@ -233,27 +266,32 @@ def analyze(path: str, max_cycle: int, eigenvalue_count: int) -> dict[str, objec
 def print_report(path: str, result: dict[str, object]) -> None:
     print(f"\n=== {path}: N={result['N']}, classes={result['node_count']} ===")
     print(
-        "minimum feature-covariance eigenvalue "
-        f"uniform/piA/piB={result['uniform_feature_covariance_min_eigenvalue']:.6g}/"
-        f"{result['pi_A_feature_covariance_min_eigenvalue']:.6g}/"
-        f"{result['pi_B_feature_covariance_min_eigenvalue']:.6g}"
+        "smallest eigenvalue of the centered cycle-indicator covariance: "
+        f"uniform={result['uniform_feature_covariance_min_eigenvalue']:.6g}; "
+        f"Rule A={result['pi_A_feature_covariance_min_eigenvalue']:.6g}; "
+        f"Rule B={result['pi_B_fixed_feature_covariance_min_eigenvalue']:.6g}; "
+        f"B jump={result['pi_B_jump_feature_covariance_min_eigenvalue']:.6g}"
     )
     print("smallest eigenvalues (including zero):")
     for name, values in result["low_eigenvalues"].items():
         print(f"  {name}: " + ", ".join(f"{value:.7g}" for value in values))
     print(
         "j  class-frac  boundary/|X|  mean-q X/Xc  "
-        "Rayleigh[comb, RuleB, RuleA]  mass[piA,piB]"
+        "energy/variance[A,B-fixed,B-jump,support-L]  "
+        "mass[piA,piB-fixed,piB-jump]"
     )
     for row in result["features"]:
         print(
             f"{row['cycle_length']:d}  {row['class_fraction']:.6f}  "
             f"{row['boundary_per_feature_class']:.6g}  "
             f"{row['mean_q_feature']:.6g}/{row['mean_q_complement']:.6g}  "
-            f"{row['combinatorial_rayleigh']:.6g},"
-            f"{row['rule_B_normalized_rayleigh']:.6g},"
-            f"{row['rule_A_rayleigh']:.6g}  "
-            f"{row['pi_A_mass']:.6g},{row['pi_B_mass']:.6g}"
+            f"{row['rule_A_energy_over_variance']:.6g},"
+            f"{row['rule_B_fixed_energy_over_variance']:.6g},"
+            f"{row['rule_B_jump_energy_over_variance']:.6g},"
+            f"{row['support_laplacian_energy_over_variance']:.6g}  "
+            f"{row['pi_A_mass']:.6g},"
+            f"{row['pi_B_fixed_mass']:.6g},"
+            f"{row['pi_B_jump_mass']:.6g}"
         )
 
 

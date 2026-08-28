@@ -3,7 +3,7 @@
 (* Build the canonical MathNotebook artifact and fail on any fidelity loss. *)
 
 $requiredMathNotebookVersion = "0.1.24";
-$requiredGogFieldDynamicsVersion = "0.1.0";
+$requiredGogFieldDynamicsVersion = "0.2.0";
 $minimumWolframVersion = 14.3;
 
 fail[message_String] := (
@@ -427,6 +427,25 @@ notebook = notebook /. Notebook[documentCells_, options___] :>
   )
 ];
 
+(* MathNotebook's article stylesheet may italicize theorem-family cells.
+   Keep prose upright in the computational edition as it is in the PDF. *)
+$uprightArticleStyles = {
+  "Abstract", "Author", "Caption", "Conjecture", "Corollary", "Definition",
+  "Item", "ItemNumbered", "Lemma", "Proof", "Proposition", "Question",
+  "Reference", "Remark", "Section", "Subsection", "Text", "Theorem", "Title"
+};
+uprightArticleCell[
+  Cell[content_, style_String, options___]
+] /; MemberQ[$uprightArticleStyles, style] := Cell[
+  content,
+  style,
+  Sequence @@ DeleteCases[{options}, FontSlant -> _],
+  FontSlant -> Plain
+];
+uprightArticleCell[cell_] := cell;
+notebook = notebook /. Notebook[documentCells_, options___] :>
+  Notebook[uprightArticleCell /@ documentCells, options];
+
 (* Enrich the faithful article conversion with native, presentation-only
    Wolfram graphics.  Every added cell carries MathNotebook's Suppressed tag,
    so the canonical LaTeX export remains byte-exact. *)
@@ -579,6 +598,21 @@ requiredStyles = {
 };
 If[! AllTrue[requiredStyles, Lookup[styles, #, 0] > 0 &],
   fail["one or more required document styles are absent"]
+];
+If[
+  ! AllTrue[
+    Cases[
+      cells,
+      cell : Cell[_, style_String, ___] /;
+        MemberQ[$uprightArticleStyles, style] :> cell
+    ],
+    ! FreeQ[#, FontSlant -> Plain] &
+  ],
+  fail["one or more prose cells lack the required upright style"]
+];
+If[
+  ! FreeQ[notebook, FontSlant -> Italic],
+  fail["the notebook still contains an explicit italic style"]
 ];
 
 visibleByCell = visibleStrings /@ cells;

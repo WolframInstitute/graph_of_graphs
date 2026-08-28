@@ -29,7 +29,8 @@ presentationCell[content_, style_String, id_String, options___] := Cell[
   style,
   TaggingRules -> notebookTag[id],
   CellTags -> {"GoGNotebookVisual", id},
-  options
+  options,
+  FontSlant -> Plain
 ];
 
 graphicCell[expression_, id_String] := presentationCell[
@@ -171,8 +172,8 @@ updateIcon[] := Column[
   {
     Row[{
       Style[
-        Row[{Subscript[Style["f", Italic], Style["i", Italic]], ", ",
-          Subscript[Style["f", Italic], Style["j", Italic]]}],
+        Row[{Subscript[Style["f", Plain], Style["i", Plain]], ", ",
+          Subscript[Style["f", Plain], Style["j", Plain]]}],
         9,
         $navy
       ],
@@ -180,9 +181,9 @@ updateIcon[] := Column[
       Style[
         Row[{"m, m", "   ",
           Style["m = (", 8],
-          Subscript[Style["f", Italic], Style["i", Italic]],
+          Subscript[Style["f", Plain], Style["i", Plain]],
           Style[" + ", 8],
-          Subscript[Style["f", Italic], Style["j", Italic]],
+          Subscript[Style["f", Plain], Style["j", Plain]],
           Style[")/2", 8]}],
         9,
         $navy
@@ -324,7 +325,7 @@ visualAbstract[] := Framed[
       Style[
         "One local operation; four mathematical objects that must stay distinct",
         10,
-        Italic,
+        Plain,
         $muted,
         FontFamily -> "Helvetica"
       ],
@@ -333,7 +334,7 @@ visualAbstract[] := Framed[
           caseBadge["1", "field cocycle", "state (G,f)", $blue],
           caseBadge["2", "fixed-labelled", "four moves / edge", $vermillion],
           caseBadge["3", "multiplicity chain", "3N resolution slots", $green],
-          caseBadge["4", "simple support", "positive targets only", $purple]
+          caseBadge["4", "simple support", "fixed 3N clock", $purple]
         }},
         Spacings -> {0.18, 0},
         Alignment -> Center
@@ -465,8 +466,8 @@ whiteheadMoveFigure[] := Framed[
         Spacings -> {0.8, 0}
       ],
       Style[
-        "Rule A retains resolution slots and multiplicities.\n" <>
-        "Rule B keeps only distinct nonself targets.",
+        "Rule A retains every resolution slot and its multiplicity.\n" <>
+        "Rule B gives each distinct target one tick and uses the rest to hold.",
         10,
         $muted,
         FontFamily -> "Helvetica",
@@ -841,8 +842,8 @@ enrichCells[inputCells_List, diffusionBoxes_] := Module[{cells},
         "A playable exact diffusion on the complete N=2,4,6 unlabelled " <>
         "quotients.  Blue fill is probability mass; the orange ring and " <>
         "trail are one sampled path.  SetReplace repeats singleton-hypergraph " <>
-        "rules by Rule-A slot multiplicity and uses one rule per Rule-B " <>
-        "support neighbour.",
+        "rules by Rule-A slot multiplicity.  Rule B uses one rule per support " <>
+        "neighbour and pads every class to a fixed 3N clock with self-rules.",
         "GoGDiffusionLabCaption"
       ]
     }

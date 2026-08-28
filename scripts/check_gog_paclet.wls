@@ -38,7 +38,7 @@ If[! TrueQ[report["ReportSucceeded"]],
 testCount = Length[report["Results"]];
 
 Print[<|
-  "Paclet" -> "GogFieldDynamics 0.1.0",
+  "Paclet" -> "GogFieldDynamics 0.2.0",
   "SmallModels" -> GogFieldDynamics`GogAvailableSizes[],
   "SetReplaceVersion" -> GogFieldDynamics`GogSetReplaceVersion[],
   "TestsRun" -> testCount,

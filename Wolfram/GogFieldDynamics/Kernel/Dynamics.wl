@@ -11,12 +11,12 @@ GogSmallModel::usage =
   "Rule-A slot counts for the complete n-vertex quotient.";
 
 GogTransitionCounts::usage =
-  "GogTransitionCounts[n, rule] returns the integer Rule-A multiplicity " <>
-  "matrix or the off-diagonal 0/1 Rule-B support matrix.";
+  "GogTransitionCounts[n, rule] returns integer event counts for Rule A, " <>
+  "fixed-clock Rule B, or the degree-normalized Rule-B jump chain.";
 
 GogTransitionMatrix::usage =
   "GogTransitionMatrix[n, rule] returns the exact row-stochastic transition " <>
-  "matrix for Rule A or Rule B.";
+  "matrix for Rule A, fixed-clock Rule B, or \"BJump\".";
 
 GogDiffusionState::usage =
   "GogDiffusionState[n, rule, start, steps] returns the exact distribution " <>
@@ -35,7 +35,8 @@ GogSetReplaceVersion::usage =
 
 GogSetReplaceRules::usage =
   "GogSetReplaceRules[n, rule] encodes quotient transitions as singleton " <>
-  "hypergraph rewrite rules. Rule-A rules are repeated by slot multiplicity.";
+  "hypergraph rewrite rules. Rule A retains slot multiplicity; Rule B " <>
+  "retains one rule per neighbour and pads its fixed 3N clock with holds.";
 
 GogSetReplaceTrajectory::usage =
   "GogSetReplaceTrajectory[n, rule, start, steps, seed] samples one path " <>
@@ -127,10 +128,13 @@ GogSmallModel[n_] := failure[
 normalizeRule[rule_] := Switch[
   ToLowerCase[ToString[rule]],
   "a" | "rulea" | "rule a" | "multiplicity", "A",
-  "b" | "ruleb" | "rule b" | "support", "B",
+  "b" | "ruleb" | "rule b" | "support" | "support clock" |
+    "fixed support", "B",
+  "bjump" | "rule b jump" | "jump" | "neighbour" | "neighbor" |
+    "simple neighbour" | "simple neighbor", "BJump",
   _, failure[
     "UnknownRule",
-    "The quotient rule must be Rule A or Rule B.",
+    "The quotient rule must be Rule A, Rule B, or the Rule-B jump chain.",
     <|"Rule" -> rule|>
   ]
 ];
@@ -141,12 +145,23 @@ ruleBSupport[counts_List] := MapIndexed[
   {2}
 ];
 
+ruleBClockCounts[counts_List, n_Integer] := Module[{support, degrees},
+  support = ruleBSupport[counts];
+  degrees = Total /@ support;
+  support + DiagonalMatrix[3 n - degrees]
+];
+
 GogTransitionCounts[n_Integer, rule_: "A"] := Module[
   {model = GogSmallModel[n], normalized = normalizeRule[rule], counts},
   If[FailureQ[model], Return[model]];
   If[FailureQ[normalized], Return[normalized]];
   counts = model["RuleACounts"];
-  If[normalized === "A", counts, ruleBSupport[counts]]
+  Switch[
+    normalized,
+    "A", counts,
+    "B", ruleBClockCounts[counts, n],
+    "BJump", ruleBSupport[counts]
+  ]
 ];
 
 GogTransitionMatrix[n_Integer, rule_: "A"] := Module[
@@ -156,13 +171,17 @@ GogTransitionMatrix[n_Integer, rule_: "A"] := Module[
   If[FailureQ[normalized], Return[normalized]];
   counts = model["RuleACounts"];
   If[normalized === "A", Return[counts/model["RuleARowSum"]]];
+  If[
+    normalized === "B",
+    Return[ruleBClockCounts[counts, n]/(3 n)]
+  ];
   support = ruleBSupport[counts];
   degrees = Total /@ support;
   If[
     AnyTrue[degrees, # <= 0 &],
     Return[failure[
       "IsolatedClass",
-      "Rule B is undefined at an isolated quotient class.",
+      "The Rule-B jump chain is undefined at an isolated quotient class.",
       <|"N" -> n|>
     ]]
   ];
@@ -383,12 +402,14 @@ GogValidateSmallModels[] := Module[{sizes, reports},
   If[FailureQ[sizes], Return[sizes]];
   reports = AssociationMap[
     Function[n,
-      Module[{model = GogSmallModel[n], counts, support, matrixA, matrixB,
-        edges, supportEdges, checks},
+      Module[{model = GogSmallModel[n], counts, support, clockCounts,
+        matrixA, matrixB, matrixBJump, edges, supportEdges, checks},
         counts = model["RuleACounts"];
         support = ruleBSupport[counts];
+        clockCounts = ruleBClockCounts[counts, n];
         matrixA = GogTransitionMatrix[n, "A"];
         matrixB = GogTransitionMatrix[n, "B"];
+        matrixBJump = GogTransitionMatrix[n, "BJump"];
         edges = Sort[Sort /@ model["Edges"]];
         supportEdges = Sort @ DeleteDuplicates @ Cases[
           MapIndexed[
@@ -410,7 +431,14 @@ GogValidateSmallModels[] := Module[{sizes, reports},
               model["ExpectedRuleASlotCount"]),
           "SupportEdges" -> (edges === supportEdges),
           "RuleAStochastic" -> AllTrue[Total /@ matrixA, # === 1 &],
-          "RuleBStochastic" -> AllTrue[Total /@ matrixB, # === 1 &]
+          "RuleBClockRowSums" ->
+            AllTrue[Total /@ clockCounts, # === 3 n &],
+          "RuleBClockSymmetric" -> (clockCounts === Transpose[clockCounts]),
+          "RuleBStochastic" -> AllTrue[Total /@ matrixB, # === 1 &],
+          "RuleBUniformStationary" ->
+            AllTrue[Total /@ Transpose[matrixB], # === 1 &],
+          "RuleBJumpStochastic" ->
+            AllTrue[Total /@ matrixBJump, # === 1 &]
         |>;
         <|"Valid" -> And @@ Values[checks], "Checks" -> checks|>
       ]

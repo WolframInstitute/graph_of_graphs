@@ -1,7 +1,7 @@
 PacletObject[
   <|
     "Name" -> "GogFieldDynamics",
-    "Version" -> "0.1.0",
+    "Version" -> "0.2.0",
     "WolframVersion" -> "14.3+",
     "Description" ->
       "Exact small graph-of-graphs diffusion and SetReplace trajectories",

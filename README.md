@@ -38,7 +38,7 @@ and the interactive lab without changing exported TeX.
 | 1. Carrier field | A cubic multigraph `G` and a field `f` on its vertices | Average one carrier-edge pair, perform a Whitehead rewrite, then settle coordinates | Carrier Laplacian and a specified Rule-A or Rule-B lift |
 | 2. Fixed-labelled simple GoG | Cubic multigraphs on the fixed vertex set `[N]` | Keep distinct nonself labelled targets from four endpoint-oriented moves | Degree-stationary simple walk, or a padded symmetric `6N` clock |
 | 3. GDPK multiplicity chain | Unlabelled isomorphism classes | Retain two resolutions per edge object, including multiplicity and holding slots | `P_A(G,H)=m(G,H)/(3N)` and the configuration-model quotient law |
-| 4. Unlabelled simple support | The same classes as Case 3 | Collapse positive nonself multiplicity to one support edge | Degree `q(G)` and Rule B, with `pi_B` proportional to `q(G)` |
+| 4. Unlabelled simple support | The same classes as Case 3 | Give every distinct nonself target one of `3N` ticks and use the remaining ticks for holding | Fixed-clock Rule B is symmetric and uniform; its jump chain has stationary mass proportional to `q(G)` |
 
 Cases 3 and 4 share reachability after self-targets are removed, but not path
 counts, probabilities, stationary measures, conductance, or normalized
@@ -68,7 +68,7 @@ make notebook
 make notebook-check
 ```
 
-`make notebook-check` also runs the small-model regeneration check and seven
+`make notebook-check` also runs the small-model regeneration check and nine
 companion-paclet tests, including a real SetReplace trajectory.
 
 ## Wolfram computational article
@@ -89,8 +89,8 @@ Needs["WolframInstitute`MathNotebook`"]
 The repo-local `GogFieldDynamics` paclet is loaded directly by the build; it
 does not need to be installed globally. It bundles complete `N=2,4,6`
 unlabelled quotient data derived from `gog_generate.py` and provides exact
-Rule-A and Rule-B matrices, rational diffusion, native random paths, and a
-singleton-hypergraph bridge to
+Rule-A, fixed-clock Rule-B, and Rule-B jump-chain matrices, rational diffusion,
+native random paths, and a singleton-hypergraph bridge to
 [WolframInstitute/SetReplace](https://github.com/WolframInstitute/SetReplace).
 
 In the lab:
@@ -99,7 +99,8 @@ In the lab:
 - the orange ring and trail are one sampled trajectory;
 - Rule A repeats a SetReplace rule once per resolution slot, so duplicates and
   holding events retain their exact multiplicity;
-- Rule B uses one rule per distinct nonself support neighbour;
+- Rule B uses one rule per distinct nonself support neighbour and pads every
+  row to `3N` with holding rules;
 - exact matrix diffusion remains separate from the sample path.
 
 SetReplace is optional for opening the article and using exact/native
@@ -112,7 +113,7 @@ Whitehead move, exact consensus schedules, the diffusion lab, and enumeration
 growth. It verifies all presentation IDs, rejects visible conversion debris,
 normalizes cell UUIDs, saves through the Mathematica front end, reopens the
 artifact, and requires exact LaTeX export both before and after saving. The
-current notebook has 520 article cells, 723 inline formula cells, 159 display
+current notebook has 546 article cells, 766 inline formula cells, 169 display
 formula cells, and five notebook-only visuals.
 
 When the committed notebook already exports exactly to the current source, the

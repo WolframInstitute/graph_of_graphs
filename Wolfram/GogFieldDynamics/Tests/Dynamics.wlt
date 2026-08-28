@@ -18,8 +18,14 @@ VerificationTest[
 
 VerificationTest[
   GogFieldDynamics`GogTransitionMatrix[2, "B"],
+  {{5/6, 1/6}, {1/6, 5/6}},
+  TestID -> "n2-rule-b-fixed-clock"
+]
+
+VerificationTest[
+  GogFieldDynamics`GogTransitionMatrix[2, "BJump"],
   {{0, 1}, {1, 0}},
-  TestID -> "n2-rule-b-support-walk"
+  TestID -> "n2-rule-b-jump-chain"
 ]
 
 VerificationTest[
@@ -40,6 +46,20 @@ VerificationTest[
   ],
   True,
   TestID -> "n4-rule-a-rewrite-multiplicities"
+]
+
+VerificationTest[
+  Module[
+    {counts = GogFieldDynamics`GogTransitionCounts[4, "B"],
+      rules = GogFieldDynamics`GogSetReplaceRules[4, "B"]},
+    Table[
+      Count[rules, {{source}} -> {{target}}],
+      {source, Length[counts]},
+      {target, Length[counts]}
+    ] === counts && AllTrue[Total /@ counts, # === 12 &]
+  ],
+  True,
+  TestID -> "n4-rule-b-fixed-clock-rewrite-rules"
 ]
 
 VerificationTest[
