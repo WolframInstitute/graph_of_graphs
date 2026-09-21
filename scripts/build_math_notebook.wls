@@ -1,59 +1,52 @@
 #!/usr/bin/env wolframscript
 
-(* Build the canonical MathNotebook artifact and fail on any fidelity loss. *)
+(* Build the concise executable companion notebook. *)
 
-$requiredMathNotebookVersion = "0.1.24";
 $requiredGogFieldDynamicsVersion = "0.2.0";
 $minimumWolframVersion = 14.3;
 
 fail[message_String] := (
-  WriteString["stderr", "MathNotebook build failed: " <> message <> "\n"];
+  WriteString["stderr", "Companion notebook build failed: " <> message <> "\n"];
   Exit[1]
 );
 
-progress[message_String] := Print["MathNotebook build: " <> message];
+progress[message_String] := Print["Companion notebook build: " <> message];
 
-scriptFile = If[StringQ[$InputFileName] && $InputFileName =!= "",
+scriptFile = If[
+  StringQ[$InputFileName] && $InputFileName =!= "",
   ExpandFileName[$InputFileName],
   FileNameJoin[{Directory[], "scripts", "build_math_notebook.wls"}]
 ];
 repositoryDirectory = DirectoryName[DirectoryName[scriptFile]];
-sourceFile = FileNameJoin[{repositoryDirectory, "whitehead-field-dynamics.tex"}];
-notebookFile = FileNameJoin[{repositoryDirectory, "whitehead-field-dynamics.nb"}];
-visualsFile = FileNameJoin[{repositoryDirectory, "scripts", "notebook_visuals.wl"}];
+notebookFile = FileNameJoin[
+  {repositoryDirectory, "whitehead-field-dynamics.nb"}
+];
+visualsFile = FileNameJoin[
+  {repositoryDirectory, "scripts", "notebook_visuals.wl"}
+];
 paperPacletDirectory = FileNameJoin[
   {repositoryDirectory, "Wolfram", "GogFieldDynamics"}
 ];
 
-If[! FileExistsQ[sourceFile], fail["source file not found: " <> sourceFile]];
-If[! FileExistsQ[visualsFile], fail["visual layer not found: " <> visualsFile]];
+If[! FileExistsQ[visualsFile],
+  fail["notebook source not found: " <> visualsFile]
+];
 If[! DirectoryQ[paperPacletDirectory],
-  fail["paper paclet not found: " <> paperPacletDirectory]
+  fail["local paclet not found: " <> paperPacletDirectory]
 ];
 If[$VersionNumber < $minimumWolframVersion,
   fail["Wolfram Language 14.3 or newer is required; found " <> $Version]
 ];
 
-developmentPaclet = Environment["MATHNOTEBOOK_PACLET_DIR"];
-If[StringQ[developmentPaclet] && developmentPaclet =!= "",
-  If[! DirectoryQ[developmentPaclet],
-    fail["MATHNOTEBOOK_PACLET_DIR is not a directory: " <> developmentPaclet]
-  ];
-  PacletDirectoryLoad[ExpandFileName[developmentPaclet]];
+Quiet @ Check[
+  PacletDirectoryLoad[paperPacletDirectory],
+  fail["the local GogFieldDynamics paclet directory could not be loaded"]
+];
+Quiet @ Check[
+  Needs["GogFieldDynamics`"],
+  fail["the local GogFieldDynamics context could not be loaded"]
 ];
 
-Quiet[
-  Check[
-    PacletDirectoryLoad[paperPacletDirectory],
-    fail["the local GogFieldDynamics paclet directory could not be loaded"]
-  ]
-];
-Quiet[
-  Check[
-    Needs["GogFieldDynamics`"],
-    fail["the local GogFieldDynamics context could not be loaded"]
-  ]
-];
 paperPaclet = Quiet[Check[PacletObject["GogFieldDynamics"], $Failed]];
 If[Head[paperPaclet] =!= PacletObject,
   fail["the GogFieldDynamics paclet could not be resolved"]
@@ -65,20 +58,21 @@ If[paperPacletVersion =!= $requiredGogFieldDynamicsVersion,
     " is required; found " <> ToString[paperPacletVersion]
   ]
 ];
-smallModelValidation = Quiet[
-  Check[GogFieldDynamics`GogValidateSmallModels[], $Failed]
+
+smallModelValidation = Quiet @ Check[
+  GogFieldDynamics`GogValidateSmallModels[],
+  $Failed
 ];
 If[
   ! AssociationQ[smallModelValidation] ||
     ! TrueQ[smallModelValidation["Valid"]],
   fail["the bundled small graph-of-graphs models failed validation"]
 ];
-progress["preboxing the self-contained diffusion lab"];
-diffusionExplorerBoxes = Quiet[
-  Check[
-    ToBoxes[GogFieldDynamics`GogDiffusionExplorer[], StandardForm],
-    $Failed
-  ]
+
+progress["boxing the self-contained diffusion laboratory"];
+diffusionExplorerBoxes = Quiet @ Check[
+  ToBoxes[GogFieldDynamics`GogDiffusionExplorer[], StandardForm],
+  $Failed
 ];
 If[
   diffusionExplorerBoxes === $Failed ||
@@ -89,411 +83,76 @@ If[
   fail["the diffusion explorer could not be boxed"]
 ];
 
-If[Quiet[Check[PacletFind["WolframInstitute/MathNotebook"], {}]] === {},
-  mathNotebookRepository = FileNameJoin[
-    {$UserBaseDirectory, "Paclets", "Repository"}
-  ];
-  mathNotebookCandidates = If[
-    DirectoryQ[mathNotebookRepository],
-    Select[
-      FileNames[
-        "WolframInstitute__MathNotebook-*",
-        mathNotebookRepository
-      ],
-      DirectoryQ
-    ],
-    {}
-  ];
-  Scan[
-    Function[path, Quiet[Check[PacletDirectoryLoad[path], Null]]],
-    mathNotebookCandidates
-  ];
-];
-
-Quiet[
-  Check[
-    Needs["WolframInstitute`MathNotebook`"],
-    fail[
-      "MathNotebook is not installed. Follow the installation command in " <>
-      "docs/notebook.rst."
-    ]
-  ]
-];
-
-mathNotebookPaclet = PacletObject["WolframInstitute/MathNotebook"];
-If[Head[mathNotebookPaclet] =!= PacletObject,
-  fail["the MathNotebook paclet could not be resolved"]
-];
-mathNotebookVersion = mathNotebookPaclet["Version"];
-If[mathNotebookVersion =!= $requiredMathNotebookVersion,
-  fail[
-    "MathNotebook " <> $requiredMathNotebookVersion <>
-    " is required for a reproducible build; found " <> ToString[mathNotebookVersion]
-  ]
-];
-
-(* MathNotebook stores each formula's original TeX independently of the boxes
-   used to display it. Expand this manuscript's private macros only for box
-   construction, leaving SourceTeX—and therefore LaTeX export—untouched. *)
-matchingClosingBrace[text_String, opening_Integer] := Module[
-  {depth = 0, character},
-  Do[
-    character = StringTake[text, {index}];
-    If[character === "{", depth++];
-    If[character === "}",
-      depth--;
-      If[depth === 0, Return[index]]
-    ],
-    {index, opening, StringLength[text]}
-  ];
-  $Failed
-];
-
-expandUnaryMacro[
-  text_String, name_String, opening_String, closing_String
-] := Module[
-  {token = "\\" <> name <> "{", position, start, openBrace, closeBrace, body},
-  position = First[StringPosition[text, token, 1], Missing["NotFound"]];
-  If[MissingQ[position], Return[text]];
-  {start, openBrace} = position;
-  closeBrace = matchingClosingBrace[text, openBrace];
-  If[closeBrace === $Failed, Return[text]];
-  body = StringTake[text, {openBrace + 1, closeBrace - 1}];
-  StringTake[text, start - 1] <> opening <>
-    expandUnaryMacro[body, name, opening, closing] <> closing <>
-    expandUnaryMacro[StringDrop[text, closeBrace], name, opening, closing]
-];
-
-expandInnerProduct[text_String] := Module[
-  {token = "\\ip{", position, start, firstOpen, firstClose, secondOpen,
-    secondClose, firstBody, secondBody},
-  position = First[StringPosition[text, token, 1], Missing["NotFound"]];
-  If[MissingQ[position], Return[text]];
-  {start, firstOpen} = position;
-  firstClose = matchingClosingBrace[text, firstOpen];
-  If[firstClose === $Failed, Return[text]];
-  secondOpen = firstClose + 1;
-  If[secondOpen > StringLength[text] ||
-      StringTake[text, {secondOpen}] =!= "{", Return[text]];
-  secondClose = matchingClosingBrace[text, secondOpen];
-  If[secondClose === $Failed, Return[text]];
-  firstBody = StringTake[text, {firstOpen + 1, firstClose - 1}];
-  secondBody = StringTake[text, {secondOpen + 1, secondClose - 1}];
-  StringTake[text, start - 1] <> "\\langle " <> firstBody <> "," <>
-    secondBody <> "\\rangle" <> expandInnerProduct[StringDrop[text, secondClose]]
-];
-
-$simpleMacroExpansions = {
-  RegularExpression["([0-9])\\\\,([0-9])"] -> "$1{,}$2",
-  RegularExpression["\\\\Specsing(?![A-Za-z])"] ->
-    "\\operatorname{Spec}_{\\mathrm{sing}}",
-  RegularExpression["\\\\Spec(?![A-Za-z])"] -> "\\operatorname{Spec}",
-  RegularExpression["\\\\source(?![A-Za-z])"] -> "\\operatorname{source}",
-  RegularExpression["\\\\target(?![A-Za-z])"] -> "\\operatorname{target}",
-  RegularExpression["\\\\rank(?![A-Za-z])"] -> "\\operatorname{rank}",
-  RegularExpression["\\\\diam(?![A-Za-z])"] -> "\\operatorname{diam}",
-  RegularExpression["\\\\Aut(?![A-Za-z])"] -> "\\operatorname{Aut}",
-  RegularExpression["\\\\Pp(?![A-Za-z])"] -> "\\mathbb{P}",
-  RegularExpression["\\\\one(?![A-Za-z])"] -> "\\mathbf{1}",
-  RegularExpression["\\\\R(?![A-Za-z])"] -> "\\mathbb{R}",
-  RegularExpression["\\\\E(?![A-Za-z])"] -> "\\mathbb{E}",
-  RegularExpression["\\\\G(?![A-Za-z])"] -> "\\Gamma",
-  RegularExpression["\\\\C(?![A-Za-z])"] -> "\\mathcal{C}",
-  RegularExpression["\\\\F(?![A-Za-z])"] -> "\\mathcal{F}",
-  RegularExpression["\\\\V(?![A-Za-z])"] -> "\\mathcal{V}",
-  RegularExpression["\\\\A(?![A-Za-z])"] -> "\\mathcal{A}"
-};
-
-expandManuscriptTeX[tex_String] := StringReplace[
-  expandUnaryMacro[expandInnerProduct[tex], "norm", "\\left\\|", "\\right\\|"],
-  $simpleMacroExpansions
-];
-
-DownValues[gogOriginalTexToBoxes] =
-  DownValues[WolframInstitute`MathNotebook`PackageScope`texToBoxes] /.
-    HoldPattern[WolframInstitute`MathNotebook`PackageScope`texToBoxes] ->
-      gogOriginalTexToBoxes;
-Clear[WolframInstitute`MathNotebook`PackageScope`texToBoxes];
-WolframInstitute`MathNotebook`PackageScope`texToBoxes[tex_String] :=
-  gogOriginalTexToBoxes[expandManuscriptTeX[tex]];
-
-(* ReadString preserves the terminal newline. Import[..., "Text"], used by the
-   public file wrapper, normalizes it away. MathNotebook exposes latexToNotebook
-   as its pure conversion core, so using it here makes the round trip byte-exact. *)
-sourceStream = Quiet[
-  Check[OpenRead[sourceFile, CharacterEncoding -> "UTF-8"], $Failed]
-];
-If[Head[sourceStream] =!= InputStream, fail["could not open " <> sourceFile]];
-source = Quiet[Check[ReadString[sourceStream], $Failed]];
-Close[sourceStream];
-If[! StringQ[source], fail["could not read " <> sourceFile]];
-
-forceReconversion = Environment["MATHNOTEBOOK_FORCE_RECONVERT"] === "1";
-cachedNotebook = If[
-  ! forceReconversion && FileExistsQ[notebookFile],
-  Quiet[Check[Get[notebookFile], $Failed]],
-  $Failed
-];
-cachedRoundTrip = If[
-  Head[cachedNotebook] === Notebook,
-  Quiet[
-    Check[
-      WolframInstitute`MathNotebook`ExportLaTeXDocument[cachedNotebook],
-      $Failed
-    ]
-  ],
-  $Failed
-];
-usingCachedNotebook = cachedRoundTrip === source;
-
-ClearAll[ungroupNotebookCells, ungroupNotebookCell];
-ungroupNotebookCells[documentCells_List] := Flatten[
-  ungroupNotebookCell /@ documentCells,
-  1
-];
-ungroupNotebookCell[
-  Cell[CellGroupData[groupCells_List, _], ___]
-] := ungroupNotebookCells[groupCells];
-ungroupNotebookCell[cell_Cell] := {cell};
-
-stripPresentationCells[Notebook[documentCells_List, options___]] := Notebook[
-  Select[
-    ungroupNotebookCells[documentCells],
-    FreeQ[#, "GoGNotebookVisual"] &
-  ],
-  options
-];
-
-If[
-  usingCachedNotebook,
-  progress["using the exact-round-trip conversion cache"];
-  notebook = stripPresentationCells[cachedNotebook],
-  (
-  progress["running a full LaTeX conversion"];
-  notebook = Quiet[
-  Check[
-    WolframInstitute`MathNotebook`PackageScope`latexToNotebook[source],
-    $Failed
-  ]
-];
-If[Head[notebook] =!= Notebook, fail["the LaTeX importer did not return a Notebook"]];
-
-commandArgument[text_String, command_String] := First[
-  StringCases[
-    text,
-    ("\\" <> command <> "{") ~~ Shortest[value___] ~~ "}" :> value,
-    1
-  ],
-  ""
-];
-suppressedFrontMatterCell[text_String, style_String] := Cell[
-  text,
-  style,
-  TaggingRules -> <|"MathNotebook" -> <|"Suppressed" -> "True"|>|>
-];
-displayFrontMatter = DeleteCases[
-  {
-    suppressedFrontMatterCell[commandArgument[source, "title"], "Title"],
-    suppressedFrontMatterCell[commandArgument[source, "author"], "Author"]
-  },
-  Cell["", _, ___]
-];
-notebook = notebook /. Notebook[documentCells_, options___] :>
-  Notebook[Join[displayFrontMatter, documentCells], options];
-
-(* thebibliography entries are source-oriented in MathNotebook 0.1.24: TeX
-   accents and \url commands otherwise remain visible as literal markup.
-   Give each Reference cell a readable display while storing its original
-   cell-level LaTeX in BibliographyTeX, which the exporter emits verbatim. *)
-$referenceTextRules = {
-  "{\\L}" -> "Ł", "{\\l}" -> "ł", "\\L" -> "Ł", "\\l" -> "ł",
-  "\\'A" -> "Á", "\\'E" -> "É", "\\'I" -> "Í", "\\'O" -> "Ó",
-  "\\'U" -> "Ú", "\\'Y" -> "Ý", "\\'C" -> "Ć", "\\'N" -> "Ń",
-  "\\'S" -> "Ś", "\\'Z" -> "Ź",
-  "\\'a" -> "á", "\\'e" -> "é", "\\'i" -> "í", "\\'o" -> "ó",
-  "\\'u" -> "ú", "\\'y" -> "ý", "\\'c" -> "ć", "\\'n" -> "ń",
-  "\\'s" -> "ś", "\\'z" -> "ź",
-  "--" -> "–", "~" -> FromCharacterCode[160]
-};
-
-normalizeReferenceText[text_String] := StringReplace[text, $referenceTextRules];
-referenceURL[url_String] := ButtonBox[
-  url,
-  BaseStyle -> "URL",
-  ButtonData -> {URL[url], None},
-  ButtonNote -> url
-];
-referenceStringParts[text_String] := Replace[
-  StringSplit[
-    text,
-    "\\url{" ~~ url : Except["}"] .. ~~ "}" :> referenceURL[url]
-  ],
-  part_String :> normalizeReferenceText[part],
-  {1}
-];
-
-ClearAll[referenceDisplayPart];
-referenceDisplayPart[text_String] := referenceStringParts[text];
-referenceDisplayPart[StyleBox[text_String, options___]] :=
-  {StyleBox[normalizeReferenceText[text], options]};
-referenceDisplayPart[StyleBox[TextData[parts_], options___]] :=
-  {StyleBox[
-    TextData[Flatten[referenceDisplayPart /@ Flatten[{parts}]]],
-    options
-  ]};
-referenceDisplayPart[part_] := {part};
-
-referenceDisplayContent[text_String] := Replace[
-  referenceStringParts[text],
-  {{single_String} :> single, parts_List :> TextData[parts]}
-];
-referenceDisplayContent[TextData[parts_]] :=
-  TextData[Flatten[referenceDisplayPart /@ Flatten[{parts}]]];
-referenceDisplayContent[content_] := content;
-
-cellToLaTeXFunction =
-  Symbol["WolframInstitute`MathNotebook`Document`PackagePrivate`cellToLaTeX"];
-displayReferenceCell[
-  cell : Cell[content_, "Reference", options___]
-] := Module[{originalLaTeX, displayed},
-  originalLaTeX = cellToLaTeXFunction[cell];
-  If[! StringQ[originalLaTeX], fail["could not preserve a bibliography entry"]];
-  displayed = Cell[referenceDisplayContent[content], "Reference", options];
-  WolframInstitute`MathNotebook`PackageScope`retagged[
-    displayed,
-    <|"BibliographyTeX" -> originalLaTeX|>
-  ]
-];
-displayReferenceCell[cell_] := cell;
-
-notebook = notebook /. Notebook[documentCells_, options___] :>
-  Notebook[displayReferenceCell /@ documentCells, options];
-
-(* MathNotebook deliberately preserves unsupported prose commands as literal
-   text.  This manuscript uses a few of them for layout and code typography.
-   Give those cells a clean notebook display while carrying their complete
-   original TeX through the paclet's verbatim whole-cell export channel. *)
-$proseDisplayRules = {
-  RegularExpression["\\\\path\\{([^{}]*)\\}"] -> "$1",
-  RegularExpression["\\\\texttt\\{([^{}]*)\\}"] -> "$1",
-  RegularExpression["\\\\emph\\{([^{}]*)\\}"] -> "$1",
-  "\\\\_" -> "_",
-  "\\\\#" -> "#",
-  "~" -> FromCharacterCode[160],
-  "\n{\\small" ~~ EndOfString -> "",
-  StartOfString ~~ "}\n" -> ""
-};
-
-cleanDisplayString[text_String] := StringReplace[text, $proseDisplayRules];
-
-displayProseContent[text_String] := Module[{paragraph},
-  paragraph = StringCases[
-    text,
-    StartOfString ~~ "\\paragraph{" ~~ title : Except["}"] .. ~~ "}\n" ~~
-      body___ ~~ EndOfString :> {title, body},
-    1
-  ];
-  If[
-    paragraph === {},
-    cleanDisplayString[text],
-    TextData[{
-      StyleBox[paragraph[[1, 1]], FontWeight -> "Bold"],
-      "\n",
-      cleanDisplayString[paragraph[[1, 2]]]
-    }]
-  ]
-];
-displayProseContent[TextData[parts_]] := TextData[
-  Replace[parts, text_String :> cleanDisplayString[text], {1}]
-];
-displayProseContent[content_] := content;
-
-displayProseCell[cell : Cell[content_, style_String, options___]] := Module[
-  {displayedContent, originalLaTeX, displayed},
-  displayedContent = displayProseContent[content];
-  If[SameQ[displayedContent, content], Return[cell]];
-  originalLaTeX = cellToLaTeXFunction[cell];
-  If[! StringQ[originalLaTeX], fail["could not preserve cleaned prose source"]];
-  displayed = Cell[displayedContent, style, options];
-  WolframInstitute`MathNotebook`PackageScope`retagged[
-    displayed,
-    <|"BibliographyTeX" -> originalLaTeX|>
-  ]
-];
-displayProseCell[cell_] := cell;
-
-notebook = notebook /. Notebook[documentCells_, options___] :>
-  Notebook[displayProseCell /@ documentCells, options];
-  )
-];
-
-(* MathNotebook's article stylesheet may italicize theorem-family cells.
-   Keep prose upright in the computational edition as it is in the PDF. *)
-$uprightArticleStyles = {
-  "Abstract", "Author", "Caption", "Conjecture", "Corollary", "Definition",
-  "Item", "ItemNumbered", "Lemma", "Proof", "Proposition", "Question",
-  "Reference", "Remark", "Section", "Subsection", "Text", "Theorem", "Title"
-};
-uprightArticleCell[
-  Cell[content_, style_String, options___]
-] /; MemberQ[$uprightArticleStyles, style] := Cell[
-  content,
-  style,
-  Sequence @@ DeleteCases[{options}, FontSlant -> _],
-  FontSlant -> Plain
-];
-uprightArticleCell[cell_] := cell;
-notebook = notebook /. Notebook[documentCells_, options___] :>
-  Notebook[uprightArticleCell /@ documentCells, options];
-
-(* Enrich the faithful article conversion with native, presentation-only
-   Wolfram graphics.  Every added cell carries MathNotebook's Suppressed tag,
-   so the canonical LaTeX export remains byte-exact. *)
-progress["adding the native presentation layer"];
+progress["loading the companion notebook source"];
 visualsLoaded = Quiet[Check[Get[visualsFile], $Failed]];
-If[visualsLoaded === $Failed ||
-    ! NameQ["GogNotebookVisuals`EnrichNotebook"],
-  fail["the notebook visual layer could not be loaded"]
+If[
+  visualsLoaded === $Failed ||
+    ! NameQ["GogNotebookVisuals`BuildCompanionNotebook"],
+  fail["the companion notebook constructor could not be loaded"]
 ];
-progress["constructing presentation cells"];
-notebook = Quiet[
-  Check[
-    GogNotebookVisuals`EnrichNotebook[notebook, diffusionExplorerBoxes],
-    $Failed
-  ]
+
+progress["constructing the concise notebook"];
+notebook = Quiet @ Check[
+  GogNotebookVisuals`BuildCompanionNotebook[diffusionExplorerBoxes],
+  $Failed
 ];
 If[Head[notebook] =!= Notebook,
-  fail["the visual layer did not return a Notebook"]
+  fail["the companion constructor did not return a Notebook"]
 ];
-progress["checking presentation identifiers"];
+
 requiredVisualIDs = {
-  "GoGVisualAbstract", "GoGWhiteheadMove", "GoGConsensusSchedules",
-  "GoGDiffusionLab", "GoGEnumerationGrowth"
+  "GoGVisualAbstract",
+  "GoGWhiteheadMove",
+  "GoGVarianceDrop",
+  "GoGConsensusSchedules",
+  "GoGTransitionComparison",
+  "GoGDiffusionLab",
+  "GoGEnumerationGrowth"
 };
-requiredPresentationIDs = Join[
-  {"GoGBanner", "GoGNavigation"},
-  requiredVisualIDs
-];
-missingPresentationIDs = Select[
-  requiredPresentationIDs,
-  FreeQ[notebook, #] &
-];
-If[missingPresentationIDs =!= {},
+missingVisualIDs = Select[requiredVisualIDs, FreeQ[notebook, #] &];
+If[missingVisualIDs =!= {},
   fail[
-    "required notebook presentation elements are absent: " <>
-    StringRiffle[missingPresentationIDs, ", "]
+    "required visual outputs are absent: " <>
+      StringRiffle[missingVisualIDs, ", "]
   ]
 ];
-progress["normalizing in-memory cell identifiers"];
 
-(* MathNotebook and Export create fresh ExpressionUUID values on every build.
-   The serialized .nb repeats those values in its cache outline, so normalize
-   the unique UUIDs in first-occurrence order after export.  Equal-length
-   replacements keep all cached byte offsets valid and make unchanged rebuilds
-   byte-stable on the same Wolfram version. *)
+cellCount = Count[notebook, _Cell, Infinity];
+sectionCount = Count[notebook, Cell[_, "Section", ___], Infinity];
+inputCount = Count[notebook, Cell[_, "Input", ___], Infinity];
+outputCount = Count[notebook, Cell[_, "Output", ___], Infinity];
+theoremLikeCount = Count[
+  notebook,
+  Cell[_, style_String, ___] /;
+    MemberQ[
+      {"Theorem", "Proof", "Lemma", "Proposition", "Corollary",
+        "Conjecture", "Reference"},
+      style
+    ],
+  Infinity
+];
+
+If[! Between[cellCount, {35, 80}],
+  fail[
+    "the companion should contain 35–80 cells, found " <>
+      ToString[cellCount]
+  ]
+];
+If[sectionCount =!= 7,
+  fail["the companion should contain seven sections"]
+];
+If[inputCount < 6 || outputCount < 10,
+  fail["the companion is missing executable or visual cells"]
+];
+If[theoremLikeCount =!= 0,
+  fail["paper-style theorem/proof cells leaked into the companion"]
+];
+
+(* Seed stable top-level UUIDs, then normalize any UUIDs introduced by the
+   front end.  Equal-length replacements preserve notebook cache offsets. *)
 uuidFromSeed[seed_] := Module[{hex},
   hex = StringTake[
-    IntegerString[Hash[{"gog-math-notebook", seed}, "SHA256"], 16, 64],
+    IntegerString[Hash[{"gog-companion-notebook", seed}, "SHA256"], 16, 64],
     32
   ];
   StringRiffle[
@@ -509,10 +168,6 @@ withExpressionUUID[expression_, uuid_String] := Append[
   ExpressionUUID -> uuid
 ];
 
-(* A small number of long top-level cells can have their UUID string wrapped
-   across physical .nb lines, outside the serialized regular-expression pass.
-   Seed every top-level cell and the notebook itself before export so those
-   wrapped values are deterministic too. *)
 notebook = notebook /. Notebook[documentCells_List, options___] :>
   withExpressionUUID[
     Notebook[
@@ -527,7 +182,6 @@ notebook = notebook /. Notebook[documentCells_List, options___] :>
     ],
     uuidFromSeed["notebook-root"]
   ];
-progress["checking the in-memory LaTeX round trip"];
 
 $uuidPattern = RegularExpression[
   "[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-" <>
@@ -536,9 +190,11 @@ $uuidPattern = RegularExpression[
 
 normalizeSerializedUUIDs[file_String] := Module[
   {input, bytes, serialized, existing, replacements, replacementAssociation,
-    normalized, output, normalizedUUIDs},
+    normalized, output},
   input = Quiet[Check[OpenRead[file, BinaryFormat -> True], $Failed]];
-  If[Head[input] =!= InputStream, fail["could not reopen the serialized notebook"]];
+  If[Head[input] =!= InputStream,
+    fail["could not reopen the serialized notebook"]
+  ];
   bytes = Quiet[Check[BinaryReadList[input, "Byte"], $Failed]];
   Close[input];
   If[! ListQ[bytes], fail["could not read the serialized notebook bytes"]];
@@ -551,142 +207,58 @@ normalizeSerializedUUIDs[file_String] := Module[
     serialized,
     uuid : $uuidPattern :> Lookup[replacementAssociation, uuid]
   ];
-  normalizedUUIDs = DeleteDuplicates[StringCases[normalized, $uuidPattern]];
-  If[
-    Length[normalizedUUIDs] =!= Length[existing] ||
-      ! DuplicateFreeQ[Last /@ replacements],
-    fail["could not normalize the serialized notebook UUIDs"]
-  ];
   output = Quiet[Check[OpenWrite[file, BinaryFormat -> True], $Failed]];
   If[Head[output] =!= OutputStream,
     fail["could not open the notebook for UUID normalization"]
   ];
-  Quiet[Check[BinaryWrite[output, ToCharacterCode[normalized, "UTF-8"], "Byte"],
-    Close[output]; fail["could not write the normalized notebook"]
-  ]];
+  Quiet @ Check[
+    BinaryWrite[output, ToCharacterCode[normalized, "UTF-8"], "Byte"],
+    Close[output];
+    fail["could not write the normalized notebook"]
+  ];
   Close[output];
   Length[existing]
 ];
 
-roundTrip = Quiet[
-  Check[WolframInstitute`MathNotebook`ExportLaTeXDocument[notebook], $Failed]
-];
-If[roundTrip =!= source,
-  fail[
-    "the in-memory LaTeX round trip differs (source " <>
-    ToString[StringLength[source]] <> " characters, export " <>
-    ToString[If[StringQ[roundTrip], StringLength[roundTrip], 0]] <> ")"
-  ]
-];
-progress["checking visible cell content"];
-
-ClearAll[visibleStrings];
-visibleStrings[text_String] := {text};
-visibleStrings[TextData[parts_]] := Flatten[visibleStrings /@ Flatten[{parts}]];
-visibleStrings[Cell[content_, ___]] := visibleStrings[content];
-visibleStrings[StyleBox[content_, ___]] := visibleStrings[content];
-visibleStrings[ButtonBox[content_, ___]] := visibleStrings[content];
-visibleStrings[RowBox[parts_]] := Flatten[visibleStrings /@ Flatten[{parts}]];
-visibleStrings[BoxData[_]] := {};
-visibleStrings[_] := {};
-
-cells = First[notebook];
-styles = KeySort[Counts[Cases[cells, Cell[_, style_String, ___] :> style]]];
-requiredStyles = {
-  "Title", "Author", "Section", "Text", "DisplayFormula", "Theorem", "Proof",
-  "Reference"
-};
-If[! AllTrue[requiredStyles, Lookup[styles, #, 0] > 0 &],
-  fail["one or more required document styles are absent"]
-];
-If[
-  ! AllTrue[
-    Cases[
-      cells,
-      cell : Cell[_, style_String, ___] /;
-        MemberQ[$uprightArticleStyles, style] :> cell
-    ],
-    ! FreeQ[#, FontSlant -> Plain] &
+progress["saving through the Mathematica front end"];
+saved = Quiet @ Check[
+  UsingFrontEnd[
+    saveObject = NotebookPut[notebook];
+    NotebookSave[saveObject, notebookFile];
+    NotebookClose[saveObject];
+    notebookFile
   ],
-  fail["one or more prose cells lack the required upright style"]
-];
-If[
-  ! FreeQ[notebook, FontSlant -> Italic],
-  fail["the notebook still contains an explicit italic style"]
-];
-
-visibleByCell = visibleStrings /@ cells;
-unconvertedMath = Select[
-  visibleByCell,
-  AnyTrue[#, StringContainsQ[
-      #,
-      "$" | "\\(" | "\\[" | "\\begin{equation" | "\\begin{align" |
-        "\\begin{gather" | "\\begin{multline"
-    ] &] &
-];
-If[unconvertedMath =!= {},
-  fail[ToString[Length[unconvertedMath]] <> " cells still contain visible raw math"]
-];
-rawProseMarkers = {"{\\small", "\\paragraph{", "\\path{", "\\texttt{"};
-unconvertedProse = Select[
-  visibleByCell,
-  AnyTrue[#, StringContainsQ[#, Alternatives @@ rawProseMarkers] &] &
-];
-If[unconvertedProse =!= {},
-  fail[
-    ToString[Length[unconvertedProse]] <>
-      " cells still contain visible unsupported prose commands"
-  ]
-];
-If[! FreeQ[cells, text_String /; StringContainsQ[text, "$Failed"]],
-  fail["the notebook contains a visible $Failed conversion artifact"]
-];
-
-progress["serializing the notebook"];
-saved = Quiet[
-  Check[
-    UsingFrontEnd[
-      saveObject = NotebookPut[notebook];
-      NotebookSave[saveObject, notebookFile];
-      NotebookClose[saveObject];
-      notebookFile
-    ],
-    $Failed
-  ]
+  $Failed
 ];
 If[saved =!= notebookFile || ! FileExistsQ[notebookFile],
   fail["could not save " <> notebookFile]
 ];
+
 progress["normalizing serialized identifiers"];
 deterministicUUIDCount = normalizeSerializedUUIDs[notebookFile];
 
-progress["reopening and checking the saved artifact"];
+progress["reopening the saved artifact"];
 reopened = Quiet[Check[Get[notebookFile], $Failed]];
-If[Head[reopened] =!= Notebook, fail["the saved file does not reopen as a Notebook expression"]];
-savedRoundTrip = Quiet[
-  Check[WolframInstitute`MathNotebook`ExportLaTeXDocument[reopened], $Failed]
+If[Head[reopened] =!= Notebook,
+  fail["the saved file does not reopen as a Notebook expression"]
 ];
-If[savedRoundTrip =!= source,
-  fail["the saved notebook no longer round-trips exactly to the LaTeX source"]
+If[! FreeQ[reopened, "ComputationalCompanion"], Null,
+  fail["the saved artifact lost its companion-edition metadata"]
 ];
 
 Print[<|
   "Notebook" -> notebookFile,
   "WolframVersion" -> $Version,
-  "MathNotebookVersion" -> mathNotebookVersion,
   "GogFieldDynamicsVersion" -> paperPacletVersion,
-  "Cells" -> Length[cells],
-  "Styles" -> styles,
-  "InlineMathCells" ->
-    Count[cells, Cell[_BoxData, "InlineFormula", ___], Infinity],
-  "DisplayMathCells" ->
-    Count[cells, Cell[_BoxData, "DisplayFormula", ___]],
-  "NotebookVisuals" -> Length[requiredVisualIDs],
-  "Buttons" -> Count[cells, _ButtonBox, Infinity],
+  "Cells" -> cellCount,
+  "Sections" -> sectionCount,
+  "InputCells" -> inputCount,
+  "OutputCells" -> outputCount,
+  "NativeVisuals" -> Length[requiredVisualIDs],
+  "PaperStyleCells" -> theoremLikeCount,
   "DeterministicUUIDs" -> deterministicUUIDCount,
   "NotebookSHA256" ->
-    IntegerString[FileHash[notebookFile, "SHA256"], 16, 64],
-  "ExactLaTeXRoundTrip" -> True
+    IntegerString[FileHash[notebookFile, "SHA256"], 16, 64]
 |>];
 
 Exit[0];

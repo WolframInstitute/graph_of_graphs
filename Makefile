@@ -2,15 +2,20 @@ PYTHON ?= python3
 LATEXMK ?= latexmk
 WOLFRAM_KERNEL ?= /Applications/Wolfram.app/Contents/MacOS/WolframKernel
 
-.PHONY: all check paper docs lean python-check notebook-data-check \
-	notebook notebook-paclet-check notebook-check clean
+.PHONY: all check paper computational-notes docs lean python-check \
+	notebook-data-check notebook notebook-paclet-check notebook-check \
+	computational-notes-notebook computational-notes-notebook-check clean
 
 all: check
 
-check: paper docs lean python-check notebook-data-check
+check: paper computational-notes docs lean python-check notebook-data-check
 
 paper:
 	$(LATEXMK) -pdf -interaction=nonstopmode -halt-on-error whitehead-field-dynamics.tex
+
+computational-notes:
+	$(LATEXMK) -pdf -interaction=nonstopmode -halt-on-error \
+		whitehead-field-dynamics-computational-notes.tex
 
 docs:
 	$(MAKE) -C docs html SPHINXOPTS="-W --keep-going"
@@ -39,6 +44,15 @@ notebook-check: notebook-data-check notebook-paclet-check
 	"$(WOLFRAM_KERNEL)" -noinit -noprompt -script \
 		scripts/check_math_notebook.wls
 
+computational-notes-notebook:
+	"$(WOLFRAM_KERNEL)" -noinit -noprompt -script \
+		scripts/build_computational_notes_notebook.wls
+
+computational-notes-notebook-check: notebook-data-check
+	"$(WOLFRAM_KERNEL)" -noinit -noprompt -script \
+		scripts/check_computational_notes_notebook.wls
+
 clean:
 	$(LATEXMK) -c whitehead-field-dynamics.tex
+	$(LATEXMK) -c whitehead-field-dynamics-computational-notes.tex
 	$(MAKE) -C docs clean

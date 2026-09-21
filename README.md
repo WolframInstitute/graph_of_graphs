@@ -3,7 +3,7 @@
 This repository studies Whitehead moves on connected cubic multigraphs and a
 scalar field averaged along the rewritten carrier edge. Loops and parallel
 edges are allowed. The project combines a mathematical manuscript, complete
-finite enumeration, spectral diagnostics, a computational Wolfram article,
+finite enumeration, spectral diagnostics, a compact Mathematica companion,
 and a deliberately small Lean verification layer.
 
 This is a research repository, not a package release. Results have different
@@ -18,16 +18,20 @@ boundaries.
 |---|---|
 | [`whitehead-field-dynamics.tex`](whitehead-field-dynamics.tex) | Canonical editable manuscript and source of record. |
 | [`whitehead-field-dynamics.pdf`](whitehead-field-dynamics.pdf) | PDF built from the canonical LaTeX source. |
-| [`whitehead-field-dynamics.nb`](whitehead-field-dynamics.nb) | Generated MathNotebook article with native figures and a playable graph-of-graphs diffusion lab. |
+| [`whitehead-field-dynamics.nb`](whitehead-field-dynamics.nb) | Concise generated Mathematica companion with seven native figures and a playable graph-of-graphs diffusion lab. |
+| [`whitehead-field-dynamics-computational-notes.tex`](whitehead-field-dynamics-computational-notes.tex) | Standalone TeX companion with annotated Mathematica input/output cells. |
+| [`whitehead-field-dynamics-computational-notes.pdf`](whitehead-field-dynamics-computational-notes.pdf) | Built nine-page companion report. |
+| [`whitehead-field-dynamics-computational-notes.nb`](whitehead-field-dynamics-computational-notes.nb) | Executable mini-notebook carrying the report text, 16 input/output pairs, local-paclet setup, and a built-in self-test. |
 | [`Wolfram/GogFieldDynamics/`](Wolfram/GogFieldDynamics/) | Repo-local companion paclet for exact small quotients, diffusion, and SetReplace trajectories. |
 | [`docs/`](docs/) | Project guide, conventions, evidence status, and reproducibility instructions. |
 | [`gog_generate.py`](gog_generate.py) and analysis scripts | Exact finite enumeration and diagnostics. |
 | [`lean/`](lean/) | Lean/Std proofs of a limited finite-algebra boundary. |
 
-The notebook is a committed derived artifact, not a second manuscript source.
-Its build must export byte-for-byte to the canonical UTF-8 LaTeX before it can
-replace the file. Source-suppressed cells add navigation, five native visuals,
-and the interactive lab without changing exported TeX.
+The notebook is a committed derived artifact, not a second manuscript source
+and not a paper wrapped in notebook cells. Its seven short sections combine
+six executable input cells, exact outputs, seven native visuals, and one
+interactive laboratory. Proofs and longer mathematical discussion remain in
+the canonical LaTeX manuscript.
 
 ## Four objects that must not be conflated
 
@@ -48,9 +52,9 @@ the [convention dictionary](docs/overview.rst) before comparing results.
 
 ## Verification
 
-The ordinary repository check builds the paper and Sphinx documentation,
-checks Lean, compiles every Python entry point, and regenerates the committed
-small Wolfram models in memory:
+The ordinary repository check builds the paper, the computational companion,
+and Sphinx documentation, checks Lean, compiles every Python entry point, and
+regenerates the committed small Wolfram models in memory:
 
 ```sh
 python3 -m pip install -r docs/requirements.txt
@@ -59,6 +63,28 @@ make check
 
 It requires Python 3, a TeX distribution with `latexmk` and `pdflatex`, Sphinx
 8 or 9, and the Lean toolchain pinned in `lean/lean-toolchain`.
+
+Build the standalone computational notes with:
+
+```sh
+make computational-notes
+```
+
+Its displayed Mathematica transcript can be regenerated independently with
+`scripts/notebook_report_outputs.wls`; this does not modify the canonical
+manuscript or generated notebook.
+
+Build and test the executable version of the report with:
+
+```sh
+make computational-notes-notebook
+make computational-notes-notebook-check
+```
+
+Alternatively, open `whitehead-field-dynamics-computational-notes.nb`, choose
+**Evaluation > Evaluate Notebook**, and inspect the last cell. A successful run
+ends with `AllTestsPassed -> True`. This mini-notebook needs only the repo-local
+`GogFieldDynamics` paclet; SetReplace is not required.
 
 Wolfram checks are separate because they require a licensed local installation
 and a front end:
@@ -71,20 +97,11 @@ make notebook-check
 `make notebook-check` also runs the small-model regeneration check and nine
 companion-paclet tests, including a real SetReplace trajectory.
 
-## Wolfram computational article
+## Mathematica computational companion
 
-The article conversion uses
-[WolframInstitute/MathNotebook](https://github.com/WolframInstitute/MathNotebook)
-`0.1.24` and Wolfram Language 14.3 or newer. Install the pinned-compatible
-MathNotebook paclet from a Wolfram kernel:
-
-```wolfram
-PacletInstall[
-  "https://www.wolframcloud.com/obj/hajek_pavel/MathNotebook.paclet",
-  ForceVersionInstall -> True
-]
-Needs["WolframInstitute`MathNotebook`"]
-```
+The notebook build uses Wolfram Language 14.3 or newer and the built-in
+`Default.nb` stylesheet. It is constructed directly from
+`scripts/notebook_visuals.wl`; it has no MathNotebook conversion dependency.
 
 The repo-local `GogFieldDynamics` paclet is loaded directly by the build; it
 does not need to be installed globally. It bundles complete `N=2,4,6`
@@ -103,27 +120,24 @@ In the lab:
   row to `3N` with holding rules;
 - exact matrix diffusion remains separate from the sample path.
 
-SetReplace is optional for opening the article and using exact/native
+SetReplace is optional for opening the notebook and using exact/native
 diffusion. It is required by `make notebook-paclet-check` and therefore by the
 full `make notebook-check` used on this audited installation. The validated
 local version is `0.3.196`.
 
-The build adds a banner, eight section links, a visual abstract, the local
-Whitehead move, exact consensus schedules, the diffusion lab, and enumeration
-growth. It verifies all presentation IDs, rejects visible conversion debris,
-normalizes cell UUIDs, saves through the Mathematica front end, reopens the
-artifact, and requires exact LaTeX export both before and after saving. The
-current notebook has 546 article cells, 766 inline formula cells, 169 display
-formula cells, and five notebook-only visuals.
+The build adds a banner and seven section links, then presents a visual
+abstract, the local Whitehead move, the exact variance drop, finite consensus
+schedules, a two-clock heat-map comparison, the diffusion lab, and enumeration
+growth. It verifies the named visual IDs, bounds the notebook size, rejects
+paper-style theorem/proof cells, normalizes cell UUIDs, saves through the
+Mathematica front end, and reopens and renders the artifact. The constructor
+currently emits 52 cells; the front end normalizes this to 66 cells with 2,547
+narrative characters, seven sections, six input cells, and seven visuals.
 
-When the committed notebook already exports exactly to the current source, the
-builder reuses that faithful conversion after removing old presentation cells.
-This makes visual-only rebuilds fast without weakening the source contract.
-Force a cold conversion after changing importer behavior with:
-
-```sh
-MATHNOTEBOOK_FORCE_RECONVERT=1 make notebook
-```
+The separate computational-notes mini-notebook follows the longer TeX
+transcript rather than the visual layout. It has 11 sections and 16 executable
+cell pairs. Its checker evaluates those cells in order from a fresh kernel,
+verifies the final self-test, and renders the notebook through the front end.
 
 Use a different kernel path when necessary:
 
@@ -173,6 +187,8 @@ When changing a result:
 5. update the status ledger and reproducibility notes with the manuscript;
 6. rebuild the PDF and notebook before committing synchronized artifacts.
 
-Edit notebook presentation code in `scripts/notebook_visuals.wl` or the
-`GogFieldDynamics` paclet, never by hand in the generated `.nb`. Generated
-large tables and local diagnostics belong under ignored `artifacts/`.
+Edit visual-notebook presentation code in `scripts/notebook_visuals.wl`, the
+mini-notebook source in `scripts/build_computational_notes_notebook.wls`, or
+exact dynamics in the `GogFieldDynamics` paclet. Never hand-edit either
+generated `.nb`. Generated large tables and local diagnostics belong under
+ignored `artifacts/`.

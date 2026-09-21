@@ -1,0 +1,3708 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 15.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[    147876,       3698]
+NotebookOptionsPosition[     79467,       2582]
+NotebookOutlinePosition[    127693,       3383]
+CellTagsIndexPosition[    123066,       3255]
+WindowTitle->Whitehead Field Dynamics \:2014 Computational Notes
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Whitehead Field Dynamics", "Title",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "Title", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontColor->RGBColor[0.075, 0.13, 0.22],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "Title"},ExpressionUUID->"c7a7a966-b587-7399-1d2a-fb4e266e84e9"],
+
+Cell["Computational Notes \[LongDash] Executable Mini-Notebook", "Subtitle",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "Subtitle", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "Subtitle"},ExpressionUUID->"e211cf8e-f35c-a264-5c96-82748394ce6a"],
+
+Cell["Alexander Kolpakov", "Author",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "Author", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "Author"},ExpressionUUID->"0f37c903-8061-39ca-1d16-88da223b8959"],
+
+Cell["September 21, 2026", "Affiliation",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "Date", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "Date"},ExpressionUUID->"637bfb47-a8b7-4d84-e256-763e733c6166"],
+
+Cell[TextData[{
+ StyleBox["EXECUTABLE MINI-NOTEBOOK",
+  FontFamily->"Helvetica",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0., 0.45, 0.7]],
+ StyleBox["   \[Bullet]   ",
+  FontColor->RGBColor[0.82, 0.85, 0.88]],
+ StyleBox["exact cells \[Bullet] local paclet \[Bullet] built-in self-test",
+  FontFamily->"Helvetica",
+  FontColor->RGBColor[0.37, 0.42, 0.49]]
+}], "Text",
+ CellFrame->True,
+ ShowCellBracket->False,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "EditionBanner", "Generated" -> True|>|>,
+ CellFrameMargins->{{12, 12}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88]],
+ TextAlignment->Center,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "EditionBanner"},ExpressionUUID->"e4581535-6516-b3cc-6985-1541b5e473d5"],
+
+Cell["\<\
+This mini-notebook is the executable counterpart of \
+whitehead-field-dynamics-computational-notes.tex. It records the local \
+pair-averaging calculation, the exact small graph-of-graphs models, the two \
+transition clocks, exact diffusion snapshots, one seeded path, and finite \
+consensus products for K4 and Q3. Every displayed number is computed exactly \
+before a decimal approximation is requested. Proofs remain in the full LaTeX \
+manuscript.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "Abstract", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "Abstract"},ExpressionUUID->"46d8de8c-c466-768e-ac8c-bf59592516b9"],
+
+Cell[CellGroupData[{
+
+Cell["Start here", "Section",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "SectionSetup", "Generated" -> True|>|>,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "SectionSetup"},ExpressionUUID->"4486bec3-2f90-a083-58e6-7be0232ea799"],
+
+Cell["\<\
+Keep this notebook in the repository root. Choose Evaluation > Evaluate \
+Notebook to run the cells in order. The setup cell loads the repo-local \
+GogFieldDynamics paclet; no global installation and no MathNotebook paclet \
+are needed. SetReplace is optional and is not used by the displayed native \
+sample path.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "SetupGuide", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "SetupGuide"},ExpressionUUID->"5295c97a-ca53-9d01-7197-f127d18ade83"],
+
+Cell[TextData[{
+ StyleBox["MATHEMATICA CELLS: ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0., 0.45, 0.7]],
+ "local paclet"
+}], "Text",
+ ShowCellBracket->False,
+ CellMargins->{{48, 48}, {12, 3}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "setupHeading", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->10,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "setupHeading"},ExpressionUUID->"6f343e64-de67-64a6-c23c-9cdf099ef046"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"repo", "=", 
+   RowBox[{"Quiet", "[", 
+    RowBox[{"Check", "[", 
+     RowBox[{
+      RowBox[{"NotebookDirectory", "[", "]"}], ",", "$Failed"}], "]"}], 
+    "]"}]}], ";", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"!", 
+      RowBox[{"StringQ", "[", "repo", "]"}]}], "||", 
+     RowBox[{"!", 
+      RowBox[{"DirectoryQ", "[", 
+       RowBox[{"FileNameJoin", "[", 
+        RowBox[{"{", 
+         RowBox[{
+         "repo", ",", "\"\<Wolfram\>\"", ",", "\"\<GogFieldDynamics\>\""}], 
+         "}"}], "]"}], "]"}]}]}], ",", 
+    RowBox[{"repo", "=", 
+     RowBox[{"Directory", "[", "]"}]}]}], "]"}], ";", 
+  RowBox[{"PacletDirectoryLoad", "[", 
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{"{", 
+     RowBox[{
+     "repo", ",", "\"\<Wolfram\>\"", ",", "\"\<GogFieldDynamics\>\""}], "}"}],
+     "]"}], "]"}], ";", 
+  RowBox[{"Needs", "[", "\"\<GogFieldDynamics`\>\"", "]"}], ";", 
+  RowBox[{"Association", "[", 
+   RowBox[{
+    RowBox[{"\"\<GogFieldDynamicsVersion\>\"", "\[Rule]", 
+     RowBox[{
+      RowBox[{"PacletObject", "[", "\"\<GogFieldDynamics\>\"", "]"}], 
+      "[", "\"\<Version\>\"", "]"}]}], ",", 
+    RowBox[{"\"\<PacletLoaded\>\"", "\[Rule]", 
+     RowBox[{
+     "NameQ", "[", "\"\<GogFieldDynamics`GogAvailableSizes\>\"", "]"}]}]}], 
+   "]"}]}]], "Input",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "setupInput", "Generated" -> True|>|>,
+ InitializationCell->True,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "setupInput"},ExpressionUUID->"5a5e9180-8090-0838-1778-454ba08f47cc"],
+
+Cell[BoxData[
+ RowBox[{"\[LeftAssociation]", 
+  RowBox[{
+   RowBox[{"\<\"GogFieldDynamicsVersion\"\>", "\[Rule]", "\<\"0.2.0\"\>"}], ",", 
+   RowBox[{"\<\"PacletLoaded\"\>", "\[Rule]", "True"}]}], 
+  "\[RightAssociation]"}]], "Output",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "setupOutput", "Generated" -> True|>|>,
+ 
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.992, 0.976, 0.935],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "setupOutput"},ExpressionUUID->"e6943ffd-ca02-03f9-6657-e220bc35e090"]
+}, Open  ]],
+
+Cell["\<\
+The final section contains a self-test. A successful complete run ends with \
+AllTestsPassed -> True.\
+\>", "Caption",
+ ShowCellBracket->False,
+ CellMargins->{{72, 72}, {3, 14}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "SetupCaption", "Generated" -> True|>|>,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "SetupCaption"},ExpressionUUID->"9cc502c1-0ba5-f321-7112-0289d20fb07c"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["What is being computed", "Section",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "SectionObjects", "Generated" -> True|>|>,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "SectionObjects"},ExpressionUUID->"16881b76-a257-711c-598d-17fdaeb7fac8"],
+
+Cell["\<\
+The state space consists of isomorphism classes of connected cubic \
+multigraphs on an even number N of vertices; loops and parallel edges are \
+allowed. A Whitehead move selects a carrier edge, collapses it, and chooses \
+one of the two other pairings of the four exposed half-edges. A scalar field \
+f in R^N is carried along with the graph. If the selected edge has endpoints \
+i and j, their values are replaced by their common mean.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "ObjectsIntro", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "ObjectsIntro"},ExpressionUUID->"96640e76-8c7c-3fb2-3d45-6d5ad55fb3f5"],
+
+Cell[BoxData[
+ FormBox[
+  TagBox[
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      SubscriptBox["f", "i"], ",", 
+      SubscriptBox["f", "j"]}], "}"}], "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       FractionBox["1", "2"], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["f", "i"], "+", 
+         SubscriptBox["f", "j"]}], ")"}]}], ",", 
+      RowBox[{
+       FractionBox["1", "2"], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["f", "i"], "+", 
+         SubscriptBox["f", "j"]}], ")"}]}]}], "}"}]}],
+   HoldForm], TraditionalForm]], "DisplayFormula",
+ ShowCellBracket->False,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "FieldUpdateFormula", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->15,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "FieldUpdateFormula"},ExpressionUUID->"f5c10e52-e82f-d31f-e27b-\
+430ef128516b"],
+
+Cell["Three computational objects must be kept separate.", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "ObjectsListIntro", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "ObjectsListIntro"},ExpressionUUID->"bb43c14b-97ec-4744-9ff2-68a3688e620f"],
+
+Cell["\<\
+The carrier field uses a concrete edge and, after an unlabelled move, a \
+settlement permutation for its coordinates.\
+\>", "ItemNumbered",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "ObjectCarrier", "Generated" -> True|>|>,
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "ObjectCarrier"},ExpressionUUID->"f3667e76-2339-dedf-1b39-ee490e6c2e88"],
+
+Cell["\<\
+Rule A is the quotient chain that retains all 3N compressed resolution slots, \
+including multiplicity and holding slots.\
+\>", "ItemNumbered",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "ObjectRuleA", "Generated" -> True|>|>,
+ 
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "ObjectRuleA"},ExpressionUUID->"6f835564-e174-9118-9abf-acc258354430"],
+
+Cell["\<\
+Fixed-clock Rule B gives one of the same 3N ticks to each distinct nonself \
+quotient neighbour and turns unused ticks into holds. BJump is Rule B \
+conditioned on moving and is a different chain.\
+\>", "ItemNumbered",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "ObjectRuleB", "Generated" -> True|>|>,
+ 
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "ObjectRuleB"},ExpressionUUID->"8abc9dad-6384-9a30-691b-38ebc0e260b0"],
+
+Cell["\<\
+The interactive laboratory in whitehead-field-dynamics.nb bundles complete \
+quotient data only for N=2,4,6. Larger finite tables come from the Python \
+enumeration pipeline and are not part of the compact notebook resource.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "ObjectsBoundary", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "ObjectsBoundary"},ExpressionUUID->"650e708c-193d-6dc1-2e6c-41b437809161"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["A visual map of the companion", "Section",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "SectionVisualMap", "Generated" -> True|>|>,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "SectionVisualMap"},ExpressionUUID->"57299ade-2b3f-3ff9-d18e-774c392a4047"],
+
+Cell["\<\
+The separate visual companion whitehead-field-dynamics.nb is deliberately not \
+a copy of the paper. Its seven pictures provide entry points into the \
+following computational questions.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "VisualMapIntro", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "VisualMapIntro"},ExpressionUUID->"8504be98-5a76-cf50-2536-f67a4e14b387"],
+
+Cell[TextData[{
+ StyleBox["Visual abstract. ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0.075, 0.13, 0.22]],
+ "Separates carrier field, fixed-labelled moves, multiplicity, and support.\n",
+ StyleBox["Whitehead move. ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0.075, 0.13, 0.22]],
+ "Shows the selected edge, exposed half-edges, and two resolutions.\n",
+ StyleBox["Variance drop. ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0.075, 0.13, 0.22]],
+ "Turns one pair average into the exact loss (f_i-f_j)^2/2.\n",
+ StyleBox["Consensus schedules. ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0.075, 0.13, 0.22]],
+ "Displays finite consensus layers on K4 and Q3.\n",
+ StyleBox["Transition heat maps. ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0.075, 0.13, 0.22]],
+ "Compares Rule A and fixed-clock Rule B at N=4.\n",
+ StyleBox["Diffusion laboratory. ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0.075, 0.13, 0.22]],
+ "Separates exact rational mass from one sampled path.\n",
+ StyleBox["Enumeration growth. ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0.075, 0.13, 0.22]],
+ "Compares class and Rule-A slot counts through N=14."
+}], "Text",
+ CellFrame->True,
+ ShowCellBracket->False,
+ CellMargins->{{48, 48}, {8, 14}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "VisualMapTable", "Generated" -> True|>|>,
+ CellFrameMargins->{{12, 12}, {10, 10}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88]],
+ LineSpacing->{1.1, 2},
+ FontSize->11,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "VisualMapTable"},ExpressionUUID->"9ef94874-3684-3f7c-5547-57bd4c4f8aef"],
+
+Cell["\<\
+This mini-notebook keeps the fuller explanatory text and executable \
+transcript. Every input/output pair has one shared MATHEMATICA CELLS heading. \
+Inputs are pale blue and exact outputs are warm cream.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "VisualMapBoundary", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "VisualMapBoundary"},ExpressionUUID->"60abc392-c311-dad4-8d86-\
+4b208f1a37d9"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["The local averaging calculation", "Section",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "SectionLocalAverage", "Generated" -> True|>|>,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "SectionLocalAverage"},ExpressionUUID->"f803b24c-75d6-1c7c-7f7d-\
+5586bff19f47"],
+
+Cell["\<\
+For a non-loop pair {i,j}, the averaging matrix is the orthogonal projection \
+onto the hyperplane f_i=f_j.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "AverageIntro", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "AverageIntro"},ExpressionUUID->"63cd1b71-0e92-3114-41c0-d0c70f5913d6"],
+
+Cell[BoxData[
+ FormBox[
+  TagBox[
+   RowBox[{
+    SubscriptBox["A", 
+     RowBox[{"i", ",", "j"}]], "\[LongEqual]", 
+    RowBox[{
+     SubscriptBox["identity", "n"], "-", 
+     RowBox[{
+      FractionBox["1", "2"], " ", 
+      RowBox[{"(", 
+       RowBox[{
+        SubscriptBox["e", "i"], "-", 
+        SubscriptBox["e", "j"]}], ")"}], " ", 
+      TemplateBox[{
+        RowBox[{
+          SubscriptBox["e", "i"], "-", 
+          SubscriptBox["e", "j"]}], "T"},
+       "Superscript"]}]}]}],
+   HoldForm], TraditionalForm]], "DisplayFormula",
+ ShowCellBracket->False,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "AverageMatrixFormula", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->15,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "AverageMatrixFormula"},ExpressionUUID->"c042d5a1-7668-f20f-fc27-\
+809a72232769"],
+
+Cell["\<\
+It is symmetric, idempotent, and fixes the all-ones vector. The \
+two-coordinate energy calculation can be checked without constructing the \
+whole matrix.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "AverageProperties", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "AverageProperties"},ExpressionUUID->"a9e79bb6-57e5-b3b7-2cf5-\
+ea3d1dd88b05"],
+
+Cell[TextData[{
+ StyleBox["MATHEMATICA CELLS: ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0., 0.45, 0.7]],
+ "one-pair loss"
+}], "Text",
+ ShowCellBracket->False,
+ CellMargins->{{48, 48}, {12, 3}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "pair-lossHeading", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->10,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "pair-lossHeading"},ExpressionUUID->"53729b43-0207-b5c8-e039-9ab44cb83039"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Clear", "[", 
+   RowBox[{"x", ",", "y"}], "]"}], ";", 
+  RowBox[{"FullSimplify", "[", 
+   RowBox[{
+    RowBox[{
+     SuperscriptBox["x", "2"], "+", 
+     SuperscriptBox["y", "2"], "-", 
+     RowBox[{"2", " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        FractionBox[
+         RowBox[{"x", "+", "y"}], "2"], ")"}], "2"]}]}], ",", 
+    RowBox[{"Assumptions", "\[Rule]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"x", ",", "y"}], "}"}], "\[Element]", 
+      TemplateBox[{},
+       "Reals"]}]}]}], "]"}]}]], "Input",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "pair-lossInput", "Generated" -> True|>|>,
+ InitializationCell->False,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "pair-lossInput"},ExpressionUUID->"362a8e51-7b51-7436-024f-f5b9a009de4a"],
+
+Cell[BoxData[
+ RowBox[{
+  FractionBox["1", "2"], " ", 
+  SuperscriptBox[
+   RowBox[{"(", 
+    RowBox[{"x", "-", "y"}], ")"}], "2"]}]], "Output",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "pair-lossOutput", "Generated" -> True|>|>,
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.992, 0.976, 0.935],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "pair-lossOutput"},ExpressionUUID->"d52c1b0d-d92f-c36c-1366-58c7fa2250c2"]
+}, Open  ]],
+
+Cell["\<\
+The sum and therefore the mean are unchanged. Applied to the centered field, \
+the identity is an exact Lyapunov law.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "VarianceIntro", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "VarianceIntro"},ExpressionUUID->"743f18b3-ab70-d0a3-83da-a3408f43fa9a"],
+
+Cell[BoxData[
+ FormBox[
+  TagBox[
+   RowBox[{
+    RowBox[{"V", "(", 
+     RowBox[{
+      SubscriptBox["A", 
+       RowBox[{"i", ",", "j"}]], " ", "f"}], ")"}], "\[LongEqual]", 
+    RowBox[{
+     RowBox[{"V", "(", "f", ")"}], "-", 
+     RowBox[{
+      FractionBox["1", "2"], " ", 
+      SuperscriptBox[
+       RowBox[{"(", 
+        RowBox[{
+         SubscriptBox["f", "i"], "-", 
+         SubscriptBox["f", "j"]}], ")"}], "2"]}]}]}],
+   HoldForm], TraditionalForm]], "DisplayFormula",
+ ShowCellBracket->False,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "VarianceFormula", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->15,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "VarianceFormula"},ExpressionUUID->"8f5064e2-0400-b026-c209-f3497d2a1088"],
+
+Cell[TextData[{
+ StyleBox["MATHEMATICA CELLS: ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0., 0.45, 0.7]],
+ "averaging matrix"
+}], "Text",
+ ShowCellBracket->False,
+ CellMargins->{{48, 48}, {12, 3}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "averaging-matrixHeading", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->10,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "averaging-matrixHeading"},ExpressionUUID->"e873314f-1f4e-2da7-35a1-\
+eaa9b211af98"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"pairAverage", "[", 
+    RowBox[{"n_", ",", 
+     RowBox[{"{", 
+      RowBox[{"i_", ",", "j_"}], "}"}]}], "]"}], ":=", 
+   RowBox[{"ReplacePart", "[", 
+    RowBox[{
+     RowBox[{"IdentityMatrix", "[", "n", "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"i", ",", "i"}], "}"}], "\[Rule]", 
+        FractionBox["1", "2"]}], ",", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"i", ",", "j"}], "}"}], "\[Rule]", 
+        FractionBox["1", "2"]}], ",", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"j", ",", "i"}], "}"}], "\[Rule]", 
+        FractionBox["1", "2"]}], ",", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"j", ",", "j"}], "}"}], "\[Rule]", 
+        FractionBox["1", "2"]}]}], "}"}]}], "]"}]}], ";", 
+  RowBox[{"a", "=", 
+   RowBox[{"pairAverage", "[", 
+    RowBox[{"4", ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "3"}], "}"}]}], "]"}]}], ";", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"SymmetricMatrixQ", "[", "a", "]"}], ",", 
+    RowBox[{
+     RowBox[{"a", ".", "a"}], "===", "a"}], ",", 
+    RowBox[{
+     RowBox[{"a", ".", 
+      RowBox[{"ConstantArray", "[", 
+       RowBox[{"1", ",", "4"}], "]"}]}], "===", 
+     RowBox[{"ConstantArray", "[", 
+      RowBox[{"1", ",", "4"}], "]"}]}]}], "}"}]}]], "Input",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "averaging-matrixInput", "Generated" -> True|>|>,
+ InitializationCell->False,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "averaging-matrixInput"},ExpressionUUID->"9b52411b-550f-cfa9-ab23-\
+0d1914eaf8ac"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"True", ",", "True", ",", "True"}], "}"}]], "Output",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "averaging-matrixOutput", "Generated" -> True|>|>,
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.992, 0.976, 0.935],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "averaging-matrixOutput"},ExpressionUUID->"fb02e9c6-eb21-b544-63a8-\
+f177e5ad37b0"]
+}, Open  ]],
+
+Cell["\<\
+A settlement is a permutation matrix. It preserves sums and Euclidean norms, \
+so it cannot change this one-step variance identity. It can change which \
+persistent coordinate pair is averaged later; a quotient trajectory alone \
+therefore does not reconstruct the full field cocycle.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "SettlementBoundary", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "SettlementBoundary"},ExpressionUUID->"24ad5abc-522a-cfa4-0f02-\
+beafce263621"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Loading and validating the notebook models", "Section",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "SectionModels", "Generated" -> True|>|>,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "SectionModels"},ExpressionUUID->"1ae29b4b-05b2-eea0-976e-f32ec423a113"],
+
+Cell["\<\
+The setup cell loaded the local companion paclet. For each bundled size, the \
+next query records {N, number of classes, support edges, total Rule-A slots}.\
+\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "ModelsIntro", "Generated" -> True|>|>,
+ 
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "ModelsIntro"},ExpressionUUID->"5f6944cc-0ebf-78d8-3f4d-fedcf22b677c"],
+
+Cell[TextData[{
+ StyleBox["MATHEMATICA CELLS: ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0., 0.45, 0.7]],
+ "resource summary"
+}], "Text",
+ ShowCellBracket->False,
+ CellMargins->{{48, 48}, {12, 3}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "resource-summaryHeading", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->10,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "resource-summaryHeading"},ExpressionUUID->"6b628d12-4c44-fb8b-06e1-\
+636bf2f3421a"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Table", "[", 
+  RowBox[{
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"m", "=", 
+       RowBox[{"GogSmallModel", "[", "n", "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"n", ",", 
+       RowBox[{"m", "[", "\"\<NodeCount\>\"", "]"}], ",", 
+       RowBox[{"m", "[", "\"\<EdgeCount\>\"", "]"}], ",", 
+       RowBox[{"m", "[", "\"\<RuleASlotCount\>\"", "]"}]}], "}"}]}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"n", ",", 
+     RowBox[{"GogAvailableSizes", "[", "]"}]}], "}"}]}], "]"}]], "Input",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "resource-summaryInput", "Generated" -> True|>|>,
+ InitializationCell->False,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "resource-summaryInput"},ExpressionUUID->"e672ce56-4397-d2d9-a53c-\
+2e8fd6741958"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"2", ",", "2", ",", "1", ",", "12"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"4", ",", "5", ",", "4", ",", "60"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"6", ",", "17", ",", "25", ",", "306"}], "}"}]}], "}"}]], "Output",\
+
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "resource-summaryOutput", "Generated" -> True|>|>,
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.992, 0.976, 0.935],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "resource-summaryOutput"},ExpressionUUID->"6ffcec46-2b08-ac2a-3a49-\
+dc5c2917beb4"]
+}, Open  ]],
+
+Cell["\<\
+The class counts 2, 5, and 17 agree with the corresponding first terms of \
+OEIS A005967. The total slot counts independently satisfy classes times 3N: \
+2*6=12, 5*12=60, and 17*18=306.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "SlotCheckText", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "SlotCheckText"},ExpressionUUID->"bce070a0-938b-011d-8b36-9e69951c5728"],
+
+Cell["\<\
+The paclet validator checks completeness metadata, node and slot counts, \
+support edges, row sums, stochasticity, Rule-B symmetry, and uniform Rule-B \
+stationarity.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "ValidationIntro", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "ValidationIntro"},ExpressionUUID->"9cf0b69a-04c8-78cb-460b-a9e274d1e67b"],
+
+Cell[TextData[{
+ StyleBox["MATHEMATICA CELLS: ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0., 0.45, 0.7]],
+ "compact validation report"
+}], "Text",
+ ShowCellBracket->False,
+ CellMargins->{{48, 48}, {12, 3}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "validationHeading", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->10,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "validationHeading"},ExpressionUUID->"59d1c4c9-3c30-8826-acb6-\
+062e2ffe1245"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"r", "=", 
+   RowBox[{"GogValidateSmallModels", "[", "]"}]}], ";", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"r", "[", "\"\<Valid\>\"", "]"}], ",", 
+    RowBox[{"AssociationMap", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"r", "[", 
+         RowBox[{"\"\<Models\>\"", ",", "#1"}], "]"}], "[", "\"\<Valid\>\"", 
+        "]"}], "&"}], ",", 
+      RowBox[{"GogAvailableSizes", "[", "]"}]}], "]"}]}], "}"}]}]], "Input",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "validationInput", "Generated" -> True|>|>,
+ InitializationCell->False,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "validationInput"},ExpressionUUID->"74af29a1-b82d-6228-372a-a7416a64f27e"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"True", ",", 
+   RowBox[{"\[LeftAssociation]", 
+    RowBox[{
+     RowBox[{"2", "\[Rule]", "True"}], ",", 
+     RowBox[{"4", "\[Rule]", "True"}], ",", 
+     RowBox[{"6", "\[Rule]", "True"}]}], "\[RightAssociation]"}]}], 
+  "}"}]], "Output",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "validationOutput", "Generated" -> True|>|>,
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.992, 0.976, 0.935],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "validationOutput"},ExpressionUUID->"ac6b631e-3645-e2cf-266e-bd60c9482ac6"]
+}, Open  ]],
+
+Cell["\<\
+These are complete finite checks of the bundled data and implemented matrix \
+conventions; they are not an asymptotic theorem.\
+\>", "Caption",
+ ShowCellBracket->False,
+ CellMargins->{{72, 72}, {3, 14}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "ValidationBoundary", "Generated" -> True|>|>,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "ValidationBoundary"},ExpressionUUID->"2b077699-9250-868d-ef8a-\
+fef123970c94"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["An exact five-state example", "Section",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "SectionFiveState", "Generated" -> True|>|>,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "SectionFiveState"},ExpressionUUID->"c6d43ec1-39cb-efea-09f5-57cc15ce31a0"],
+
+Cell["\<\
+At N=4 there are five unlabelled carrier classes. Rule A retains the integer \
+multiplicity of every compressed resolution.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "FiveStateIntro", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "FiveStateIntro"},ExpressionUUID->"7b902c5d-a7e6-3ce9-5a41-ca89d558d2db"],
+
+Cell[TextData[{
+ StyleBox["MATHEMATICA CELLS: ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0., 0.45, 0.7]],
+ "Rule-A counts"
+}], "Text",
+ ShowCellBracket->False,
+ CellMargins->{{48, 48}, {12, 3}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "rule-a-countsHeading", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->10,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "rule-a-countsHeading"},ExpressionUUID->"73e7e437-4130-3667-0286-\
+d5de3e177625"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"countsA", "=", 
+   RowBox[{"GogTransitionCounts", "[", 
+    RowBox[{"4", ",", "\"\<A\>\""}], "]"}]}], ";", 
+  RowBox[{"{", 
+   RowBox[{"countsA", ",", 
+    RowBox[{"Total", "/@", "countsA"}]}], "}"}]}]], "Input",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "rule-a-countsInput", "Generated" -> True|>|>,
+ InitializationCell->False,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "rule-a-countsInput"},ExpressionUUID->"9bc901b4-c7a4-1e6e-1002-\
+c220092ef12b"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"4", ",", "4", ",", "4", ",", "0", ",", "0"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"6", ",", "6", ",", "0", ",", "0", ",", "0"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"2", ",", "0", ",", "8", ",", "0", ",", "2"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "0", ",", "0", ",", "6", ",", "6"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "0", ",", "4", ",", "2", ",", "6"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"12", ",", "12", ",", "12", ",", "12", ",", "12"}], "}"}]}], 
+  "}"}]], "Output",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "rule-a-countsOutput", "Generated" -> True|>|>,
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.992, 0.976, 0.935],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "rule-a-countsOutput"},ExpressionUUID->"9faa1ff3-7e76-3cd2-09ab-\
+b3a4bbc6bcc1"]
+}, Open  ]],
+
+Cell["\<\
+Every row sums to 3N=12. Dividing the count matrix by 12 gives the exact \
+Rule-A transition matrix. It is not symmetric.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "RuleAMatrixText", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "RuleAMatrixText"},ExpressionUUID->"2e0f7185-c402-2426-e658-95d8f8a919a1"],
+
+Cell[BoxData[
+ FormBox[
+  TagBox[
+   RowBox[{
+    SubscriptBox["P", "A"], "\[LongEqual]", 
+    TagBox["pA",
+     Function[BoxForm`e$, 
+      MatrixForm[BoxForm`e$]]]}],
+   HoldForm], TraditionalForm]], "DisplayFormula",
+ ShowCellBracket->False,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "RuleAMatrix", "Generated" -> True|>|>,
+ 
+ TextAlignment->Center,
+ FontSize->15,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "RuleAMatrix"},ExpressionUUID->"4573d872-c503-70cb-677c-ee977c07d64a"],
+
+Cell["\<\
+Solving pi_A P_A = pi_A with exact arithmetic gives a nonuniform law.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "StationaryIntro", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "StationaryIntro"},ExpressionUUID->"aa389fb1-fdca-4fe6-59d7-e2c5f4741883"],
+
+Cell[TextData[{
+ StyleBox["MATHEMATICA CELLS: ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0., 0.45, 0.7]],
+ "Rule-A stationary law"
+}], "Text",
+ ShowCellBracket->False,
+ CellMargins->{{48, 48}, {12, 3}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "rule-a-stationaryHeading", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->10,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "rule-a-stationaryHeading"},ExpressionUUID->"5b851071-debb-a01f-a3e8-\
+35342e990273"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"pA", "=", 
+   RowBox[{"GogTransitionMatrix", "[", 
+    RowBox[{"4", ",", "\"\<A\>\""}], "]"}]}], ";", 
+  RowBox[{"piA", "=", 
+   RowBox[{"First", "[", 
+    RowBox[{"NullSpace", "[", 
+     RowBox[{
+      TemplateBox[{"pA"},
+       "Transpose"], "-", 
+      RowBox[{"IdentityMatrix", "[", 
+       RowBox[{"Length", "[", "pA", "]"}], "]"}]}], "]"}], "]"}]}], ";", 
+  FractionBox["piA", 
+   RowBox[{"Total", "[", "piA", "]"}]]}]], "Input",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "rule-a-stationaryInput", "Generated" -> True|>|>,
+ InitializationCell->False,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "rule-a-stationaryInput"},ExpressionUUID->"e5f63522-5ce2-6b91-073c-\
+b7d92d610d61"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   FractionBox["1", "5"], ",", 
+   FractionBox["2", "15"], ",", 
+   FractionBox["2", "5"], ",", 
+   FractionBox["1", "15"], ",", 
+   FractionBox["1", "5"]}], "}"}]], "Output",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "rule-a-stationaryOutput", "Generated" -> True|>|>,
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.992, 0.976, 0.935],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "rule-a-stationaryOutput"},ExpressionUUID->"66c442b3-749d-a208-3cb8-\
+a642359daaca"]
+}, Open  ]],
+
+Cell["\<\
+This is the finite N=4 instance of the projected cubic configuration-model \
+law. Treating Rule A as uniform on isomorphism classes would change the \
+process.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "StationaryMeaning", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "StationaryMeaning"},ExpressionUUID->"d4cb56f8-e8de-10a4-dc80-\
+1f50d06bf8f5"],
+
+Cell["\<\
+For fixed-clock Rule B, every distinct nonself support neighbour has \
+probability 1/12 and the remaining ticks hold.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "RuleBIntro", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "RuleBIntro"},ExpressionUUID->"9aa4665c-5c74-1fb2-2edd-048e055d94eb"],
+
+Cell[TextData[{
+ StyleBox["MATHEMATICA CELLS: ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0., 0.45, 0.7]],
+ "fixed-clock Rule B"
+}], "Text",
+ ShowCellBracket->False,
+ CellMargins->{{48, 48}, {12, 3}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "fixed-clock-bHeading", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->10,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "fixed-clock-bHeading"},ExpressionUUID->"a1568f47-336a-bcbd-bcf7-\
+ec4f5077d00e"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"pB", "=", 
+   RowBox[{"GogTransitionMatrix", "[", 
+    RowBox[{"4", ",", "\"\<B\>\""}], "]"}]}], ";", 
+  TagBox["pB",
+   Function[BoxForm`e$, 
+    MatrixForm[BoxForm`e$]]]}]], "Input",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "fixed-clock-bInput", "Generated" -> True|>|>,
+ InitializationCell->False,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "fixed-clock-bInput"},ExpressionUUID->"bd2b2a0c-aacf-1873-b0b0-\
+e9547368264b"],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      FractionBox["5", "6"], 
+      FractionBox["1", "12"], 
+      FractionBox["1", "12"], "0", "0"},
+     {
+      FractionBox["1", "12"], 
+      FractionBox["11", "12"], "0", "0", "0"},
+     {
+      FractionBox["1", "12"], "0", 
+      FractionBox["5", "6"], "0", 
+      FractionBox["1", "12"]},
+     {"0", "0", "0", 
+      FractionBox["11", "12"], 
+      FractionBox["1", "12"]},
+     {"0", "0", 
+      FractionBox["1", "12"], 
+      FractionBox["1", "12"], 
+      FractionBox["5", "6"]}
+    },
+    GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "fixed-clock-bOutput", "Generated" -> True|>|>,
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.992, 0.976, 0.935],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "fixed-clock-bOutput"},ExpressionUUID->"7f955a61-5553-e072-566a-\
+1cfff23107ea"]
+}, Open  ]],
+
+Cell["\<\
+The defining symmetry and stationarity checks can be made directly.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "RuleBChecksIntro", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "RuleBChecksIntro"},ExpressionUUID->"041dbf16-20cf-621a-1ef1-91b37b465e49"],
+
+Cell[TextData[{
+ StyleBox["MATHEMATICA CELLS: ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0., 0.45, 0.7]],
+ "symmetry and stationarity"
+}], "Text",
+ ShowCellBracket->False,
+ CellMargins->{{48, 48}, {12, 3}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "symmetry-stationarityHeading", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->10,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "symmetry-stationarityHeading"},ExpressionUUID->"120d310c-68f2-a85c-0610-\
+19b0e8ecf370"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"u", "=", 
+   RowBox[{"ConstantArray", "[", 
+    RowBox[{
+     FractionBox["1", "5"], ",", "5"}], "]"}]}], ";", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"SymmetricMatrixQ", "[", "pB", "]"}], ",", 
+    RowBox[{"u", ".", "pB"}]}], "}"}]}]], "Input",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "symmetry-stationarityInput", "Generated" -> True|>|>,
+ InitializationCell->False,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "symmetry-stationarityInput"},ExpressionUUID->"22b388dd-f2a4-0043-d8e2-\
+2d27cff2bb97"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"True", ",", 
+   RowBox[{"{", 
+    RowBox[{
+     FractionBox["1", "5"], ",", 
+     FractionBox["1", "5"], ",", 
+     FractionBox["1", "5"], ",", 
+     FractionBox["1", "5"], ",", 
+     FractionBox["1", "5"]}], "}"}]}], "}"}]], "Output",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "symmetry-stationarityOutput", "Generated" -> True|>|>,
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.992, 0.976, 0.935],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "symmetry-stationarityOutput"},ExpressionUUID->"2b33f1f2-ba07-99dd-1673-\
+38bbecd06a0a"]
+}, Open  ]],
+
+Cell[BoxData[
+ FormBox[
+  TagBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"IdentityMatrix", "[", "n", "]"}], "-", 
+     SubscriptBox["P", "B"]}], "\[LongEqual]", 
+    FractionBox[
+     SubscriptBox["L", "supp"], 
+     RowBox[{"3", " ", "n"}]]}],
+   HoldForm], TraditionalForm]], "DisplayFormula",
+ ShowCellBracket->False,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "RuleBLaplacianFormula", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->15,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "RuleBLaplacianFormula"},ExpressionUUID->"ec7f169f-5263-f13b-8c34-\
+3936ec85bfd5"],
+
+Cell["\<\
+Holding cannot simply be discarded. Already at N=2, the fixed clock and the \
+chain conditioned on moving have the same nonself support but different \
+clocks, spectra, and path probabilities.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "JumpChainIntro", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "JumpChainIntro"},ExpressionUUID->"b91951d8-61f3-ba17-4334-1ca77c3ebc91"],
+
+Cell[TextData[{
+ StyleBox["MATHEMATICA CELLS: ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0., 0.45, 0.7]],
+ "Rule B versus its jump chain"
+}], "Text",
+ ShowCellBracket->False,
+ CellMargins->{{48, 48}, {12, 3}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "b-versus-jumpHeading", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->10,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "b-versus-jumpHeading"},ExpressionUUID->"e2267014-ab22-1140-eacd-\
+d02d5b7382b6"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"GogTransitionMatrix", "[", 
+    RowBox[{"2", ",", "\"\<B\>\""}], "]"}], ",", 
+   RowBox[{"GogTransitionMatrix", "[", 
+    RowBox[{"2", ",", "\"\<BJump\>\""}], "]"}]}], "}"}]], "Input",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "b-versus-jumpInput", "Generated" -> True|>|>,
+ InitializationCell->False,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "b-versus-jumpInput"},ExpressionUUID->"21eb2f8c-81cc-3ac7-64ee-\
+b91520d8066b"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       FractionBox["5", "6"], ",", 
+       FractionBox["1", "6"]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       FractionBox["1", "6"], ",", 
+       FractionBox["5", "6"]}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0", ",", "1"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "0"}], "}"}]}], "}"}]}], "}"}]], "Output",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "b-versus-jumpOutput", "Generated" -> True|>|>,
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.992, 0.976, 0.935],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "b-versus-jumpOutput"},ExpressionUUID->"6a9f161d-8f11-02db-bf24-\
+ecbd160eb5b3"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Exact diffusion and a sampled path", "Section",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "SectionDiffusion", "Generated" -> True|>|>,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "SectionDiffusion"},ExpressionUUID->"ea9b4283-6336-730f-6d8e-fbb512a6449b"],
+
+Cell["\<\
+The blue node fill in the visual laboratory is exact row-vector matrix \
+evolution. Its default view uses N=4, Rule A, start class 1, and t=4.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "DiffusionIntro", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "DiffusionIntro"},ExpressionUUID->"731f460f-fbbd-691f-b9cd-3d7fde9fac5f"],
+
+Cell[TextData[{
+ StyleBox["MATHEMATICA CELLS: ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0., 0.45, 0.7]],
+ "default exact snapshot"
+}], "Text",
+ ShowCellBracket->False,
+ CellMargins->{{48, 48}, {12, 3}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "diffusion-aHeading", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->10,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "diffusion-aHeading"},ExpressionUUID->"673e7b52-573a-bb02-0f53-\
+88ead33c2d80"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"p4A", "=", 
+   RowBox[{"GogDiffusionState", "[", 
+    RowBox[{"4", ",", "\"\<A\>\"", ",", "1", ",", "4"}], "]"}]}], ";", 
+  RowBox[{"{", 
+   RowBox[{"p4A", ",", 
+    RowBox[{"N", "[", 
+     RowBox[{"p4A", ",", "6"}], "]"}]}], "}"}]}]], "Input",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "diffusion-aInput", "Generated" -> True|>|>,
+ InitializationCell->False,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "diffusion-aInput"},ExpressionUUID->"69c7a465-c18f-8fd0-30e7-be903269c0c6"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     FractionBox["185", "648"], ",", 
+     FractionBox["49", "216"], ",", 
+     FractionBox["59", "162"], ",", 
+     FractionBox["1", "54"], ",", 
+     FractionBox["17", "162"]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+    "0.2854938271604938271`6.", ",", "0.2268518518518518518`6.", ",", 
+     "0.3641975308641975309`6.", ",", "0.0185185185185185185`6.", ",", 
+     "0.1049382716049382716`6."}], "}"}]}], "}"}]], "Output",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "diffusion-aOutput", "Generated" -> True|>|>,
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.992, 0.976, 0.935],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "diffusion-aOutput"},ExpressionUUID->"f247480f-2a29-699a-f8c6-\
+11c0f55e4467"]
+}, Open  ]],
+
+Cell["\<\
+All five classes are reachable by time four, but the mass is far from the \
+stationary vector. The same initial condition under fixed-clock Rule B \
+retains much more mass at the starting class.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "DiffusionComparisonIntro", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "DiffusionComparisonIntro"},ExpressionUUID->"57a872f5-19bb-0fa7-317a-\
+9d383424836c"],
+
+Cell[TextData[{
+ StyleBox["MATHEMATICA CELLS: ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0., 0.45, 0.7]],
+ "Rule-B comparison"
+}], "Text",
+ ShowCellBracket->False,
+ CellMargins->{{48, 48}, {12, 3}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "diffusion-bHeading", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->10,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "diffusion-bHeading"},ExpressionUUID->"9abb27eb-a10d-af3c-4bb0-\
+6c7415cc34df"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"p4B", "=", 
+   RowBox[{"GogDiffusionState", "[", 
+    RowBox[{"4", ",", "\"\<B\>\"", ",", "1", ",", "4"}], "]"}]}], ";", 
+  RowBox[{"{", 
+   RowBox[{"p4B", ",", 
+    RowBox[{"N", "[", 
+     RowBox[{"p4B", ",", "6"}], "]"}]}], "}"}]}]], "Input",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "diffusion-bInput", "Generated" -> True|>|>,
+ InitializationCell->False,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "diffusion-bInput"},ExpressionUUID->"eee2d581-6f01-82d0-5958-9e74a6ede9ab"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     FractionBox["5623", "10368"], ",", 
+     FractionBox["1181", "5184"], ",", 
+     FractionBox["4121", "20736"], ",", 
+     FractionBox["41", "20736"], ",", 
+     FractionBox["151", "5184"]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+    "0.542341820987654321`6.", ",", "0.227816358024691358`6.", ",", 
+     "0.1987364969135802469`6.", ",", "0.0019772376543209877`6.", ",", 
+     "0.0291280864197530864`6."}], "}"}]}], "}"}]], "Output",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "diffusion-bOutput", "Generated" -> True|>|>,
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.992, 0.976, 0.935],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "diffusion-bOutput"},ExpressionUUID->"baa0d102-f21a-790b-5e27-\
+d8ceed672334"]
+}, Open  ]],
+
+Cell["\<\
+This compares quotient clocks; it does not specify a Rule-B lift that chooses \
+which concrete carrier edge to average. The orange trail in the visual \
+notebook is one random realization, not an estimate of the blue exact \
+distribution.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "DiffusionBoundary", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "DiffusionBoundary"},ExpressionUUID->"5225530c-6f36-6e19-b7b0-\
+eda9a212ee9f"],
+
+Cell[TextData[{
+ StyleBox["MATHEMATICA CELLS: ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0., 0.45, 0.7]],
+ "one reproducible trajectory"
+}], "Text",
+ ShowCellBracket->False,
+ CellMargins->{{48, 48}, {12, 3}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "seeded-pathHeading", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->10,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "seeded-pathHeading"},ExpressionUUID->"1d73a877-5c3f-1736-cd42-\
+3356165e856e"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"GogRandomTrajectory", "[", 
+  RowBox[{"4", ",", "\"\<A\>\"", ",", "1", ",", "12", ",", "2026"}], 
+  "]"}]], "Input",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "seeded-pathInput", "Generated" -> True|>|>,
+ InitializationCell->False,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "seeded-pathInput"},ExpressionUUID->"0db5a271-23bf-62c0-272e-bfbdcd73e41d"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "1", ",", "3", ",", "1", ",", "3", ",", "3", ",", "3", ",", "3", ",", "5", ",",
+    "3", ",", "1", ",", "2", ",", "2", ",", "1"}], "}"}]], "Output",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "seeded-pathOutput", "Generated" -> True|>|>,
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.992, 0.976, 0.935],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "seeded-pathOutput"},ExpressionUUID->"4c88cd4a-e1be-c32f-9bf8-\
+5f0057e53e35"]
+}, Open  ]],
+
+Cell["\<\
+Repeated class labels are genuine holding events. The fixed seed makes this \
+native sample reproducible.\
+\>", "Caption",
+ ShowCellBracket->False,
+ CellMargins->{{72, 72}, {3, 14}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "PathCaption", "Generated" -> True|>|>,
+ 
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "PathCaption"},ExpressionUUID->"4ef13ff6-a0ff-f4ee-394a-d69eb49cf5a2"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Finite consensus words", "Section",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "SectionConsensus", "Generated" -> True|>|>,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "SectionConsensus"},ExpressionUUID->"d5c504a7-2ed2-a7a4-3759-7fdf2056636f"],
+
+Cell["\<\
+Pair averages on disjoint edges commute, so a perfect matching is one block. \
+Two matching layers on K4 and three coordinate matchings on Q3 give exact \
+finite consensus.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "ConsensusIntro", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "ConsensusIntro"},ExpressionUUID->"338065fe-8bd6-5a53-51ec-8511e28139c4"],
+
+Cell[BoxData[
+ FormBox[
+  TagBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["J", "4"], "\[LongEqual]", 
+     RowBox[{"ConstantArray", "[", 
+      RowBox[{
+       FractionBox["1", "4"], ",", 
+       RowBox[{"{", 
+        RowBox[{"4", ",", "4"}], "}"}]}], "]"}]}], "\[And]", 
+    RowBox[{
+     SubscriptBox["J", "8"], "\[LongEqual]", 
+     RowBox[{"ConstantArray", "[", 
+      RowBox[{
+       FractionBox["1", "8"], ",", 
+       RowBox[{"{", 
+        RowBox[{"8", ",", "8"}], "}"}]}], "]"}]}]}],
+   HoldForm], TraditionalForm]], "DisplayFormula",
+ ShowCellBracket->False,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "ConsensusFormula", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->15,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "ConsensusFormula"},ExpressionUUID->"76a9e2f7-b970-46b7-4d38-d021e12ae473"],
+
+Cell[TextData[{
+ StyleBox["MATHEMATICA CELLS: ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0., 0.45, 0.7]],
+ "matching products"
+}], "Text",
+ ShowCellBracket->False,
+ CellMargins->{{48, 48}, {12, 3}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "matching-productsHeading", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->10,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "matching-productsHeading"},ExpressionUUID->"60cfc059-fb44-7d82-0261-\
+4c2d8bf38a3c"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"matching", "[", 
+    RowBox[{"n_", ",", "edges_"}], "]"}], ":=", 
+   RowBox[{"Dot", "@@", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"pairAverage", "[", 
+        RowBox[{"n", ",", "#1"}], "]"}], "&"}], ")"}], "/@", "edges"}]}]}], ";", 
+  RowBox[{"k4Word", "=", 
+   RowBox[{
+    RowBox[{"matching", "[", 
+     RowBox[{"4", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "3"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"2", ",", "4"}], "}"}]}], "}"}]}], "]"}], ".", 
+    RowBox[{"matching", "[", 
+     RowBox[{"4", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "2"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"3", ",", "4"}], "}"}]}], "}"}]}], "]"}]}]}], ";", 
+  RowBox[{"q3Word", "=", 
+   RowBox[{
+    RowBox[{"matching", "[", 
+     RowBox[{"8", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "5"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"2", ",", "6"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"3", ",", "7"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"4", ",", "8"}], "}"}]}], "}"}]}], "]"}], ".", 
+    RowBox[{"matching", "[", 
+     RowBox[{"8", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "3"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"2", ",", "4"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"5", ",", "7"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"6", ",", "8"}], "}"}]}], "}"}]}], "]"}], ".", 
+    RowBox[{"matching", "[", 
+     RowBox[{"8", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"1", ",", "2"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"3", ",", "4"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"5", ",", "6"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"7", ",", "8"}], "}"}]}], "}"}]}], "]"}]}]}], ";", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"k4Word", "===", 
+     RowBox[{"ConstantArray", "[", 
+      RowBox[{
+       FractionBox["1", "4"], ",", 
+       RowBox[{"{", 
+        RowBox[{"4", ",", "4"}], "}"}]}], "]"}]}], ",", 
+    RowBox[{"q3Word", "===", 
+     RowBox[{"ConstantArray", "[", 
+      RowBox[{
+       FractionBox["1", "8"], ",", 
+       RowBox[{"{", 
+        RowBox[{"8", ",", "8"}], "}"}]}], "]"}]}]}], "}"}]}]], "Input",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "matching-productsInput", "Generated" -> True|>|>,
+ InitializationCell->False,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "matching-productsInput"},ExpressionUUID->"e8dcc022-1ca2-4008-9f40-\
+759433bca585"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"True", ",", "True"}], "}"}]], "Output",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "matching-productsOutput", "Generated" -> True|>|>,
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.992, 0.976, 0.935],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "matching-productsOutput"},ExpressionUUID->"dfbefc10-d228-b03e-572f-\
+f54381eb68b3"]
+}, Open  ]],
+
+Cell["\<\
+For example, the K4 word is returned exactly as the consensus matrix.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "K4Intro", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "K4Intro"},ExpressionUUID->"fa2301ba-cb1f-8cd5-e900-262a9897c57b"],
+
+Cell[TextData[{
+ StyleBox["MATHEMATICA CELLS: ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0., 0.45, 0.7]],
+ "the K4 product"
+}], "Text",
+ ShowCellBracket->False,
+ CellMargins->{{48, 48}, {12, 3}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "k4-productHeading", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->10,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "k4-productHeading"},ExpressionUUID->"c852ce67-a461-88b0-3756-\
+3edc144f26e3"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ TagBox["k4Word",
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Input",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "k4-productInput", "Generated" -> True|>|>,
+ InitializationCell->False,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "k4-productInput"},ExpressionUUID->"ac591b54-2660-5426-df37-00bed52d11b0"],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      FractionBox["1", "4"], 
+      FractionBox["1", "4"], 
+      FractionBox["1", "4"], 
+      FractionBox["1", "4"]},
+     {
+      FractionBox["1", "4"], 
+      FractionBox["1", "4"], 
+      FractionBox["1", "4"], 
+      FractionBox["1", "4"]},
+     {
+      FractionBox["1", "4"], 
+      FractionBox["1", "4"], 
+      FractionBox["1", "4"], 
+      FractionBox["1", "4"]},
+     {
+      FractionBox["1", "4"], 
+      FractionBox["1", "4"], 
+      FractionBox["1", "4"], 
+      FractionBox["1", "4"]}
+    },
+    GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "k4-productOutput", "Generated" -> True|>|>,
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.992, 0.976, 0.935],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "k4-productOutput"},ExpressionUUID->"c7d85b12-f2f4-ecd9-c5b1-1bc403253589"]
+}, Open  ]],
+
+Cell["\<\
+Every initial field therefore reaches its exact mean after the stated \
+schedule. This exceptional finite-time consensus should not be extrapolated \
+to arbitrary N: pair averaging has a dyadic denominator obstruction, and \
+(0,0,1) cannot reach its mean after a finite word of pair averages.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "ConsensusBoundary", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "ConsensusBoundary"},ExpressionUUID->"a0f2d85b-35a2-241c-4d4e-\
+80129417816e"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Interpretation limits", "Section",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "SectionLimits", "Generated" -> True|>|>,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "SectionLimits"},ExpressionUUID->"c69b47a3-6384-069b-a2a5-a56b38c9124f"],
+
+Cell["\<\
+The executable transcript supports the following precise conclusions.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "LimitsPositiveIntro", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "LimitsPositiveIntro"},ExpressionUUID->"3c98c9c5-eb08-294a-4930-\
+99400c876d7a"],
+
+Cell["\<\
+Pair averaging is an orthogonal projection with exact variance loss.\
+\>", "Item",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "LimitPositive1", "Generated" -> True|>|>,
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "LimitPositive1"},ExpressionUUID->"e7fb1dcb-14bd-b2fb-fdd1-b6308f7d263c"],
+
+Cell["Each Rule-A row contains exactly 3N resolution slots.", "Item",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "LimitPositive2", "Generated" -> True|>|>,
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "LimitPositive2"},ExpressionUUID->"c4d79000-e07d-f457-9ffe-9138d377b418"],
+
+Cell["The N=4 Rule-A class law is nonuniform.", "Item",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "LimitPositive3", "Generated" -> True|>|>,
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "LimitPositive3"},ExpressionUUID->"cf6ebdbe-4352-c18c-a5ce-c8268f7f405d"],
+
+Cell["\<\
+Fixed-clock Rule B is symmetric and has uniform class stationarity.\
+\>", "Item",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "LimitPositive4", "Generated" -> True|>|>,
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "LimitPositive4"},ExpressionUUID->"51df2809-8135-8b74-9a44-fb85e1d04ed3"],
+
+Cell["\<\
+Diffusion is exact rational matrix evolution, and the K4/Q3 schedules are \
+exact finite consensus words.\
+\>", "Item",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "LimitPositive5", "Generated" -> True|>|>,
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "LimitPositive5"},ExpressionUUID->"e7c6fa4b-253f-31c0-bbcf-8115c9eff3ef"],
+
+Cell["There are also three important non-conclusions.", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "LimitsNegativeIntro", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "LimitsNegativeIntro"},ExpressionUUID->"4dc86d3f-7f45-e33a-bc1c-\
+95282de2ff71"],
+
+Cell["\<\
+The bundled quotient model omits carrier edges, resolution identifiers, and \
+settlement permutations, so it cannot by itself produce a pathwise \
+transported field or Lyapunov exponent.\
+\>", "ItemNumbered",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "LimitNegative1", "Generated" -> True|>|>,
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "LimitNegative1"},ExpressionUUID->"d9782e38-7f6b-596e-5192-6d1a0e595781"],
+
+Cell["\<\
+A single sampled trajectory does not approximate the exact distribution.\
+\>", "ItemNumbered",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "LimitNegative2", "Generated" -> True|>|>,
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "LimitNegative2"},ExpressionUUID->"2d6f4b82-e61a-35c4-f5ab-b1e32239bd36"],
+
+Cell["\<\
+Complete finite checks through N=6 here or N=14 in the Python tables do not \
+prove an asymptotic spectral or mixing statement.\
+\>", "ItemNumbered",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "LimitNegative3", "Generated" -> True|>|>,
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "LimitNegative3"},ExpressionUUID->"6c2d6f59-add0-7580-e43e-d38847099097"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Reproduction and self-test", "Section",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "SectionReproduction", "Generated" -> True|>|>,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "SectionReproduction"},ExpressionUUID->"28ee34ff-43da-bb17-ca75-\
+9575de2d3416"],
+
+Cell["\<\
+The transcript was regenerated with Wolfram 15.0.0 for macOS ARM. The \
+following shell commands reproduce the textual transcript, byte-check the \
+small-model resource, rebuild the TeX note, and validate this mini-notebook. \
+They are shown as program text rather than Mathematica input cells.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "ReproductionIntro", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "ReproductionIntro"},ExpressionUUID->"478f0a22-d380-12e9-7b2c-\
+ae770de01f30"],
+
+Cell["\<\
+/Applications/Wolfram.app/Contents/MacOS/WolframKernel -noinit -noprompt \
+-script scripts/notebook_report_outputs.wls\
+\>", "Program",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "TranscriptCommand", "Generated" -> True|>|>,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->10,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "TranscriptCommand"},ExpressionUUID->"3e4a605b-b7cd-99b2-0d99-\
+b0e5baef10b0"],
+
+Cell["python3 scripts/build_small_gog_models.py --check", "Program",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "DataCheckCommand", "Generated" -> True|>|>,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->10,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "DataCheckCommand"},ExpressionUUID->"ae79dd22-c8a3-d802-edd8-b0b0fea64a04"],
+
+Cell["\<\
+latexmk -pdf -interaction=nonstopmode -halt-on-error \
+whitehead-field-dynamics-computational-notes.tex\
+\>", "Program",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "TeXCommand", "Generated" -> True|>|>,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->10,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "TeXCommand"},ExpressionUUID->"5a59dca9-d7e5-67c8-a2bd-a325008cbc7e"],
+
+Cell["make computational-notes-notebook-check", "Program",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "NotebookCheckCommand", "Generated" -> True|>|>,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->10,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "NotebookCheckCommand"},ExpressionUUID->"1e86e0bf-f1dd-cfc2-2674-\
+90d5a422285f"],
+
+Cell["\<\
+Run the final Mathematica cell after evaluating the notebook. Every entry in \
+Checks should be True, and the first line should report AllTestsPassed -> \
+True.\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "SelfTestIntro", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "SelfTestIntro"},ExpressionUUID->"73753370-b7a6-40b9-2529-c68cb1912051"],
+
+Cell[TextData[{
+ StyleBox["MATHEMATICA CELLS: ",
+  FontWeight->"Bold",
+  FontColor->RGBColor[0., 0.45, 0.7]],
+ "complete mini-notebook self-test"
+}], "Text",
+ ShowCellBracket->False,
+ CellMargins->{{48, 48}, {12, 3}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "self-testHeading", "Generated" -> True|>|>,
+ TextAlignment->Center,
+ FontSize->10,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "self-testHeading"},ExpressionUUID->"3ee6cc00-fea2-74d8-da1b-67130fe8845d"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"miniNotebookChecks", "=", 
+   RowBox[{"Association", "[", 
+    RowBox[{
+     RowBox[{"\"\<PacletLoaded\>\"", "\[Rule]", 
+      RowBox[{"NameQ", "[", "\"\<GogFieldDynamics`GogSmallModel\>\"", "]"}]}],
+      ",", 
+     RowBox[{"\"\<AvailableSizes\>\"", "\[Rule]", 
+      RowBox[{
+       RowBox[{"GogAvailableSizes", "[", "]"}], "===", 
+       RowBox[{"{", 
+        RowBox[{"2", ",", "4", ",", "6"}], "}"}]}]}], ",", 
+     RowBox[{"\"\<ModelsValidate\>\"", "\[Rule]", 
+      RowBox[{"TrueQ", "[", 
+       RowBox[{
+        RowBox[{"GogValidateSmallModels", "[", "]"}], "[", "\"\<Valid\>\"", 
+        "]"}], "]"}]}], ",", 
+     RowBox[{"\"\<PairLoss\>\"", "\[Rule]", 
+      RowBox[{
+       RowBox[{"FullSimplify", "[", 
+        RowBox[{
+         RowBox[{
+          SuperscriptBox["x", "2"], "+", 
+          SuperscriptBox["y", "2"], "-", 
+          RowBox[{"2", " ", 
+           SuperscriptBox[
+            RowBox[{"(", 
+             FractionBox[
+              RowBox[{"x", "+", "y"}], "2"], ")"}], "2"]}]}], ",", 
+         RowBox[{"Assumptions", "\[Rule]", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"x", ",", "y"}], "}"}], "\[Element]", 
+           TemplateBox[{},
+            "Reals"]}]}]}], "]"}], "===", 
+       RowBox[{
+        FractionBox["1", "2"], " ", 
+        SuperscriptBox[
+         RowBox[{"(", 
+          RowBox[{"x", "-", "y"}], ")"}], "2"]}]}]}], ",", 
+     RowBox[{"\"\<Projection\>\"", "\[Rule]", 
+      RowBox[{"And", "@@", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"SymmetricMatrixQ", "[", "a", "]"}], ",", 
+         RowBox[{
+          RowBox[{"a", ".", "a"}], "===", "a"}], ",", 
+         RowBox[{
+          RowBox[{"a", ".", 
+           RowBox[{"ConstantArray", "[", 
+            RowBox[{"1", ",", "4"}], "]"}]}], "===", 
+          RowBox[{"ConstantArray", "[", 
+           RowBox[{"1", ",", "4"}], "]"}]}]}], "}"}]}]}], ",", 
+     RowBox[{"\"\<RuleARowSums\>\"", "\[Rule]", 
+      RowBox[{
+       RowBox[{"Total", "/@", 
+        RowBox[{"GogTransitionCounts", "[", 
+         RowBox[{"4", ",", "\"\<A\>\""}], "]"}]}], "===", 
+       RowBox[{"ConstantArray", "[", 
+        RowBox[{"12", ",", "5"}], "]"}]}]}], ",", 
+     RowBox[{"\"\<RuleBUniform\>\"", "\[Rule]", 
+      RowBox[{
+       RowBox[{"SymmetricMatrixQ", "[", "pB", "]"}], "&&", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"ConstantArray", "[", 
+          RowBox[{
+           FractionBox["1", "5"], ",", "5"}], "]"}], ".", "pB"}], "===", 
+        RowBox[{"ConstantArray", "[", 
+         RowBox[{
+          FractionBox["1", "5"], ",", "5"}], "]"}]}]}]}], ",", 
+     RowBox[{"\"\<DiffusionMass\>\"", "\[Rule]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Total", "[", "p4A", "]"}], "===", "1"}], "&&", 
+       RowBox[{
+        RowBox[{"Total", "[", "p4B", "]"}], "===", "1"}]}]}], ",", 
+     RowBox[{"\"\<SeededTrajectory\>\"", "\[Rule]", 
+      RowBox[{
+       RowBox[{"GogRandomTrajectory", "[", 
+        RowBox[{"4", ",", "\"\<A\>\"", ",", "1", ",", "12", ",", "2026"}], 
+        "]"}], "===", 
+       RowBox[{"{", 
+        RowBox[{
+        "1", ",", "3", ",", "1", ",", "3", ",", "3", ",", "3", ",", "3", ",", 
+         "5", ",", "3", ",", "1", ",", "2", ",", "2", ",", "1"}], "}"}]}]}], ",", 
+     RowBox[{"\"\<FiniteConsensus\>\"", "\[Rule]", 
+      RowBox[{
+       RowBox[{"k4Word", "===", 
+        RowBox[{"ConstantArray", "[", 
+         RowBox[{
+          FractionBox["1", "4"], ",", 
+          RowBox[{"{", 
+           RowBox[{"4", ",", "4"}], "}"}]}], "]"}]}], "&&", 
+       RowBox[{"q3Word", "===", 
+        RowBox[{"ConstantArray", "[", 
+         RowBox[{
+          FractionBox["1", "8"], ",", 
+          RowBox[{"{", 
+           RowBox[{"8", ",", "8"}], "}"}]}], "]"}]}]}]}]}], "]"}]}], ";", 
+  RowBox[{"Association", "[", 
+   RowBox[{
+    RowBox[{"\"\<AllTestsPassed\>\"", "\[Rule]", 
+     RowBox[{"And", "@@", 
+      RowBox[{"Values", "[", "miniNotebookChecks", "]"}]}]}], ",", 
+    RowBox[{"\"\<Checks\>\"", "\[Rule]", "miniNotebookChecks"}]}], 
+   "]"}]}]], "Input",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "self-testInput", "Generated" -> True|>|>,
+ InitializationCell->False,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.965, 0.975, 0.985],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "self-testInput"},ExpressionUUID->"618e848a-76c4-ca69-5ded-1638040f17c1"],
+
+Cell[BoxData[
+ RowBox[{"\[LeftAssociation]", 
+  RowBox[{
+   RowBox[{"\<\"AllTestsPassed\"\>", "\[Rule]", "True"}], ",", 
+   RowBox[{"\<\"Checks\"\>", "\[Rule]", 
+    RowBox[{"\[LeftAssociation]", 
+     RowBox[{
+      RowBox[{"\<\"PacletLoaded\"\>", "\[Rule]", "True"}], ",", 
+      RowBox[{"\<\"AvailableSizes\"\>", "\[Rule]", "True"}], ",", 
+      RowBox[{"\<\"ModelsValidate\"\>", "\[Rule]", "True"}], ",", 
+      RowBox[{"\<\"PairLoss\"\>", "\[Rule]", "True"}], ",", 
+      RowBox[{"\<\"Projection\"\>", "\[Rule]", "True"}], ",", 
+      RowBox[{"\<\"RuleARowSums\"\>", "\[Rule]", "True"}], ",", 
+      RowBox[{"\<\"RuleBUniform\"\>", "\[Rule]", "True"}], ",", 
+      RowBox[{"\<\"DiffusionMass\"\>", "\[Rule]", "True"}], ",", 
+      RowBox[{"\<\"SeededTrajectory\"\>", "\[Rule]", "True"}], ",", 
+      RowBox[{"\<\"FiniteConsensus\"\>", "\[Rule]", "True"}]}], 
+     "\[RightAssociation]"}]}]}], "\[RightAssociation]"}]], "Output",
+ CellFrame->True,
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "self-testOutput", "Generated" -> True|>|>,
+ GeneratedCell->True,
+ CellAutoOverwrite->True,
+ CellFrameMargins->{{9, 9}, {8, 8}},
+ CellFrameStyle->Directive[
+   RGBColor[0.82, 0.85, 0.88], 
+   AbsoluteThickness[1]],
+ FontSize->11,
+ Background->RGBColor[0.992, 0.976, 0.935],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "self-testOutput"},ExpressionUUID->"c70afa3b-32b6-9f8f-e02a-734b7b8c67ca"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["References", "Section",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "SectionReferences", "Generated" -> True|>|>,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "SectionReferences"},ExpressionUUID->"2020a197-7a4e-c9f2-3ab6-\
+f51d5d8b1d11"],
+
+Cell["\<\
+Laura Grave de Peralta and Alexander Kolpakov, Expansion properties of \
+Whitehead moves on cubic graphs, Comptes Rendus Mathematique 362 (2024), \
+1825-1836. https://doi.org/10.5802/crmath.691\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "ReferenceGDPK", "Generated" -> True|>|>,
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "ReferenceGDPK"},ExpressionUUID->"42375d8b-d12e-94b4-657f-f0714b10aa09"],
+
+Cell["\<\
+Michael Li, Increasingly Many Bounded Eigenvalues of the Graph of Whitehead \
+Moves, arXiv:2405.14592. https://arxiv.org/abs/2405.14592\
+\>", "Text",
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|"ID" -> "ReferenceLi", "Generated" -> True|>|>,
+ 
+ LineSpacing->{1.15, 2},
+ FontSize->12,
+ CellTags->{
+  "GoGComputationalNotes", 
+   "ReferenceLi"},ExpressionUUID->"f1dea117-ca24-bc8c-11ff-124f7c2e51da"],
+
+Cell["\<\
+Mathematical proofs remain in whitehead-field-dynamics.tex. The claim ledger \
+remains in docs/status.rst.\
+\>", "Caption",
+ ShowCellBracket->False,
+ CellMargins->{{72, 72}, {3, 14}},
+ TaggingRules-><|
+  "GoGComputationalNotes" -> <|
+    "ID" -> "ClosingBoundary", "Generated" -> True|>|>,
+ FontColor->RGBColor[0.37, 0.42, 0.49],
+ CellTags->{
+  "GoGComputationalNotes", 
+   "ClosingBoundary"},ExpressionUUID->"d18d2e56-e9b6-1fc7-6708-39955cd8e283"]
+}, Open  ]]
+}, Open  ]]
+},
+Saveable->True,
+InitializationCellEvaluation->False,
+WindowSize->{1040, 900},
+WindowMargins->{{215, Automatic}, {Automatic, 0}},
+WindowTitle->"Whitehead Field Dynamics \[LongDash] Computational Notes",
+PrintingOptions->{"PrintCellBrackets"->False},
+TaggingRules-><|
+ "GoGComputationalNotes" -> <|
+   "Edition" -> "ExecutableMiniNotebook", "SchemaVersion" -> 1, "Source" -> 
+    "whitehead-field-dynamics-computational-notes.tex", "SelfTestExpected" -> 
+    True|>|>,
+CellContext->Notebook,
+ShowCellLabel->False,
+FrontEndVersion->"15.0 for Mac OS X ARM (64-bit) (May 19, 2026)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"e7b6a67b-f099-e10a-2a0a-e2105b738948"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "GoGComputationalNotes"->{
+  Cell[641, 23, 306, 7, 70, "Title",ExpressionUUID->"c7a7a966-b587-7399-1d2a-fb4e266e84e9",
+   CellTags->{"GoGComputationalNotes", "Title"}],
+  Cell[950, 32, 346, 7, 70, "Subtitle",ExpressionUUID->"e211cf8e-f35c-a264-5c96-82748394ce6a",
+   CellTags->{"GoGComputationalNotes", "Subtitle"}],
+  Cell[1299, 41, 262, 6, 70, "Author",ExpressionUUID->"0f37c903-8061-39ca-1d16-88da223b8959",
+   CellTags->{"GoGComputationalNotes", "Author"}],
+  Cell[1564, 49, 303, 7, 70, "Affiliation",ExpressionUUID->"637bfb47-a8b7-4d84-e256-763e733c6166",
+   CellTags->{"GoGComputationalNotes", "Date"}],
+  Cell[1870, 58, 795, 22, 70, "Text",ExpressionUUID->"e4581535-6516-b3cc-6985-1541b5e473d5",
+   CellTags->{"GoGComputationalNotes", "EditionBanner"}],
+  Cell[2668, 82, 720, 15, 70, "Text",ExpressionUUID->"46d8de8c-c466-768e-ac8c-bf59592516b9",
+   CellTags->{"GoGComputationalNotes", "Abstract"}],
+  Cell[3413, 101, 243, 5, 70, "Section",ExpressionUUID->"4486bec3-2f90-a083-58e6-7be0232ea799",
+   CellTags->{"GoGComputationalNotes", "SectionSetup"}],
+  Cell[3659, 108, 588, 13, 70, "Text",ExpressionUUID->"5295c97a-ca53-9d01-7197-f127d18ade83",
+   CellTags->{"GoGComputationalNotes", "SetupGuide"}],
+  Cell[4250, 123, 490, 15, 70, "Text",ExpressionUUID->"6f343e64-de67-64a6-c23c-9cdf099ef046",
+   CellTags->{"GoGComputationalNotes", "setupHeading"}],
+  Cell[4765, 142, 1758, 51, 70, "Input",ExpressionUUID->"5a5e9180-8090-0838-1778-454ba08f47cc",
+   InitializationCell->True,
+   CellTags->{"GoGComputationalNotes", "setupInput"}],
+  Cell[6526, 195, 697, 20, 70, "Output",ExpressionUUID->"e6943ffd-ca02-03f9-6657-e220bc35e090",
+   CellTags->{"GoGComputationalNotes", "setupOutput"}],
+  Cell[7238, 218, 442, 11, 70, "Caption",ExpressionUUID->"9cc502c1-0ba5-f321-7112-0289d20fb07c",
+   CellTags->{"GoGComputationalNotes", "SetupCaption"}],
+  Cell[7717, 234, 264, 6, 70, "Section",ExpressionUUID->"16881b76-a257-711c-598d-17fdaeb7fac8",
+   CellTags->{"GoGComputationalNotes", "SectionObjects"}],
+  Cell[7984, 242, 715, 14, 70, "Text",ExpressionUUID->"96640e76-8c7c-3fb2-3d45-6d5ad55fb3f5",
+   CellTags->{"GoGComputationalNotes", "ObjectsIntro"}],
+  Cell[8702, 258, 905, 32, 70, "DisplayFormula",ExpressionUUID->"4062bbf1-6ba5-c99e-e96c-b2543cfdada5",
+   CellTags->{"GoGComputationalNotes", "FieldUpdateFormula"}],
+  Cell[9610, 292, 333, 8, 70, "Text",ExpressionUUID->"bb43c14b-97ec-4744-9ff2-68a3688e620f",
+   CellTags->{"GoGComputationalNotes", "ObjectsListIntro"}],
+  Cell[9946, 302, 380, 9, 70, "ItemNumbered",ExpressionUUID->"f3667e76-2339-dedf-1b39-ee490e6c2e88",
+   CellTags->{"GoGComputationalNotes", "ObjectCarrier"}],
+  Cell[10329, 313, 382, 10, 70, "ItemNumbered",ExpressionUUID->"6f835564-e174-9118-9abf-acc258354430",
+   CellTags->{"GoGComputationalNotes", "ObjectRuleA"}],
+  Cell[10714, 325, 457, 11, 70, "ItemNumbered",ExpressionUUID->"8abc9dad-6384-9a30-691b-38ebc0e260b0",
+   CellTags->{"GoGComputationalNotes", "ObjectRuleB"}],
+  Cell[11174, 338, 513, 12, 70, "Text",ExpressionUUID->"650e708c-193d-6dc1-2e6c-41b437809161",
+   CellTags->{"GoGComputationalNotes", "ObjectsBoundary"}],
+  Cell[11724, 355, 275, 6, 70, "Section",ExpressionUUID->"57299ade-2b3f-3ff9-d18e-774c392a4047",
+   CellTags->{"GoGComputationalNotes", "SectionVisualMap"}],
+  Cell[12002, 363, 473, 12, 70, "Text",ExpressionUUID->"8504be98-5a76-cf50-2536-f67a4e14b387",
+   CellTags->{"GoGComputationalNotes", "VisualMapIntro"}],
+  Cell[12478, 377, 1634, 44, 70, "Text",ExpressionUUID->"9ef94874-3684-3f7c-5547-57bd4c4f8aef",
+   CellTags->{"GoGComputationalNotes", "VisualMapTable"}],
+  Cell[14115, 423, 499, 13, 70, "Text",ExpressionUUID->"ff7ffd64-79b1-6f76-7bb9-cea0a76f215f",
+   CellTags->{"GoGComputationalNotes", "VisualMapBoundary"}],
+  Cell[14651, 441, 285, 7, 70, "Section",ExpressionUUID->"5c7d9a4a-2972-da98-b4c7-49a2737de57f",
+   CellTags->{"GoGComputationalNotes", "SectionLocalAverage"}],
+  Cell[14939, 450, 385, 10, 70, "Text",ExpressionUUID->"63cd1b71-0e92-3114-41c0-d0c70f5913d6",
+   CellTags->{"GoGComputationalNotes", "AverageIntro"}],
+  Cell[15327, 462, 841, 29, 70, "DisplayFormula",ExpressionUUID->"2b7d33ea-9a34-2146-a837-b1f265a7125d",
+   CellTags->{"GoGComputationalNotes", "AverageMatrixFormula"}],
+  Cell[16171, 493, 450, 13, 70, "Text",ExpressionUUID->"176d4733-c0bb-2626-f642-311a74a738e6",
+   CellTags->{"GoGComputationalNotes", "AverageProperties"}],
+  Cell[16624, 508, 504, 16, 70, "Text",ExpressionUUID->"53729b43-0207-b5c8-e039-9ab44cb83039",
+   CellTags->{"GoGComputationalNotes", "pair-lossHeading"}],
+  Cell[17153, 528, 1013, 33, 70, "Input",ExpressionUUID->"362a8e51-7b51-7436-024f-f5b9a009de4a",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "pair-lossInput"}],
+  Cell[18169, 563, 617, 20, 70, "Output",ExpressionUUID->"d52c1b0d-d92f-c36c-1366-58c7fa2250c2",
+   CellTags->{"GoGComputationalNotes", "pair-lossOutput"}],
+  Cell[18801, 586, 397, 10, 70, "Text",ExpressionUUID->"743f18b3-ab70-d0a3-83da-a3408f43fa9a",
+   CellTags->{"GoGComputationalNotes", "VarianceIntro"}],
+  Cell[19201, 598, 772, 26, 70, "DisplayFormula",ExpressionUUID->"8f5064e2-0400-b026-c209-f3497d2a1088",
+   CellTags->{"GoGComputationalNotes", "VarianceFormula"}],
+  Cell[19976, 626, 523, 17, 70, "Text",ExpressionUUID->"34b86c27-694d-f3ce-59ba-dca6fb615ecd",
+   CellTags->{"GoGComputationalNotes", "averaging-matrixHeading"}],
+  Cell[20524, 647, 1821, 58, 70, "Input",ExpressionUUID->"6457d666-07da-94f0-91a6-296883c5ff7f",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "averaging-matrixInput"}],
+  Cell[22348, 707, 581, 18, 70, "Output",ExpressionUUID->"d8822875-5a6f-46b3-1966-5a0b061192a4",
+   CellTags->{"GoGComputationalNotes", "averaging-matrixOutput"}],
+  Cell[22944, 728, 581, 14, 70, "Text",ExpressionUUID->"14910b8e-8022-314e-2ee2-717785d2ef4c",
+   CellTags->{"GoGComputationalNotes", "SettlementBoundary"}],
+  Cell[23562, 747, 277, 5, 70, "Section",ExpressionUUID->"1ae29b4b-05b2-eea0-976e-f32ec423a113",
+   CellTags->{"GoGComputationalNotes", "SectionModels"}],
+  Cell[23842, 754, 436, 12, 70, "Text",ExpressionUUID->"5f6944cc-0ebf-78d8-3f4d-fedcf22b677c",
+   CellTags->{"GoGComputationalNotes", "ModelsIntro"}],
+  Cell[24281, 768, 523, 17, 70, "Text",ExpressionUUID->"c2e38086-3c55-eeaa-a4a0-9d0e73a98cda",
+   CellTags->{"GoGComputationalNotes", "resource-summaryHeading"}],
+  Cell[24829, 789, 1019, 30, 70, "Input",ExpressionUUID->"3013adae-180a-7945-1b8b-b7fb9b29346a",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "resource-summaryInput"}],
+  Cell[25851, 821, 787, 25, 70, "Output",ExpressionUUID->"7038dc64-9e43-2c05-473f-9e66ee15fdb9",
+   CellTags->{"GoGComputationalNotes", "resource-summaryOutput"}],
+  Cell[26653, 849, 465, 11, 70, "Text",ExpressionUUID->"bce070a0-938b-011d-8b36-9e69951c5728",
+   CellTags->{"GoGComputationalNotes", "SlotCheckText"}],
+  Cell[27121, 862, 455, 12, 70, "Text",ExpressionUUID->"9cf0b69a-04c8-78cb-460b-a9e274d1e67b",
+   CellTags->{"GoGComputationalNotes", "ValidationIntro"}],
+  Cell[27579, 876, 520, 17, 70, "Text",ExpressionUUID->"c8845435-5ce8-94ad-90eb-46786f793fd8",
+   CellTags->{"GoGComputationalNotes", "validationHeading"}],
+  Cell[28124, 897, 925, 28, 70, "Input",ExpressionUUID->"74af29a1-b82d-6228-372a-a7416a64f27e",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "validationInput"}],
+  Cell[29052, 927, 753, 23, 70, "Output",ExpressionUUID->"ac6b631e-3645-e2cf-266e-bd60c9482ac6",
+   CellTags->{"GoGComputationalNotes", "validationOutput"}],
+  Cell[29820, 953, 486, 13, 70, "Caption",ExpressionUUID->"49ceb815-c503-c2d4-9e70-e2a97d36dd56",
+   CellTags->{"GoGComputationalNotes", "ValidationBoundary"}],
+  Cell[30343, 971, 273, 6, 70, "Section",ExpressionUUID->"c6d43ec1-39cb-efea-09f5-57cc15ce31a0",
+   CellTags->{"GoGComputationalNotes", "SectionFiveState"}],
+  Cell[30619, 979, 410, 11, 70, "Text",ExpressionUUID->"7b902c5d-a7e6-3ce9-5a41-ca89d558d2db",
+   CellTags->{"GoGComputationalNotes", "FiveStateIntro"}],
+  Cell[31032, 992, 514, 17, 70, "Text",ExpressionUUID->"980def47-402f-989b-e33d-358272769ed2",
+   CellTags->{"GoGComputationalNotes", "rule-a-countsHeading"}],
+  Cell[31571, 1013, 708, 22, 70, "Input",ExpressionUUID->"5d00f1d8-8e85-9baf-1f4d-8a8a4ab51fd5",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "rule-a-countsInput"}],
+  Cell[32282, 1037, 1137, 33, 70, "Output",ExpressionUUID->"a654294a-e6ec-45c6-5fea-1a369f5771eb",
+   CellTags->{"GoGComputationalNotes", "rule-a-countsOutput"}],
+  Cell[33434, 1073, 410, 11, 70, "Text",ExpressionUUID->"2e0f7185-c402-2426-e658-95d8f8a919a1",
+   CellTags->{"GoGComputationalNotes", "RuleAMatrixText"}],
+  Cell[33847, 1086, 497, 17, 70, "DisplayFormula",ExpressionUUID->"4573d872-c503-70cb-677c-ee977c07d64a",
+   CellTags->{"GoGComputationalNotes", "RuleAMatrix"}],
+  Cell[34347, 1105, 358, 10, 70, "Text",ExpressionUUID->"aa389fb1-fdca-4fe6-59d7-e2c5f4741883",
+   CellTags->{"GoGComputationalNotes", "StationaryIntro"}],
+  Cell[34708, 1117, 530, 17, 70, "Text",ExpressionUUID->"61fcb7e2-8e5c-0946-d160-a1b8afddb757",
+   CellTags->{"GoGComputationalNotes", "rule-a-stationaryHeading"}],
+  Cell[35263, 1138, 939, 29, 70, "Input",ExpressionUUID->"ffe0e497-7c8e-f57e-1c2a-a752e04c8218",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "rule-a-stationaryInput"}],
+  Cell[36205, 1169, 706, 23, 70, "Output",ExpressionUUID->"8d3cc685-c6cb-86f6-56ba-464dc718ffe0",
+   CellTags->{"GoGComputationalNotes", "rule-a-stationaryOutput"}],
+  Cell[36926, 1195, 454, 13, 70, "Text",ExpressionUUID->"43b9bcce-e8a1-1cf5-0638-1033cffad739",
+   CellTags->{"GoGComputationalNotes", "StationaryMeaning"}],
+  Cell[37383, 1210, 391, 10, 70, "Text",ExpressionUUID->"9aa4665c-5c74-1fb2-2edd-048e055d94eb",
+   CellTags->{"GoGComputationalNotes", "RuleBIntro"}],
+  Cell[37777, 1222, 519, 17, 70, "Text",ExpressionUUID->"df657f88-01b0-6fa9-60c1-58ab07c9ff03",
+   CellTags->{"GoGComputationalNotes", "fixed-clock-bHeading"}],
+  Cell[38321, 1243, 680, 22, 70, "Input",ExpressionUUID->"4c201f0d-bbb0-dfda-f294-561daf08709d",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "fixed-clock-bInput"}],
+  Cell[39004, 1267, 1428, 47, 70, "Output",ExpressionUUID->"2ef10beb-bf1b-0432-c29d-bf941d7e3f2d",
+   CellTags->{"GoGComputationalNotes", "fixed-clock-bOutput"}],
+  Cell[40447, 1317, 358, 10, 70, "Text",ExpressionUUID->"041dbf16-20cf-621a-1ef1-91b37b465e49",
+   CellTags->{"GoGComputationalNotes", "RuleBChecksIntro"}],
+  Cell[40808, 1329, 542, 17, 70, "Text",ExpressionUUID->"146af76a-f4ec-a833-41da-39ca340e8ecd",
+   CellTags->{"GoGComputationalNotes", "symmetry-stationarityHeading"}],
+  Cell[41375, 1350, 758, 24, 70, "Input",ExpressionUUID->"48ff44f4-0094-46d4-6478-05b91fc74bad",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "symmetry-stationarityInput"}],
+  Cell[42136, 1376, 774, 25, 70, "Output",ExpressionUUID->"61838f1d-3a2c-af52-3199-a51fdac4a552",
+   CellTags->{"GoGComputationalNotes", "symmetry-stationarityOutput"}],
+  Cell[42925, 1404, 597, 20, 70, "DisplayFormula",ExpressionUUID->"2b56c6f7-fbda-9eea-6238-425a5d79b1f8",
+   CellTags->{"GoGComputationalNotes", "RuleBLaplacianFormula"}],
+  Cell[43525, 1426, 479, 12, 70, "Text",ExpressionUUID->"b91951d8-61f3-ba17-4334-1ca77c3ebc91",
+   CellTags->{"GoGComputationalNotes", "JumpChainIntro"}],
+  Cell[44007, 1440, 529, 17, 70, "Text",ExpressionUUID->"cc5e79e0-eff6-085c-8086-2db668e61201",
+   CellTags->{"GoGComputationalNotes", "b-versus-jumpHeading"}],
+  Cell[44561, 1461, 697, 21, 70, "Input",ExpressionUUID->"e1610521-9e53-9a48-aa52-86341e4e7d22",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "b-versus-jumpInput"}],
+  Cell[45261, 1484, 970, 34, 70, "Output",ExpressionUUID->"d5e19f0a-8cd4-8ef0-eff9-accf7d72f645",
+   CellTags->{"GoGComputationalNotes", "b-versus-jumpOutput"}],
+  Cell[46280, 1524, 280, 6, 70, "Section",ExpressionUUID->"ea9b4283-6336-730f-6d8e-fbb512a6449b",
+   CellTags->{"GoGComputationalNotes", "SectionDiffusion"}],
+  Cell[46563, 1532, 429, 11, 70, "Text",ExpressionUUID->"731f460f-fbbd-691f-b9cd-3d7fde9fac5f",
+   CellTags->{"GoGComputationalNotes", "DiffusionIntro"}],
+  Cell[46995, 1545, 519, 17, 70, "Text",ExpressionUUID->"eb1255c5-a70a-143d-8417-fc5c215b750f",
+   CellTags->{"GoGComputationalNotes", "diffusion-aHeading"}],
+  Cell[47539, 1566, 734, 22, 70, "Input",ExpressionUUID->"69c7a465-c18f-8fd0-30e7-be903269c0c6",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "diffusion-aInput"}],
+  Cell[48276, 1590, 976, 30, 70, "Output",ExpressionUUID->"21c26115-40d7-1cb5-e4d7-2600223260d0",
+   CellTags->{"GoGComputationalNotes", "diffusion-aOutput"}],
+  Cell[49267, 1623, 503, 13, 70, "Text",ExpressionUUID->"d9184d0e-0b96-089c-132e-915aaaea3e6a",
+   CellTags->{"GoGComputationalNotes", "DiffusionComparisonIntro"}],
+  Cell[49773, 1638, 514, 17, 70, "Text",ExpressionUUID->"cdbd66ee-2f62-b367-7cd3-b0c2ae42d34a",
+   CellTags->{"GoGComputationalNotes", "diffusion-bHeading"}],
+  Cell[50312, 1659, 734, 22, 70, "Input",ExpressionUUID->"eee2d581-6f01-82d0-5958-9e74a6ede9ab",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "diffusion-bInput"}],
+  Cell[51049, 1683, 990, 30, 70, "Output",ExpressionUUID->"24d9b542-ae8b-0a26-8033-de8bf37b91b4",
+   CellTags->{"GoGComputationalNotes", "diffusion-bOutput"}],
+  Cell[52054, 1716, 533, 14, 70, "Text",ExpressionUUID->"9ec47151-e2bc-f336-8419-b3b5ba0c6366",
+   CellTags->{"GoGComputationalNotes", "DiffusionBoundary"}],
+  Cell[52590, 1732, 524, 17, 70, "Text",ExpressionUUID->"e64de94d-6382-6d3b-fb26-0713cd97c65d",
+   CellTags->{"GoGComputationalNotes", "seeded-pathHeading"}],
+  Cell[53139, 1753, 595, 17, 70, "Input",ExpressionUUID->"0db5a271-23bf-62c0-272e-bfbdcd73e41d",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "seeded-pathInput"}],
+  Cell[53737, 1772, 669, 20, 70, "Output",ExpressionUUID->"cbc2ff16-d382-47cd-5c7e-fe5ef1f84b41",
+   CellTags->{"GoGComputationalNotes", "seeded-pathOutput"}],
+  Cell[54421, 1795, 446, 12, 70, "Caption",ExpressionUUID->"4ef13ff6-a0ff-f4ee-394a-d69eb49cf5a2",
+   CellTags->{"GoGComputationalNotes", "PathCaption"}],
+  Cell[54904, 1812, 268, 6, 70, "Section",ExpressionUUID->"d5c504a7-2ed2-a7a4-3759-7fdf2056636f",
+   CellTags->{"GoGComputationalNotes", "SectionConsensus"}],
+  Cell[55175, 1820, 459, 12, 70, "Text",ExpressionUUID->"338065fe-8bd6-5a53-51ec-8511e28139c4",
+   CellTags->{"GoGComputationalNotes", "ConsensusIntro"}],
+  Cell[55637, 1834, 836, 27, 70, "DisplayFormula",ExpressionUUID->"76a9e2f7-b970-46b7-4d38-d021e12ae473",
+   CellTags->{"GoGComputationalNotes", "ConsensusFormula"}],
+  Cell[56476, 1863, 526, 17, 70, "Text",ExpressionUUID->"dc9a078a-f196-7b08-a23f-5afecf05cace",
+   CellTags->{"GoGComputationalNotes", "matching-productsHeading"}],
+  Cell[57027, 1884, 2932, 95, 70, "Input",ExpressionUUID->"7846d937-4ea5-4e24-ae0a-ea666292c15f",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "matching-productsInput"}],
+  Cell[59962, 1981, 570, 18, 70, "Output",ExpressionUUID->"8fec8e9f-9b62-d9b8-d833-5870fd908bcb",
+   CellTags->{"GoGComputationalNotes", "matching-productsOutput"}],
+  Cell[60547, 2002, 337, 9, 70, "Text",ExpressionUUID->"fa2301ba-cb1f-8cd5-e900-262a9897c57b",
+   CellTags->{"GoGComputationalNotes", "K4Intro"}],
+  Cell[60887, 2013, 509, 17, 70, "Text",ExpressionUUID->"a5fd66ca-43e7-1f42-b308-977819e7d291",
+   CellTags->{"GoGComputationalNotes", "k4-productHeading"}],
+  Cell[61421, 2034, 547, 17, 70, "Input",ExpressionUUID->"ac591b54-2660-5426-df37-00bed52d11b0",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "k4-productInput"}],
+  Cell[61971, 2053, 1431, 48, 70, "Output",ExpressionUUID->"c7d85b12-f2f4-ecd9-c5b1-1bc403253589",
+   CellTags->{"GoGComputationalNotes", "k4-productOutput"}],
+  Cell[63417, 2104, 587, 14, 70, "Text",ExpressionUUID->"ff615424-0a9c-5d9b-1357-2b1c30557ea8",
+   CellTags->{"GoGComputationalNotes", "ConsensusBoundary"}],
+  Cell[64041, 2123, 256, 5, 70, "Section",ExpressionUUID->"c69b47a3-6384-069b-a2a5-a56b38c9124f",
+   CellTags->{"GoGComputationalNotes", "SectionLimits"}],
+  Cell[64300, 2130, 368, 11, 70, "Text",ExpressionUUID->"28dbd64a-d2e9-9967-f15c-0733438fc2fa",
+   CellTags->{"GoGComputationalNotes", "LimitsPositiveIntro"}],
+  Cell[64671, 2143, 330, 9, 70, "Item",ExpressionUUID->"e7fb1dcb-14bd-b2fb-fdd1-b6308f7d263c",
+   CellTags->{"GoGComputationalNotes", "LimitPositive1"}],
+  Cell[65004, 2154, 307, 7, 70, "Item",ExpressionUUID->"c4d79000-e07d-f457-9ffe-9138d377b418",
+   CellTags->{"GoGComputationalNotes", "LimitPositive2"}],
+  Cell[65314, 2163, 293, 7, 70, "Item",ExpressionUUID->"cf6ebdbe-4352-c18c-a5ce-c8268f7f405d",
+   CellTags->{"GoGComputationalNotes", "LimitPositive3"}],
+  Cell[65610, 2172, 329, 9, 70, "Item",ExpressionUUID->"51df2809-8135-8b74-9a44-fb85e1d04ed3",
+   CellTags->{"GoGComputationalNotes", "LimitPositive4"}],
+  Cell[65942, 2183, 367, 10, 70, "Item",ExpressionUUID->"e7c6fa4b-253f-31c0-bbcf-8115c9eff3ef",
+   CellTags->{"GoGComputationalNotes", "LimitPositive5"}],
+  Cell[66312, 2195, 338, 9, 70, "Text",ExpressionUUID->"61a264d1-e326-1b8b-66a8-c2b72fdf6602",
+   CellTags->{"GoGComputationalNotes", "LimitsNegativeIntro"}],
+  Cell[66653, 2206, 456, 11, 70, "ItemNumbered",ExpressionUUID->"d9782e38-7f6b-596e-5192-6d1a0e595781",
+   CellTags->{"GoGComputationalNotes", "LimitNegative1"}],
+  Cell[67112, 2219, 342, 9, 70, "ItemNumbered",ExpressionUUID->"2d6f4b82-e61a-35c4-f5ab-b1e32239bd36",
+   CellTags->{"GoGComputationalNotes", "LimitNegative2"}],
+  Cell[67457, 2230, 397, 10, 70, "ItemNumbered",ExpressionUUID->"6c2d6f59-add0-7580-e43e-d38847099097",
+   CellTags->{"GoGComputationalNotes", "LimitNegative3"}],
+  Cell[67891, 2245, 280, 7, 70, "Section",ExpressionUUID->"3ff06f35-e899-b001-8f77-ce7ebc80f5df",
+   CellTags->{"GoGComputationalNotes", "SectionReproduction"}],
+  Cell[68174, 2254, 589, 14, 70, "Text",ExpressionUUID->"6d8a9cf4-ce1f-6ee0-86e8-380a9742c0f5",
+   CellTags->{"GoGComputationalNotes", "ReproductionIntro"}],
+  Cell[68766, 2270, 576, 17, 70, "Program",ExpressionUUID->"d53cc4ef-e985-c6d7-55c5-437651073e3f",
+   CellTags->{"GoGComputationalNotes", "TranscriptCommand"}],
+  Cell[69345, 2289, 495, 13, 70, "Program",ExpressionUUID->"ae79dd22-c8a3-d802-edd8-b0b0fea64a04",
+   CellTags->{"GoGComputationalNotes", "DataCheckCommand"}],
+  Cell[69843, 2304, 540, 15, 70, "Program",ExpressionUUID->"5a59dca9-d7e5-67c8-a2bd-a325008cbc7e",
+   CellTags->{"GoGComputationalNotes", "TeXCommand"}],
+  Cell[70386, 2321, 495, 14, 70, "Program",ExpressionUUID->"6bd2db11-cf52-d2cd-e773-c524d8d1bc8c",
+   CellTags->{"GoGComputationalNotes", "NotebookCheckCommand"}],
+  Cell[70884, 2337, 440, 11, 70, "Text",ExpressionUUID->"73753370-b7a6-40b9-2529-c68cb1912051",
+   CellTags->{"GoGComputationalNotes", "SelfTestIntro"}],
+  Cell[71327, 2350, 523, 16, 70, "Text",ExpressionUUID->"3ee6cc00-fea2-74d8-da1b-67130fe8845d",
+   CellTags->{"GoGComputationalNotes", "self-testHeading"}],
+  Cell[71875, 2370, 4493, 121, 70, "Input",ExpressionUUID->"618e848a-76c4-ca69-5ded-1638040f17c1",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "self-testInput"}],
+  Cell[76371, 2493, 1406, 32, 70, "Output",ExpressionUUID->"c70afa3b-32b6-9f8f-e02a-734b7b8c67ca",
+   CellTags->{"GoGComputationalNotes", "self-testOutput"}],
+  Cell[77826, 2531, 260, 7, 70, "Section",ExpressionUUID->"2099abc3-97a7-98ed-6049-9f14b698aee2",
+   CellTags->{"GoGComputationalNotes", "SectionReferences"}],
+  Cell[78089, 2540, 473, 11, 70, "Text",ExpressionUUID->"42375d8b-d12e-94b4-657f-f0714b10aa09",
+   CellTags->{"GoGComputationalNotes", "ReferenceGDPK"}],
+  Cell[78565, 2553, 413, 11, 70, "Text",ExpressionUUID->"f1dea117-ca24-bc8c-11ff-124f7c2e51da",
+   CellTags->{"GoGComputationalNotes", "ReferenceLi"}],
+  Cell[78981, 2566, 458, 12, 70, "Caption",ExpressionUUID->"d18d2e56-e9b6-1fc7-6708-39955cd8e283",
+   CellTags->{"GoGComputationalNotes", "ClosingBoundary"}]},
+ "Title"->{
+  Cell[641, 23, 306, 7, 70, "Title",ExpressionUUID->"c7a7a966-b587-7399-1d2a-fb4e266e84e9",
+   CellTags->{"GoGComputationalNotes", "Title"}]},
+ "Subtitle"->{
+  Cell[950, 32, 346, 7, 70, "Subtitle",ExpressionUUID->"e211cf8e-f35c-a264-5c96-82748394ce6a",
+   CellTags->{"GoGComputationalNotes", "Subtitle"}]},
+ "Author"->{
+  Cell[1299, 41, 262, 6, 70, "Author",ExpressionUUID->"0f37c903-8061-39ca-1d16-88da223b8959",
+   CellTags->{"GoGComputationalNotes", "Author"}]},
+ "Date"->{
+  Cell[1564, 49, 303, 7, 70, "Affiliation",ExpressionUUID->"637bfb47-a8b7-4d84-e256-763e733c6166",
+   CellTags->{"GoGComputationalNotes", "Date"}]},
+ "EditionBanner"->{
+  Cell[1870, 58, 795, 22, 70, "Text",ExpressionUUID->"e4581535-6516-b3cc-6985-1541b5e473d5",
+   CellTags->{"GoGComputationalNotes", "EditionBanner"}]},
+ "Abstract"->{
+  Cell[2668, 82, 720, 15, 70, "Text",ExpressionUUID->"46d8de8c-c466-768e-ac8c-bf59592516b9",
+   CellTags->{"GoGComputationalNotes", "Abstract"}]},
+ "SectionSetup"->{
+  Cell[3413, 101, 243, 5, 70, "Section",ExpressionUUID->"4486bec3-2f90-a083-58e6-7be0232ea799",
+   CellTags->{"GoGComputationalNotes", "SectionSetup"}]},
+ "SetupGuide"->{
+  Cell[3659, 108, 588, 13, 70, "Text",ExpressionUUID->"5295c97a-ca53-9d01-7197-f127d18ade83",
+   CellTags->{"GoGComputationalNotes", "SetupGuide"}]},
+ "setupHeading"->{
+  Cell[4250, 123, 490, 15, 70, "Text",ExpressionUUID->"6f343e64-de67-64a6-c23c-9cdf099ef046",
+   CellTags->{"GoGComputationalNotes", "setupHeading"}]},
+ "setupInput"->{
+  Cell[4765, 142, 1758, 51, 70, "Input",ExpressionUUID->"5a5e9180-8090-0838-1778-454ba08f47cc",
+   InitializationCell->True,
+   CellTags->{"GoGComputationalNotes", "setupInput"}]},
+ "setupOutput"->{
+  Cell[6526, 195, 697, 20, 70, "Output",ExpressionUUID->"e6943ffd-ca02-03f9-6657-e220bc35e090",
+   CellTags->{"GoGComputationalNotes", "setupOutput"}]},
+ "SetupCaption"->{
+  Cell[7238, 218, 442, 11, 70, "Caption",ExpressionUUID->"9cc502c1-0ba5-f321-7112-0289d20fb07c",
+   CellTags->{"GoGComputationalNotes", "SetupCaption"}]},
+ "SectionObjects"->{
+  Cell[7717, 234, 264, 6, 70, "Section",ExpressionUUID->"16881b76-a257-711c-598d-17fdaeb7fac8",
+   CellTags->{"GoGComputationalNotes", "SectionObjects"}]},
+ "ObjectsIntro"->{
+  Cell[7984, 242, 715, 14, 70, "Text",ExpressionUUID->"96640e76-8c7c-3fb2-3d45-6d5ad55fb3f5",
+   CellTags->{"GoGComputationalNotes", "ObjectsIntro"}]},
+ "FieldUpdateFormula"->{
+  Cell[8702, 258, 905, 32, 70, "DisplayFormula",ExpressionUUID->"4062bbf1-6ba5-c99e-e96c-b2543cfdada5",
+   CellTags->{"GoGComputationalNotes", "FieldUpdateFormula"}]},
+ "ObjectsListIntro"->{
+  Cell[9610, 292, 333, 8, 70, "Text",ExpressionUUID->"bb43c14b-97ec-4744-9ff2-68a3688e620f",
+   CellTags->{"GoGComputationalNotes", "ObjectsListIntro"}]},
+ "ObjectCarrier"->{
+  Cell[9946, 302, 380, 9, 70, "ItemNumbered",ExpressionUUID->"f3667e76-2339-dedf-1b39-ee490e6c2e88",
+   CellTags->{"GoGComputationalNotes", "ObjectCarrier"}]},
+ "ObjectRuleA"->{
+  Cell[10329, 313, 382, 10, 70, "ItemNumbered",ExpressionUUID->"6f835564-e174-9118-9abf-acc258354430",
+   CellTags->{"GoGComputationalNotes", "ObjectRuleA"}]},
+ "ObjectRuleB"->{
+  Cell[10714, 325, 457, 11, 70, "ItemNumbered",ExpressionUUID->"8abc9dad-6384-9a30-691b-38ebc0e260b0",
+   CellTags->{"GoGComputationalNotes", "ObjectRuleB"}]},
+ "ObjectsBoundary"->{
+  Cell[11174, 338, 513, 12, 70, "Text",ExpressionUUID->"650e708c-193d-6dc1-2e6c-41b437809161",
+   CellTags->{"GoGComputationalNotes", "ObjectsBoundary"}]},
+ "SectionVisualMap"->{
+  Cell[11724, 355, 275, 6, 70, "Section",ExpressionUUID->"57299ade-2b3f-3ff9-d18e-774c392a4047",
+   CellTags->{"GoGComputationalNotes", "SectionVisualMap"}]},
+ "VisualMapIntro"->{
+  Cell[12002, 363, 473, 12, 70, "Text",ExpressionUUID->"8504be98-5a76-cf50-2536-f67a4e14b387",
+   CellTags->{"GoGComputationalNotes", "VisualMapIntro"}]},
+ "VisualMapTable"->{
+  Cell[12478, 377, 1634, 44, 70, "Text",ExpressionUUID->"9ef94874-3684-3f7c-5547-57bd4c4f8aef",
+   CellTags->{"GoGComputationalNotes", "VisualMapTable"}]},
+ "VisualMapBoundary"->{
+  Cell[14115, 423, 499, 13, 70, "Text",ExpressionUUID->"ff7ffd64-79b1-6f76-7bb9-cea0a76f215f",
+   CellTags->{"GoGComputationalNotes", "VisualMapBoundary"}]},
+ "SectionLocalAverage"->{
+  Cell[14651, 441, 285, 7, 70, "Section",ExpressionUUID->"5c7d9a4a-2972-da98-b4c7-49a2737de57f",
+   CellTags->{"GoGComputationalNotes", "SectionLocalAverage"}]},
+ "AverageIntro"->{
+  Cell[14939, 450, 385, 10, 70, "Text",ExpressionUUID->"63cd1b71-0e92-3114-41c0-d0c70f5913d6",
+   CellTags->{"GoGComputationalNotes", "AverageIntro"}]},
+ "AverageMatrixFormula"->{
+  Cell[15327, 462, 841, 29, 70, "DisplayFormula",ExpressionUUID->"2b7d33ea-9a34-2146-a837-b1f265a7125d",
+   CellTags->{"GoGComputationalNotes", "AverageMatrixFormula"}]},
+ "AverageProperties"->{
+  Cell[16171, 493, 450, 13, 70, "Text",ExpressionUUID->"176d4733-c0bb-2626-f642-311a74a738e6",
+   CellTags->{"GoGComputationalNotes", "AverageProperties"}]},
+ "pair-lossHeading"->{
+  Cell[16624, 508, 504, 16, 70, "Text",ExpressionUUID->"53729b43-0207-b5c8-e039-9ab44cb83039",
+   CellTags->{"GoGComputationalNotes", "pair-lossHeading"}]},
+ "pair-lossInput"->{
+  Cell[17153, 528, 1013, 33, 70, "Input",ExpressionUUID->"362a8e51-7b51-7436-024f-f5b9a009de4a",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "pair-lossInput"}]},
+ "pair-lossOutput"->{
+  Cell[18169, 563, 617, 20, 70, "Output",ExpressionUUID->"d52c1b0d-d92f-c36c-1366-58c7fa2250c2",
+   CellTags->{"GoGComputationalNotes", "pair-lossOutput"}]},
+ "VarianceIntro"->{
+  Cell[18801, 586, 397, 10, 70, "Text",ExpressionUUID->"743f18b3-ab70-d0a3-83da-a3408f43fa9a",
+   CellTags->{"GoGComputationalNotes", "VarianceIntro"}]},
+ "VarianceFormula"->{
+  Cell[19201, 598, 772, 26, 70, "DisplayFormula",ExpressionUUID->"8f5064e2-0400-b026-c209-f3497d2a1088",
+   CellTags->{"GoGComputationalNotes", "VarianceFormula"}]},
+ "averaging-matrixHeading"->{
+  Cell[19976, 626, 523, 17, 70, "Text",ExpressionUUID->"34b86c27-694d-f3ce-59ba-dca6fb615ecd",
+   CellTags->{"GoGComputationalNotes", "averaging-matrixHeading"}]},
+ "averaging-matrixInput"->{
+  Cell[20524, 647, 1821, 58, 70, "Input",ExpressionUUID->"6457d666-07da-94f0-91a6-296883c5ff7f",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "averaging-matrixInput"}]},
+ "averaging-matrixOutput"->{
+  Cell[22348, 707, 581, 18, 70, "Output",ExpressionUUID->"d8822875-5a6f-46b3-1966-5a0b061192a4",
+   CellTags->{"GoGComputationalNotes", "averaging-matrixOutput"}]},
+ "SettlementBoundary"->{
+  Cell[22944, 728, 581, 14, 70, "Text",ExpressionUUID->"14910b8e-8022-314e-2ee2-717785d2ef4c",
+   CellTags->{"GoGComputationalNotes", "SettlementBoundary"}]},
+ "SectionModels"->{
+  Cell[23562, 747, 277, 5, 70, "Section",ExpressionUUID->"1ae29b4b-05b2-eea0-976e-f32ec423a113",
+   CellTags->{"GoGComputationalNotes", "SectionModels"}]},
+ "ModelsIntro"->{
+  Cell[23842, 754, 436, 12, 70, "Text",ExpressionUUID->"5f6944cc-0ebf-78d8-3f4d-fedcf22b677c",
+   CellTags->{"GoGComputationalNotes", "ModelsIntro"}]},
+ "resource-summaryHeading"->{
+  Cell[24281, 768, 523, 17, 70, "Text",ExpressionUUID->"c2e38086-3c55-eeaa-a4a0-9d0e73a98cda",
+   CellTags->{"GoGComputationalNotes", "resource-summaryHeading"}]},
+ "resource-summaryInput"->{
+  Cell[24829, 789, 1019, 30, 70, "Input",ExpressionUUID->"3013adae-180a-7945-1b8b-b7fb9b29346a",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "resource-summaryInput"}]},
+ "resource-summaryOutput"->{
+  Cell[25851, 821, 787, 25, 70, "Output",ExpressionUUID->"7038dc64-9e43-2c05-473f-9e66ee15fdb9",
+   CellTags->{"GoGComputationalNotes", "resource-summaryOutput"}]},
+ "SlotCheckText"->{
+  Cell[26653, 849, 465, 11, 70, "Text",ExpressionUUID->"bce070a0-938b-011d-8b36-9e69951c5728",
+   CellTags->{"GoGComputationalNotes", "SlotCheckText"}]},
+ "ValidationIntro"->{
+  Cell[27121, 862, 455, 12, 70, "Text",ExpressionUUID->"9cf0b69a-04c8-78cb-460b-a9e274d1e67b",
+   CellTags->{"GoGComputationalNotes", "ValidationIntro"}]},
+ "validationHeading"->{
+  Cell[27579, 876, 520, 17, 70, "Text",ExpressionUUID->"c8845435-5ce8-94ad-90eb-46786f793fd8",
+   CellTags->{"GoGComputationalNotes", "validationHeading"}]},
+ "validationInput"->{
+  Cell[28124, 897, 925, 28, 70, "Input",ExpressionUUID->"74af29a1-b82d-6228-372a-a7416a64f27e",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "validationInput"}]},
+ "validationOutput"->{
+  Cell[29052, 927, 753, 23, 70, "Output",ExpressionUUID->"ac6b631e-3645-e2cf-266e-bd60c9482ac6",
+   CellTags->{"GoGComputationalNotes", "validationOutput"}]},
+ "ValidationBoundary"->{
+  Cell[29820, 953, 486, 13, 70, "Caption",ExpressionUUID->"49ceb815-c503-c2d4-9e70-e2a97d36dd56",
+   CellTags->{"GoGComputationalNotes", "ValidationBoundary"}]},
+ "SectionFiveState"->{
+  Cell[30343, 971, 273, 6, 70, "Section",ExpressionUUID->"c6d43ec1-39cb-efea-09f5-57cc15ce31a0",
+   CellTags->{"GoGComputationalNotes", "SectionFiveState"}]},
+ "FiveStateIntro"->{
+  Cell[30619, 979, 410, 11, 70, "Text",ExpressionUUID->"7b902c5d-a7e6-3ce9-5a41-ca89d558d2db",
+   CellTags->{"GoGComputationalNotes", "FiveStateIntro"}]},
+ "rule-a-countsHeading"->{
+  Cell[31032, 992, 514, 17, 70, "Text",ExpressionUUID->"980def47-402f-989b-e33d-358272769ed2",
+   CellTags->{"GoGComputationalNotes", "rule-a-countsHeading"}]},
+ "rule-a-countsInput"->{
+  Cell[31571, 1013, 708, 22, 70, "Input",ExpressionUUID->"5d00f1d8-8e85-9baf-1f4d-8a8a4ab51fd5",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "rule-a-countsInput"}]},
+ "rule-a-countsOutput"->{
+  Cell[32282, 1037, 1137, 33, 70, "Output",ExpressionUUID->"a654294a-e6ec-45c6-5fea-1a369f5771eb",
+   CellTags->{"GoGComputationalNotes", "rule-a-countsOutput"}]},
+ "RuleAMatrixText"->{
+  Cell[33434, 1073, 410, 11, 70, "Text",ExpressionUUID->"2e0f7185-c402-2426-e658-95d8f8a919a1",
+   CellTags->{"GoGComputationalNotes", "RuleAMatrixText"}]},
+ "RuleAMatrix"->{
+  Cell[33847, 1086, 497, 17, 70, "DisplayFormula",ExpressionUUID->"4573d872-c503-70cb-677c-ee977c07d64a",
+   CellTags->{"GoGComputationalNotes", "RuleAMatrix"}]},
+ "StationaryIntro"->{
+  Cell[34347, 1105, 358, 10, 70, "Text",ExpressionUUID->"aa389fb1-fdca-4fe6-59d7-e2c5f4741883",
+   CellTags->{"GoGComputationalNotes", "StationaryIntro"}]},
+ "rule-a-stationaryHeading"->{
+  Cell[34708, 1117, 530, 17, 70, "Text",ExpressionUUID->"61fcb7e2-8e5c-0946-d160-a1b8afddb757",
+   CellTags->{"GoGComputationalNotes", "rule-a-stationaryHeading"}]},
+ "rule-a-stationaryInput"->{
+  Cell[35263, 1138, 939, 29, 70, "Input",ExpressionUUID->"ffe0e497-7c8e-f57e-1c2a-a752e04c8218",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "rule-a-stationaryInput"}]},
+ "rule-a-stationaryOutput"->{
+  Cell[36205, 1169, 706, 23, 70, "Output",ExpressionUUID->"8d3cc685-c6cb-86f6-56ba-464dc718ffe0",
+   CellTags->{"GoGComputationalNotes", "rule-a-stationaryOutput"}]},
+ "StationaryMeaning"->{
+  Cell[36926, 1195, 454, 13, 70, "Text",ExpressionUUID->"43b9bcce-e8a1-1cf5-0638-1033cffad739",
+   CellTags->{"GoGComputationalNotes", "StationaryMeaning"}]},
+ "RuleBIntro"->{
+  Cell[37383, 1210, 391, 10, 70, "Text",ExpressionUUID->"9aa4665c-5c74-1fb2-2edd-048e055d94eb",
+   CellTags->{"GoGComputationalNotes", "RuleBIntro"}]},
+ "fixed-clock-bHeading"->{
+  Cell[37777, 1222, 519, 17, 70, "Text",ExpressionUUID->"df657f88-01b0-6fa9-60c1-58ab07c9ff03",
+   CellTags->{"GoGComputationalNotes", "fixed-clock-bHeading"}]},
+ "fixed-clock-bInput"->{
+  Cell[38321, 1243, 680, 22, 70, "Input",ExpressionUUID->"4c201f0d-bbb0-dfda-f294-561daf08709d",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "fixed-clock-bInput"}]},
+ "fixed-clock-bOutput"->{
+  Cell[39004, 1267, 1428, 47, 70, "Output",ExpressionUUID->"2ef10beb-bf1b-0432-c29d-bf941d7e3f2d",
+   CellTags->{"GoGComputationalNotes", "fixed-clock-bOutput"}]},
+ "RuleBChecksIntro"->{
+  Cell[40447, 1317, 358, 10, 70, "Text",ExpressionUUID->"041dbf16-20cf-621a-1ef1-91b37b465e49",
+   CellTags->{"GoGComputationalNotes", "RuleBChecksIntro"}]},
+ "symmetry-stationarityHeading"->{
+  Cell[40808, 1329, 542, 17, 70, "Text",ExpressionUUID->"146af76a-f4ec-a833-41da-39ca340e8ecd",
+   CellTags->{"GoGComputationalNotes", "symmetry-stationarityHeading"}]},
+ "symmetry-stationarityInput"->{
+  Cell[41375, 1350, 758, 24, 70, "Input",ExpressionUUID->"48ff44f4-0094-46d4-6478-05b91fc74bad",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "symmetry-stationarityInput"}]},
+ "symmetry-stationarityOutput"->{
+  Cell[42136, 1376, 774, 25, 70, "Output",ExpressionUUID->"61838f1d-3a2c-af52-3199-a51fdac4a552",
+   CellTags->{"GoGComputationalNotes", "symmetry-stationarityOutput"}]},
+ "RuleBLaplacianFormula"->{
+  Cell[42925, 1404, 597, 20, 70, "DisplayFormula",ExpressionUUID->"2b56c6f7-fbda-9eea-6238-425a5d79b1f8",
+   CellTags->{"GoGComputationalNotes", "RuleBLaplacianFormula"}]},
+ "JumpChainIntro"->{
+  Cell[43525, 1426, 479, 12, 70, "Text",ExpressionUUID->"b91951d8-61f3-ba17-4334-1ca77c3ebc91",
+   CellTags->{"GoGComputationalNotes", "JumpChainIntro"}]},
+ "b-versus-jumpHeading"->{
+  Cell[44007, 1440, 529, 17, 70, "Text",ExpressionUUID->"cc5e79e0-eff6-085c-8086-2db668e61201",
+   CellTags->{"GoGComputationalNotes", "b-versus-jumpHeading"}]},
+ "b-versus-jumpInput"->{
+  Cell[44561, 1461, 697, 21, 70, "Input",ExpressionUUID->"e1610521-9e53-9a48-aa52-86341e4e7d22",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "b-versus-jumpInput"}]},
+ "b-versus-jumpOutput"->{
+  Cell[45261, 1484, 970, 34, 70, "Output",ExpressionUUID->"d5e19f0a-8cd4-8ef0-eff9-accf7d72f645",
+   CellTags->{"GoGComputationalNotes", "b-versus-jumpOutput"}]},
+ "SectionDiffusion"->{
+  Cell[46280, 1524, 280, 6, 70, "Section",ExpressionUUID->"ea9b4283-6336-730f-6d8e-fbb512a6449b",
+   CellTags->{"GoGComputationalNotes", "SectionDiffusion"}]},
+ "DiffusionIntro"->{
+  Cell[46563, 1532, 429, 11, 70, "Text",ExpressionUUID->"731f460f-fbbd-691f-b9cd-3d7fde9fac5f",
+   CellTags->{"GoGComputationalNotes", "DiffusionIntro"}]},
+ "diffusion-aHeading"->{
+  Cell[46995, 1545, 519, 17, 70, "Text",ExpressionUUID->"eb1255c5-a70a-143d-8417-fc5c215b750f",
+   CellTags->{"GoGComputationalNotes", "diffusion-aHeading"}]},
+ "diffusion-aInput"->{
+  Cell[47539, 1566, 734, 22, 70, "Input",ExpressionUUID->"69c7a465-c18f-8fd0-30e7-be903269c0c6",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "diffusion-aInput"}]},
+ "diffusion-aOutput"->{
+  Cell[48276, 1590, 976, 30, 70, "Output",ExpressionUUID->"21c26115-40d7-1cb5-e4d7-2600223260d0",
+   CellTags->{"GoGComputationalNotes", "diffusion-aOutput"}]},
+ "DiffusionComparisonIntro"->{
+  Cell[49267, 1623, 503, 13, 70, "Text",ExpressionUUID->"d9184d0e-0b96-089c-132e-915aaaea3e6a",
+   CellTags->{"GoGComputationalNotes", "DiffusionComparisonIntro"}]},
+ "diffusion-bHeading"->{
+  Cell[49773, 1638, 514, 17, 70, "Text",ExpressionUUID->"cdbd66ee-2f62-b367-7cd3-b0c2ae42d34a",
+   CellTags->{"GoGComputationalNotes", "diffusion-bHeading"}]},
+ "diffusion-bInput"->{
+  Cell[50312, 1659, 734, 22, 70, "Input",ExpressionUUID->"eee2d581-6f01-82d0-5958-9e74a6ede9ab",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "diffusion-bInput"}]},
+ "diffusion-bOutput"->{
+  Cell[51049, 1683, 990, 30, 70, "Output",ExpressionUUID->"24d9b542-ae8b-0a26-8033-de8bf37b91b4",
+   CellTags->{"GoGComputationalNotes", "diffusion-bOutput"}]},
+ "DiffusionBoundary"->{
+  Cell[52054, 1716, 533, 14, 70, "Text",ExpressionUUID->"9ec47151-e2bc-f336-8419-b3b5ba0c6366",
+   CellTags->{"GoGComputationalNotes", "DiffusionBoundary"}]},
+ "seeded-pathHeading"->{
+  Cell[52590, 1732, 524, 17, 70, "Text",ExpressionUUID->"e64de94d-6382-6d3b-fb26-0713cd97c65d",
+   CellTags->{"GoGComputationalNotes", "seeded-pathHeading"}]},
+ "seeded-pathInput"->{
+  Cell[53139, 1753, 595, 17, 70, "Input",ExpressionUUID->"0db5a271-23bf-62c0-272e-bfbdcd73e41d",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "seeded-pathInput"}]},
+ "seeded-pathOutput"->{
+  Cell[53737, 1772, 669, 20, 70, "Output",ExpressionUUID->"cbc2ff16-d382-47cd-5c7e-fe5ef1f84b41",
+   CellTags->{"GoGComputationalNotes", "seeded-pathOutput"}]},
+ "PathCaption"->{
+  Cell[54421, 1795, 446, 12, 70, "Caption",ExpressionUUID->"4ef13ff6-a0ff-f4ee-394a-d69eb49cf5a2",
+   CellTags->{"GoGComputationalNotes", "PathCaption"}]},
+ "SectionConsensus"->{
+  Cell[54904, 1812, 268, 6, 70, "Section",ExpressionUUID->"d5c504a7-2ed2-a7a4-3759-7fdf2056636f",
+   CellTags->{"GoGComputationalNotes", "SectionConsensus"}]},
+ "ConsensusIntro"->{
+  Cell[55175, 1820, 459, 12, 70, "Text",ExpressionUUID->"338065fe-8bd6-5a53-51ec-8511e28139c4",
+   CellTags->{"GoGComputationalNotes", "ConsensusIntro"}]},
+ "ConsensusFormula"->{
+  Cell[55637, 1834, 836, 27, 70, "DisplayFormula",ExpressionUUID->"76a9e2f7-b970-46b7-4d38-d021e12ae473",
+   CellTags->{"GoGComputationalNotes", "ConsensusFormula"}]},
+ "matching-productsHeading"->{
+  Cell[56476, 1863, 526, 17, 70, "Text",ExpressionUUID->"dc9a078a-f196-7b08-a23f-5afecf05cace",
+   CellTags->{"GoGComputationalNotes", "matching-productsHeading"}]},
+ "matching-productsInput"->{
+  Cell[57027, 1884, 2932, 95, 70, "Input",ExpressionUUID->"7846d937-4ea5-4e24-ae0a-ea666292c15f",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "matching-productsInput"}]},
+ "matching-productsOutput"->{
+  Cell[59962, 1981, 570, 18, 70, "Output",ExpressionUUID->"8fec8e9f-9b62-d9b8-d833-5870fd908bcb",
+   CellTags->{"GoGComputationalNotes", "matching-productsOutput"}]},
+ "K4Intro"->{
+  Cell[60547, 2002, 337, 9, 70, "Text",ExpressionUUID->"fa2301ba-cb1f-8cd5-e900-262a9897c57b",
+   CellTags->{"GoGComputationalNotes", "K4Intro"}]},
+ "k4-productHeading"->{
+  Cell[60887, 2013, 509, 17, 70, "Text",ExpressionUUID->"a5fd66ca-43e7-1f42-b308-977819e7d291",
+   CellTags->{"GoGComputationalNotes", "k4-productHeading"}]},
+ "k4-productInput"->{
+  Cell[61421, 2034, 547, 17, 70, "Input",ExpressionUUID->"ac591b54-2660-5426-df37-00bed52d11b0",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "k4-productInput"}]},
+ "k4-productOutput"->{
+  Cell[61971, 2053, 1431, 48, 70, "Output",ExpressionUUID->"c7d85b12-f2f4-ecd9-c5b1-1bc403253589",
+   CellTags->{"GoGComputationalNotes", "k4-productOutput"}]},
+ "ConsensusBoundary"->{
+  Cell[63417, 2104, 587, 14, 70, "Text",ExpressionUUID->"ff615424-0a9c-5d9b-1357-2b1c30557ea8",
+   CellTags->{"GoGComputationalNotes", "ConsensusBoundary"}]},
+ "SectionLimits"->{
+  Cell[64041, 2123, 256, 5, 70, "Section",ExpressionUUID->"c69b47a3-6384-069b-a2a5-a56b38c9124f",
+   CellTags->{"GoGComputationalNotes", "SectionLimits"}]},
+ "LimitsPositiveIntro"->{
+  Cell[64300, 2130, 368, 11, 70, "Text",ExpressionUUID->"28dbd64a-d2e9-9967-f15c-0733438fc2fa",
+   CellTags->{"GoGComputationalNotes", "LimitsPositiveIntro"}]},
+ "LimitPositive1"->{
+  Cell[64671, 2143, 330, 9, 70, "Item",ExpressionUUID->"e7fb1dcb-14bd-b2fb-fdd1-b6308f7d263c",
+   CellTags->{"GoGComputationalNotes", "LimitPositive1"}]},
+ "LimitPositive2"->{
+  Cell[65004, 2154, 307, 7, 70, "Item",ExpressionUUID->"c4d79000-e07d-f457-9ffe-9138d377b418",
+   CellTags->{"GoGComputationalNotes", "LimitPositive2"}]},
+ "LimitPositive3"->{
+  Cell[65314, 2163, 293, 7, 70, "Item",ExpressionUUID->"cf6ebdbe-4352-c18c-a5ce-c8268f7f405d",
+   CellTags->{"GoGComputationalNotes", "LimitPositive3"}]},
+ "LimitPositive4"->{
+  Cell[65610, 2172, 329, 9, 70, "Item",ExpressionUUID->"51df2809-8135-8b74-9a44-fb85e1d04ed3",
+   CellTags->{"GoGComputationalNotes", "LimitPositive4"}]},
+ "LimitPositive5"->{
+  Cell[65942, 2183, 367, 10, 70, "Item",ExpressionUUID->"e7c6fa4b-253f-31c0-bbcf-8115c9eff3ef",
+   CellTags->{"GoGComputationalNotes", "LimitPositive5"}]},
+ "LimitsNegativeIntro"->{
+  Cell[66312, 2195, 338, 9, 70, "Text",ExpressionUUID->"61a264d1-e326-1b8b-66a8-c2b72fdf6602",
+   CellTags->{"GoGComputationalNotes", "LimitsNegativeIntro"}]},
+ "LimitNegative1"->{
+  Cell[66653, 2206, 456, 11, 70, "ItemNumbered",ExpressionUUID->"d9782e38-7f6b-596e-5192-6d1a0e595781",
+   CellTags->{"GoGComputationalNotes", "LimitNegative1"}]},
+ "LimitNegative2"->{
+  Cell[67112, 2219, 342, 9, 70, "ItemNumbered",ExpressionUUID->"2d6f4b82-e61a-35c4-f5ab-b1e32239bd36",
+   CellTags->{"GoGComputationalNotes", "LimitNegative2"}]},
+ "LimitNegative3"->{
+  Cell[67457, 2230, 397, 10, 70, "ItemNumbered",ExpressionUUID->"6c2d6f59-add0-7580-e43e-d38847099097",
+   CellTags->{"GoGComputationalNotes", "LimitNegative3"}]},
+ "SectionReproduction"->{
+  Cell[67891, 2245, 280, 7, 70, "Section",ExpressionUUID->"3ff06f35-e899-b001-8f77-ce7ebc80f5df",
+   CellTags->{"GoGComputationalNotes", "SectionReproduction"}]},
+ "ReproductionIntro"->{
+  Cell[68174, 2254, 589, 14, 70, "Text",ExpressionUUID->"6d8a9cf4-ce1f-6ee0-86e8-380a9742c0f5",
+   CellTags->{"GoGComputationalNotes", "ReproductionIntro"}]},
+ "TranscriptCommand"->{
+  Cell[68766, 2270, 576, 17, 70, "Program",ExpressionUUID->"d53cc4ef-e985-c6d7-55c5-437651073e3f",
+   CellTags->{"GoGComputationalNotes", "TranscriptCommand"}]},
+ "DataCheckCommand"->{
+  Cell[69345, 2289, 495, 13, 70, "Program",ExpressionUUID->"ae79dd22-c8a3-d802-edd8-b0b0fea64a04",
+   CellTags->{"GoGComputationalNotes", "DataCheckCommand"}]},
+ "TeXCommand"->{
+  Cell[69843, 2304, 540, 15, 70, "Program",ExpressionUUID->"5a59dca9-d7e5-67c8-a2bd-a325008cbc7e",
+   CellTags->{"GoGComputationalNotes", "TeXCommand"}]},
+ "NotebookCheckCommand"->{
+  Cell[70386, 2321, 495, 14, 70, "Program",ExpressionUUID->"6bd2db11-cf52-d2cd-e773-c524d8d1bc8c",
+   CellTags->{"GoGComputationalNotes", "NotebookCheckCommand"}]},
+ "SelfTestIntro"->{
+  Cell[70884, 2337, 440, 11, 70, "Text",ExpressionUUID->"73753370-b7a6-40b9-2529-c68cb1912051",
+   CellTags->{"GoGComputationalNotes", "SelfTestIntro"}]},
+ "self-testHeading"->{
+  Cell[71327, 2350, 523, 16, 70, "Text",ExpressionUUID->"3ee6cc00-fea2-74d8-da1b-67130fe8845d",
+   CellTags->{"GoGComputationalNotes", "self-testHeading"}]},
+ "self-testInput"->{
+  Cell[71875, 2370, 4493, 121, 70, "Input",ExpressionUUID->"618e848a-76c4-ca69-5ded-1638040f17c1",
+   InitializationCell->False,
+   CellTags->{"GoGComputationalNotes", "self-testInput"}]},
+ "self-testOutput"->{
+  Cell[76371, 2493, 1406, 32, 70, "Output",ExpressionUUID->"c70afa3b-32b6-9f8f-e02a-734b7b8c67ca",
+   CellTags->{"GoGComputationalNotes", "self-testOutput"}]},
+ "SectionReferences"->{
+  Cell[77826, 2531, 260, 7, 70, "Section",ExpressionUUID->"2099abc3-97a7-98ed-6049-9f14b698aee2",
+   CellTags->{"GoGComputationalNotes", "SectionReferences"}]},
+ "ReferenceGDPK"->{
+  Cell[78089, 2540, 473, 11, 70, "Text",ExpressionUUID->"42375d8b-d12e-94b4-657f-f0714b10aa09",
+   CellTags->{"GoGComputationalNotes", "ReferenceGDPK"}]},
+ "ReferenceLi"->{
+  Cell[78565, 2553, 413, 11, 70, "Text",ExpressionUUID->"f1dea117-ca24-bc8c-11ff-124f7c2e51da",
+   CellTags->{"GoGComputationalNotes", "ReferenceLi"}]},
+ "ClosingBoundary"->{
+  Cell[78981, 2566, 458, 12, 70, "Caption",ExpressionUUID->"d18d2e56-e9b6-1fc7-6708-39955cd8e283",
+   CellTags->{"GoGComputationalNotes", "ClosingBoundary"}]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"GoGComputationalNotes", 80259, 2604},
+ {"Title", 100192, 2867},
+ {"Subtitle", 100350, 2870},
+ {"Author", 100512, 2873},
+ {"Date", 100669, 2876},
+ {"EditionBanner", 100838, 2879},
+ {"Abstract", 101005, 2882},
+ {"SectionSetup", 101171, 2885},
+ {"SetupGuide", 101342, 2888},
+ {"setupHeading", 101511, 2891},
+ {"setupInput", 101680, 2894},
+ {"setupOutput", 101879, 2898},
+ {"SetupCaption", 102051, 2901},
+ {"SectionObjects", 102227, 2904},
+ {"ObjectsIntro", 102402, 2907},
+ {"FieldUpdateFormula", 102579, 2910},
+ {"ObjectsListIntro", 102770, 2913},
+ {"ObjectCarrier", 102945, 2916},
+ {"ObjectRuleA", 103123, 2919},
+ {"ObjectRuleB", 103301, 2922},
+ {"ObjectsBoundary", 103483, 2925},
+ {"SectionVisualMap", 103662, 2928},
+ {"VisualMapIntro", 103842, 2931},
+ {"VisualMapTable", 104018, 2934},
+ {"VisualMapBoundary", 104198, 2937},
+ {"SectionLocalAverage", 104382, 2940},
+ {"AverageIntro", 104563, 2943},
+ {"AverageMatrixFormula", 104743, 2946},
+ {"AverageProperties", 104938, 2949},
+ {"pair-lossHeading", 105119, 2952},
+ {"pair-lossInput", 105297, 2955},
+ {"pair-lossOutput", 105506, 2959},
+ {"VarianceIntro", 105684, 2962},
+ {"VarianceFormula", 105860, 2965},
+ {"averaging-matrixHeading", 106056, 2968},
+ {"averaging-matrixInput", 106248, 2971},
+ {"averaging-matrixOutput", 106471, 2975},
+ {"SettlementBoundary", 106661, 2978},
+ {"SectionModels", 106840, 2981},
+ {"ModelsIntro", 107014, 2984},
+ {"resource-summaryHeading", 107196, 2987},
+ {"resource-summaryInput", 107388, 2990},
+ {"resource-summaryOutput", 107611, 2994},
+ {"SlotCheckText", 107796, 2997},
+ {"ValidationIntro", 107972, 3000},
+ {"validationHeading", 108152, 3003},
+ {"validationInput", 108332, 3006},
+ {"validationOutput", 108542, 3010},
+ {"ValidationBoundary", 108726, 3013},
+ {"SectionFiveState", 108911, 3016},
+ {"FiveStateIntro", 109091, 3019},
+ {"rule-a-countsHeading", 109273, 3022},
+ {"rule-a-countsInput", 109459, 3025},
+ {"rule-a-countsOutput", 109676, 3029},
+ {"RuleAMatrixText", 109862, 3032},
+ {"RuleAMatrix", 110037, 3035},
+ {"StationaryIntro", 110222, 3038},
+ {"rule-a-stationaryHeading", 110410, 3041},
+ {"rule-a-stationaryInput", 110605, 3044},
+ {"rule-a-stationaryOutput", 110830, 3048},
+ {"StationaryMeaning", 111021, 3051},
+ {"RuleBIntro", 111197, 3054},
+ {"fixed-clock-bHeading", 111376, 3057},
+ {"fixed-clock-bInput", 111563, 3060},
+ {"fixed-clock-bOutput", 111780, 3064},
+ {"RuleBChecksIntro", 111967, 3067},
+ {"symmetry-stationarityHeading", 112160, 3070},
+ {"symmetry-stationarityInput", 112363, 3073},
+ {"symmetry-stationarityOutput", 112596, 3077},
+ {"RuleBLaplacianFormula", 112795, 3080},
+ {"JumpChainIntro", 112989, 3083},
+ {"b-versus-jumpHeading", 113172, 3086},
+ {"b-versus-jumpInput", 113359, 3089},
+ {"b-versus-jumpOutput", 113576, 3093},
+ {"SectionDiffusion", 113762, 3096},
+ {"DiffusionIntro", 113943, 3099},
+ {"diffusion-aHeading", 114124, 3102},
+ {"diffusion-aInput", 114307, 3105},
+ {"diffusion-aOutput", 114520, 3109},
+ {"DiffusionComparisonIntro", 114712, 3112},
+ {"diffusion-bHeading", 114903, 3115},
+ {"diffusion-bInput", 115086, 3118},
+ {"diffusion-bOutput", 115299, 3122},
+ {"DiffusionBoundary", 115484, 3125},
+ {"seeded-pathHeading", 115668, 3128},
+ {"seeded-pathInput", 115851, 3131},
+ {"seeded-pathOutput", 116064, 3135},
+ {"PathCaption", 116243, 3138},
+ {"SectionConsensus", 116422, 3141},
+ {"ConsensusIntro", 116603, 3144},
+ {"ConsensusFormula", 116782, 3147},
+ {"matching-productsHeading", 116981, 3150},
+ {"matching-productsInput", 117176, 3153},
+ {"matching-productsOutput", 117402, 3157},
+ {"K4Intro", 117583, 3160},
+ {"k4-productHeading", 117755, 3163},
+ {"k4-productInput", 117936, 3166},
+ {"k4-productOutput", 118147, 3170},
+ {"ConsensusBoundary", 118332, 3173},
+ {"SectionLimits", 118511, 3176},
+ {"LimitsPositiveIntro", 118694, 3179},
+ {"LimitPositive1", 118876, 3182},
+ {"LimitPositive2", 119052, 3185},
+ {"LimitPositive3", 119228, 3188},
+ {"LimitPositive4", 119404, 3191},
+ {"LimitPositive5", 119580, 3194},
+ {"LimitsNegativeIntro", 119762, 3197},
+ {"LimitNegative1", 119943, 3200},
+ {"LimitNegative2", 120128, 3203},
+ {"LimitNegative3", 120312, 3206},
+ {"SectionReproduction", 120502, 3209},
+ {"ReproductionIntro", 120689, 3212},
+ {"TranscriptCommand", 120872, 3215},
+ {"DataCheckCommand", 121057, 3218},
+ {"TeXCommand", 121235, 3221},
+ {"NotebookCheckCommand", 121417, 3224},
+ {"SelfTestIntro", 121602, 3227},
+ {"self-testHeading", 121780, 3230},
+ {"self-testInput", 121959, 3233},
+ {"self-testOutput", 122170, 3237},
+ {"SectionReferences", 122354, 3240},
+ {"ReferenceGDPK", 122535, 3243},
+ {"ReferenceLi", 122708, 3246},
+ {"ClosingBoundary", 122883, 3249}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[641, 23, 306, 7, 70, "Title",ExpressionUUID->"c7a7a966-b587-7399-1d2a-fb4e266e84e9",
+ CellTags->{"GoGComputationalNotes", "Title"}],
+Cell[950, 32, 346, 7, 70, "Subtitle",ExpressionUUID->"e211cf8e-f35c-a264-5c96-82748394ce6a",
+ CellTags->{"GoGComputationalNotes", "Subtitle"}],
+Cell[1299, 41, 262, 6, 70, "Author",ExpressionUUID->"0f37c903-8061-39ca-1d16-88da223b8959",
+ CellTags->{"GoGComputationalNotes", "Author"}],
+Cell[1564, 49, 303, 7, 70, "Affiliation",ExpressionUUID->"637bfb47-a8b7-4d84-e256-763e733c6166",
+ CellTags->{"GoGComputationalNotes", "Date"}],
+Cell[1870, 58, 795, 22, 70, "Text",ExpressionUUID->"e4581535-6516-b3cc-6985-1541b5e473d5",
+ CellTags->{"GoGComputationalNotes", "EditionBanner"}],
+Cell[2668, 82, 720, 15, 70, "Text",ExpressionUUID->"46d8de8c-c466-768e-ac8c-bf59592516b9",
+ CellTags->{"GoGComputationalNotes", "Abstract"}],
+Cell[CellGroupData[{
+Cell[3413, 101, 243, 5, 70, "Section",ExpressionUUID->"4486bec3-2f90-a083-58e6-7be0232ea799",
+ CellTags->{"GoGComputationalNotes", "SectionSetup"}],
+Cell[3659, 108, 588, 13, 70, "Text",ExpressionUUID->"5295c97a-ca53-9d01-7197-f127d18ade83",
+ CellTags->{"GoGComputationalNotes", "SetupGuide"}],
+Cell[4250, 123, 490, 15, 70, "Text",ExpressionUUID->"6f343e64-de67-64a6-c23c-9cdf099ef046",
+ CellTags->{"GoGComputationalNotes", "setupHeading"}],
+Cell[CellGroupData[{
+Cell[4765, 142, 1758, 51, 70, "Input",ExpressionUUID->"5a5e9180-8090-0838-1778-454ba08f47cc",
+ InitializationCell->True,
+ CellTags->{"GoGComputationalNotes", "setupInput"}],
+Cell[6526, 195, 697, 20, 70, "Output",ExpressionUUID->"e6943ffd-ca02-03f9-6657-e220bc35e090",
+ CellTags->{"GoGComputationalNotes", "setupOutput"}]
+}, Open  ]],
+Cell[7238, 218, 442, 11, 70, "Caption",ExpressionUUID->"9cc502c1-0ba5-f321-7112-0289d20fb07c",
+ CellTags->{"GoGComputationalNotes", "SetupCaption"}]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7717, 234, 264, 6, 70, "Section",ExpressionUUID->"16881b76-a257-711c-598d-17fdaeb7fac8",
+ CellTags->{"GoGComputationalNotes", "SectionObjects"}],
+Cell[7984, 242, 715, 14, 70, "Text",ExpressionUUID->"96640e76-8c7c-3fb2-3d45-6d5ad55fb3f5",
+ CellTags->{"GoGComputationalNotes", "ObjectsIntro"}],
+Cell[8702, 258, 905, 32, 70, "DisplayFormula",ExpressionUUID->"4062bbf1-6ba5-c99e-e96c-b2543cfdada5",
+ CellTags->{"GoGComputationalNotes", "FieldUpdateFormula"}],
+Cell[9610, 292, 333, 8, 70, "Text",ExpressionUUID->"bb43c14b-97ec-4744-9ff2-68a3688e620f",
+ CellTags->{"GoGComputationalNotes", "ObjectsListIntro"}],
+Cell[9946, 302, 380, 9, 70, "ItemNumbered",ExpressionUUID->"f3667e76-2339-dedf-1b39-ee490e6c2e88",
+ CellTags->{"GoGComputationalNotes", "ObjectCarrier"}],
+Cell[10329, 313, 382, 10, 70, "ItemNumbered",ExpressionUUID->"6f835564-e174-9118-9abf-acc258354430",
+ CellTags->{"GoGComputationalNotes", "ObjectRuleA"}],
+Cell[10714, 325, 457, 11, 70, "ItemNumbered",ExpressionUUID->"8abc9dad-6384-9a30-691b-38ebc0e260b0",
+ CellTags->{"GoGComputationalNotes", "ObjectRuleB"}],
+Cell[11174, 338, 513, 12, 70, "Text",ExpressionUUID->"650e708c-193d-6dc1-2e6c-41b437809161",
+ CellTags->{"GoGComputationalNotes", "ObjectsBoundary"}]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11724, 355, 275, 6, 70, "Section",ExpressionUUID->"57299ade-2b3f-3ff9-d18e-774c392a4047",
+ CellTags->{"GoGComputationalNotes", "SectionVisualMap"}],
+Cell[12002, 363, 473, 12, 70, "Text",ExpressionUUID->"8504be98-5a76-cf50-2536-f67a4e14b387",
+ CellTags->{"GoGComputationalNotes", "VisualMapIntro"}],
+Cell[12478, 377, 1634, 44, 70, "Text",ExpressionUUID->"9ef94874-3684-3f7c-5547-57bd4c4f8aef",
+ CellTags->{"GoGComputationalNotes", "VisualMapTable"}],
+Cell[14115, 423, 499, 13, 70, "Text",ExpressionUUID->"ff7ffd64-79b1-6f76-7bb9-cea0a76f215f",
+ CellTags->{"GoGComputationalNotes", "VisualMapBoundary"}]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14651, 441, 285, 7, 70, "Section",ExpressionUUID->"5c7d9a4a-2972-da98-b4c7-49a2737de57f",
+ CellTags->{"GoGComputationalNotes", "SectionLocalAverage"}],
+Cell[14939, 450, 385, 10, 70, "Text",ExpressionUUID->"63cd1b71-0e92-3114-41c0-d0c70f5913d6",
+ CellTags->{"GoGComputationalNotes", "AverageIntro"}],
+Cell[15327, 462, 841, 29, 70, "DisplayFormula",ExpressionUUID->"2b7d33ea-9a34-2146-a837-b1f265a7125d",
+ CellTags->{"GoGComputationalNotes", "AverageMatrixFormula"}],
+Cell[16171, 493, 450, 13, 70, "Text",ExpressionUUID->"176d4733-c0bb-2626-f642-311a74a738e6",
+ CellTags->{"GoGComputationalNotes", "AverageProperties"}],
+Cell[16624, 508, 504, 16, 70, "Text",ExpressionUUID->"53729b43-0207-b5c8-e039-9ab44cb83039",
+ CellTags->{"GoGComputationalNotes", "pair-lossHeading"}],
+Cell[CellGroupData[{
+Cell[17153, 528, 1013, 33, 70, "Input",ExpressionUUID->"362a8e51-7b51-7436-024f-f5b9a009de4a",
+ InitializationCell->False,
+ CellTags->{"GoGComputationalNotes", "pair-lossInput"}],
+Cell[18169, 563, 617, 20, 70, "Output",ExpressionUUID->"d52c1b0d-d92f-c36c-1366-58c7fa2250c2",
+ CellTags->{"GoGComputationalNotes", "pair-lossOutput"}]
+}, Open  ]],
+Cell[18801, 586, 397, 10, 70, "Text",ExpressionUUID->"743f18b3-ab70-d0a3-83da-a3408f43fa9a",
+ CellTags->{"GoGComputationalNotes", "VarianceIntro"}],
+Cell[19201, 598, 772, 26, 70, "DisplayFormula",ExpressionUUID->"8f5064e2-0400-b026-c209-f3497d2a1088",
+ CellTags->{"GoGComputationalNotes", "VarianceFormula"}],
+Cell[19976, 626, 523, 17, 70, "Text",ExpressionUUID->"34b86c27-694d-f3ce-59ba-dca6fb615ecd",
+ CellTags->{"GoGComputationalNotes", "averaging-matrixHeading"}],
+Cell[CellGroupData[{
+Cell[20524, 647, 1821, 58, 70, "Input",ExpressionUUID->"6457d666-07da-94f0-91a6-296883c5ff7f",
+ InitializationCell->False,
+ CellTags->{"GoGComputationalNotes", "averaging-matrixInput"}],
+Cell[22348, 707, 581, 18, 70, "Output",ExpressionUUID->"d8822875-5a6f-46b3-1966-5a0b061192a4",
+ CellTags->{"GoGComputationalNotes", "averaging-matrixOutput"}]
+}, Open  ]],
+Cell[22944, 728, 581, 14, 70, "Text",ExpressionUUID->"14910b8e-8022-314e-2ee2-717785d2ef4c",
+ CellTags->{"GoGComputationalNotes", "SettlementBoundary"}]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[23562, 747, 277, 5, 70, "Section",ExpressionUUID->"1ae29b4b-05b2-eea0-976e-f32ec423a113",
+ CellTags->{"GoGComputationalNotes", "SectionModels"}],
+Cell[23842, 754, 436, 12, 70, "Text",ExpressionUUID->"5f6944cc-0ebf-78d8-3f4d-fedcf22b677c",
+ CellTags->{"GoGComputationalNotes", "ModelsIntro"}],
+Cell[24281, 768, 523, 17, 70, "Text",ExpressionUUID->"c2e38086-3c55-eeaa-a4a0-9d0e73a98cda",
+ CellTags->{"GoGComputationalNotes", "resource-summaryHeading"}],
+Cell[CellGroupData[{
+Cell[24829, 789, 1019, 30, 70, "Input",ExpressionUUID->"3013adae-180a-7945-1b8b-b7fb9b29346a",
+ InitializationCell->False,
+ CellTags->{"GoGComputationalNotes", "resource-summaryInput"}],
+Cell[25851, 821, 787, 25, 70, "Output",ExpressionUUID->"7038dc64-9e43-2c05-473f-9e66ee15fdb9",
+ CellTags->{"GoGComputationalNotes", "resource-summaryOutput"}]
+}, Open  ]],
+Cell[26653, 849, 465, 11, 70, "Text",ExpressionUUID->"bce070a0-938b-011d-8b36-9e69951c5728",
+ CellTags->{"GoGComputationalNotes", "SlotCheckText"}],
+Cell[27121, 862, 455, 12, 70, "Text",ExpressionUUID->"9cf0b69a-04c8-78cb-460b-a9e274d1e67b",
+ CellTags->{"GoGComputationalNotes", "ValidationIntro"}],
+Cell[27579, 876, 520, 17, 70, "Text",ExpressionUUID->"c8845435-5ce8-94ad-90eb-46786f793fd8",
+ CellTags->{"GoGComputationalNotes", "validationHeading"}],
+Cell[CellGroupData[{
+Cell[28124, 897, 925, 28, 70, "Input",ExpressionUUID->"74af29a1-b82d-6228-372a-a7416a64f27e",
+ InitializationCell->False,
+ CellTags->{"GoGComputationalNotes", "validationInput"}],
+Cell[29052, 927, 753, 23, 70, "Output",ExpressionUUID->"ac6b631e-3645-e2cf-266e-bd60c9482ac6",
+ CellTags->{"GoGComputationalNotes", "validationOutput"}]
+}, Open  ]],
+Cell[29820, 953, 486, 13, 70, "Caption",ExpressionUUID->"49ceb815-c503-c2d4-9e70-e2a97d36dd56",
+ CellTags->{"GoGComputationalNotes", "ValidationBoundary"}]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[30343, 971, 273, 6, 70, "Section",ExpressionUUID->"c6d43ec1-39cb-efea-09f5-57cc15ce31a0",
+ CellTags->{"GoGComputationalNotes", "SectionFiveState"}],
+Cell[30619, 979, 410, 11, 70, "Text",ExpressionUUID->"7b902c5d-a7e6-3ce9-5a41-ca89d558d2db",
+ CellTags->{"GoGComputationalNotes", "FiveStateIntro"}],
+Cell[31032, 992, 514, 17, 70, "Text",ExpressionUUID->"980def47-402f-989b-e33d-358272769ed2",
+ CellTags->{"GoGComputationalNotes", "rule-a-countsHeading"}],
+Cell[CellGroupData[{
+Cell[31571, 1013, 708, 22, 70, "Input",ExpressionUUID->"5d00f1d8-8e85-9baf-1f4d-8a8a4ab51fd5",
+ InitializationCell->False,
+ CellTags->{"GoGComputationalNotes", "rule-a-countsInput"}],
+Cell[32282, 1037, 1137, 33, 70, "Output",ExpressionUUID->"a654294a-e6ec-45c6-5fea-1a369f5771eb",
+ CellTags->{"GoGComputationalNotes", "rule-a-countsOutput"}]
+}, Open  ]],
+Cell[33434, 1073, 410, 11, 70, "Text",ExpressionUUID->"2e0f7185-c402-2426-e658-95d8f8a919a1",
+ CellTags->{"GoGComputationalNotes", "RuleAMatrixText"}],
+Cell[33847, 1086, 497, 17, 70, "DisplayFormula",ExpressionUUID->"4573d872-c503-70cb-677c-ee977c07d64a",
+ CellTags->{"GoGComputationalNotes", "RuleAMatrix"}],
+Cell[34347, 1105, 358, 10, 70, "Text",ExpressionUUID->"aa389fb1-fdca-4fe6-59d7-e2c5f4741883",
+ CellTags->{"GoGComputationalNotes", "StationaryIntro"}],
+Cell[34708, 1117, 530, 17, 70, "Text",ExpressionUUID->"61fcb7e2-8e5c-0946-d160-a1b8afddb757",
+ CellTags->{"GoGComputationalNotes", "rule-a-stationaryHeading"}],
+Cell[CellGroupData[{
+Cell[35263, 1138, 939, 29, 70, "Input",ExpressionUUID->"ffe0e497-7c8e-f57e-1c2a-a752e04c8218",
+ InitializationCell->False,
+ CellTags->{"GoGComputationalNotes", "rule-a-stationaryInput"}],
+Cell[36205, 1169, 706, 23, 70, "Output",ExpressionUUID->"8d3cc685-c6cb-86f6-56ba-464dc718ffe0",
+ CellTags->{"GoGComputationalNotes", "rule-a-stationaryOutput"}]
+}, Open  ]],
+Cell[36926, 1195, 454, 13, 70, "Text",ExpressionUUID->"43b9bcce-e8a1-1cf5-0638-1033cffad739",
+ CellTags->{"GoGComputationalNotes", "StationaryMeaning"}],
+Cell[37383, 1210, 391, 10, 70, "Text",ExpressionUUID->"9aa4665c-5c74-1fb2-2edd-048e055d94eb",
+ CellTags->{"GoGComputationalNotes", "RuleBIntro"}],
+Cell[37777, 1222, 519, 17, 70, "Text",ExpressionUUID->"df657f88-01b0-6fa9-60c1-58ab07c9ff03",
+ CellTags->{"GoGComputationalNotes", "fixed-clock-bHeading"}],
+Cell[CellGroupData[{
+Cell[38321, 1243, 680, 22, 70, "Input",ExpressionUUID->"4c201f0d-bbb0-dfda-f294-561daf08709d",
+ InitializationCell->False,
+ CellTags->{"GoGComputationalNotes", "fixed-clock-bInput"}],
+Cell[39004, 1267, 1428, 47, 70, "Output",ExpressionUUID->"2ef10beb-bf1b-0432-c29d-bf941d7e3f2d",
+ CellTags->{"GoGComputationalNotes", "fixed-clock-bOutput"}]
+}, Open  ]],
+Cell[40447, 1317, 358, 10, 70, "Text",ExpressionUUID->"041dbf16-20cf-621a-1ef1-91b37b465e49",
+ CellTags->{"GoGComputationalNotes", "RuleBChecksIntro"}],
+Cell[40808, 1329, 542, 17, 70, "Text",ExpressionUUID->"146af76a-f4ec-a833-41da-39ca340e8ecd",
+ CellTags->{"GoGComputationalNotes", "symmetry-stationarityHeading"}],
+Cell[CellGroupData[{
+Cell[41375, 1350, 758, 24, 70, "Input",ExpressionUUID->"48ff44f4-0094-46d4-6478-05b91fc74bad",
+ InitializationCell->False,
+ CellTags->{"GoGComputationalNotes", "symmetry-stationarityInput"}],
+Cell[42136, 1376, 774, 25, 70, "Output",ExpressionUUID->"61838f1d-3a2c-af52-3199-a51fdac4a552",
+ CellTags->{"GoGComputationalNotes", "symmetry-stationarityOutput"}]
+}, Open  ]],
+Cell[42925, 1404, 597, 20, 70, "DisplayFormula",ExpressionUUID->"2b56c6f7-fbda-9eea-6238-425a5d79b1f8",
+ CellTags->{"GoGComputationalNotes", "RuleBLaplacianFormula"}],
+Cell[43525, 1426, 479, 12, 70, "Text",ExpressionUUID->"b91951d8-61f3-ba17-4334-1ca77c3ebc91",
+ CellTags->{"GoGComputationalNotes", "JumpChainIntro"}],
+Cell[44007, 1440, 529, 17, 70, "Text",ExpressionUUID->"cc5e79e0-eff6-085c-8086-2db668e61201",
+ CellTags->{"GoGComputationalNotes", "b-versus-jumpHeading"}],
+Cell[CellGroupData[{
+Cell[44561, 1461, 697, 21, 70, "Input",ExpressionUUID->"e1610521-9e53-9a48-aa52-86341e4e7d22",
+ InitializationCell->False,
+ CellTags->{"GoGComputationalNotes", "b-versus-jumpInput"}],
+Cell[45261, 1484, 970, 34, 70, "Output",ExpressionUUID->"d5e19f0a-8cd4-8ef0-eff9-accf7d72f645",
+ CellTags->{"GoGComputationalNotes", "b-versus-jumpOutput"}]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[46280, 1524, 280, 6, 70, "Section",ExpressionUUID->"ea9b4283-6336-730f-6d8e-fbb512a6449b",
+ CellTags->{"GoGComputationalNotes", "SectionDiffusion"}],
+Cell[46563, 1532, 429, 11, 70, "Text",ExpressionUUID->"731f460f-fbbd-691f-b9cd-3d7fde9fac5f",
+ CellTags->{"GoGComputationalNotes", "DiffusionIntro"}],
+Cell[46995, 1545, 519, 17, 70, "Text",ExpressionUUID->"eb1255c5-a70a-143d-8417-fc5c215b750f",
+ CellTags->{"GoGComputationalNotes", "diffusion-aHeading"}],
+Cell[CellGroupData[{
+Cell[47539, 1566, 734, 22, 70, "Input",ExpressionUUID->"69c7a465-c18f-8fd0-30e7-be903269c0c6",
+ InitializationCell->False,
+ CellTags->{"GoGComputationalNotes", "diffusion-aInput"}],
+Cell[48276, 1590, 976, 30, 70, "Output",ExpressionUUID->"21c26115-40d7-1cb5-e4d7-2600223260d0",
+ CellTags->{"GoGComputationalNotes", "diffusion-aOutput"}]
+}, Open  ]],
+Cell[49267, 1623, 503, 13, 70, "Text",ExpressionUUID->"d9184d0e-0b96-089c-132e-915aaaea3e6a",
+ CellTags->{"GoGComputationalNotes", "DiffusionComparisonIntro"}],
+Cell[49773, 1638, 514, 17, 70, "Text",ExpressionUUID->"cdbd66ee-2f62-b367-7cd3-b0c2ae42d34a",
+ CellTags->{"GoGComputationalNotes", "diffusion-bHeading"}],
+Cell[CellGroupData[{
+Cell[50312, 1659, 734, 22, 70, "Input",ExpressionUUID->"eee2d581-6f01-82d0-5958-9e74a6ede9ab",
+ InitializationCell->False,
+ CellTags->{"GoGComputationalNotes", "diffusion-bInput"}],
+Cell[51049, 1683, 990, 30, 70, "Output",ExpressionUUID->"24d9b542-ae8b-0a26-8033-de8bf37b91b4",
+ CellTags->{"GoGComputationalNotes", "diffusion-bOutput"}]
+}, Open  ]],
+Cell[52054, 1716, 533, 14, 70, "Text",ExpressionUUID->"9ec47151-e2bc-f336-8419-b3b5ba0c6366",
+ CellTags->{"GoGComputationalNotes", "DiffusionBoundary"}],
+Cell[52590, 1732, 524, 17, 70, "Text",ExpressionUUID->"e64de94d-6382-6d3b-fb26-0713cd97c65d",
+ CellTags->{"GoGComputationalNotes", "seeded-pathHeading"}],
+Cell[CellGroupData[{
+Cell[53139, 1753, 595, 17, 70, "Input",ExpressionUUID->"0db5a271-23bf-62c0-272e-bfbdcd73e41d",
+ InitializationCell->False,
+ CellTags->{"GoGComputationalNotes", "seeded-pathInput"}],
+Cell[53737, 1772, 669, 20, 70, "Output",ExpressionUUID->"cbc2ff16-d382-47cd-5c7e-fe5ef1f84b41",
+ CellTags->{"GoGComputationalNotes", "seeded-pathOutput"}]
+}, Open  ]],
+Cell[54421, 1795, 446, 12, 70, "Caption",ExpressionUUID->"4ef13ff6-a0ff-f4ee-394a-d69eb49cf5a2",
+ CellTags->{"GoGComputationalNotes", "PathCaption"}]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[54904, 1812, 268, 6, 70, "Section",ExpressionUUID->"d5c504a7-2ed2-a7a4-3759-7fdf2056636f",
+ CellTags->{"GoGComputationalNotes", "SectionConsensus"}],
+Cell[55175, 1820, 459, 12, 70, "Text",ExpressionUUID->"338065fe-8bd6-5a53-51ec-8511e28139c4",
+ CellTags->{"GoGComputationalNotes", "ConsensusIntro"}],
+Cell[55637, 1834, 836, 27, 70, "DisplayFormula",ExpressionUUID->"76a9e2f7-b970-46b7-4d38-d021e12ae473",
+ CellTags->{"GoGComputationalNotes", "ConsensusFormula"}],
+Cell[56476, 1863, 526, 17, 70, "Text",ExpressionUUID->"dc9a078a-f196-7b08-a23f-5afecf05cace",
+ CellTags->{"GoGComputationalNotes", "matching-productsHeading"}],
+Cell[CellGroupData[{
+Cell[57027, 1884, 2932, 95, 70, "Input",ExpressionUUID->"7846d937-4ea5-4e24-ae0a-ea666292c15f",
+ InitializationCell->False,
+ CellTags->{"GoGComputationalNotes", "matching-productsInput"}],
+Cell[59962, 1981, 570, 18, 70, "Output",ExpressionUUID->"8fec8e9f-9b62-d9b8-d833-5870fd908bcb",
+ CellTags->{"GoGComputationalNotes", "matching-productsOutput"}]
+}, Open  ]],
+Cell[60547, 2002, 337, 9, 70, "Text",ExpressionUUID->"fa2301ba-cb1f-8cd5-e900-262a9897c57b",
+ CellTags->{"GoGComputationalNotes", "K4Intro"}],
+Cell[60887, 2013, 509, 17, 70, "Text",ExpressionUUID->"a5fd66ca-43e7-1f42-b308-977819e7d291",
+ CellTags->{"GoGComputationalNotes", "k4-productHeading"}],
+Cell[CellGroupData[{
+Cell[61421, 2034, 547, 17, 70, "Input",ExpressionUUID->"ac591b54-2660-5426-df37-00bed52d11b0",
+ InitializationCell->False,
+ CellTags->{"GoGComputationalNotes", "k4-productInput"}],
+Cell[61971, 2053, 1431, 48, 70, "Output",ExpressionUUID->"c7d85b12-f2f4-ecd9-c5b1-1bc403253589",
+ CellTags->{"GoGComputationalNotes", "k4-productOutput"}]
+}, Open  ]],
+Cell[63417, 2104, 587, 14, 70, "Text",ExpressionUUID->"ff615424-0a9c-5d9b-1357-2b1c30557ea8",
+ CellTags->{"GoGComputationalNotes", "ConsensusBoundary"}]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[64041, 2123, 256, 5, 70, "Section",ExpressionUUID->"c69b47a3-6384-069b-a2a5-a56b38c9124f",
+ CellTags->{"GoGComputationalNotes", "SectionLimits"}],
+Cell[64300, 2130, 368, 11, 70, "Text",ExpressionUUID->"28dbd64a-d2e9-9967-f15c-0733438fc2fa",
+ CellTags->{"GoGComputationalNotes", "LimitsPositiveIntro"}],
+Cell[64671, 2143, 330, 9, 70, "Item",ExpressionUUID->"e7fb1dcb-14bd-b2fb-fdd1-b6308f7d263c",
+ CellTags->{"GoGComputationalNotes", "LimitPositive1"}],
+Cell[65004, 2154, 307, 7, 70, "Item",ExpressionUUID->"c4d79000-e07d-f457-9ffe-9138d377b418",
+ CellTags->{"GoGComputationalNotes", "LimitPositive2"}],
+Cell[65314, 2163, 293, 7, 70, "Item",ExpressionUUID->"cf6ebdbe-4352-c18c-a5ce-c8268f7f405d",
+ CellTags->{"GoGComputationalNotes", "LimitPositive3"}],
+Cell[65610, 2172, 329, 9, 70, "Item",ExpressionUUID->"51df2809-8135-8b74-9a44-fb85e1d04ed3",
+ CellTags->{"GoGComputationalNotes", "LimitPositive4"}],
+Cell[65942, 2183, 367, 10, 70, "Item",ExpressionUUID->"e7c6fa4b-253f-31c0-bbcf-8115c9eff3ef",
+ CellTags->{"GoGComputationalNotes", "LimitPositive5"}],
+Cell[66312, 2195, 338, 9, 70, "Text",ExpressionUUID->"61a264d1-e326-1b8b-66a8-c2b72fdf6602",
+ CellTags->{"GoGComputationalNotes", "LimitsNegativeIntro"}],
+Cell[66653, 2206, 456, 11, 70, "ItemNumbered",ExpressionUUID->"d9782e38-7f6b-596e-5192-6d1a0e595781",
+ CellTags->{"GoGComputationalNotes", "LimitNegative1"}],
+Cell[67112, 2219, 342, 9, 70, "ItemNumbered",ExpressionUUID->"2d6f4b82-e61a-35c4-f5ab-b1e32239bd36",
+ CellTags->{"GoGComputationalNotes", "LimitNegative2"}],
+Cell[67457, 2230, 397, 10, 70, "ItemNumbered",ExpressionUUID->"6c2d6f59-add0-7580-e43e-d38847099097",
+ CellTags->{"GoGComputationalNotes", "LimitNegative3"}]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[67891, 2245, 280, 7, 70, "Section",ExpressionUUID->"3ff06f35-e899-b001-8f77-ce7ebc80f5df",
+ CellTags->{"GoGComputationalNotes", "SectionReproduction"}],
+Cell[68174, 2254, 589, 14, 70, "Text",ExpressionUUID->"6d8a9cf4-ce1f-6ee0-86e8-380a9742c0f5",
+ CellTags->{"GoGComputationalNotes", "ReproductionIntro"}],
+Cell[68766, 2270, 576, 17, 70, "Program",ExpressionUUID->"d53cc4ef-e985-c6d7-55c5-437651073e3f",
+ CellTags->{"GoGComputationalNotes", "TranscriptCommand"}],
+Cell[69345, 2289, 495, 13, 70, "Program",ExpressionUUID->"ae79dd22-c8a3-d802-edd8-b0b0fea64a04",
+ CellTags->{"GoGComputationalNotes", "DataCheckCommand"}],
+Cell[69843, 2304, 540, 15, 70, "Program",ExpressionUUID->"5a59dca9-d7e5-67c8-a2bd-a325008cbc7e",
+ CellTags->{"GoGComputationalNotes", "TeXCommand"}],
+Cell[70386, 2321, 495, 14, 70, "Program",ExpressionUUID->"6bd2db11-cf52-d2cd-e773-c524d8d1bc8c",
+ CellTags->{"GoGComputationalNotes", "NotebookCheckCommand"}],
+Cell[70884, 2337, 440, 11, 70, "Text",ExpressionUUID->"73753370-b7a6-40b9-2529-c68cb1912051",
+ CellTags->{"GoGComputationalNotes", "SelfTestIntro"}],
+Cell[71327, 2350, 523, 16, 70, "Text",ExpressionUUID->"3ee6cc00-fea2-74d8-da1b-67130fe8845d",
+ CellTags->{"GoGComputationalNotes", "self-testHeading"}],
+Cell[CellGroupData[{
+Cell[71875, 2370, 4493, 121, 70, "Input",ExpressionUUID->"618e848a-76c4-ca69-5ded-1638040f17c1",
+ InitializationCell->False,
+ CellTags->{"GoGComputationalNotes", "self-testInput"}],
+Cell[76371, 2493, 1406, 32, 70, "Output",ExpressionUUID->"c70afa3b-32b6-9f8f-e02a-734b7b8c67ca",
+ CellTags->{"GoGComputationalNotes", "self-testOutput"}]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[77826, 2531, 260, 7, 70, "Section",ExpressionUUID->"2099abc3-97a7-98ed-6049-9f14b698aee2",
+ CellTags->{"GoGComputationalNotes", "SectionReferences"}],
+Cell[78089, 2540, 473, 11, 70, "Text",ExpressionUUID->"42375d8b-d12e-94b4-657f-f0714b10aa09",
+ CellTags->{"GoGComputationalNotes", "ReferenceGDPK"}],
+Cell[78565, 2553, 413, 11, 70, "Text",ExpressionUUID->"f1dea117-ca24-bc8c-11ff-124f7c2e51da",
+ CellTags->{"GoGComputationalNotes", "ReferenceLi"}],
+Cell[78981, 2566, 458, 12, 70, "Caption",ExpressionUUID->"d18d2e56-e9b6-1fc7-6708-39955cd8e283",
+ CellTags->{"GoGComputationalNotes", "ClosingBoundary"}]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+

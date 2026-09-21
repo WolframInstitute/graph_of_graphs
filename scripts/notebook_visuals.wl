@@ -6,6 +6,10 @@ EnrichNotebook::usage =
   "EnrichNotebook[notebook] adds source-suppressed navigation and native " <>
   "Wolfram visualizations to the generated MathNotebook article.";
 
+BuildCompanionNotebook::usage =
+  "BuildCompanionNotebook[diffusionBoxes] constructs the concise, visual " <>
+  "Whitehead-field-dynamics companion notebook.";
+
 Begin["`Private`"];
 
 $navy = RGBColor[0.075, 0.13, 0.22];
@@ -78,7 +82,7 @@ bannerCell[] := presentationCell[
     ],
     StyleBox["   •   ", FontColor -> $line],
     StyleBox[
-      "native Wolfram visuals • exact LaTeX round trip",
+      "native Mathematica visuals • exact finite models",
       FontFamily -> "Helvetica",
       FontColor -> $muted
     ]
@@ -875,6 +879,636 @@ EnrichNotebook[
   Notebook[cells_List, options___],
   diffusionBoxes_
 ] := Notebook[enrichCells[cells, diffusionBoxes], options];
+
+(* Concise companion notebook ------------------------------------------------ *)
+
+companionTag[id_String] := <|
+  "GoGNotebook" -> <|
+    "Companion" -> True,
+    "ID" -> id
+  |>
+|>;
+
+companionCell[content_, style_String, id_String, options___] := Cell[
+  content,
+  style,
+  TaggingRules -> companionTag[id],
+  CellTags -> {"GoGCompanion", id},
+  options,
+  FontSlant -> Plain
+];
+
+companionText[text_String, id_String] := companionCell[
+  text,
+  "Text",
+  id,
+  FontSize -> 12,
+  LineSpacing -> {1.15, 2}
+];
+
+companionCaption[text_String, id_String] := companionCell[
+  text,
+  "Caption",
+  id,
+  FontColor -> $muted,
+  CellMargins -> {{72, 72}, {2, 18}},
+  ShowCellBracket -> False
+];
+
+companionFigure[expression_, id_String] := companionCell[
+  BoxData[ToBoxes[expression, StandardForm]],
+  "Output",
+  id,
+  ShowCellBracket -> False,
+  CellMargins -> {{24, 24}, {12, 8}},
+  CellFrame -> True,
+  CellFrameStyle -> Directive[$line, AbsoluteThickness[1]],
+  CellFrameMargins -> {{12, 12}, {12, 12}},
+  Background -> White,
+  TextAlignment -> Center
+];
+
+companionDynamicCell[boxes_, id_String] := companionCell[
+  BoxData[boxes],
+  "Output",
+  id,
+  ShowCellBracket -> False,
+  CellMargins -> {{12, 12}, {12, 8}},
+  Background -> White,
+  TextAlignment -> Center
+];
+
+companionCellHeading[text_String, id_String] := companionCell[
+  TextData[{StyleBox["MATHEMATICA CELLS  ·  ", FontWeight -> "Bold",
+    FontColor -> $blue], text}],
+  "Text",
+  id,
+  ShowCellBracket -> False,
+  CellMargins -> {{48, 48}, {10, 3}},
+  TextAlignment -> Center,
+  FontSize -> 10,
+  FontColor -> $muted
+];
+
+SetAttributes[companionInputCell, HoldAllComplete];
+
+(* Expressions written in this package are initially parsed in its private
+   context.  Clean the finished boxes so displayed cells read like ordinary
+   notebook code rather than an implementation trace.  Public paclet names
+   remain explicitly qualified, which also makes those cells executable in a
+   fresh kernel before Needs has changed the context path. *)
+cleanCompanionBoxes[boxes_] := boxes /. text_String :> StringReplace[
+  text,
+  {
+    "GogNotebookVisuals`Private`GogAvailableSizes" ->
+      "GogFieldDynamics`GogAvailableSizes",
+    "GogNotebookVisuals`Private`GogValidateSmallModels" ->
+      "GogFieldDynamics`GogValidateSmallModels",
+    "GogNotebookVisuals`Private`GogTransitionMatrix" ->
+      "GogFieldDynamics`GogTransitionMatrix",
+    "GogNotebookVisuals`Private`GogDiffusionState" ->
+      "GogFieldDynamics`GogDiffusionState",
+    "GogNotebookVisuals`Private`" -> ""
+  }
+];
+
+companionInputCell[expression_, id_String] := companionCell[
+  BoxData[cleanCompanionBoxes[ToBoxes[Defer[expression], StandardForm]]],
+  "Input",
+  id,
+  CellFrame -> True,
+  CellFrameStyle -> Directive[$line, AbsoluteThickness[1]],
+  CellFrameMargins -> {{8, 8}, {7, 7}},
+  Background -> $wash,
+  FontSize -> 11
+];
+
+companionOutputCell[value_, id_String] := companionCell[
+  BoxData[cleanCompanionBoxes[ToBoxes[value, StandardForm]]],
+  "Output",
+  id,
+  CellFrame -> True,
+  CellFrameStyle -> Directive[$line, AbsoluteThickness[1]],
+  CellFrameMargins -> {{8, 8}, {7, 7}},
+  Background -> Blend[{White, $orange}, 0.07],
+  FontSize -> 11
+];
+
+SetAttributes[companionFormulaCell, HoldAllComplete];
+companionFormulaCell[expression_, id_String] := companionCell[
+  BoxData[cleanCompanionBoxes[ToBoxes[expression, TraditionalForm]]],
+  "DisplayFormula",
+  id,
+  ShowCellBracket -> False,
+  TextAlignment -> Center,
+  FontSize -> 15
+];
+
+companionNavigationCell[] := Module[{items},
+  items = {
+    {"AT A GLANCE", "At a glance"},
+    {"LOCAL MOVE", "Local move and energy"},
+    {"CONSENSUS", "Finite consensus schedules"},
+    {"CLOCKS", "Exact quotient clocks"},
+    {"DIFFUSION", "Diffusion laboratory"},
+    {"ENUMERATION", "Finite enumeration"},
+    {"SCOPE", "Scope and next steps"}
+  };
+  companionCell[
+    TextData[Flatten[Riffle[
+      Map[
+        Function[item,
+          With[{target = item[[2]]},
+            ButtonBox[
+              item[[1]],
+              BaseStyle -> {"Hyperlink", FontFamily -> "Helvetica",
+                FontWeight -> "Bold", FontColor -> $blue},
+              ButtonFunction :> NotebookFind[
+                InputNotebook[], target, All, CellStyle -> "Section"
+              ],
+              Evaluator -> Automatic,
+              Method -> "Preemptive"
+            ]
+          ]
+        ],
+        items
+      ],
+      StyleBox["   •   ", FontColor -> $line]
+    ]]],
+    "Text",
+    "GoGCompanionNavigation",
+    ShowCellBracket -> False,
+    CellFrame -> True,
+    CellFrameStyle -> Directive[$line, AbsoluteThickness[1]],
+    CellFrameMargins -> {{12, 12}, {8, 8}},
+    Background -> $wash,
+    TextAlignment -> Center,
+    FontSize -> 8.5
+  ]
+];
+
+pairValueGraphic[values_List, colors_List] := Graphics[
+  {
+    {Directive[$line, AbsoluteThickness[3]], Line[{{-0.65, 0}, {0.65, 0}}]},
+    Table[
+      {
+        EdgeForm[Directive[White, AbsoluteThickness[2]]],
+        colors[[index]],
+        Disk[{{-0.65, 0}, {0.65, 0}}[[index]], 0.23],
+        Text[
+          Style[ToString[values[[index]]], 13, Bold, White,
+            FontFamily -> "Helvetica"],
+          {{-0.65, 0}, {0.65, 0}}[[index]]
+        ]
+      },
+      {index, 2}
+    ]
+  },
+  PlotRange -> {{-1, 1}, {-0.48, 0.48}},
+  ImageSize -> {145, 72},
+  Background -> White
+];
+
+varianceDropFigure[] := Framed[
+  Column[
+    {
+      Style["ONE PAIR AVERAGE REMOVES THE ENTIRE LOCAL CONTRAST", 13,
+        Bold, $navy, FontFamily -> "Helvetica"],
+      Grid[
+        {{
+          Framed[
+            Column[
+              {
+                Style["BEFORE", 9, Bold, $vermillion,
+                  FontFamily -> "Helvetica"],
+                pairValueGraphic[{-1, 3}, {$sky, $orange}],
+                Style["pair mean = 1   •   contrast energy = 8", 9,
+                  $muted, FontFamily -> "Helvetica"]
+              },
+              Alignment -> Center,
+              Spacings -> 0.35
+            ],
+            Background -> White,
+            FrameStyle -> Directive[$line],
+            FrameMargins -> {{10, 10}, {8, 8}}
+          ],
+          Style["→", 24, Bold, $blue],
+          Framed[
+            Column[
+              {
+                Style["AFTER", 9, Bold, $green,
+                  FontFamily -> "Helvetica"],
+                pairValueGraphic[{1, 1}, {$green, $green}],
+                Style["same mean   •   contrast energy = 0", 9,
+                  $muted, FontFamily -> "Helvetica"]
+              },
+              Alignment -> Center,
+              Spacings -> 0.35
+            ],
+            Background -> White,
+            FrameStyle -> Directive[$line],
+            FrameMargins -> {{10, 10}, {8, 8}}
+          ]
+        }},
+        Alignment -> Center,
+        Spacings -> {0.8, 0}
+      ],
+      Style[
+        "exact loss = ((-1) - 3)^2 / 2 = 8",
+        11,
+        Bold,
+        $blue,
+        FontFamily -> "Helvetica"
+      ]
+    },
+    Alignment -> Center,
+    Spacings -> 0.8
+  ],
+  Background -> $wash,
+  FrameStyle -> None,
+  FrameMargins -> {{18, 18}, {14, 14}},
+  ImageSize -> 500
+];
+
+transitionMatrixPlot[matrix_, title_String, subtitle_String] := Module[
+  {ticks = MapIndexed[{First[#2], #1} &, "G" <> ToString[#] & /@ Range[5]]},
+  Column[
+    {
+      Style[title, 11, Bold, $navy, FontFamily -> "Helvetica"],
+      ArrayPlot[
+        N[matrix],
+        ColorFunction -> Function[value,
+          Blend[{$wash, $sky, $blue}, Clip[value, {0, 1}]]
+        ],
+        ColorFunctionScaling -> False,
+        PlotRange -> {0, 1},
+        Mesh -> All,
+        MeshStyle -> Directive[White, AbsoluteThickness[1]],
+        Frame -> True,
+        FrameTicks -> {{ticks, None}, {ticks, None}},
+        FrameLabel -> {"target", "source"},
+        ImageSize -> 190
+      ],
+      Style[subtitle, 8.5, $muted, FontFamily -> "Helvetica",
+        TextAlignment -> Center]
+    },
+    Alignment -> Center,
+    Spacings -> 0.35
+  ]
+];
+
+transitionComparisonFigure[] := Module[{matrixA, matrixB},
+  matrixA = GogFieldDynamics`GogTransitionMatrix[4, "A"];
+  matrixB = GogFieldDynamics`GogTransitionMatrix[4, "B"];
+  Framed[
+    Column[
+      {
+        Style["THE SAME SUPPORT, TWO DIFFERENT CLOCKS", 13, Bold, $navy,
+          FontFamily -> "Helvetica"],
+        Grid[
+          {{
+            transitionMatrixPlot[
+              matrixA,
+              "RULE A",
+              "slot multiplicity retained\nnonuniform class law"
+            ],
+            transitionMatrixPlot[
+              matrixB,
+              "RULE B",
+              "one tick per neighbour\nuniform class law"
+            ]
+          }},
+          Alignment -> Center,
+          Spacings -> {1.1, 0}
+        ],
+        Row[
+          {
+            Style["light", 8, $muted],
+            Graphics[
+              Table[
+                {
+                  Blend[{$wash, $sky, $blue}, k/14],
+                  Rectangle[{k, 0}, {k + 1, 1}]
+                },
+                {k, 0, 14}
+              ],
+              PlotRange -> {{0, 15}, {0, 1}},
+              ImagePadding -> 0,
+              ImageSize -> {150, 9},
+              AspectRatio -> 0.06
+            ],
+            Style["probability", 8, $muted],
+            Style["dark", 8, $muted]
+          },
+          Spacer[6]
+        ]
+      },
+      Alignment -> Center,
+      Spacings -> 0.65
+    ],
+    Background -> White,
+    FrameStyle -> Directive[$line],
+    FrameMargins -> {{16, 16}, {12, 12}},
+    ImageSize -> 500
+  ]
+];
+
+companionPairAverage[n_Integer, {i_Integer, j_Integer}] := ReplacePart[
+  IdentityMatrix[n],
+  {
+    {i, i} -> 1/2, {i, j} -> 1/2,
+    {j, i} -> 1/2, {j, j} -> 1/2
+  }
+];
+
+companionMatching[n_Integer, edges_List] :=
+  Dot @@ (companionPairAverage[n, #] & /@ edges);
+
+companionConsensusChecks[] := Module[{k4, q3},
+  k4 = companionMatching[4, {{1, 3}, {2, 4}}] .
+    companionMatching[4, {{1, 2}, {3, 4}}];
+  q3 = companionMatching[8, {{1, 5}, {2, 6}, {3, 7}, {4, 8}}] .
+    companionMatching[8, {{1, 3}, {2, 4}, {5, 7}, {6, 8}}] .
+    companionMatching[8, {{1, 2}, {3, 4}, {5, 6}, {7, 8}}];
+  {
+    k4 === ConstantArray[1/4, {4, 4}],
+    q3 === ConstantArray[1/8, {8, 8}]
+  }
+];
+
+BuildCompanionNotebook[diffusionBoxes_] := Module[
+  {pairLoss, validationSummary, clockChecks, diffusion, enumerationSummary,
+    consensusChecks, cells},
+
+  pairLoss = (x - y)^2/2;
+  validationSummary = <|
+    "AvailableSizes" -> GogFieldDynamics`GogAvailableSizes[],
+    "ModelsValid" -> GogFieldDynamics`GogValidateSmallModels[]["Valid"]
+  |>;
+  clockChecks = With[
+    {
+      matrixA = GogFieldDynamics`GogTransitionMatrix[4, "A"],
+      matrixB = GogFieldDynamics`GogTransitionMatrix[4, "B"]
+    },
+    <|
+      "RuleASymmetric" -> SymmetricMatrixQ[matrixA],
+      "RuleBSymmetric" -> SymmetricMatrixQ[matrixB],
+      "RuleBUniformStationary" ->
+        ConstantArray[1/5, 5] . matrixB === ConstantArray[1/5, 5]
+    |>
+  ];
+  diffusion = GogFieldDynamics`GogDiffusionState[4, "A", 1, 4];
+  enumerationSummary = Transpose[{
+    Range[2, 14, 2],
+    {2, 5, 17, 71, 388, 2592, 21096},
+    {12, 60, 306, 1704, 11640, 93312, 886032}
+  }];
+  consensusChecks = companionConsensusChecks[];
+
+  cells = {
+    companionCell[
+      "Whitehead Field Dynamics",
+      "Title",
+      "GoGCompanionTitle",
+      TextAlignment -> Center,
+      FontColor -> $navy
+    ],
+    companionCell[
+      "A visual computational companion",
+      "Subtitle",
+      "GoGCompanionSubtitle",
+      TextAlignment -> Center,
+      FontColor -> $muted
+    ],
+    companionCell[
+      "Alexander Kolpakov",
+      "Author",
+      "GoGCompanionAuthor",
+      TextAlignment -> Center
+    ],
+    bannerCell[],
+    companionNavigationCell[],
+    companionText[
+      "This notebook is a compact laboratory for the field update and the " <>
+      "small exact graph-of-graphs models.  It favors executable cells, " <>
+      "pictures, and one interactive experiment; proofs and asymptotic " <>
+      "arguments remain in the LaTeX manuscript.",
+      "GoGCompanionIntro"
+    ],
+
+    companionCell["At a glance", "Section", "GoGSectionOverview"],
+    companionFigure[visualAbstract[], "GoGVisualAbstract"],
+    companionCaption[
+      "One local operation produces four related but inequivalent objects: " <>
+      "the carrier field, a fixed-labelled move graph, the multiplicity " <>
+      "chain, and the simple-support chain.",
+      "GoGVisualAbstractCaption"
+    ],
+
+    companionCell[
+      "Local move and energy",
+      "Section",
+      "GoGSectionLocalMove"
+    ],
+    companionText[
+      "Select a non-loop carrier edge.  Its four exposed half-edges admit " <>
+      "two compressed Whitehead resolutions.  Before the rewrite, the two " <>
+      "endpoint values are replaced by their mean.",
+      "GoGLocalMoveText"
+    ],
+    companionFigure[whiteheadMoveFigure[], "GoGWhiteheadMove"],
+    companionCaption[
+      "The local graph rewrite has two compressed resolutions; the field " <>
+      "average is the same for either resolution.",
+      "GoGWhiteheadMoveCaption"
+    ],
+    companionFigure[varianceDropFigure[], "GoGVarianceDrop"],
+    companionFormulaCell[
+      HoldForm[
+        \[ScriptCapitalV][Subscript[A, i, j] f] ==
+          \[ScriptCapitalV][f] -
+            (Subscript[f, i] - Subscript[f, j])^2/2
+      ],
+      "GoGVarianceFormula"
+    ],
+    companionCaption[
+      "Settlement permutations preserve sums and Euclidean norms, so this " <>
+      "one-step identity survives passage to unlabelled representatives.",
+      "GoGVarianceDropCaption"
+    ],
+    companionCellHeading["one-pair loss", "GoGPairLossHeading"],
+    companionInputCell[
+      FullSimplify[
+        x^2 + y^2 - 2 ((x + y)/2)^2,
+        Assumptions -> Element[{x, y}, Reals]
+      ],
+      "GoGPairLossInput"
+    ],
+    companionOutputCell[pairLoss, "GoGPairLossOutput"],
+
+    companionCell[
+      "Finite consensus schedules",
+      "Section",
+      "GoGSectionConsensus"
+    ],
+    companionText[
+      "A perfect matching is a commuting block of pair projections.  Two " <>
+      "transverse matchings on K4 and three coordinate matchings on Q3 " <>
+      "produce exact consensus in finitely many stages.",
+      "GoGConsensusText"
+    ],
+    companionFigure[consensusFigure[], "GoGConsensusSchedules"],
+    companionCaption[
+      "The schedules double equal-value blocks at each stage: 1→2→4 on K4 " <>
+      "and 1→2→4→8 on Q3.",
+      "GoGConsensusSchedulesCaption"
+    ],
+    companionCellHeading["consensus products", "GoGConsensusHeading"],
+    companionInputCell[
+      pairAverage[n_, {i_, j_}] := ReplacePart[
+        IdentityMatrix[n],
+        {{i, i} -> 1/2, {i, j} -> 1/2,
+          {j, i} -> 1/2, {j, j} -> 1/2}
+      ];
+      matching[n_, edges_] := Dot @@ (pairAverage[n, #] & /@ edges);
+      k4 = matching[4, {{1, 3}, {2, 4}}] .
+        matching[4, {{1, 2}, {3, 4}}];
+      q3 = matching[8, {{1, 5}, {2, 6}, {3, 7}, {4, 8}}] .
+        matching[8, {{1, 3}, {2, 4}, {5, 7}, {6, 8}}] .
+        matching[8, {{1, 2}, {3, 4}, {5, 6}, {7, 8}}];
+      {k4 === ConstantArray[1/4, {4, 4}],
+        q3 === ConstantArray[1/8, {8, 8}]},
+      "GoGConsensusInput"
+    ],
+    companionOutputCell[consensusChecks, "GoGConsensusOutput"],
+
+    companionCell[
+      "Exact quotient clocks",
+      "Section",
+      "GoGSectionClocks"
+    ],
+    companionText[
+      "The bundled complete models have N=2,4,6.  Rule A keeps all 3N " <>
+      "resolution slots and their multiplicities.  Fixed-clock Rule B gives " <>
+      "one tick to each distinct nonself target and converts unused ticks " <>
+      "into holding probability.",
+      "GoGClockText"
+    ],
+    companionCellHeading["load and validate", "GoGValidationHeading"],
+    companionInputCell[
+      PacletDirectoryLoad[
+        FileNameJoin[{NotebookDirectory[], "Wolfram", "GogFieldDynamics"}]
+      ];
+      Needs["GogFieldDynamics`"];
+      <|"AvailableSizes" -> GogAvailableSizes[],
+        "ModelsValid" -> GogValidateSmallModels[]["Valid"]|>,
+      "GoGValidationInput"
+    ],
+    companionOutputCell[validationSummary, "GoGValidationOutput"],
+    companionFigure[transitionComparisonFigure[], "GoGTransitionComparison"],
+    companionCaption[
+      "Exact N=4 transition matrices shown as heat maps.  Rule A is not " <>
+      "symmetric; fixed-clock Rule B is symmetric and has the uniform class law.",
+      "GoGTransitionComparisonCaption"
+    ],
+    companionCellHeading["clock checks", "GoGClockChecksHeading"],
+    companionInputCell[
+      pA = GogTransitionMatrix[4, "A"];
+      pB = GogTransitionMatrix[4, "B"];
+      <|"RuleASymmetric" -> SymmetricMatrixQ[pA],
+        "RuleBSymmetric" -> SymmetricMatrixQ[pB],
+        "RuleBUniformStationary" ->
+          ConstantArray[1/5, 5] . pB === ConstantArray[1/5, 5]|>,
+      "GoGClockChecksInput"
+    ],
+    companionOutputCell[clockChecks, "GoGClockChecksOutput"],
+
+    companionCell[
+      "Diffusion laboratory",
+      "Section",
+      "GoGSectionDiffusion"
+    ],
+    companionText[
+      "Blue fill is the exact rational distribution after t quotient steps.  " <>
+      "The orange trail is one independently sampled path.  Change N, the " <>
+      "clock, the starting class, or the seed and then play the time control.",
+      "GoGDiffusionText"
+    ],
+    companionDynamicCell[diffusionBoxes, "GoGDiffusionLab"],
+    companionCaption[
+      "The distribution is matrix evolution, not a histogram of the sampled " <>
+      "path.  SetReplace is an optional path engine; exact diffusion remains " <>
+      "matrix based.",
+      "GoGDiffusionLabCaption"
+    ],
+    companionCellHeading["default exact snapshot", "GoGDiffusionHeading"],
+    companionInputCell[
+      GogDiffusionState[4, "A", 1, 4],
+      "GoGDiffusionInput"
+    ],
+    companionOutputCell[diffusion, "GoGDiffusionOutput"],
+
+    companionCell[
+      "Finite enumeration",
+      "Section",
+      "GoGSectionEnumeration"
+    ],
+    companionText[
+      "Complete unlabelled enumeration grows rapidly.  The plot separates " <>
+      "class counts from Rule-A slot records and uses a logarithmic vertical " <>
+      "scale.  These are finite checks, not asymptotic evidence by themselves.",
+      "GoGEnumerationText"
+    ],
+    companionFigure[enumerationFigure[], "GoGEnumerationGrowth"],
+    companionCaption[
+      "At N=14 the complete table contains 21,096 classes and 886,032 " <>
+      "compressed Rule-A slot records.",
+      "GoGEnumerationGrowthCaption"
+    ],
+    companionCellHeading["enumeration summary", "GoGEnumerationHeading"],
+    companionInputCell[
+      Transpose[{
+        Range[2, 14, 2],
+        {2, 5, 17, 71, 388, 2592, 21096},
+        {12, 60, 306, 1704, 11640, 93312, 886032}
+      }],
+      "GoGEnumerationInput"
+    ],
+    companionOutputCell[enumerationSummary, "GoGEnumerationOutput"],
+
+    companionCell[
+      "Scope and next steps",
+      "Section",
+      "GoGSectionScope"
+    ],
+    companionText[
+      "This companion deliberately omits theorem and proof text.  The full " <>
+      "mathematical source is whitehead-field-dynamics.tex; the annotated " <>
+      "cell transcript is whitehead-field-dynamics-computational-notes.tex; " <>
+      "and docs/notebook.rst records the build and verification boundary.  " <>
+      "The bundled quotient resource does not contain concrete carrier-edge " <>
+      "choices or settlement maps, so it does not by itself define a " <>
+      "pathwise transported-field cocycle.",
+      "GoGScopeText"
+    ]
+  };
+
+  Notebook[
+    cells,
+    WindowTitle -> "Whitehead Field Dynamics — Computational Companion",
+    StyleDefinitions -> "Default.nb",
+    TaggingRules -> <|
+      "GoGNotebook" -> <|
+        "Edition" -> "ComputationalCompanion",
+        "SchemaVersion" -> 1,
+        "Purpose" -> "Concise executable visual companion"
+      |>
+    |>,
+    Saveable -> True,
+    WindowSize -> {1040, 900},
+    PrintingOptions -> {"PrintCellBrackets" -> False}
+  ]
+];
 
 End[];
 EndPackage[];
