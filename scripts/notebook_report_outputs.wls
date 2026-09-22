@@ -93,11 +93,11 @@ diffusionA = GogFieldDynamics`GogDiffusionState[4, "A", 1, 4];
 diffusionB = GogFieldDynamics`GogDiffusionState[4, "B", 1, 4];
 trajectoryA = GogFieldDynamics`GogRandomTrajectory[4, "A", 1, 12, 2026];
 
-k4Word =
+k4Product =
   matching[4, {{1, 3}, {2, 4}}] .
   matching[4, {{1, 2}, {3, 4}}];
 
-q3Word =
+q3Product =
   matching[8, {{1, 5}, {2, 6}, {3, 7}, {4, 8}}] .
   matching[8, {{1, 3}, {2, 4}, {5, 7}, {6, 8}}] .
   matching[8, {{1, 2}, {3, 4}, {5, 6}, {7, 8}}];
@@ -131,13 +131,13 @@ write["N=4 Rule-A row sums", Total /@ countsA];
 write["N=4 Rule-A transition matrix", matrixA];
 write["N=4 Rule-A stationary distribution", stationaryA];
 
-write["N=4 fixed-clock Rule-B transition matrix", matrixB];
+write["N=4 Rule-B transition matrix", matrixB];
 write[
   "Rule-B symmetry and uniform stationarity",
   {SymmetricMatrixQ[matrixB], uniformB . matrixB}
 ];
 write[
-  "N=2 fixed-clock Rule B and its jump chain",
+  "N=2 Rule B and its jump chain",
   {
     GogFieldDynamics`GogTransitionMatrix[2, "B"],
     GogFieldDynamics`GogTransitionMatrix[2, "BJump"]
@@ -153,10 +153,10 @@ write["N=4 Rule-A native path, seed 2026", trajectoryA];
 write[
   "finite-consensus checks for K4 and Q3",
   {
-    k4Word === ConstantArray[1/4, {4, 4}],
-    q3Word === ConstantArray[1/8, {8, 8}]
+    k4Product === ConstantArray[1/4, {4, 4}],
+    q3Product === ConstantArray[1/8, {8, 8}]
   }
 ];
-write["K4 consensus product", k4Word];
+write["K4 consensus product", k4Product];
 
 Exit[0];

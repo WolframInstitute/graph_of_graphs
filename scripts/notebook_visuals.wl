@@ -471,7 +471,7 @@ whiteheadMoveFigure[] := Framed[
       ],
       Style[
         "Rule A retains every resolution slot and its multiplicity.\n" <>
-        "Rule B gives each distinct target one tick and uses the rest to hold.",
+        "Rule B gives each distinct target probability 1/(3N); the rest stays put.",
         10,
         $muted,
         FontFamily -> "Helvetica",
@@ -827,7 +827,7 @@ enrichCells[inputCells_List, diffusionBoxes_] := Module[{cells},
       graphicCell[consensusFigure[], "GoGConsensusSchedules"],
       captionCell[
         3,
-        "The exact finite consensus words used at N=4 and N=8.  Each color is " <>
+        "The exact finite-time consensus products used at N=4 and N=8.  Each color is " <>
         "one perfect matching, so equal-value blocks double at every stage.",
         "GoGConsensusSchedulesCaption"
       ]
@@ -843,7 +843,7 @@ enrichCells[inputCells_List, diffusionBoxes_] := Module[{cells},
       ],
       captionCell[
         4,
-        "A playable exact diffusion on the complete N=2,4,6 unlabelled " <>
+        "A playable exact diffusion on the complete N=2,4,6,8 unlabelled " <>
         "quotients.  Blue fill is probability mass; the orange ring and " <>
         "trail are one sampled path.  SetReplace repeats singleton-hypergraph " <>
         "rules by Rule-A slot multiplicity.  Rule B uses one rule per support " <>
@@ -1008,8 +1008,8 @@ companionNavigationCell[] := Module[{items},
   items = {
     {"AT A GLANCE", "At a glance"},
     {"LOCAL MOVE", "Local move and energy"},
-    {"CONSENSUS", "Finite consensus schedules"},
-    {"CLOCKS", "Exact quotient clocks"},
+    {"CONSENSUS", "Finite-time consensus"},
+    {"TRANSITIONS", "Transition probabilities"},
     {"DIFFUSION", "Diffusion laboratory"},
     {"ENUMERATION", "Finite enumeration"},
     {"SCOPE", "Scope and next steps"}
@@ -1163,19 +1163,19 @@ transitionComparisonFigure[] := Module[{matrixA, matrixB},
   Framed[
     Column[
       {
-        Style["THE SAME SUPPORT, TWO DIFFERENT CLOCKS", 13, Bold, $navy,
+        Style["THE SAME MOVES, DIFFERENT PROBABILITIES", 13, Bold, $navy,
           FontFamily -> "Helvetica"],
         Grid[
           {{
             transitionMatrixPlot[
               matrixA,
               "RULE A",
-              "slot multiplicity retained\nnonuniform class law"
+              "repeated outcomes retain extra weight\nnonuniform stationary law"
             ],
             transitionMatrixPlot[
               matrixB,
               "RULE B",
-              "one tick per neighbour\nuniform class law"
+              "equal weight per distinct neighbour\nuniform stationary law"
             ]
           }},
           Alignment -> Center,
@@ -1347,14 +1347,15 @@ BuildCompanionNotebook[diffusionBoxes_] := Module[
     companionOutputCell[pairLoss, "GoGPairLossOutput"],
 
     companionCell[
-      "Finite consensus schedules",
+      "Finite-time consensus",
       "Section",
       "GoGSectionConsensus"
     ],
     companionText[
-      "A perfect matching is a commuting block of pair projections.  Two " <>
-      "transverse matchings on K4 and three coordinate matchings on Q3 " <>
-      "produce exact consensus in finitely many stages.",
+      "Consensus means that every field coordinate equals the arithmetic " <>
+      "mean of the initial field.  Finite-time consensus means that a finite " <>
+      "product of pair-averaging matrices equals J_N.  Two matchings on K4 " <>
+      "and three coordinate matchings on Q3 give explicit examples.",
       "GoGConsensusText"
     ],
     companionFigure[consensusFigure[], "GoGConsensusSchedules"],
@@ -1383,15 +1384,15 @@ BuildCompanionNotebook[diffusionBoxes_] := Module[
     companionOutputCell[consensusChecks, "GoGConsensusOutput"],
 
     companionCell[
-      "Exact quotient clocks",
+      "Transition probabilities",
       "Section",
       "GoGSectionClocks"
     ],
     companionText[
-      "The bundled complete models have N=2,4,6.  Rule A keeps all 3N " <>
-      "resolution slots and their multiplicities.  Fixed-clock Rule B gives " <>
-      "one tick to each distinct nonself target and converts unused ticks " <>
-      "into holding probability.",
+      "The bundled complete models have N=2,4,6,8.  Rule A keeps all 3N " <>
+      "move outcomes and their multiplicities.  Rule B gives each distinct " <>
+      "nonself target probability 1/(3N) and assigns the remaining " <>
+      "probability to staying put.",
       "GoGClockText"
     ],
     companionCellHeading["load and validate", "GoGValidationHeading"],
@@ -1408,10 +1409,10 @@ BuildCompanionNotebook[diffusionBoxes_] := Module[
     companionFigure[transitionComparisonFigure[], "GoGTransitionComparison"],
     companionCaption[
       "Exact N=4 transition matrices shown as heat maps.  Rule A is not " <>
-      "symmetric; fixed-clock Rule B is symmetric and has the uniform class law.",
+      "symmetric; Rule B is symmetric and has the uniform stationary law.",
       "GoGTransitionComparisonCaption"
     ],
-    companionCellHeading["clock checks", "GoGClockChecksHeading"],
+    companionCellHeading["matrix checks", "GoGClockChecksHeading"],
     companionInputCell[
       pA = GogTransitionMatrix[4, "A"];
       pB = GogTransitionMatrix[4, "B"];
@@ -1429,9 +1430,9 @@ BuildCompanionNotebook[diffusionBoxes_] := Module[
       "GoGSectionDiffusion"
     ],
     companionText[
-      "Blue fill is the exact rational distribution after t quotient steps.  " <>
+      "Blue fill is the exact rational distribution after t graph-type steps.  " <>
       "The orange trail is one independently sampled path.  Change N, the " <>
-      "clock, the starting class, or the seed and then play the time control.",
+      "rule, the starting graph type, or the seed and then play the time control.",
       "GoGDiffusionText"
     ],
     companionDynamicCell[diffusionBoxes, "GoGDiffusionLab"],

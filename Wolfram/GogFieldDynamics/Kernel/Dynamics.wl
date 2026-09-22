@@ -3,24 +3,24 @@
 BeginPackage["GogFieldDynamics`"];
 
 GogAvailableSizes::usage =
-  "GogAvailableSizes[] lists the complete small quotient models bundled " <>
-  "with the paclet.";
+  "GogAvailableSizes[] lists the complete small graph-type models bundled " <>
+  "with the package.";
 
 GogSmallModel::usage =
-  "GogSmallModel[n] returns canonical classes, support edges, and exact " <>
-  "Rule-A slot counts for the complete n-vertex quotient.";
+  "GogSmallModel[n] returns stored graph types, their connections, and exact " <>
+  "Rule-A outcome counts for the complete n-vertex model.";
 
 GogTransitionCounts::usage =
   "GogTransitionCounts[n, rule] returns integer event counts for Rule A, " <>
-  "fixed-clock Rule B, or the degree-normalized Rule-B jump chain.";
+  "Rule B with stay-put outcomes, or the Rule-B jump chain.";
 
 GogTransitionMatrix::usage =
   "GogTransitionMatrix[n, rule] returns the exact row-stochastic transition " <>
-  "matrix for Rule A, fixed-clock Rule B, or \"BJump\".";
+  "matrix for Rule A, Rule B, or \"BJump\".";
 
 GogDiffusionState::usage =
   "GogDiffusionState[n, rule, start, steps] returns the exact distribution " <>
-  "after the requested number of quotient-chain steps.";
+  "after the requested number of graph-type steps.";
 
 GogRandomTrajectory::usage =
   "GogRandomTrajectory[n, rule, start, steps, seed] samples a path directly " <>
@@ -34,9 +34,9 @@ GogSetReplaceVersion::usage =
   "GogSetReplaceVersion[] returns the resolved SetReplace paclet version.";
 
 GogSetReplaceRules::usage =
-  "GogSetReplaceRules[n, rule] encodes quotient transitions as singleton " <>
+  "GogSetReplaceRules[n, rule] encodes graph-type transitions as singleton " <>
   "hypergraph rewrite rules. Rule A retains slot multiplicity; Rule B " <>
-  "retains one rule per neighbour and pads its fixed 3N clock with holds.";
+  "retains one rule per neighbour and adds stay-put rules for unused outcomes.";
 
 GogSetReplaceTrajectory::usage =
   "GogSetReplaceTrajectory[n, rule, start, steps, seed] samples one path " <>
@@ -128,8 +128,7 @@ GogSmallModel[n_] := failure[
 normalizeRule[rule_] := Switch[
   ToLowerCase[ToString[rule]],
   "a" | "rulea" | "rule a" | "multiplicity", "A",
-  "b" | "ruleb" | "rule b" | "support" | "support clock" |
-    "fixed support", "B",
+  "b" | "ruleb" | "rule b" | "support", "B",
   "bjump" | "rule b jump" | "jump" | "neighbour" | "neighbor" |
     "simple neighbour" | "simple neighbor", "BJump",
   _, failure[

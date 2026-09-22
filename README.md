@@ -20,9 +20,9 @@ boundaries.
 | [`whitehead-field-dynamics.pdf`](whitehead-field-dynamics.pdf) | PDF built from the canonical LaTeX source. |
 | [`whitehead-field-dynamics.nb`](whitehead-field-dynamics.nb) | Concise generated Mathematica companion with seven native figures and a playable graph-of-graphs diffusion lab. |
 | [`whitehead-field-dynamics-computational-notes.tex`](whitehead-field-dynamics-computational-notes.tex) | Standalone TeX companion with annotated Mathematica input/output cells. |
-| [`whitehead-field-dynamics-computational-notes.pdf`](whitehead-field-dynamics-computational-notes.pdf) | Built nine-page companion report. |
-| [`whitehead-field-dynamics-computational-notes.nb`](whitehead-field-dynamics-computational-notes.nb) | Executable mini-notebook carrying the report text, 16 input/output pairs, local-paclet setup, and a built-in self-test. |
-| [`Wolfram/GogFieldDynamics/`](Wolfram/GogFieldDynamics/) | Repo-local companion paclet for exact small quotients, diffusion, and SetReplace trajectories. |
+| [`whitehead-field-dynamics-computational-notes.pdf`](whitehead-field-dynamics-computational-notes.pdf) | Built companion report. |
+| [`whitehead-field-dynamics-computational-notes.nb`](whitehead-field-dynamics-computational-notes.nb) | Computational notebook with 19 input/output pairs, a GoG atlas, a click-to-inspect vertex viewer, exact diffusion tables and pictures, and local-package setup. |
+| [`Wolfram/GogFieldDynamics/`](Wolfram/GogFieldDynamics/) | Repo-local Wolfram package for exact small graph-type models, diffusion, and SetReplace trajectories. |
 | [`docs/`](docs/) | Project guide, conventions, evidence status, and reproducibility instructions. |
 | [`gog_generate.py`](gog_generate.py) and analysis scripts | Exact finite enumeration and diagnostics. |
 | [`lean/`](lean/) | Lean/Std proofs of a limited finite-algebra boundary. |
@@ -42,11 +42,11 @@ the canonical LaTeX manuscript.
 | 1. Carrier field | A cubic multigraph `G` and a field `f` on its vertices | Average one carrier-edge pair, perform a Whitehead rewrite, then settle coordinates | Carrier Laplacian and a specified Rule-A or Rule-B lift |
 | 2. Fixed-labelled simple GoG | Cubic multigraphs on the fixed vertex set `[N]` | Keep distinct nonself labelled targets from four endpoint-oriented moves | Degree-stationary simple walk, or a padded symmetric `6N` clock |
 | 3. GDPK multiplicity chain | Unlabelled isomorphism classes | Retain two resolutions per edge object, including multiplicity and holding slots | `P_A(G,H)=m(G,H)/(3N)` and the configuration-model quotient law |
-| 4. Unlabelled simple support | The same classes as Case 3 | Give every distinct nonself target one of `3N` ticks and use the remaining ticks for holding | Fixed-clock Rule B is symmetric and uniform; its jump chain has stationary mass proportional to `q(G)` |
+| 4. Unlabelled simple support | The same classes as Case 3 | Give every distinct nonself target probability `1/(3N)` and use the remaining probability for staying put | Rule B is symmetric and uniform; its jump chain has stationary mass proportional to `q(G)` |
 
 Cases 3 and 4 share reachability after self-targets are removed, but not path
 counts, probabilities, stationary measures, conductance, or normalized
-spectra. Case 2 has a different state space and move clock. Case 1 is a field
+spectra. Case 2 has a different state space and step convention. Case 1 is a field
 cocycle over a chosen base chain, not another scalar walk on the quotient. See
 the [convention dictionary](docs/overview.rst) before comparing results.
 
@@ -81,13 +81,14 @@ make computational-notes-notebook
 make computational-notes-notebook-check
 ```
 
-Alternatively, open `whitehead-field-dynamics-computational-notes.nb`, choose
-**Evaluation > Evaluate Notebook**, and inspect the last cell. A successful run
-ends with `AllTestsPassed -> True`. This mini-notebook needs only the repo-local
-`GogFieldDynamics` paclet; SetReplace is not required.
+Alternatively, open `whitehead-field-dynamics-computational-notes.nb` and
+choose **Evaluation > Evaluate Notebook**. The notebook needs only the
+repo-local `GogFieldDynamics` package; SetReplace is not required. The command
+above evaluates all visible cells again in a fresh kernel and checks the
+mathematical results and visual objects.
 
-Wolfram checks are separate because they require a licensed local installation
-and a front end:
+The Wolfram checks require a licensed local installation.
+`whitehead-field-dynamics.nb` also requires a front end:
 
 ```sh
 make notebook
@@ -95,7 +96,7 @@ make notebook-check
 ```
 
 `make notebook-check` also runs the small-model regeneration check and nine
-companion-paclet tests, including a real SetReplace trajectory.
+companion-package tests, including a real SetReplace trajectory.
 
 ## Mathematica computational companion
 
@@ -103,16 +104,16 @@ The notebook build uses Wolfram Language 14.3 or newer and the built-in
 `Default.nb` stylesheet. It is constructed directly from
 `scripts/notebook_visuals.wl`; it has no MathNotebook conversion dependency.
 
-The repo-local `GogFieldDynamics` paclet is loaded directly by the build; it
-does not need to be installed globally. It bundles complete `N=2,4,6`
+The repo-local `GogFieldDynamics` package is loaded directly by the build; it
+does not need to be installed globally. It bundles complete `N=2,4,6,8`
 unlabelled quotient data derived from `gog_generate.py` and provides exact
-Rule-A, fixed-clock Rule-B, and Rule-B jump-chain matrices, rational diffusion,
+Rule-A, Rule-B, and Rule-B jump-chain matrices, rational diffusion,
 native random paths, and a singleton-hypergraph bridge to
 [WolframInstitute/SetReplace](https://github.com/WolframInstitute/SetReplace).
 
 In the lab:
 
-- blue node fill is the exact distribution after `t` quotient steps;
+- blue node fill is the exact distribution after `t` graph-type steps;
 - the orange ring and trail are one sampled trajectory;
 - Rule A repeats a SetReplace rule once per resolution slot, so duplicates and
   holding events retain their exact multiplicity;
@@ -127,17 +128,21 @@ local version is `0.3.196`.
 
 The build adds a banner and seven section links, then presents a visual
 abstract, the local Whitehead move, the exact variance drop, finite consensus
-schedules, a two-clock heat-map comparison, the diffusion lab, and enumeration
+schedules, a Rule-A/Rule-B heat-map comparison, the diffusion lab, and enumeration
 growth. It verifies the named visual IDs, bounds the notebook size, rejects
 paper-style theorem/proof cells, normalizes cell UUIDs, saves through the
 Mathematica front end, and reopens and renders the artifact. The constructor
 currently emits 52 cells; the front end normalizes this to 66 cells with 2,547
 narrative characters, seven sections, six input cells, and seven visuals.
 
-The separate computational-notes mini-notebook follows the longer TeX
-transcript rather than the visual layout. It has 11 sections and 16 executable
-cell pairs. Its checker evaluates those cells in order from a fresh kernel,
-verifies the final self-test, and renders the notebook through the front end.
+The separate computational notebook follows the longer TeX
+transcript and now places its key pictures alongside the relevant calculations.
+It has nine sections and 19 executable cell pairs, including an `N=4` GoG
+atlas, a live viewer for the cubic multigraph represented by each GoG vertex,
+an exact-distribution/sample-path panel, and an exact Rule-B spectral-gap
+calculation. Its checker evaluates every cell in order from a fresh kernel and
+verifies the mathematics, formula formatting, graph spacing, and visual
+objects without requiring a front end.
 
 Use a different kernel path when necessary:
 
@@ -188,7 +193,7 @@ When changing a result:
 6. rebuild the PDF and notebook before committing synchronized artifacts.
 
 Edit visual-notebook presentation code in `scripts/notebook_visuals.wl`, the
-mini-notebook source in `scripts/build_computational_notes_notebook.wls`, or
+computational-notebook source in `scripts/build_computational_notes_notebook.wls`, or
 exact dynamics in the `GogFieldDynamics` paclet. Never hand-edit either
 generated `.nb`. Generated large tables and local diagnostics belong under
 ignored `artifacts/`.

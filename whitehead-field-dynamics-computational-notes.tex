@@ -42,11 +42,13 @@
   commentstyle=\color{codegreen}\itshape,
   stringstyle=\color{codegray},
   morekeywords={
-    AssociationMap,ConstantArray,FullSimplify,GogAvailableSizes,
+    AssociationMap,ConstantArray,Count,DeleteDuplicates,Eigenvalues,
+    FullSimplify,GogAvailableSizes,
     GogDiffusionState,GogRandomTrajectory,GogSmallModel,
     GogTransitionCounts,GogTransitionMatrix,GogValidateSmallModels,
-    IdentityMatrix,MatrixForm,Needs,NullSpace,PacletDirectoryLoad,
-    ReplacePart,SymmetricMatrixQ,Table,Transpose
+    Greater,IdentityMatrix,Length,MatrixForm,Max,Needs,NullSpace,
+    PacletDirectoryLoad,Partition,ReplacePart,Sort,SymmetricMatrixQ,
+    Table,Transpose
   }
 }
 
@@ -76,33 +78,35 @@
 }
 
 \title{Whitehead Field Dynamics\\
-  \large Computational Notebook Notes and Exact Mathematica Cells}
+  \large Computational Notes}
 \author{Alexander Kolpakov}
-\date{September 21, 2026}
+\date{September 22, 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-This companion note turns the executable parts of
-\path{whitehead-field-dynamics.nb} into a short, reproducible transcript.  It
-records the local pair-averaging calculation, the exact small graph-of-graphs
-models used by the notebook, the two transition clocks, an exact diffusion
-snapshot, one seeded sample path, and the finite consensus products for
-$K_4$ and $Q_3$.  Every displayed number is obtained with exact rational
-arithmetic before a decimal approximation is requested.  The note is not a
-replacement for the full manuscript: its purpose is to place selected
-Mathematica cells and their interpretation in one compilable \TeX{} file.
+This companion note turns the executable notebook of the same name into a
+short transcript.  It records the local pair-averaging calculation, complete graph-of-graphs
+models through $N=8$, two rules for choosing the next graph type, an exact
+71-state diffusion calculation, one seeded 48-step path, and finite consensus
+products for $K_4$ and $Q_3$.  Exact rational arithmetic is used until a
+decimal display is requested.  This is a computational companion, not a
+replacement for the proofs in the full manuscript.
 \end{abstract}
 
 \section{What is being computed}
 
-The state space consists of isomorphism classes of connected cubic
-multigraphs on an even number $N$ of vertices; loops and parallel edges are
-allowed.  A Whitehead move selects a carrier edge, collapses it, and chooses
-one of the two other pairings of the four exposed half-edges.  A scalar field
-$f\in\mathbb R^N$ is carried along with the graph.  If the selected edge has
-endpoints $i,j$, the field update is
+A \emph{cubic multigraph} is a graph in which every vertex has degree three;
+a loop contributes two to the degree, and parallel edges are allowed.  A
+\emph{graph type} is an isomorphism class obtained after vertex labels are
+forgotten.  The \emph{graph of graphs} (GoG) has one vertex for each connected
+graph type and joins two types when one Whitehead move relates them.
+
+A Whitehead move selects a \emph{carrier edge}, meaning a specific edge in a
+chosen representative, collapses it, and chooses one of the two other pairings
+of the four exposed half-edges.  A scalar field $f\in\mathbb R^N$ travels with
+the graph.  If the carrier has endpoints $i,j$, the field update is
 \[
   (f_i,f_j)\longmapsto
   \left(\frac{f_i+f_j}{2},\frac{f_i+f_j}{2}\right).
@@ -111,47 +115,48 @@ endpoints $i,j$, the field update is
 Three computational objects must be kept separate.
 
 \begin{enumerate}
-  \item The \emph{carrier field} uses a concrete edge and, after an
-  unlabelled move, a settlement permutation for its coordinates.
-  \item Rule A is the quotient chain that retains all $3N$ compressed
-  resolution slots, including multiplicity and holding slots.
-  \item Fixed-clock Rule B assigns one of the same $3N$ ticks to each
-  distinct nonself quotient neighbour and turns every unused tick into a
-  hold.  Its jump chain, denoted \texttt{"BJump"} in the code, is Rule B
-  conditioned on moving and is a different Markov chain.
+  \item The carrier field uses the concrete selected edge.  After an
+  unlabelled move, a \emph{settlement permutation} is the relabelling that
+  identifies the result with the stored representative of its graph type; the
+  same permutation acts on the field coordinates.
+  \item Rule A keeps every local \emph{outcome slot}.  A cubic graph has
+  $3N/2$ edges and two resolutions per edge, hence $3N$ slots.  Different
+  slots leading to the same graph type retain their multiplicity.  A slot
+  returning to the current type is a \emph{holding event}.
+  \item Rule B gives one of the $3N$ equally weighted slots to each distinct
+  adjacent graph type and assigns every unused slot to staying put.  Its
+  \emph{jump chain}, denoted \texttt{"BJump"}, is the conditional chain given
+  that the graph type changes.  Removing holds changes path probabilities and
+  elapsed time.
 \end{enumerate}
 
-The notebook's interactive laboratory bundles complete quotient data only for
-$N=2,4,6$.  The larger finite tables in the manuscript come from the Python
-enumeration pipeline and should not be confused with the compact notebook
-resource.
+The notebook bundles every graph type, every one-move connection, and the
+exact transition counts for $N=2,4,6,8$.  The $N=8$ model has 71 states;
+larger data sets can be generated separately.
 
-\section{A visual map of the notebook}
+\section{Notebook map}
 
-The refreshed notebook is deliberately a companion rather than a second copy
-of the paper.  Its seven sections can be read in sequence, but each visual is
-also a useful entry point into one computational question.
+The executable companion is deliberately shorter than the paper.  Its
+computational sections have the following roles.
 
 \begin{center}
 \small
 \begin{tabular}{@{}p{0.27\linewidth}p{0.66\linewidth}@{}}
 \toprule
-Notebook visual & Computational role \\
+Notebook section & Computational role \\
 \midrule
-Visual abstract & Separates the carrier field, the fixed-labelled move graph,
-  the multiplicity chain, and the simple-support chain. \\
-Whitehead move & Shows the selected carrier edge, its four exposed half-edges,
-  and the two compressed resolutions. \\
-Variance drop & Turns one pair average into the exact loss
+Graph of graphs & Shows the five $N=4$ types, then provides a live inspector
+  for the complete $N=2,4,6,8$ models, including all 71 vertices at $N=8$. \\
+Local averaging & Turns one pair average into the exact loss
   $(f_i-f_j)^2/2$. \\
-Consensus schedules & Displays the matching layers that give finite consensus
-  on $K_4$ and $Q_3$. \\
-Transition heat maps & Compares Rule A with fixed-clock Rule B on the same
-  five quotient classes at $N=4$. \\
-Diffusion laboratory & Places exact rational mass and one independently
-  sampled path on the quotient graph. \\
-Enumeration growth & Compares class counts and Rule-A slot records through
-  $N=14$ on a logarithmic scale. \\
+Bundled models & Checks class counts, the GoG edge list, transition-row sums,
+  Rule-B symmetry, and preservation of the uniform distribution. \\
+Five-state example & Displays the complete Rule-A count matrix and Rule-B
+  transition matrix at $N=4$ in exact arithmetic. \\
+Diffusion & Places the exact time-12 distribution and a separate 48-step
+  sample on the 71-state $N=8$ GoG. \\
+Finite-time consensus & Verifies the averaging products for $K_4$ and $Q_3$.
+  \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -187,8 +192,8 @@ FullSimplify[
 \end{lstlisting}
 
 Since the sum of the two coordinates is unchanged, the mean is unchanged as
-well.  Applying the identity to the centered field gives the exact Lyapunov
-law
+well.  Applying the identity to the centered field gives the exact variance
+identity
 \[
   \V(A_{ij}f)=\V(f)-\frac12(f_i-f_j)^2,
   \qquad
@@ -216,20 +221,20 @@ a = pairAverage[4, {1, 3}];
 {True, True, True}
 \end{lstlisting}
 
-A settlement after a quotient move is a permutation matrix $P_\sigma$.
+A settlement after labels are forgotten is a permutation matrix $P_\sigma$.
 Because $P_\sigma$ preserves sums and Euclidean norms, replacing $A_{ij}$ by
 $P_\sigma A_{ij}$ does not change this one-step variance identity.  It does,
-however, affect which persistent coordinate pair is averaged later, so a
-quotient trajectory alone is not enough to reconstruct the full field
-cocycle.
+however, affect which persistent pair of field coordinates is averaged later.
+A list of unlabelled graph types therefore does not contain enough information
+to reconstruct the later field values.
 
 \Needspace{22\baselineskip}
 \section{Loading and validating the notebook models}
 
-From a notebook opened at the repository root, the local companion paclet can
+From a notebook opened at the repository root, the local companion package can
 be loaded as follows.
 
-\mathematicacells{local paclet}
+\mathematicacells{local package}
 \begin{lstlisting}[style=mathematica-input]
 repo = NotebookDirectory[];
 PacletDirectoryLoad[
@@ -241,12 +246,12 @@ GogAvailableSizes[]
 \end{lstlisting}
 
 \begin{lstlisting}[style=mathematica-output]
-{2, 4, 6}
+{2, 4, 6, 8}
 \end{lstlisting}
 
 For each bundled size, the next query records
 \[
-  \{N,\ \text{number of classes},\ \text{support edges},\
+  \{N,\ \text{number of classes},\ \text{GoG edges},\
       \text{total Rule-A slots}\}.
 \]
 
@@ -262,18 +267,21 @@ Table[
 \end{lstlisting}
 
 \begin{lstlisting}[style=mathematica-output]
-{{2, 2, 1, 12}, {4, 5, 4, 60}, {6, 17, 25, 306}}
+{{2, 2, 1, 12}, {4, 5, 4, 60}, {6, 17, 25, 306},
+ {8, 71, 179, 1704}}
 \end{lstlisting}
 
-The class counts $2,5,17$ agree with the corresponding first terms of OEIS
+The class counts $2,5,17,71$ agree with the corresponding terms of OEIS
 A005967.  The last column also passes the independent slot check
 \[
   \#\text{classes}\times 3N:\qquad
-  2\cdot6=12,\quad5\cdot12=60,\quad17\cdot18=306.
+  2\cdot6=12,\quad5\cdot12=60,\quad17\cdot18=306,\quad
+  71\cdot24=1704.
 \]
-The paclet validator checks completeness metadata, node and slot counts,
-support edges, row sums, stochasticity, Rule-B symmetry, and uniform Rule-B
-stationarity.
+The next cell checks that every bundled table is complete, that the node and
+outcome counts agree, and that every transition row sums to one.  It also
+checks Rule-B symmetry and verifies that a uniform starting distribution
+remains uniform after one step.
 
 \mathematicacells{compact validation report}
 \begin{lstlisting}[style=mathematica-input]
@@ -288,7 +296,7 @@ r = GogValidateSmallModels[];
 \end{lstlisting}
 
 \begin{lstlisting}[style=mathematica-output]
-{True, <|2 -> True, 4 -> True, 6 -> True|>}
+{True, <|2 -> True, 4 -> True, 6 -> True, 8 -> True|>}
 \end{lstlisting}
 
 These checks validate the bundled finite data and the implemented matrix
@@ -296,8 +304,9 @@ conventions.  They are not an asymptotic theorem.
 
 \section{An exact five-state example}
 
-At $N=4$ there are five unlabelled carrier classes.  Rule A retains the
-integer multiplicity of every compressed resolution.  Its count matrix is
+At $N=4$ there are five unlabelled graph types.  Rule A counts every local move
+outcome, including repeated outcomes that lead to the same graph type.  Its
+count matrix is
 
 \mathematicacells{Rule-A counts}
 \begin{lstlisting}[style=mathematica-input]
@@ -325,8 +334,9 @@ P_A=
 0&0&1/3&1/6&1/2
 \end{pmatrix}.
 \]
-This matrix is not symmetric.  Solving $\pi_A P_A=\pi_A$ with exact
-arithmetic gives
+This matrix is not symmetric.  A \emph{stationary distribution} is a
+probability row vector $\pi$ satisfying $\pi P=\pi$.  Solving that equation
+for Rule A with exact arithmetic gives
 
 \mathematicacells{Rule-A stationary law}
 \begin{lstlisting}[style=mathematica-input]
@@ -341,15 +351,16 @@ piA/Total[piA]
 {1/5, 2/15, 2/5, 1/15, 1/5}
 \end{lstlisting}
 
-The nonuniform vector is the finite $N=4$ instance of the projected cubic
-configuration-model law.  Treating Rule A as uniform on isomorphism classes
-would therefore change the process.
+The vector is nonuniform because graph types with different numbers of labelled
+realizations receive different weights.  Treating Rule A as uniform on graph
+types would therefore change the process.
 
 \Needspace{22\baselineskip}
-For fixed-clock Rule B, every distinct nonself support neighbour has
-probability $1/12$ and the remaining ticks hold:
+Under Rule B, every different graph type reachable in one move has probability
+$1/12$.  Whatever probability remains is assigned to staying at the current
+graph type:
 
-\mathematicacells{fixed-clock Rule B}
+\mathematicacells{Rule B probabilities at $N=4$}
 \begin{lstlisting}[style=mathematica-input]
 pB = GogTransitionMatrix[4, "B"];
 MatrixForm[pB]
@@ -375,13 +386,31 @@ u = ConstantArray[1/5, 5];
 {True, {1/5, 1/5, 1/5, 1/5, 1/5}}
 \end{lstlisting}
 
-Thus the fixed-clock chain is symmetric and the uniform class law is
-stationary.  It also satisfies
+For a symmetric transition matrix, the \emph{spectral gap} is one minus its
+second-largest eigenvalue.  Here it is exact:
+
+\mathematicacells{Rule-B spectrum and gap}
+\begin{lstlisting}[style=mathematica-input]
+eigenvaluesB = Sort[Eigenvalues[pB], Greater];
+{eigenvaluesB,
+ FullSimplify[1 - eigenvaluesB[[2]]]}
+\end{lstlisting}
+
+\begin{lstlisting}[style=mathematica-output]
+{{1, (21 + Sqrt[5])/24, (19 + Sqrt[5])/24,
+  (21 - Sqrt[5])/24, (19 - Sqrt[5])/24},
+ (3 - Sqrt[5])/24}
+\end{lstlisting}
+
+Thus Rule B with its stay-put steps retained is symmetric, and the uniform
+class law is stationary.  The \emph{support graph} keeps one edge whenever a
+nonself transition is possible and discards transition multiplicities.  If
+$L_{\mathrm{supp}}$ is its graph Laplacian, then
 \[
   I-P_B=\frac{1}{3N}L_{\mathrm{supp}}.
 \]
-Holding cannot simply be discarded.  Already at $N=2$, the fixed clock and
-the chain conditioned on moving are
+Staying in place is part of the random process and cannot simply be discarded.
+Already at $N=2$, Rule B and the chain conditioned on moving are
 
 \mathematicacells{Rule B versus its jump chain}
 \begin{lstlisting}[style=mathematica-input]
@@ -396,14 +425,18 @@ the chain conditioned on moving are
  {{0, 1}, {1, 0}}}
 \end{lstlisting}
 
-The two matrices have the same nonself support, but different clocks,
-spectra, and path probabilities.
+The two matrices allow the same changes to other graph types, but have
+different spectra and path probabilities.  A holding step consumes one Rule-B
+step; the jump chain conditions on such a hold not occurring.
 
 \section{Exact diffusion and a sampled path}
 
-The blue node fill in the notebook laboratory is computed by exact row-vector
-multiplication.  Its default static view uses $N=4$, Rule A, start class $1$,
-and time $t=4$.
+Here \emph{diffusion} means the evolution of a probability distribution over
+graph types.  From a point mass at $G1$,
+\[
+  p_t=e_{G1}^{T}P^t,\qquad p_{t+1}=p_tP,\qquad \sum_g p_t(g)=1.
+\]
+The following five-state calculation keeps every rational entry visible.
 
 \mathematicacells{default exact snapshot}
 \begin{lstlisting}[style=mathematica-input]
@@ -417,8 +450,8 @@ p4A = GogDiffusionState[4, "A", 1, 4];
 \end{lstlisting}
 
 All five classes are reachable by time four, but the mass is far from the
-stationary vector.  Running the same initial condition and time with the
-fixed-clock Rule B gives
+stationary vector.  From the same starting point, Rule B retains much more
+probability at the first class because it more often stays in place:
 
 \mathematicacells{Rule-B comparison}
 \begin{lstlisting}[style=mathematica-input]
@@ -432,55 +465,70 @@ p4B = GogDiffusionState[4, "B", 1, 4];
  {0.542342, 0.227816, 0.198736, 0.00197724, 0.0291281}}
 \end{lstlisting}
 
-The extra holding probability in Rule B is plainly visible: after four ticks,
-more than half of the mass remains at the starting class.  This comparison is
-about two quotient clocks; it does not yet specify a Rule-B lift that chooses
-which concrete carrier edge to average.
+The extra stay-put probability in Rule B is plainly visible: after four steps,
+more than half of the probability remains at the starting graph type.  These
+calculations compare how Rule A and Rule B move probability among graph types.
+They do not yet describe how a scalar field moves under Rule B: when several
+edge moves lead to the same next graph type, one must still say which actual
+edge is averaged.
 
-The orange ring and trail in the notebook show one random realization, not an
-estimate of the blue distribution.  With the notebook's default seed, the
-native sampler returns
+The notebook then repeats the calculation on the complete $N=8$ GoG.  Blue
+encodes the exact time-12 distribution on all 71 graph types; the orange trail
+is a separate 48-step sample and is not used to estimate the blue values.
 
-\mathematicacells{one reproducible trajectory}
+\mathematicacells{71-state diffusion and path summary}
 \begin{lstlisting}[style=mathematica-input]
-GogRandomTrajectory[4, "A", 1, 12, 2026]
+p8A = GogDiffusionState[8, "A", 1, 12];
+path8 = GogRandomTrajectory[8, "A", 1, 48, 273];
+
+{
+  {Length[p8A], Count[p8A, _?Positive], Total[p8A],
+   N[Max[p8A], 7]},
+  {Length[path8] - 1, Length[DeleteDuplicates[path8]],
+   Count[Partition[path8, 2, 1], {x_, x_}]}
+}
 \end{lstlisting}
 
 \begin{lstlisting}[style=mathematica-output]
-{1, 3, 1, 3, 3, 3, 3, 5, 3, 1, 2, 2, 1}
+{{71, 71, 1, 0.06504625}, {48, 27, 13}}
 \end{lstlisting}
 
-Repeated class labels are genuine holding events.  Rule-A multiplicity is
-retained because the sampler chooses from the exact transition matrix (and
-the optional SetReplace engine repeats rewrite rules according to the same
-integer count matrix).
+Thus every $N=8$ graph type has positive mass by time 12.  The sample visits
+27 distinct types; its 13 repeated consecutive labels are genuine holding
+events.  Rule-A multiplicity is retained because sampling uses the exact
+integer count matrix.
 
 \Needspace{30\baselineskip}
-\section{Finite consensus words}
+\section{Finite-time consensus}
 
-Pair averages on disjoint edges commute, so a perfect matching can be treated
-as one block.  The notebook visualizes two such blocks on $K_4$ and three
-coordinate matchings on the cube $Q_3$.  The following exact calculation
-checks that the corresponding products are the consensus matrices
-$J_4=\one\one^T/4$ and $J_8=\one\one^T/8$.
+\emph{Consensus} means that every field coordinate equals the arithmetic mean
+of the initial field: $f\mapsto \bar f\one$.  \emph{Finite-time consensus}
+means that a finite product of pair-averaging matrices equals
+\[
+  J_N=\frac1N\one\one^T,\qquad J_Nf=\bar f\one.
+\]
+A \emph{perfect matching} is a set of disjoint pairs covering all $N$
+coordinates.  Pair averages within one perfect matching commute, so the
+matching can be treated as one block.  The following calculation checks two
+blocks on $K_4$ and three coordinate matchings on the cube $Q_3$.
 
 \mathematicacells{matching products}
 \begin{lstlisting}[style=mathematica-input]
 matching[n_, edges_] :=
   Dot @@ (pairAverage[n, #] & /@ edges);
 
-k4Word =
+k4Product =
   matching[4, {{1, 3}, {2, 4}}] .
   matching[4, {{1, 2}, {3, 4}}];
 
-q3Word =
+q3Product =
   matching[8, {{1, 5}, {2, 6}, {3, 7}, {4, 8}}] .
   matching[8, {{1, 3}, {2, 4}, {5, 7}, {6, 8}}] .
   matching[8, {{1, 2}, {3, 4}, {5, 6}, {7, 8}}];
 
 {
-  k4Word === ConstantArray[1/4, {4, 4}],
-  q3Word === ConstantArray[1/8, {8, 8}]
+  k4Product === ConstantArray[1/4, {4, 4}],
+  q3Product === ConstantArray[1/8, {8, 8}]
 }
 \end{lstlisting}
 
@@ -492,7 +540,7 @@ For example, the first product is returned exactly as
 
 \mathematicacells{the $K_4$ product}
 \begin{lstlisting}[style=mathematica-input]
-k4Word // MatrixForm
+k4Product // MatrixForm
 \end{lstlisting}
 
 \begin{lstlisting}[style=mathematica-output]
@@ -505,88 +553,13 @@ k4Word // MatrixForm
 Consequently every initial field reaches its exact mean after the displayed
 schedule.  This is stronger than exponential convergence, and it explains
 the exceptional finite-time consensus at $N=4$ and $N=8$.  It should not be
-extrapolated to arbitrary $N$: pair averaging has a dyadic denominator
-obstruction, and a three-coordinate field such as $(0,0,1)$ cannot reach its
-mean exactly after a finite word of pair averages.
-
-\section{Interpretation limits}
-
-The transcript supports several precise conclusions:
-
-\begin{itemize}
-  \item pair averaging is an orthogonal projection with exact variance loss;
-  \item each Rule-A row contains exactly $3N$ resolution slots;
-  \item the $N=4$ Rule-A class law is nonuniform;
-  \item fixed-clock Rule B is symmetric and has uniform class stationarity;
-  \item the interactive diffusion is exact rational matrix evolution; and
-  \item the $K_4$ and $Q_3$ schedules are exact finite consensus words.
-\end{itemize}
-
-There are also three important non-conclusions.
-
-\begin{enumerate}
-  \item The bundled quotient model omits selected carrier edges, resolution
-  identifiers, and settlement permutations.  It therefore cannot by itself
-  produce a pathwise transported field or its Lyapunov exponent.
-  \item A single sampled trajectory does not approximate the exact
-  distribution.  The notebook deliberately renders them as separate layers.
-  \item Complete finite checks, whether through $N=6$ in the notebook or
-  through $N=14$ in the enumeration scripts, do not establish an asymptotic
-  spectral or mixing statement.
-\end{enumerate}
-
-These boundaries are useful when reading the graphics: the notebook is an
-exact laboratory for the specified finite quotient chains, not a substitute
-for the manuscript's proofs or for a fully specified field lift.
-
-\Needspace{18\baselineskip}
-\section{Reproduction}
-
-The displayed transcript was regenerated on September 21, 2026 with Wolfram
-15.0.0 for macOS ARM (kernel build dated May 19, 2026).
-
-The deterministic command-line transcript is produced by
-\path{scripts/notebook_report_outputs.wls}:
-
-\begin{lstlisting}[style=mathematica-input,title={Reproduction command: cell transcript}]
-/Applications/Wolfram.app/Contents/MacOS/WolframKernel \
-  -noinit -noprompt \
-  -script scripts/notebook_report_outputs.wls
-\end{lstlisting}
-
-The compact data resource can be regenerated and byte-checked without a
-Wolfram installation:
-
-\begin{lstlisting}[style=mathematica-input,title={Reproduction command: data check}]
-python3 scripts/build_small_gog_models.py --check
-\end{lstlisting}
-
-Compile this note from the repository root with
-
-\begin{lstlisting}[style=mathematica-input,title={Reproduction command: TeX build}]
-latexmk -pdf -interaction=nonstopmode -halt-on-error \
-  whitehead-field-dynamics-computational-notes.tex
-\end{lstlisting}
-
-Build and test the executable mini-notebook version with
-
-\begin{lstlisting}[style=mathematica-input,title={Reproduction command: executable mini-notebook}]
-make computational-notes-notebook
-make computational-notes-notebook-check
-\end{lstlisting}
-
-Then open {\small\path{whitehead-field-dynamics-computational-notes.nb}} and choose
-\texttt{Evaluation > Evaluate Notebook}.  A complete successful run ends with
-\texttt{AllTestsPassed -> True} in the final Mathematica output cell.
-
-For the compact executable companion, its seven native graphics, and the
-playable diffusion panel, open \path{whitehead-field-dynamics.nb}.
-
-Mathematical proofs remain in \path{whitehead-field-dynamics.tex}.  The
-complete claim-status distinctions remain in \path{docs/status.rst}.
+extrapolated to arbitrary $N$: every entry of a finite product of pair averages
+has denominator a power of two, whereas the mean of $(0,0,1)$ requires the
+factor $1/3$.
 
 \begingroup
-\small
+\footnotesize
+\setlength{\parskip}{0pt}
 \begin{thebibliography}{9}
 
 \bibitem{gdp-kolpakov}

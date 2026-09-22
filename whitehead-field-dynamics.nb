@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       154,          7]
-NotebookDataLength[    232441,       5265]
-NotebookOptionsPosition[    204207,       4795]
-NotebookOutlinePosition[    224377,       5136]
-CellTagsIndexPosition[    222193,       5078]
+NotebookDataLength[    250600,       5602]
+NotebookOptionsPosition[    222366,       5132]
+NotebookOutlinePosition[    242536,       5473]
+CellTagsIndexPosition[    240352,       5415]
 WindowTitle->Whitehead Field Dynamics \:2014 Computational Companion
 WindowFrame->Normal*)
 
@@ -109,18 +109,17 @@ Cell[TextData[{
   Evaluator->Automatic,
   Method->"Preemptive",
   ButtonFunction:>NotebookFind[
-    InputNotebook[], "Finite consensus schedules", All, CellStyle -> 
-    "Section"]],
+    InputNotebook[], "Finite-time consensus", All, CellStyle -> "Section"]],
  StyleBox["   \[Bullet]   ",
   FontColor->RGBColor[0.82, 0.85, 0.88]],
- ButtonBox["CLOCKS",
+ ButtonBox["TRANSITIONS",
   BaseStyle->{
    "Hyperlink", FontFamily -> "Helvetica", FontWeight -> "Bold", FontColor -> 
     RGBColor[0., 0.45, 0.7]},
   Evaluator->Automatic,
   Method->"Preemptive",
   ButtonFunction:>NotebookFind[
-    InputNotebook[], "Exact quotient clocks", All, CellStyle -> "Section"]],
+    InputNotebook[], "Transition probabilities", All, CellStyle -> "Section"]],
  StyleBox["   \[Bullet]   ",
   FontColor->RGBColor[0.82, 0.85, 0.88]],
  ButtonBox["DIFFUSION",
@@ -1298,8 +1297,8 @@ Cell[BoxData[
        "Grid"]},
      {
       StyleBox["\<\"Rule A retains every resolution slot and its \
-multiplicity.\\nRule B gives each distinct target one tick and uses the rest \
-to hold.\"\>",
+multiplicity.\\nRule B gives each distinct target probability 1/(3N); the \
+rest stays put.\"\>",
        StripOnInput->False,
        TextAlignment->Center,
        LineColor->RGBColor[0.37, 0.42, 0.49],
@@ -1686,7 +1685,7 @@ Cell[BoxData[
 
 Cell[CellGroupData[{
 
-Cell["Finite consensus schedules", "Section",
+Cell["Finite-time consensus", "Section",
  TaggingRules-><|
   "GoGNotebook" -> <|"Companion" -> True, "ID" -> "GoGSectionConsensus"|>|>,
  FontSlant->Plain,
@@ -1696,9 +1695,10 @@ Cell["Finite consensus schedules", "Section",
 99168a43e09c"],
 
 Cell["\<\
-A perfect matching is a commuting block of pair projections.  Two transverse \
-matchings on K4 and three coordinate matchings on Q3 produce exact consensus \
-in finitely many stages.\
+Consensus means that every field coordinate equals the arithmetic mean of the \
+initial field.  Finite-time consensus means that a finite product of \
+pair-averaging matrices equals J_N.  Two matchings on K4 and three coordinate \
+matchings on Q3 give explicit examples.\
 \>", "Text",
  TaggingRules-><|
   "GoGNotebook" -> <|"Companion" -> True, "ID" -> "GoGConsensusText"|>|>,
@@ -2265,7 +2265,7 @@ c977631fd601"]
 
 Cell[CellGroupData[{
 
-Cell["Exact quotient clocks", "Section",
+Cell["Transition probabilities", "Section",
  TaggingRules-><|
   "GoGNotebook" -> <|"Companion" -> True, "ID" -> "GoGSectionClocks"|>|>,
  FontSlant->Plain,
@@ -2274,9 +2274,9 @@ Cell["Exact quotient clocks", "Section",
    "GoGSectionClocks"},ExpressionUUID->"508355fc-74dc-dd7e-43ce-dbb0e05a6f13"],
 
 Cell["\<\
-The bundled complete models have N=2,4,6.  Rule A keeps all 3N resolution \
-slots and their multiplicities.  Fixed-clock Rule B gives one tick to each \
-distinct nonself target and converts unused ticks into holding probability.\
+The bundled complete models have N=2,4,6,8.  Rule A keeps all 3N move \
+outcomes and their multiplicities.  Rule B gives each distinct nonself target \
+probability 1/(3N) and assigns the remaining probability to staying put.\
 \>", "Text",
  TaggingRules-><|
   "GoGNotebook" -> <|"Companion" -> True, "ID" -> "GoGClockText"|>|>,
@@ -2345,7 +2345,7 @@ Cell[BoxData[
   RowBox[{
    RowBox[{"\<\"AvailableSizes\"\>", "\[Rule]", 
     RowBox[{"{", 
-     RowBox[{"2", ",", "4", ",", "6"}], "}"}]}], ",", 
+     RowBox[{"2", ",", "4", ",", "6", ",", "8"}], "}"}]}], ",", 
    RowBox[{"\<\"ModelsValid\"\>", "\[Rule]", "True"}]}], 
   "\[RightAssociation]"}]], "Output",
  CellFrame->True,
@@ -2367,7 +2367,7 @@ Cell[BoxData[
  FrameBox[
   TagBox[GridBox[{
      {
-      StyleBox["\<\"THE SAME SUPPORT, TWO DIFFERENT CLOCKS\"\>",
+      StyleBox["\<\"THE SAME MOVES, DIFFERENT PROBABILITIES\"\>",
        StripOnInput->False,
        LineColor->RGBColor[0.075, 0.13, 0.22],
        FrontFaceColor->RGBColor[0.075, 0.13, 0.22],
@@ -2446,8 +2446,8 @@ VHFS7QUAj6YvMg==
                  "DefaultPlotStyle" -> Automatic}]},
              {
               
-              StyleBox["\<\"slot multiplicity retained\\nnonuniform class law\
-\"\>",
+              StyleBox["\<\"repeated outcomes retain extra \
+weight\\nnonuniform stationary law\"\>",
                StripOnInput->False,
                TextAlignment->Center,
                LineColor->RGBColor[0.37, 0.42, 0.49],
@@ -2528,7 +2528,9 @@ c4DNX2s/OR5kw32o+HOS3YnLfFLdT6q9uNxPrfDB5X5qhQ8ucQDLminr
                     "placement" -> {"x" -> "All", "y" -> "None"}}}}, 
                  "DefaultPlotStyle" -> Automatic}]},
              {
-              StyleBox["\<\"one tick per neighbour\\nuniform class law\"\>",
+              
+              StyleBox["\<\"equal weight per distinct neighbour\\nuniform \
+stationary law\"\>",
                StripOnInput->False,
                TextAlignment->Center,
                LineColor->RGBColor[0.37, 0.42, 0.49],
@@ -2633,7 +2635,7 @@ c4DNX2s/OR5kw32o+HOS3YnLfFLdT6q9uNxPrfDB5X5qhQ8ucQDLminr
 
 Cell["\<\
 Exact N=4 transition matrices shown as heat maps.  Rule A is not symmetric; \
-fixed-clock Rule B is symmetric and has the uniform class law.\
+Rule B is symmetric and has the uniform stationary law.\
 \>", "Caption",
  ShowCellBracket->False,
  CellMargins->{{72, 72}, {2, 18}},
@@ -2651,7 +2653,7 @@ Cell[TextData[{
  StyleBox["MATHEMATICA CELLS  \[CenterDot]  ",
   FontWeight->"Bold",
   FontColor->RGBColor[0., 0.45, 0.7]],
- "clock checks"
+ "matrix checks"
 }], "Text",
  ShowCellBracket->False,
  CellMargins->{{48, 48}, {10, 3}},
@@ -2743,9 +2745,9 @@ Cell["Diffusion laboratory", "Section",
 eeb1567fed9a"],
 
 Cell["\<\
-Blue fill is the exact rational distribution after t quotient steps.  The \
-orange trail is one independently sampled path.  Change N, the clock, the \
-starting class, or the seed and then play the time control.\
+Blue fill is the exact rational distribution after t graph-type steps.  The \
+orange trail is one independently sampled path.  Change N, the rule, the \
+starting graph type, or the seed and then play the time control.\
 \>", "Text",
  TaggingRules-><|
   "GoGNotebook" -> <|"Companion" -> True, "ID" -> "GoGDiffusionText"|>|>,
@@ -2775,8 +2777,7 @@ Cell[BoxData[
               RGBColor[0.075, 0.13, 0.22], FontFamily -> "Helvetica", 
               StripOnInput -> False]}, {
              StyleBox[
-             "\"exact quotient law + executable singleton-hypergraph path\"", 
-              8, 
+             "\"exact graph-type probabilities and one sampled path\"", 8, 
               RGBColor[0.37, 0.42, 0.49], FontFamily -> "Helvetica", 
               StripOnInput -> False]}}, 
            GridBoxAlignment -> {"Columns" -> {{Left}}}, DefaultBaseStyle -> 
@@ -2787,7 +2788,7 @@ Cell[BoxData[
             "Columns" -> {{Automatic}}, "Rows" -> {{0.08}}}], "Column"], 
          TemplateBox[{15}, "Spacer1"], 
          FrameBox[
-          StyleBox["\"NATIVE WOLFRAM LAB\"", 7, Bold, 
+          StyleBox["\"INTERACTIVE\"", 7, Bold, 
            GrayLevel[1], FontFamily -> "Helvetica", StripOnInput -> False], 
           Background -> RGBColor[0., 0.45, 0.7], FrameStyle -> None, 
           FrameMargins -> {{7, 7}, {3, 3}}, StripOnInput -> False]},
@@ -2841,7 +2842,15 @@ Cell[BoxData[
                    GogFieldDynamics`Private`start$$ = 1; 
                    GogFieldDynamics`Private`step$$ = 0; 
                    GogFieldDynamics`Private`signature$$ = None)& ], {
-                  6}, "\<\"N=6\"\>"]}
+                  6}, "\<\"N=6\"\>"], 
+                 
+                 SetterBox[Dynamic[
+                  GogFieldDynamics`Private`n$$, (
+                   GogFieldDynamics`Private`n$$ = #; 
+                   GogFieldDynamics`Private`start$$ = 1; 
+                   GogFieldDynamics`Private`step$$ = 0; 
+                   GogFieldDynamics`Private`signature$$ = None)& ], {
+                  8}, "\<\"N=8\"\>"]}
                },
                BaselinePosition->{1, 1},
                GridBoxSpacings->{"Columns" -> {
@@ -2858,7 +2867,7 @@ Cell[BoxData[
                GogFieldDynamics`Private`start$$ = 1; 
                GogFieldDynamics`Private`step$$ = 0; 
                GogFieldDynamics`Private`signature$$ = None)& ], {
-              2 -> "N=2", 4 -> "N=4", 6 -> "N=6"}]], 
+              2 -> "N=2", 4 -> "N=4", 6 -> "N=6", 8 -> "N=8"}]], 
             StyleBox["\<\"CHAIN\"\>",
              StripOnInput->False,
              LineColor->RGBColor[0.37, 0.42, 0.49],
@@ -2885,7 +2894,7 @@ Cell[BoxData[
                    GogFieldDynamics`Private`rule$$ = #; 
                    GogFieldDynamics`Private`step$$ = 0; 
                    GogFieldDynamics`Private`signature$$ = None)& ], {
-                  "B"}, "\<\"Rule B \[CenterDot] fixed clock\"\>"]}
+                  "B"}, "\<\"Rule B \[CenterDot] stay-put steps\"\>"]}
                },
                BaselinePosition->{1, 1},
                GridBoxSpacings->{"Columns" -> {
@@ -2902,7 +2911,7 @@ Cell[BoxData[
                GogFieldDynamics`Private`rule$$ = #; 
                GogFieldDynamics`Private`step$$ = 0; 
                GogFieldDynamics`Private`signature$$ = None)& ], {
-              "A" -> "Rule A", "B" -> "Rule B \[CenterDot] fixed clock"}]]},
+              "A" -> "Rule A", "B" -> "Rule B \[CenterDot] stay-put steps"}]]},
            {
             StyleBox["\<\"START CLASS\"\>",
              StripOnInput->False,
@@ -3134,8 +3143,8 @@ Cell[BoxData[
        "N" -> GogFieldDynamics`Private`n|>], 
      TagSet[GogFieldDynamics`GogSmallModel, 
       MessageName[GogFieldDynamics`GogSmallModel, "usage"], 
-      "GogSmallModel[n] returns canonical classes, support edges, and exact \
-Rule-A slot counts for the complete n-vertex quotient."], 
+      "GogSmallModel[n] returns stored graph types, their connections, and \
+exact Rule-A outcome counts for the complete n-vertex model."], 
      GogFieldDynamics`Private`$smallModelCache = <|
       "2" -> <|"N" -> 2, "Complete" -> True, "CanonicalBackend" -> "python", 
          "Nodes" -> {"0,3,0", "1,1,1"}, "NodeCount" -> 2, "ExpectedNodeCount" -> 
@@ -3189,7 +3198,122 @@ Rule-A slot counts for the complete n-vertex quotient."],
           4, 2, 0, 11, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 
           10, 4, 2}, {0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 2, 10, 0}, {0,
            0, 0, 0, 0, 2, 0, 4, 0, 2, 0, 0, 0, 0, 2, 0, 8}}, "RuleARowSum" -> 
-         18, "RuleASlotCount" -> 306, "ExpectedRuleASlotCount" -> 306|>|>, 
+         18, "RuleASlotCount" -> 306, "ExpectedRuleASlotCount" -> 306|>, 
+       "8" -> <|"N" -> 8, "Complete" -> True, "CanonicalBackend" -> "python", 
+         "Nodes" -> {
+          "0,0,0,0,0,0,1,2,0,0,0,0,1,2,0,0,0,1,2,0,0,0,2,0,0,1,0,0,0,0,0,0,0,\
+0,0,0", "0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,0,1,1,0,0,1,0,1,0,1,0,0,1,0,0,0,0,0,0,\
+0,0", "0,0,0,0,0,1,1,1,0,0,0,1,0,1,1,0,0,1,1,0,1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,\
+0", "0,0,0,0,0,1,1,1,0,0,0,1,0,1,1,0,1,0,1,0,1,0,1,0,1,0,0,1,0,0,0,0,0,0,0,0",
+            "0,0,0,0,0,1,1,1,0,0,0,1,0,1,1,0,1,0,1,0,1,0,1,1,0,0,0,0,1,0,0,0,\
+0,0,0,0", 
+           "0,0,0,0,0,1,1,1,0,0,0,1,0,1,1,0,1,1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,\
+0,1,0", "0,0,0,0,0,1,1,1,0,1,1,1,0,0,0,0,0,0,0,0,2,0,0,0,2,0,0,2,0,0,0,0,0,0,\
+0,0", "0,0,0,0,0,1,1,1,0,1,1,1,0,0,0,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0,0,2,0,0,0,\
+0", "0,0,0,0,1,1,0,1,0,1,1,0,0,1,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,1,0,1",
+            "0,0,1,0,0,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,1,0,0,0,2,0,0,2,0,0,0,0,\
+0,0,0,1", 
+           "0,0,1,0,0,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,1,0,2,0,0,0,0,0,0,0,0,2,0,\
+0,0,1", "0,0,1,1,0,0,0,1,0,1,1,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,2,0,2,0,0,\
+0,0", "0,0,1,1,0,0,0,1,0,1,1,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,0,2,0,0,0,0,0,0,2,\
+0", "0,0,1,1,0,0,0,1,0,1,1,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,1",
+            "0,0,1,1,0,1,0,0,0,1,1,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,1,\
+0,0,2,0", 
+           "0,0,1,1,0,1,0,0,0,1,1,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,1,0,\
+1,0,1", "0,0,1,1,0,1,0,0,0,1,1,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0,0,\
+1,1", "0,0,1,1,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,2,0,0,0,0,0,1,0,\
+1", "0,0,1,1,0,1,0,0,0,1,1,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,1,0,0,2,0",
+            "0,0,1,1,0,1,0,0,0,1,1,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,1,\
+0,1,0,1", 
+           "0,0,1,1,0,1,0,0,0,1,1,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,1,0,\
+0,1,1", "0,0,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,1,0,0,1,\
+0,1", "0,0,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,2,0,0,0,\
+1", "0,1,0,1,0,0,0,1,0,1,0,0,0,1,0,0,0,0,2,0,0,0,2,0,0,0,0,1,0,0,0,0,0,1,0,1",
+            "0,1,0,1,0,1,0,0,0,1,0,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,2,0,0,0,0,\
+0,1,0,1", 
+           "0,1,0,1,0,1,0,0,0,1,0,1,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,0,\
+0,1,0", "0,1,0,1,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,1,0,2,0,0,\
+0,1", "0,1,1,0,0,0,0,1,0,0,0,2,0,0,0,0,2,0,0,0,0,0,0,0,1,0,0,1,0,0,0,2,0,0,0,\
+1", "0,1,1,0,0,1,0,0,0,0,0,1,0,0,1,0,1,0,0,1,0,0,2,0,0,0,0,0,0,0,1,0,0,1,0,1",
+            "0,1,1,0,0,1,0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0,0,0,0,1,0,0,1,0,1,0,\
+0,1,0,1", 
+           "0,1,1,0,0,1,0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,\
+1,0,1", "0,1,1,0,1,0,0,0,0,0,1,0,1,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,\
+0,1", "0,1,1,0,1,0,0,0,0,0,2,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,1,0,0,0,1,0,0,1,0,\
+1", "0,1,1,0,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,2,0,0,2,0,0,0,1,0,0,0,1",
+            "0,1,1,0,1,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,1,0,1,0,\
+0,1,0,1", 
+           "0,1,1,0,1,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,2,0,0,0,0,0,0,0,0,1,1,\
+1,0,1", "0,1,1,0,1,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,2,0,0,0,0,0,0,0,0,2,0,0,\
+1,1", "0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,0,0,1,0,0,0,0,1,0,0,0,1,0,0,1,0,\
+1", "0,1,1,1,0,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0,0,2,0,0,1,0,0,0,0,0,0,1,1",
+            "0,1,1,1,0,0,0,0,0,0,0,1,0,1,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,0,0,0,\
+1,1,0,1", 
+           "0,1,1,1,0,0,0,0,0,0,0,1,0,1,0,0,2,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,1,\
+1,0,1", "0,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,2,0,0,2,0,0,0,0,0,0,\
+0,1", "0,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,2,0,0,0,0,0,0,0,0,2,0,0,0,\
+1", "0,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,2,0,0,0,0,0,1,0,1",
+            "0,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,\
+0,0,1,0", 
+           "0,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,\
+1,0,1", "0,1,1,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,2,0,0,0,0,0,0,1,1,0,0,1,\
+0,1", "0,1,1,1,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0,2,0,2,0,0,0,\
+0", "0,1,1,1,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,1,0,2,0,0,0,0,0,0,2,0",
+            "0,1,1,1,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,1,1,0,0,0,1,0,\
+0,1,0,1", 
+           "0,1,1,1,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,0,1,0,1,0,\
+0,2,0", "0,1,1,1,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,0,1,0,1,0,1,\
+0,1", "0,1,1,1,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,1,0,0,1,0,0,1,\
+1", "0,1,1,1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,1,0,2,0,0,0,0,0,1,0,1",
+            "0,1,1,1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1,0,0,0,1,0,1,0,0,0,0,1,0,2,\
+0,0,0,1", 
+           "0,1,1,1,0,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,1,0,2,0,\
+0,0,1", "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,2,0,2,0,0,\
+1,0", "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,1,0,1,0,0,2,\
+0", "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,1,0,1,0,1,0,1",
+            "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,1,0,0,1,\
+0,0,1,1", 
+           "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,2,0,0,0,0,1,\
+1,0,1", "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,1,0,2,0,0,\
+0,1", "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,1,1,0,0,1,0,\
+1", "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,1,0,2,0",
+            
+           "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,1,\
+1,0,1", "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,2,0,0,\
+1,1", "0,1,1,1,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,1,0,0,0,1,1,1,0,\
+1", "0,1,1,1,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,1,0,0,0,2,0,0,1,1",
+            "0,1,2,0,0,0,0,0,0,0,0,2,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,\
+0,1,0,1", 
+           "0,2,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,1,0,0,0,1,0,0,\
+1,0,1", "0,2,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,1,0,1,0,1,\
+0,1"}, "NodeCount" -> 71, "ExpectedNodeCount" -> 71, 
+         "Edges" -> CompressedData["
+1:eJwVxUd2glAAAEAbVmwU6dKlS/+fjlJ0nyN4gRwuF0yymDfy5/vrM5tMJj9/
+/p/y03y2mCGz43wxRxYIskRwJF7my2K1XQXr3TpcDxt+I2zAFts6W7izdja6
+Rzk0QEO02FP7YB8fhEN0PB/xY3wiTtQpOZPnFLtgDJZgACfxAI/xnOCIhABE
+TaYkJJuLSnFUSkGapwVapAFdMiqjMQ7jMoApWYV1WI8N2JwtOJ1zOMhlXMUr
+fCNIgnqVr9bVv75FSdREQ3xKpnSXIqmVb/JdjuRRMRSgQKVSfRWoraZrrfbU
+et3QQ73WO324vQzT8IzOtEzb9E1g1pZr3a3BdmzX9uzMAQ50Gtd3ey/0Hvfe
+j/wxiAMYZuEjesVpXCQggUmZwrSCTVZnQ94UVfEom/JZNVVXt/W7HR/ds+uH
+fhze42t8/wIg0zku
+          "], "EdgeCount" -> 179, "RuleACounts" -> CompressedData["
+1:eJytWFl63DAIFoTP8TKTniGn6XuPkAv0/m8da7GQzJa2JBMvwM8vBJImn1+/
+f31hSuln/axJFUN1V76l5cEe/l4eD9/GlZVW+g8wBHAAf4Geg6rYvx8dpQlY
+8m9AnDR++IMpIgyJvxI4kpoFraKwD0rPYAznQ/N3qM2yjNkR/fCyUVuFBbRG
+ZrZalmk6RQclwvAaXz9eEiIdSOVjQvk4mOf9X/g03yWjWVCkKPvbczpXqy2o
+NY3dOqd2n8FvNtSNVRt0K2MJ4CxpWjS+vcTihV/nXREKVHKRLeXmAFlLNahN
+6ZQeDysWwWgTa/n3EfZ0A+ZLKhnsVxz4wIjXGHI6OF2v0A3H4n7X4YiVDXav
+LYKydxAyqWmJavPlLhyBbenVGNtABma/2ICptgKfByG8xQirdms0OHygjNNV
+OcWOt2Yr6OnZRGp/NyvBat+NQOfNxvjjbOHiZMmlbO/Lfpaw1vGq5zR0nqlG
+uAHvFra4RWBZSh69BGxHM1OYDkRmr07ehDI4Zf3KlQ4YCz89U3rK+bTnG6cH
+KvsgGVYGWLPL7mL9+Eh9kqncHKIXDDcAPa4W5N3eCm8L0o1UvR7jq2AFTtsR
+XTg3Eh0S8tcypwzTNu8igry9ULzGP84icnEKlkXo0PmwSTvVcD2XygG+jKUt
+qcIIlFaGG35lgBdOZN0TdvX+9snugceY7Z3u3QQbaYNWCVezlY9cEzCP11nK
+OcFND6ms6vq+23xu9SAccrLNcZmKWCjqxjMasnn3hfj3wrvy0LnoMpwbC/iP
+0DIKKakVVPyf8aOhstuXxnhGUfriJw7gwZY2c4TCWY09ln05SEWOVgLsGEsQ
+9xY8Vuf/Pw7XthZQ2v8ANl4I3w==
+          "], "RuleARowSum" -> 24, "RuleASlotCount" -> 1704, 
+         "ExpectedRuleASlotCount" -> 1704|>|>, 
      GogFieldDynamics`Private`loadSmallModelData[] := 
      Module[{GogFieldDynamics`Private`imported}, If[
          AssociationQ[GogFieldDynamics`Private`$smallModelData], 
@@ -3268,9 +3392,179 @@ interactive Wolfram article; edge indices are zero-based.", "generator" ->
              0, 0, 0, 0, 0, 0, 1, 0, 4, 2, 0, 11, 0, 0, 0}, {0, 0, 0, 0, 0, 0,
              2, 0, 0, 0, 0, 0, 0, 0, 10, 4, 2}, {0, 0, 0, 0, 2, 0, 0, 2, 0, 0,
              2, 0, 0, 0, 2, 10, 0}, {0, 0, 0, 0, 0, 2, 0, 4, 0, 2, 0, 0, 0, 0,
-             2, 0, 8}}, "rule_a_row_sum" -> 18, "rule_a_slot_count" -> 
-           306|>|>, "schema_version" -> 1|>, 
-     GogFieldDynamics`Private`$smallModelFile = 
+             2, 0, 8}}, "rule_a_row_sum" -> 18, "rule_a_slot_count" -> 306|>, 
+         "8" -> <|"N" -> 8, "complete" -> True, "edge_count" -> 179, 
+           "edges" -> CompressedData["
+1:eJwVxdd1glAAAFBUrNgo0qVLl/4eHaXoABnBBTJcFkzycc9VP99fnzmCID9/
+/kcEpJgtZujsOF/M0QWKLlECTZbFslxtV+F6t47W40bYiBuwxbfuFu7snYPt
+MR4LsQgr9/Q+3CcH8RAfz0fimJzIE31Kz9Q5wy84i6c4ICgiJBKiIHkyJQHZ
+UBkFqfai0Tyd0ZARGJGRGMBUrMbqrMt6LGArTuVczudCruBK3uBdHvI5Xwuq
+0IqyqF2Vq30Nrm9JlnTJlJ6yJd/lWO6Um3JXYmVSTRWoUK21QANapxt6pz/1
+wTCNyGiM3hhvL9MyfbO3bMuxAgtYje3Zd3t0XMdzfCd3gQvd1gu8wY/8x30I
+4mAKkxBGefSIX0mWlClIYVplMKthmzf5WLRlXT6qtnrWbd03XfPupkf/7Idx
+mMb39JrevyW/N8g=
+            "], "expected_node_count_A005967" -> 71, 
+           "expected_rule_a_slot_count" -> 1704, "node_count" -> 71, 
+           "nodes" -> {
+            "0,0,0,0,0,0,1,2,0,0,0,0,1,2,0,0,0,1,2,0,0,0,2,0,0,1,0,0,0,0,0,0,\
+0,0,0,0", 
+             "0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,0,1,1,0,0,1,0,1,0,1,0,0,1,0,0,0,0,\
+0,0,0,0", 
+             "0,0,0,0,0,1,1,1,0,0,0,1,0,1,1,0,0,1,1,0,1,0,1,1,1,0,0,0,0,0,0,0,\
+0,0,0,0", 
+             "0,0,0,0,0,1,1,1,0,0,0,1,0,1,1,0,1,0,1,0,1,0,1,0,1,0,0,1,0,0,0,0,\
+0,0,0,0", 
+             "0,0,0,0,0,1,1,1,0,0,0,1,0,1,1,0,1,0,1,0,1,0,1,1,0,0,0,0,1,0,0,0,\
+0,0,0,0", 
+             "0,0,0,0,0,1,1,1,0,0,0,1,0,1,1,0,1,1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,\
+0,0,1,0", 
+             "0,0,0,0,0,1,1,1,0,1,1,1,0,0,0,0,0,0,0,0,2,0,0,0,2,0,0,2,0,0,0,0,\
+0,0,0,0", 
+             "0,0,0,0,0,1,1,1,0,1,1,1,0,0,0,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0,0,2,\
+0,0,0,0", 
+             "0,0,0,0,1,1,0,1,0,1,1,0,0,1,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,\
+0,1,0,1", 
+             "0,0,1,0,0,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,1,0,0,0,2,0,0,2,0,0,0,0,\
+0,0,0,1", 
+             "0,0,1,0,0,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,1,0,2,0,0,0,0,0,0,0,0,2,\
+0,0,0,1", 
+             "0,0,1,1,0,0,0,1,0,1,1,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,2,0,2,\
+0,0,0,0", 
+             "0,0,1,1,0,0,0,1,0,1,1,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,0,2,0,0,0,0,\
+0,0,2,0", 
+             "0,0,1,1,0,0,0,1,0,1,1,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,\
+0,1,0,1", 
+             "0,0,1,1,0,1,0,0,0,1,1,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,1,\
+0,0,2,0", 
+             "0,0,1,1,0,1,0,0,0,1,1,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,1,\
+0,1,0,1", 
+             "0,0,1,1,0,1,0,0,0,1,1,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,1,\
+0,0,1,1", 
+             "0,0,1,1,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,2,0,0,0,0,\
+0,1,0,1", 
+             "0,0,1,1,0,1,0,0,0,1,1,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,1,\
+0,0,2,0", 
+             "0,0,1,1,0,1,0,0,0,1,1,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,1,\
+0,1,0,1", 
+             "0,0,1,1,0,1,0,0,0,1,1,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,1,\
+0,0,1,1", 
+             "0,0,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,1,0,\
+0,1,0,1", 
+             "0,0,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,2,\
+0,0,0,1", 
+             "0,1,0,1,0,0,0,1,0,1,0,0,0,1,0,0,0,0,2,0,0,0,2,0,0,0,0,1,0,0,0,0,\
+0,1,0,1", 
+             "0,1,0,1,0,1,0,0,0,1,0,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,2,0,0,0,0,\
+0,1,0,1", 
+             "0,1,0,1,0,1,0,0,0,1,0,1,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,\
+0,0,1,0", 
+             "0,1,0,1,1,0,0,0,0,1,0,1,0,0,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,1,0,2,\
+0,0,0,1", 
+             "0,1,1,0,0,0,0,1,0,0,0,2,0,0,0,0,2,0,0,0,0,0,0,0,1,0,0,1,0,0,0,2,\
+0,0,0,1", 
+             "0,1,1,0,0,1,0,0,0,0,0,1,0,0,1,0,1,0,0,1,0,0,2,0,0,0,0,0,0,0,1,0,\
+0,1,0,1", 
+             "0,1,1,0,0,1,0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0,0,0,0,1,0,0,1,0,1,0,\
+0,1,0,1", 
+             "0,1,1,0,0,1,0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,\
+1,1,0,1", 
+             "0,1,1,0,1,0,0,0,0,0,1,0,1,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,\
+0,1,0,1", 
+             "0,1,1,0,1,0,0,0,0,0,2,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,1,0,0,0,1,0,\
+0,1,0,1", 
+             "0,1,1,0,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,2,0,0,2,0,0,0,1,\
+0,0,0,1", 
+             "0,1,1,0,1,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,1,0,1,0,\
+0,1,0,1", 
+             "0,1,1,0,1,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,2,0,0,0,0,0,0,0,0,1,\
+1,1,0,1", 
+             "0,1,1,0,1,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,2,0,0,0,0,0,0,0,0,2,\
+0,0,1,1", 
+             "0,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,0,0,1,0,0,0,0,1,0,0,0,1,0,\
+0,1,0,1", 
+             "0,1,1,1,0,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0,0,2,0,0,1,0,0,0,0,\
+0,0,1,1", 
+             "0,1,1,1,0,0,0,0,0,0,0,1,0,1,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,0,0,0,\
+1,1,0,1", 
+             "0,1,1,1,0,0,0,0,0,0,0,1,0,1,0,0,2,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,\
+1,1,0,1", 
+             "0,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,2,0,0,2,0,0,0,0,\
+0,0,0,1", 
+             "0,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,2,0,0,0,0,0,0,0,0,2,\
+0,0,0,1", 
+             "0,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,2,0,0,0,0,\
+0,1,0,1", 
+             "0,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,\
+0,0,1,0", 
+             "0,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,\
+0,1,0,1", 
+             "0,1,1,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,2,0,0,0,0,0,0,1,1,0,\
+0,1,0,1", 
+             "0,1,1,1,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0,2,0,2,\
+0,0,0,0", 
+             "0,1,1,1,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,1,0,2,0,0,0,0,\
+0,0,2,0", 
+             "0,1,1,1,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,1,1,0,0,0,1,0,\
+0,1,0,1", 
+             "0,1,1,1,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,0,1,0,1,\
+0,0,2,0", 
+             "0,1,1,1,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,0,1,0,1,\
+0,1,0,1", 
+             "0,1,1,1,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,1,0,0,1,\
+0,0,1,1", 
+             "0,1,1,1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,1,0,2,0,0,0,0,\
+0,1,0,1", 
+             "0,1,1,1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1,0,0,0,1,0,1,0,0,0,0,1,0,2,\
+0,0,0,1", 
+             "0,1,1,1,0,0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,1,0,2,\
+0,0,0,1", 
+             "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,2,0,2,\
+0,0,1,0", 
+             "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,1,0,1,\
+0,0,2,0", 
+             "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,1,0,1,\
+0,1,0,1", 
+             "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,1,0,0,1,\
+0,0,1,1", 
+             "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,2,0,0,0,0,\
+1,1,0,1", 
+             "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,1,0,2,\
+0,0,0,1", 
+             "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,1,1,0,\
+0,1,0,1", 
+             "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,\
+1,0,2,0", 
+             "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,\
+1,1,0,1", 
+             "0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,2,\
+0,0,1,1", 
+             "0,1,1,1,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,1,0,0,0,1,\
+1,1,0,1", 
+             "0,1,1,1,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,1,0,0,0,2,\
+0,0,1,1", 
+             "0,1,2,0,0,0,0,0,0,0,0,2,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,\
+0,1,0,1", 
+             "0,2,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,1,0,0,0,1,0,\
+0,1,0,1", 
+             "0,2,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,1,0,1,\
+0,1,0,1"}, "rule_a_counts" -> CompressedData["
+1:eJytWFl63DAIFoTP8TKTniGn6XuPkAv0/m8da7GQzJa2JBMvwM8vBJImn1+/
+f31hSuln/axJFUN1V76l5cEe/l4eD9/GlZVW+g8wBHAAf4Geg6rYvx8dpQlY
+8m9AnDR++IMpIgyJvxI4kpoFraKwD0rPYAznQ/N3qM2yjNkR/fCyUVuFBbRG
+ZrZalmk6RQclwvAaXz9eEiIdSOVjQvk4mOf9X/g03yWjWVCkKPvbczpXqy2o
+NY3dOqd2n8FvNtSNVRt0K2MJ4CxpWjS+vcTihV/nXREKVHKRLeXmAFlLNahN
+6ZQeDysWwWgTa/n3EfZ0A+ZLKhnsVxz4wIjXGHI6OF2v0A3H4n7X4YiVDXav
+LYKydxAyqWmJavPlLhyBbenVGNtABma/2ICptgKfByG8xQirdms0OHygjNNV
+OcWOt2Yr6OnZRGp/NyvBat+NQOfNxvjjbOHiZMmlbO/Lfpaw1vGq5zR0nqlG
+uAHvFra4RWBZSh69BGxHM1OYDkRmr07ehDI4Zf3KlQ4YCz89U3rK+bTnG6cH
+KvsgGVYGWLPL7mL9+Eh9kqncHKIXDDcAPa4W5N3eCm8L0o1UvR7jq2AFTtsR
+XTg3Eh0S8tcypwzTNu8igry9ULzGP84icnEKlkXo0PmwSTvVcD2XygG+jKUt
+qcIIlFaGG35lgBdOZN0TdvX+9snugceY7Z3u3QQbaYNWCVezlY9cEzCP11nK
+OcFND6ms6vq+23xu9SAccrLNcZmKWCjqxjMasnn3hfj3wrvy0LnoMpwbC/iP
+0DIKKakVVPyf8aOhstuXxnhGUfriJw7gwZY2c4TCWY09ln05SEWOVgLsGEsQ
+9xY8Vuf/Pw7XthZQ2v8ANl4I3w==
+            "], "rule_a_row_sum" -> 24, "rule_a_slot_count" -> 1704|>|>, 
+       "schema_version" -> 1|>, GogFieldDynamics`Private`$smallModelFile = 
      "/Users/sasha/Research/gog_notes/Wolfram/GogFieldDynamics/Resources/Data/\
 small-models.json", GogFieldDynamics`Private`failure[
        Pattern[GogFieldDynamics`Private`tag, 
@@ -3294,8 +3588,8 @@ small-models.json", GogFieldDynamics`Private`failure[
           Keys[GogFieldDynamics`Private`models]]]], 
      TagSet[GogFieldDynamics`GogAvailableSizes, 
       MessageName[GogFieldDynamics`GogAvailableSizes, "usage"], 
-      "GogAvailableSizes[] lists the complete small quotient models bundled \
-with the paclet."], GogFieldDynamics`Private`labLabel[
+      "GogAvailableSizes[] lists the complete small graph-type models bundled \
+with the package."], GogFieldDynamics`Private`labLabel[
        Pattern[GogFieldDynamics`Private`index, 
         Blank[Integer]]] := "G" <> ToString[GogFieldDynamics`Private`index], 
      GogFieldDynamics`GogTrajectory[
@@ -3462,16 +3756,14 @@ class.", <|"N" -> GogFieldDynamics`Private`n|>]]];
      TagSet[GogFieldDynamics`GogTransitionMatrix, 
       MessageName[GogFieldDynamics`GogTransitionMatrix, "usage"], 
       "GogTransitionMatrix[n, rule] returns the exact row-stochastic \
-transition matrix for Rule A, fixed-clock Rule B, or \"BJump\"."], 
+transition matrix for Rule A, Rule B, or \"BJump\"."], 
      GogFieldDynamics`Private`normalizeRule[
        Pattern[GogFieldDynamics`Private`rule, 
         Blank[]]] := Switch[
        ToLowerCase[
         ToString[GogFieldDynamics`Private`rule]], 
        Alternatives["a", "rulea", "rule a", "multiplicity"], "A", 
-       Alternatives[
-       "b", "ruleb", "rule b", "support", "support clock", "fixed support"], 
-       "B", 
+       Alternatives["b", "ruleb", "rule b", "support"], "B", 
        Alternatives[
        "bjump", "rule b jump", "jump", "neighbour", "neighbor", 
         "simple neighbour", "simple neighbor"], "BJump", 
@@ -3633,10 +3925,10 @@ resolved by this Wolfram installation."],
      
      TagSet[GogFieldDynamics`GogSetReplaceRules, 
       MessageName[GogFieldDynamics`GogSetReplaceRules, "usage"], 
-      "GogSetReplaceRules[n, rule] encodes quotient transitions as singleton \
-hypergraph rewrite rules. Rule A retains slot multiplicity; Rule B retains \
-one rule per neighbour and pads its fixed 3N clock with holds."], 
-     GogFieldDynamics`GogTransitionCounts[
+      "GogSetReplaceRules[n, rule] encodes graph-type transitions as \
+singleton hypergraph rewrite rules. Rule A retains slot multiplicity; Rule B \
+retains one rule per neighbour and adds stay-put rules for unused outcomes."],
+      GogFieldDynamics`GogTransitionCounts[
        Pattern[GogFieldDynamics`Private`n, 
         Blank[Integer]], 
        Optional[
@@ -3663,7 +3955,7 @@ one rule per neighbour and pads its fixed 3N clock with holds."],
      TagSet[GogFieldDynamics`GogTransitionCounts, 
       MessageName[GogFieldDynamics`GogTransitionCounts, "usage"], 
       "GogTransitionCounts[n, rule] returns integer event counts for Rule A, \
-fixed-clock Rule B, or the degree-normalized Rule-B jump chain."], 
+Rule B with stay-put outcomes, or the Rule-B jump chain."], 
      GogFieldDynamics`GogSetReplaceVersion[] := 
      Module[{GogFieldDynamics`Private`paclet = 
         GogFieldDynamics`Private`resolveSetReplacePaclet[]}, 
@@ -3709,10 +4001,10 @@ version."], Attributes[GogFieldDynamics`Private`newSignature$] = {Temporary},
            Diagonal[GogFieldDynamics`Private`matrix]]]; 
        GogFieldDynamics`Private`ruleText = 
         If[GogFieldDynamics`Private`rule === "A", 
-          "resolution slots \[CenterDot] multiplicity \[CenterDot] holding \
-retained", 
-          "one tick per distinct target \[CenterDot] unused ticks hold \
-\[CenterDot] uniform class law"]; Framed[
+          "all move outcomes retained, including repeated and stay-put \
+outcomes", 
+          "equal weight for each distinct target; unused probability stays \
+put"]; Framed[
          Column[{
            Row[{
              Style[
@@ -3842,7 +4134,7 @@ steps.", <|
      TagSet[GogFieldDynamics`GogDiffusionState, 
       MessageName[GogFieldDynamics`GogDiffusionState, "usage"], 
       "GogDiffusionState[n, rule, start, steps] returns the exact \
-distribution after the requested number of quotient-chain steps."], 
+distribution after the requested number of graph-type steps."], 
      GogFieldDynamics`Private`$labBlue = RGBColor[0., 0.45, 0.7], 
      GogFieldDynamics`Private`$labMuted = RGBColor[0.37, 0.42, 0.49], 
      GogFieldDynamics`Private`$labOrange = RGBColor[0.9, 0.62, 0.], 
@@ -3870,7 +4162,8 @@ distribution after the requested number of quotient-chain steps."],
         GogFieldDynamics`Private`edgeLayer, 
         GogFieldDynamics`Private`trailLayer, 
         GogFieldDynamics`Private`activeLayer, 
-        GogFieldDynamics`Private`nodeLayer}, 
+        GogFieldDynamics`Private`nodeLayer, 
+        GogFieldDynamics`Private`labelledIndices}, 
        GogFieldDynamics`Private`matrix = 
         GogFieldDynamics`GogTransitionMatrix[
          GogFieldDynamics`Private`n, GogFieldDynamics`Private`rule]; 
@@ -3909,7 +4202,16 @@ distribution after the requested number of quotient-chain steps."],
           Sort[{GogFieldDynamics`Private`previous, 
             GogFieldDynamics`Private`sampled}], None]; 
        GogFieldDynamics`Private`baseRadius = 
-        If[GogFieldDynamics`Private`size <= 5, 0.17, 0.105]; 
+        Which[GogFieldDynamics`Private`size <= 5, 0.21, 
+          GogFieldDynamics`Private`size <= 17, 0.105, True, 0.028]; 
+       GogFieldDynamics`Private`labelledIndices = 
+        If[GogFieldDynamics`Private`size <= 17, 
+          Range[GogFieldDynamics`Private`size], 
+          Union[{GogFieldDynamics`Private`sampled}, 
+           TakeLargestBy[
+            Range[GogFieldDynamics`Private`size], Part[
+            GogFieldDynamics`Private`probability, #]& , 
+            Min[10, GogFieldDynamics`Private`size]]]]; 
        GogFieldDynamics`Private`edgeLayer = {
           Directive[GogFieldDynamics`Private`$labLine, 
            AbsoluteThickness[1.5]], 
@@ -3944,14 +4246,16 @@ distribution after the requested number of quotient-chain steps."],
             Part[GogFieldDynamics`Private`coordinates, 
               GogFieldDynamics`Private`index], 
             GogFieldDynamics`Private`radius = 
-            GogFieldDynamics`Private`baseRadius (0.78 + 0.42 Sqrt[
-                 N[
-                 Part[GogFieldDynamics`Private`probability, 
-                    GogFieldDynamics`Private`index]/
-                  GogFieldDynamics`Private`maximum]]), 
+            GogFieldDynamics`Private`baseRadius, 
             GogFieldDynamics`Private`selected = 
             GogFieldDynamics`Private`index === 
-             GogFieldDynamics`Private`sampled}, 
+             GogFieldDynamics`Private`sampled, 
+            GogFieldDynamics`Private`textColor = 
+            If[N[Part[
+                 GogFieldDynamics`Private`probability, 
+                  GogFieldDynamics`Private`index]/
+                GogFieldDynamics`Private`maximum] > 0.34, White, 
+              GogFieldDynamics`Private`$labNavy]}, 
            Tooltip[{
              If[GogFieldDynamics`Private`selected, {
                Directive[GogFieldDynamics`Private`$labOrange, 
@@ -3966,25 +4270,38 @@ distribution after the requested number of quotient-chain steps."],
              GogFieldDynamics`Private`mass, GogFieldDynamics`Private`maximum], 
              Disk[
              GogFieldDynamics`Private`point, GogFieldDynamics`Private`radius], 
-             Text[
-              Style[
-               GogFieldDynamics`Private`labLabel[
+             If[
+              MemberQ[
+              GogFieldDynamics`Private`labelledIndices, 
                GogFieldDynamics`Private`index], 
-               If[GogFieldDynamics`Private`size <= 5, 9, 6.5], Bold, 
-               If[
-               N[GogFieldDynamics`Private`mass/
-                  GogFieldDynamics`Private`maximum] > 0.34, White, 
-                GogFieldDynamics`Private`$labNavy], FontFamily -> 
-               "Helvetica"], GogFieldDynamics`Private`point]}, 
+              Text[
+               Column[{
+                 Style[
+                  GogFieldDynamics`Private`labLabel[
+                  GogFieldDynamics`Private`index], 
+                  Which[
+                  GogFieldDynamics`Private`size <= 5, 9, 
+                   GogFieldDynamics`Private`size <= 17, 6.5, True, 4.5], Bold,
+                   GogFieldDynamics`Private`textColor, FontFamily -> 
+                  "Helvetica"], 
+                 If[GogFieldDynamics`Private`size <= 17, 
+                  Style[
+                   ToString[
+                    NumberForm[
+                    N[GogFieldDynamics`Private`mass], {3, 2}]], 
+                   If[GogFieldDynamics`Private`size <= 5, 7, 5.5], 
+                   GogFieldDynamics`Private`textColor, FontFamily -> 
+                   "Helvetica"], Nothing]}, Alignment -> Center, 
+                Spacings -> -0.1], GogFieldDynamics`Private`point], Nothing]}, 
             Grid[{{
                Style["class", Bold], 
                GogFieldDynamics`Private`labLabel[
-               GogFieldDynamics`Private`index]}, {"exact mass", 
-               NumberForm[
-                N[GogFieldDynamics`Private`mass], {4, 3}]}, {
+               GogFieldDynamics`Private`index]}, {
+              "exact mass", GogFieldDynamics`Private`mass}, {
               "holding probability", 
                NumberForm[
-                N[GogFieldDynamics`Private`hold], {4, 3}]}, {"canonical code", 
+                N[GogFieldDynamics`Private`hold], {4, 3}]}, {
+              "stored graph data", 
                Style[
                GogFieldDynamics`Private`code, 8, FontFamily -> "Courier"]}}, 
              Alignment -> Left, Spacings -> {0.8, 0.35}]]], {
@@ -3993,9 +4310,14 @@ distribution after the requested number of quotient-chain steps."],
          GogFieldDynamics`Private`edgeLayer, 
           GogFieldDynamics`Private`trailLayer, 
           GogFieldDynamics`Private`activeLayer, 
-          GogFieldDynamics`Private`nodeLayer}, 
-         PlotRange -> {{-2.05, 2.05}, {-1.62, 1.62}}, PlotRangePadding -> 
-         Scaled[0.03], ImageSize -> {248, 190}, Background -> White]], 
+          GogFieldDynamics`Private`nodeLayer}, PlotRange -> 
+         GogFieldDynamics`Private`labPlotRange[
+          GogFieldDynamics`Private`coordinates, 
+           If[GogFieldDynamics`Private`size <= 5, 0.34, 0.2]], 
+         PlotRangePadding -> None, ImageSize -> 
+         Which[GogFieldDynamics`Private`size <= 5, {500, 260}, 
+           GogFieldDynamics`Private`size <= 17, {560, 400}, True, {820, 600}],
+          Background -> White]], 
      GogFieldDynamics`Private`labCoordinates[2] := {{-1.15, 0}, {1.15, 0}}, 
      GogFieldDynamics`Private`labCoordinates[4] := {{-0.8, 
       0.45}, {-1.6, -0.5}, {0., 0.}, {1.6, -0.4}, {0.8, 0.5}}, 
@@ -4006,27 +4328,34 @@ distribution after the requested number of quotient-chain steps."],
       Module[{GogFieldDynamics`Private`model = 
          GogFieldDynamics`GogSmallModel[GogFieldDynamics`Private`n], 
          GogFieldDynamics`Private`graph, GogFieldDynamics`Private`points, 
-         GogFieldDynamics`Private`centered, GogFieldDynamics`Private`scale}, 
+         GogFieldDynamics`Private`centered, GogFieldDynamics`Private`spread}, 
         GogFieldDynamics`Private`graph = Graph[
            Range[
             GogFieldDynamics`Private`model["NodeCount"]], 
            MapApply[UndirectedEdge, 
             GogFieldDynamics`Private`model["Edges"]], GraphLayout -> 
-           "SpringElectricalEmbedding"]; GogFieldDynamics`Private`points = N[
+           If[GogFieldDynamics`Private`model["NodeCount"] <= 17, 
+             "LayeredDigraphEmbedding", "SpringEmbedding"]]; 
+        GogFieldDynamics`Private`points = N[
            GraphEmbedding[GogFieldDynamics`Private`graph]]; 
         GogFieldDynamics`Private`centered = 
          Map[# - Mean[GogFieldDynamics`Private`points]& , 
            GogFieldDynamics`Private`points]; 
-        GogFieldDynamics`Private`scale = Max[
-           Map[Norm, GogFieldDynamics`Private`centered]]; If[
-          Or[
-           Not[
-            NumericQ[GogFieldDynamics`Private`scale]], 
-           GogFieldDynamics`Private`scale == 0], 
-          GogFieldDynamics`Private`scale = 1.]; 
-        Map[{1.72, 1.34} (#/GogFieldDynamics`Private`scale)& , 
+        GogFieldDynamics`Private`spread = Map[Max[
+            Abs[#]]& , 
+           Transpose[GogFieldDynamics`Private`centered]]; 
+        GogFieldDynamics`Private`spread = 
+         Replace[GogFieldDynamics`Private`spread, Condition[
+             Pattern[GogFieldDynamics`Private`value, 
+              Blank[]], 
+             Or[
+              Not[
+               NumericQ[GogFieldDynamics`Private`value]], 
+              GogFieldDynamics`Private`value == 0]] -> 1., {1}]; 
+        Map[{1.72, 1.32} (#/GogFieldDynamics`Private`spread)& , 
           GogFieldDynamics`Private`centered]]), 
      GogFieldDynamics`Private`$labLine = RGBColor[0.82, 0.85, 0.88], 
+     GogFieldDynamics`Private`$labNavy = RGBColor[0.075, 0.13, 0.22], 
      GogFieldDynamics`Private`labProbabilityColor[
        Pattern[GogFieldDynamics`Private`mass, 
         Blank[]], 
@@ -4041,8 +4370,16 @@ distribution after the requested number of quotient-chain steps."],
           N[GogFieldDynamics`Private`mass/GogFieldDynamics`Private`maximum]], 
          0], {0, 1}]], GogFieldDynamics`Private`$labWash = 
      RGBColor[0.965, 0.975, 0.985], GogFieldDynamics`Private`$labSky = 
-     RGBColor[0.34, 0.71, 0.91], GogFieldDynamics`Private`$labNavy = 
-     RGBColor[0.075, 0.13, 0.22], GogFieldDynamics`Private`labMassBars[
+     RGBColor[0.34, 0.71, 0.91], GogFieldDynamics`Private`labPlotRange[
+       Pattern[GogFieldDynamics`Private`coordinates, 
+        Blank[List]], 
+       Optional[
+        Pattern[GogFieldDynamics`Private`padding, 
+         Blank[]], 0.28]] := 
+     Map[{Min[#] - GogFieldDynamics`Private`padding, Max[#] + 
+        GogFieldDynamics`Private`padding}& , 
+       Transpose[GogFieldDynamics`Private`coordinates]], 
+     GogFieldDynamics`Private`labMassBars[
        Pattern[GogFieldDynamics`Private`probability, 
         Blank[List]]] := 
      Module[{GogFieldDynamics`Private`indices, 
@@ -4818,101 +5155,101 @@ CellTagsIndex->{
    CellTags->{"GoGCompanion", "GoGCompanionSubtitle"}],
   Cell[1331, 45, 288, 8, 70, "Author",ExpressionUUID->"2c2865f1-2b6e-2776-7029-28195dc1549b",
    CellTags->{"GoGCompanion", "GoGCompanionAuthor"}],
-  Cell[2506, 83, 3068, 86, 70, "Text",ExpressionUUID->"f4cdfb3e-703f-af1a-3cb7-6aef6011f25d",
+  Cell[2506, 83, 3066, 85, 70, "Text",ExpressionUUID->"f4cdfb3e-703f-af1a-3cb7-6aef6011f25d",
    CellTags->{"GoGCompanion", "GoGCompanionNavigation"}],
-  Cell[5577, 171, 533, 14, 70, "Text",ExpressionUUID->"9b08c9d0-0099-41c2-6fb4-67cca3439218",
+  Cell[5575, 170, 533, 14, 70, "Text",ExpressionUUID->"9b08c9d0-0099-41c2-6fb4-67cca3439218",
    CellTags->{"GoGCompanion", "GoGCompanionIntro"}],
-  Cell[6135, 189, 258, 7, 70, "Section",ExpressionUUID->"fdbe342f-01a5-4e3f-2b15-89cb9f0033b0",
+  Cell[6133, 188, 258, 7, 70, "Section",ExpressionUUID->"fdbe342f-01a5-4e3f-2b15-89cb9f0033b0",
    CellTags->{"GoGCompanion", "GoGSectionOverview"}],
-  Cell[6396, 198, 28310, 636, 70, "Output",ExpressionUUID->"ec758236-f7fd-eca4-5199-214c60f59a0b",
+  Cell[6394, 197, 28310, 636, 70, "Output",ExpressionUUID->"ec758236-f7fd-eca4-5199-214c60f59a0b",
    CellTags->{"GoGCompanion", "GoGVisualAbstract"}],
-  Cell[34709, 836, 545, 15, 70, "Caption",ExpressionUUID->"3193abe9-c8f8-0412-5915-3c9e33e9e69c",
+  Cell[34707, 835, 545, 15, 70, "Caption",ExpressionUUID->"3193abe9-c8f8-0412-5915-3c9e33e9e69c",
    CellTags->{"GoGCompanion", "GoGVisualAbstractCaption"}],
-  Cell[35291, 856, 270, 7, 70, "Section",ExpressionUUID->"e336e041-8e83-73c6-a450-0aa974d419b6",
+  Cell[35289, 855, 270, 7, 70, "Section",ExpressionUUID->"e336e041-8e83-73c6-a450-0aa974d419b6",
    CellTags->{"GoGCompanion", "GoGSectionLocalMove"}],
-  Cell[35564, 865, 467, 12, 70, "Text",ExpressionUUID->"25e20be6-386a-39dc-7346-2c06d328f4c5",
+  Cell[35562, 864, 467, 12, 70, "Text",ExpressionUUID->"25e20be6-386a-39dc-7346-2c06d328f4c5",
    CellTags->{"GoGCompanion", "GoGLocalMoveText"}],
-  Cell[36034, 879, 21015, 457, 70, "Output",ExpressionUUID->"15351405-780c-3539-f808-795fccdfe663",
+  Cell[36032, 878, 21019, 457, 70, "Output",ExpressionUUID->"15351405-780c-3539-f808-795fccdfe663",
    CellTags->{"GoGCompanion", "GoGWhiteheadMove"}],
-  Cell[57052, 1338, 475, 13, 70, "Caption",ExpressionUUID->"8b2971ca-f8e6-833d-31ec-dcdc3c2f75e5",
+  Cell[57054, 1337, 475, 13, 70, "Caption",ExpressionUUID->"8b2971ca-f8e6-833d-31ec-dcdc3c2f75e5",
    CellTags->{"GoGCompanion", "GoGWhiteheadMoveCaption"}],
-  Cell[57530, 1353, 8703, 212, 70, "Output",ExpressionUUID->"580c5782-ad27-22fb-e671-387fb554280c",
+  Cell[57532, 1352, 8703, 212, 70, "Output",ExpressionUUID->"580c5782-ad27-22fb-e671-387fb554280c",
    CellTags->{"GoGCompanion", "GoGVarianceDrop"}],
-  Cell[66236, 1567, 807, 27, 70, "DisplayFormula",ExpressionUUID->"1e08d3f1-daed-1166-57a6-438e0c26edeb",
+  Cell[66238, 1566, 807, 27, 70, "DisplayFormula",ExpressionUUID->"1e08d3f1-daed-1166-57a6-438e0c26edeb",
    CellTags->{"GoGCompanion", "GoGVarianceFormula"}],
-  Cell[67046, 1596, 497, 13, 70, "Caption",ExpressionUUID->"f72e5919-ad94-a04b-5ba1-03bc661a2abd",
+  Cell[67048, 1595, 497, 13, 70, "Caption",ExpressionUUID->"f72e5919-ad94-a04b-5ba1-03bc661a2abd",
    CellTags->{"GoGCompanion", "GoGVarianceDropCaption"}],
-  Cell[67546, 1611, 519, 17, 70, "Text",ExpressionUUID->"bee941ba-2690-21ac-d48b-c4663bdf35e6",
+  Cell[67548, 1610, 519, 17, 70, "Text",ExpressionUUID->"bee941ba-2690-21ac-d48b-c4663bdf35e6",
    CellTags->{"GoGCompanion", "GoGPairLossHeading"}],
-  Cell[68090, 1632, 890, 29, 70, "Input",ExpressionUUID->"b3de0ca4-c072-d192-3860-8130e92d90a5",
+  Cell[68092, 1631, 890, 29, 70, "Input",ExpressionUUID->"b3de0ca4-c072-d192-3860-8130e92d90a5",
    CellTags->{"GoGCompanion", "GoGPairLossInput"}],
-  Cell[68983, 1663, 584, 19, 70, "Output",ExpressionUUID->"21da2f1d-690e-9e17-09af-325f5991f8eb",
+  Cell[68985, 1662, 584, 19, 70, "Output",ExpressionUUID->"21da2f1d-690e-9e17-09af-325f5991f8eb",
    CellTags->{"GoGCompanion", "GoGPairLossOutput"}],
-  Cell[69616, 1688, 275, 7, 70, "Section",ExpressionUUID->"1f01cf6d-a151-5123-98a4-47918647904c",
+  Cell[69618, 1687, 270, 7, 70, "Section",ExpressionUUID->"1f01cf6d-a151-5123-98a4-47918647904c",
    CellTags->{"GoGCompanion", "GoGSectionConsensus"}],
-  Cell[69894, 1697, 468, 12, 70, "Text",ExpressionUUID->"68191540-bce8-3462-6d97-c33131db4baf",
+  Cell[69891, 1696, 556, 13, 70, "Text",ExpressionUUID->"68191540-bce8-3462-6d97-c33131db4baf",
    CellTags->{"GoGCompanion", "GoGConsensusText"}],
-  Cell[70365, 1711, 17202, 373, 70, "Output",ExpressionUUID->"8878a585-6da7-6a3e-83de-e6d48e0c8431",
+  Cell[70450, 1711, 17202, 373, 70, "Output",ExpressionUUID->"8878a585-6da7-6a3e-83de-e6d48e0c8431",
    CellTags->{"GoGCompanion", "GoGConsensusSchedules"}],
-  Cell[87570, 2086, 527, 14, 70, "Caption",ExpressionUUID->"8dc749d0-1cb0-c3f5-0495-0dba429ebbfd",
+  Cell[87655, 2086, 527, 14, 70, "Caption",ExpressionUUID->"8dc749d0-1cb0-c3f5-0495-0dba429ebbfd",
    CellTags->{"GoGCompanion", "GoGConsensusSchedulesCaption"}],
-  Cell[88100, 2102, 526, 17, 70, "Text",ExpressionUUID->"89e78c47-cf53-b187-5b15-762c047bb75c",
+  Cell[88185, 2102, 526, 17, 70, "Text",ExpressionUUID->"89e78c47-cf53-b187-5b15-762c047bb75c",
    CellTags->{"GoGCompanion", "GoGConsensusHeading"}],
-  Cell[88651, 2123, 3688, 120, 70, "Input",ExpressionUUID->"8bb88894-8bda-ca80-2b5f-e68895186944",
+  Cell[88736, 2123, 3688, 120, 70, "Input",ExpressionUUID->"8bb88894-8bda-ca80-2b5f-e68895186944",
    CellTags->{"GoGCompanion", "GoGConsensusInput"}],
-  Cell[92342, 2245, 521, 16, 70, "Output",ExpressionUUID->"b44f34c7-b33b-b29e-9e8d-0931eb100b38",
+  Cell[92427, 2245, 521, 16, 70, "Output",ExpressionUUID->"b44f34c7-b33b-b29e-9e8d-0931eb100b38",
    CellTags->{"GoGCompanion", "GoGConsensusOutput"}],
-  Cell[92912, 2267, 262, 6, 70, "Section",ExpressionUUID->"508355fc-74dc-dd7e-43ce-dbb0e05a6f13",
+  Cell[92997, 2267, 265, 6, 70, "Section",ExpressionUUID->"508355fc-74dc-dd7e-43ce-dbb0e05a6f13",
    CellTags->{"GoGCompanion", "GoGSectionClocks"}],
-  Cell[93177, 2275, 506, 12, 70, "Text",ExpressionUUID->"5cfabb2c-93cf-ca1a-de5a-747f0e69e10d",
+  Cell[93265, 2275, 502, 12, 70, "Text",ExpressionUUID->"5cfabb2c-93cf-ca1a-de5a-747f0e69e10d",
    CellTags->{"GoGCompanion", "GoGClockText"}],
-  Cell[93686, 2289, 527, 17, 70, "Text",ExpressionUUID->"d0b6d6f3-8887-9aa2-3d81-f64b19696384",
+  Cell[93770, 2289, 527, 17, 70, "Text",ExpressionUUID->"d0b6d6f3-8887-9aa2-3d81-f64b19696384",
    CellTags->{"GoGCompanion", "GoGValidationHeading"}],
-  Cell[94238, 2310, 1114, 30, 70, "Input",ExpressionUUID->"5aa87342-1d99-c533-5736-16297dcfd0c6",
+  Cell[94322, 2310, 1114, 30, 70, "Input",ExpressionUUID->"5aa87342-1d99-c533-5736-16297dcfd0c6",
    CellTags->{"GoGCompanion", "GoGValidationInput"}],
-  Cell[95355, 2342, 718, 21, 70, "Output",ExpressionUUID->"c7832bb6-3131-987f-8f61-9ed84f0dd4cd",
+  Cell[95439, 2342, 728, 21, 70, "Output",ExpressionUUID->"c7832bb6-3131-987f-8f61-9ed84f0dd4cd",
    CellTags->{"GoGCompanion", "GoGValidationOutput"}],
-  Cell[96076, 2365, 11840, 265, 70, "Output",ExpressionUUID->"895abd3a-840d-7326-4451-0ad683edff71",
+  Cell[96170, 2365, 11892, 267, 70, "Output",ExpressionUUID->"895abd3a-840d-7326-4451-0ad683edff71",
    CellTags->{"GoGCompanion", "GoGTransitionComparison"}],
-  Cell[107931, 2633, 524, 14, 70, "Caption",ExpressionUUID->"d9606181-3f8b-a84e-ec4a-e4cc01f8767d",
+  Cell[108077, 2635, 517, 14, 70, "Caption",ExpressionUUID->"d9606181-3f8b-a84e-ec4a-e4cc01f8767d",
    CellTags->{"GoGCompanion", "GoGTransitionComparisonCaption"}],
-  Cell[108458, 2649, 526, 18, 70, "Text",ExpressionUUID->"a19e6596-b403-1a3a-13a3-e8d19279ef5e",
+  Cell[108597, 2651, 527, 18, 70, "Text",ExpressionUUID->"a19e6596-b403-1a3a-13a3-e8d19279ef5e",
    CellTags->{"GoGCompanion", "GoGClockChecksHeading"}],
-  Cell[109009, 2671, 1318, 36, 70, "Input",ExpressionUUID->"92a1479f-6ed0-65de-5bd8-c6e72a9b8886",
+  Cell[109149, 2673, 1318, 36, 70, "Input",ExpressionUUID->"92a1479f-6ed0-65de-5bd8-c6e72a9b8886",
    CellTags->{"GoGCompanion", "GoGClockChecksInput"}],
-  Cell[110330, 2709, 738, 20, 70, "Output",ExpressionUUID->"e3fa4ab7-bb4a-8f65-d06e-e4aaad354131",
+  Cell[110470, 2711, 738, 20, 70, "Output",ExpressionUUID->"e3fa4ab7-bb4a-8f65-d06e-e4aaad354131",
    CellTags->{"GoGCompanion", "GoGClockChecksOutput"}],
-  Cell[111117, 2735, 269, 7, 70, "Section",ExpressionUUID->"899aecc7-b9e4-c7dd-af99-6b95041b3ee9",
+  Cell[111257, 2737, 269, 7, 70, "Section",ExpressionUUID->"899aecc7-b9e4-c7dd-af99-6b95041b3ee9",
    CellTags->{"GoGCompanion", "GoGSectionDiffusion"}],
-  Cell[111389, 2744, 497, 12, 70, "Text",ExpressionUUID->"0e4922dc-3c14-27ed-159c-384813274f09",
+  Cell[111529, 2746, 503, 12, 70, "Text",ExpressionUUID->"0e4922dc-3c14-27ed-159c-384813274f09",
    CellTags->{"GoGCompanion", "GoGDiffusionText"}],
-  Cell[111889, 2758, 70183, 1438, 70, "Output",ExpressionUUID->"7a008bda-56b4-16ff-73f2-fe7b115ab322",
+  Cell[112035, 2760, 88196, 1773, 70, "Output",ExpressionUUID->"7a008bda-56b4-16ff-73f2-fe7b115ab322",
    CellTags->{"GoGCompanion", "GoGDiffusionLab"}],
-  Cell[182075, 4198, 517, 13, 70, "Caption",ExpressionUUID->"c0f4f445-ffe4-866d-18c7-4a02898cbbb4",
+  Cell[200234, 4535, 517, 13, 70, "Caption",ExpressionUUID->"c0f4f445-ffe4-866d-18c7-4a02898cbbb4",
    CellTags->{"GoGCompanion", "GoGDiffusionLabCaption"}],
-  Cell[182595, 4213, 530, 17, 70, "Text",ExpressionUUID->"4323540e-703f-b8ba-05e0-bdb8acdcd19d",
+  Cell[200754, 4550, 530, 17, 70, "Text",ExpressionUUID->"4323540e-703f-b8ba-05e0-bdb8acdcd19d",
    CellTags->{"GoGCompanion", "GoGDiffusionHeading"}],
-  Cell[183150, 4234, 564, 16, 70, "Input",ExpressionUUID->"e4f868fc-b14a-15de-2a8b-dec08664c86c",
+  Cell[201309, 4571, 564, 16, 70, "Input",ExpressionUUID->"e4f868fc-b14a-15de-2a8b-dec08664c86c",
    CellTags->{"GoGCompanion", "GoGDiffusionInput"}],
-  Cell[183717, 4252, 669, 21, 70, "Output",ExpressionUUID->"ca3a32b9-45f2-b6da-457b-f74c4f2d8825",
+  Cell[201876, 4589, 669, 21, 70, "Output",ExpressionUUID->"ca3a32b9-45f2-b6da-457b-f74c4f2d8825",
    CellTags->{"GoGCompanion", "GoGDiffusionOutput"}],
-  Cell[184435, 4279, 273, 8, 70, "Section",ExpressionUUID->"e4b2ecac-883d-80be-7384-b60e80143df4",
+  Cell[202594, 4616, 273, 8, 70, "Section",ExpressionUUID->"e4b2ecac-883d-80be-7384-b60e80143df4",
    CellTags->{"GoGCompanion", "GoGSectionEnumeration"}],
-  Cell[184711, 4289, 504, 13, 70, "Text",ExpressionUUID->"9e988fb1-a727-de73-f7e8-e7a868e7e57d",
+  Cell[202870, 4626, 504, 13, 70, "Text",ExpressionUUID->"9e988fb1-a727-de73-f7e8-e7a868e7e57d",
    CellTags->{"GoGCompanion", "GoGEnumerationText"}],
-  Cell[185218, 4304, 14945, 357, 70, "Output",ExpressionUUID->"2a86b59f-6f0d-538c-96a5-4819965052b2",
+  Cell[203377, 4641, 14945, 357, 70, "Output",ExpressionUUID->"2a86b59f-6f0d-538c-96a5-4819965052b2",
    CellTags->{"GoGCompanion", "GoGEnumerationGrowth"}],
-  Cell[200166, 4663, 474, 14, 70, "Caption",ExpressionUUID->"ce58f912-5368-be57-70aa-ab16103058e9",
+  Cell[218325, 5000, 474, 14, 70, "Caption",ExpressionUUID->"ce58f912-5368-be57-70aa-ab16103058e9",
    CellTags->{"GoGCompanion", "GoGEnumerationGrowthCaption"}],
-  Cell[200643, 4679, 533, 18, 70, "Text",ExpressionUUID->"52b20d56-93d4-2102-32b5-51c3c69cefcd",
+  Cell[218802, 5016, 533, 18, 70, "Text",ExpressionUUID->"52b20d56-93d4-2102-32b5-51c3c69cefcd",
    CellTags->{"GoGCompanion", "GoGEnumerationHeading"}],
-  Cell[201201, 4701, 920, 28, 70, "Input",ExpressionUUID->"9c8d32e1-1f87-0c4d-e4e3-5899f6bf479d",
+  Cell[219360, 5038, 920, 28, 70, "Input",ExpressionUUID->"9c8d32e1-1f87-0c4d-e4e3-5899f6bf479d",
    CellTags->{"GoGCompanion", "GoGEnumerationInput"}],
-  Cell[202124, 4731, 1016, 30, 70, "Output",ExpressionUUID->"a95f742d-a548-1914-3d73-947c69da1b4c",
+  Cell[220283, 5068, 1016, 30, 70, "Output",ExpressionUUID->"a95f742d-a548-1914-3d73-947c69da1b4c",
    CellTags->{"GoGCompanion", "GoGEnumerationOutput"}],
-  Cell[203189, 4767, 259, 6, 70, "Section",ExpressionUUID->"5cda3607-adaa-9fce-ffb3-781b8bb4985d",
+  Cell[221348, 5104, 259, 6, 70, "Section",ExpressionUUID->"5cda3607-adaa-9fce-ffb3-781b8bb4985d",
    CellTags->{"GoGCompanion", "GoGSectionScope"}],
-  Cell[203451, 4775, 728, 16, 70, "Text",ExpressionUUID->"d5156a8d-281f-2a40-813e-f1dd60f44849",
+  Cell[221610, 5112, 728, 16, 70, "Text",ExpressionUUID->"d5156a8d-281f-2a40-813e-f1dd60f44849",
    CellTags->{"GoGCompanion", "GoGScopeText"}]},
  "GoGCompanionTitle"->{
   Cell[645, 23, 332, 9, 70, "Title",ExpressionUUID->"50bc3ab7-3531-8e60-4c64-cd8d9f7056d2",
@@ -4930,207 +5267,207 @@ CellTagsIndex->{
   Cell[1622, 55, 881, 26, 70, "Text",ExpressionUUID->"5eb76d08-03e8-9518-7f29-e54731a869a9",
    CellTags->{"GoGNotebookVisual", "GoGBanner"}]},
  "GoGCompanionNavigation"->{
-  Cell[2506, 83, 3068, 86, 70, "Text",ExpressionUUID->"f4cdfb3e-703f-af1a-3cb7-6aef6011f25d",
+  Cell[2506, 83, 3066, 85, 70, "Text",ExpressionUUID->"f4cdfb3e-703f-af1a-3cb7-6aef6011f25d",
    CellTags->{"GoGCompanion", "GoGCompanionNavigation"}]},
  "GoGCompanionIntro"->{
-  Cell[5577, 171, 533, 14, 70, "Text",ExpressionUUID->"9b08c9d0-0099-41c2-6fb4-67cca3439218",
+  Cell[5575, 170, 533, 14, 70, "Text",ExpressionUUID->"9b08c9d0-0099-41c2-6fb4-67cca3439218",
    CellTags->{"GoGCompanion", "GoGCompanionIntro"}]},
  "GoGSectionOverview"->{
-  Cell[6135, 189, 258, 7, 70, "Section",ExpressionUUID->"fdbe342f-01a5-4e3f-2b15-89cb9f0033b0",
+  Cell[6133, 188, 258, 7, 70, "Section",ExpressionUUID->"fdbe342f-01a5-4e3f-2b15-89cb9f0033b0",
    CellTags->{"GoGCompanion", "GoGSectionOverview"}]},
  "GoGVisualAbstract"->{
-  Cell[6396, 198, 28310, 636, 70, "Output",ExpressionUUID->"ec758236-f7fd-eca4-5199-214c60f59a0b",
+  Cell[6394, 197, 28310, 636, 70, "Output",ExpressionUUID->"ec758236-f7fd-eca4-5199-214c60f59a0b",
    CellTags->{"GoGCompanion", "GoGVisualAbstract"}]},
  "GoGVisualAbstractCaption"->{
-  Cell[34709, 836, 545, 15, 70, "Caption",ExpressionUUID->"3193abe9-c8f8-0412-5915-3c9e33e9e69c",
+  Cell[34707, 835, 545, 15, 70, "Caption",ExpressionUUID->"3193abe9-c8f8-0412-5915-3c9e33e9e69c",
    CellTags->{"GoGCompanion", "GoGVisualAbstractCaption"}]},
  "GoGSectionLocalMove"->{
-  Cell[35291, 856, 270, 7, 70, "Section",ExpressionUUID->"e336e041-8e83-73c6-a450-0aa974d419b6",
+  Cell[35289, 855, 270, 7, 70, "Section",ExpressionUUID->"e336e041-8e83-73c6-a450-0aa974d419b6",
    CellTags->{"GoGCompanion", "GoGSectionLocalMove"}]},
  "GoGLocalMoveText"->{
-  Cell[35564, 865, 467, 12, 70, "Text",ExpressionUUID->"25e20be6-386a-39dc-7346-2c06d328f4c5",
+  Cell[35562, 864, 467, 12, 70, "Text",ExpressionUUID->"25e20be6-386a-39dc-7346-2c06d328f4c5",
    CellTags->{"GoGCompanion", "GoGLocalMoveText"}]},
  "GoGWhiteheadMove"->{
-  Cell[36034, 879, 21015, 457, 70, "Output",ExpressionUUID->"15351405-780c-3539-f808-795fccdfe663",
+  Cell[36032, 878, 21019, 457, 70, "Output",ExpressionUUID->"15351405-780c-3539-f808-795fccdfe663",
    CellTags->{"GoGCompanion", "GoGWhiteheadMove"}]},
  "GoGWhiteheadMoveCaption"->{
-  Cell[57052, 1338, 475, 13, 70, "Caption",ExpressionUUID->"8b2971ca-f8e6-833d-31ec-dcdc3c2f75e5",
+  Cell[57054, 1337, 475, 13, 70, "Caption",ExpressionUUID->"8b2971ca-f8e6-833d-31ec-dcdc3c2f75e5",
    CellTags->{"GoGCompanion", "GoGWhiteheadMoveCaption"}]},
  "GoGVarianceDrop"->{
-  Cell[57530, 1353, 8703, 212, 70, "Output",ExpressionUUID->"580c5782-ad27-22fb-e671-387fb554280c",
+  Cell[57532, 1352, 8703, 212, 70, "Output",ExpressionUUID->"580c5782-ad27-22fb-e671-387fb554280c",
    CellTags->{"GoGCompanion", "GoGVarianceDrop"}]},
  "GoGVarianceFormula"->{
-  Cell[66236, 1567, 807, 27, 70, "DisplayFormula",ExpressionUUID->"1e08d3f1-daed-1166-57a6-438e0c26edeb",
+  Cell[66238, 1566, 807, 27, 70, "DisplayFormula",ExpressionUUID->"1e08d3f1-daed-1166-57a6-438e0c26edeb",
    CellTags->{"GoGCompanion", "GoGVarianceFormula"}]},
  "GoGVarianceDropCaption"->{
-  Cell[67046, 1596, 497, 13, 70, "Caption",ExpressionUUID->"f72e5919-ad94-a04b-5ba1-03bc661a2abd",
+  Cell[67048, 1595, 497, 13, 70, "Caption",ExpressionUUID->"f72e5919-ad94-a04b-5ba1-03bc661a2abd",
    CellTags->{"GoGCompanion", "GoGVarianceDropCaption"}]},
  "GoGPairLossHeading"->{
-  Cell[67546, 1611, 519, 17, 70, "Text",ExpressionUUID->"bee941ba-2690-21ac-d48b-c4663bdf35e6",
+  Cell[67548, 1610, 519, 17, 70, "Text",ExpressionUUID->"bee941ba-2690-21ac-d48b-c4663bdf35e6",
    CellTags->{"GoGCompanion", "GoGPairLossHeading"}]},
  "GoGPairLossInput"->{
-  Cell[68090, 1632, 890, 29, 70, "Input",ExpressionUUID->"b3de0ca4-c072-d192-3860-8130e92d90a5",
+  Cell[68092, 1631, 890, 29, 70, "Input",ExpressionUUID->"b3de0ca4-c072-d192-3860-8130e92d90a5",
    CellTags->{"GoGCompanion", "GoGPairLossInput"}]},
  "GoGPairLossOutput"->{
-  Cell[68983, 1663, 584, 19, 70, "Output",ExpressionUUID->"21da2f1d-690e-9e17-09af-325f5991f8eb",
+  Cell[68985, 1662, 584, 19, 70, "Output",ExpressionUUID->"21da2f1d-690e-9e17-09af-325f5991f8eb",
    CellTags->{"GoGCompanion", "GoGPairLossOutput"}]},
  "GoGSectionConsensus"->{
-  Cell[69616, 1688, 275, 7, 70, "Section",ExpressionUUID->"1f01cf6d-a151-5123-98a4-47918647904c",
+  Cell[69618, 1687, 270, 7, 70, "Section",ExpressionUUID->"1f01cf6d-a151-5123-98a4-47918647904c",
    CellTags->{"GoGCompanion", "GoGSectionConsensus"}]},
  "GoGConsensusText"->{
-  Cell[69894, 1697, 468, 12, 70, "Text",ExpressionUUID->"68191540-bce8-3462-6d97-c33131db4baf",
+  Cell[69891, 1696, 556, 13, 70, "Text",ExpressionUUID->"68191540-bce8-3462-6d97-c33131db4baf",
    CellTags->{"GoGCompanion", "GoGConsensusText"}]},
  "GoGConsensusSchedules"->{
-  Cell[70365, 1711, 17202, 373, 70, "Output",ExpressionUUID->"8878a585-6da7-6a3e-83de-e6d48e0c8431",
+  Cell[70450, 1711, 17202, 373, 70, "Output",ExpressionUUID->"8878a585-6da7-6a3e-83de-e6d48e0c8431",
    CellTags->{"GoGCompanion", "GoGConsensusSchedules"}]},
  "GoGConsensusSchedulesCaption"->{
-  Cell[87570, 2086, 527, 14, 70, "Caption",ExpressionUUID->"8dc749d0-1cb0-c3f5-0495-0dba429ebbfd",
+  Cell[87655, 2086, 527, 14, 70, "Caption",ExpressionUUID->"8dc749d0-1cb0-c3f5-0495-0dba429ebbfd",
    CellTags->{"GoGCompanion", "GoGConsensusSchedulesCaption"}]},
  "GoGConsensusHeading"->{
-  Cell[88100, 2102, 526, 17, 70, "Text",ExpressionUUID->"89e78c47-cf53-b187-5b15-762c047bb75c",
+  Cell[88185, 2102, 526, 17, 70, "Text",ExpressionUUID->"89e78c47-cf53-b187-5b15-762c047bb75c",
    CellTags->{"GoGCompanion", "GoGConsensusHeading"}]},
  "GoGConsensusInput"->{
-  Cell[88651, 2123, 3688, 120, 70, "Input",ExpressionUUID->"8bb88894-8bda-ca80-2b5f-e68895186944",
+  Cell[88736, 2123, 3688, 120, 70, "Input",ExpressionUUID->"8bb88894-8bda-ca80-2b5f-e68895186944",
    CellTags->{"GoGCompanion", "GoGConsensusInput"}]},
  "GoGConsensusOutput"->{
-  Cell[92342, 2245, 521, 16, 70, "Output",ExpressionUUID->"b44f34c7-b33b-b29e-9e8d-0931eb100b38",
+  Cell[92427, 2245, 521, 16, 70, "Output",ExpressionUUID->"b44f34c7-b33b-b29e-9e8d-0931eb100b38",
    CellTags->{"GoGCompanion", "GoGConsensusOutput"}]},
  "GoGSectionClocks"->{
-  Cell[92912, 2267, 262, 6, 70, "Section",ExpressionUUID->"508355fc-74dc-dd7e-43ce-dbb0e05a6f13",
+  Cell[92997, 2267, 265, 6, 70, "Section",ExpressionUUID->"508355fc-74dc-dd7e-43ce-dbb0e05a6f13",
    CellTags->{"GoGCompanion", "GoGSectionClocks"}]},
  "GoGClockText"->{
-  Cell[93177, 2275, 506, 12, 70, "Text",ExpressionUUID->"5cfabb2c-93cf-ca1a-de5a-747f0e69e10d",
+  Cell[93265, 2275, 502, 12, 70, "Text",ExpressionUUID->"5cfabb2c-93cf-ca1a-de5a-747f0e69e10d",
    CellTags->{"GoGCompanion", "GoGClockText"}]},
  "GoGValidationHeading"->{
-  Cell[93686, 2289, 527, 17, 70, "Text",ExpressionUUID->"d0b6d6f3-8887-9aa2-3d81-f64b19696384",
+  Cell[93770, 2289, 527, 17, 70, "Text",ExpressionUUID->"d0b6d6f3-8887-9aa2-3d81-f64b19696384",
    CellTags->{"GoGCompanion", "GoGValidationHeading"}]},
  "GoGValidationInput"->{
-  Cell[94238, 2310, 1114, 30, 70, "Input",ExpressionUUID->"5aa87342-1d99-c533-5736-16297dcfd0c6",
+  Cell[94322, 2310, 1114, 30, 70, "Input",ExpressionUUID->"5aa87342-1d99-c533-5736-16297dcfd0c6",
    CellTags->{"GoGCompanion", "GoGValidationInput"}]},
  "GoGValidationOutput"->{
-  Cell[95355, 2342, 718, 21, 70, "Output",ExpressionUUID->"c7832bb6-3131-987f-8f61-9ed84f0dd4cd",
+  Cell[95439, 2342, 728, 21, 70, "Output",ExpressionUUID->"c7832bb6-3131-987f-8f61-9ed84f0dd4cd",
    CellTags->{"GoGCompanion", "GoGValidationOutput"}]},
  "GoGTransitionComparison"->{
-  Cell[96076, 2365, 11840, 265, 70, "Output",ExpressionUUID->"895abd3a-840d-7326-4451-0ad683edff71",
+  Cell[96170, 2365, 11892, 267, 70, "Output",ExpressionUUID->"895abd3a-840d-7326-4451-0ad683edff71",
    CellTags->{"GoGCompanion", "GoGTransitionComparison"}]},
  "GoGTransitionComparisonCaption"->{
-  Cell[107931, 2633, 524, 14, 70, "Caption",ExpressionUUID->"d9606181-3f8b-a84e-ec4a-e4cc01f8767d",
+  Cell[108077, 2635, 517, 14, 70, "Caption",ExpressionUUID->"d9606181-3f8b-a84e-ec4a-e4cc01f8767d",
    CellTags->{"GoGCompanion", "GoGTransitionComparisonCaption"}]},
  "GoGClockChecksHeading"->{
-  Cell[108458, 2649, 526, 18, 70, "Text",ExpressionUUID->"a19e6596-b403-1a3a-13a3-e8d19279ef5e",
+  Cell[108597, 2651, 527, 18, 70, "Text",ExpressionUUID->"a19e6596-b403-1a3a-13a3-e8d19279ef5e",
    CellTags->{"GoGCompanion", "GoGClockChecksHeading"}]},
  "GoGClockChecksInput"->{
-  Cell[109009, 2671, 1318, 36, 70, "Input",ExpressionUUID->"92a1479f-6ed0-65de-5bd8-c6e72a9b8886",
+  Cell[109149, 2673, 1318, 36, 70, "Input",ExpressionUUID->"92a1479f-6ed0-65de-5bd8-c6e72a9b8886",
    CellTags->{"GoGCompanion", "GoGClockChecksInput"}]},
  "GoGClockChecksOutput"->{
-  Cell[110330, 2709, 738, 20, 70, "Output",ExpressionUUID->"e3fa4ab7-bb4a-8f65-d06e-e4aaad354131",
+  Cell[110470, 2711, 738, 20, 70, "Output",ExpressionUUID->"e3fa4ab7-bb4a-8f65-d06e-e4aaad354131",
    CellTags->{"GoGCompanion", "GoGClockChecksOutput"}]},
  "GoGSectionDiffusion"->{
-  Cell[111117, 2735, 269, 7, 70, "Section",ExpressionUUID->"899aecc7-b9e4-c7dd-af99-6b95041b3ee9",
+  Cell[111257, 2737, 269, 7, 70, "Section",ExpressionUUID->"899aecc7-b9e4-c7dd-af99-6b95041b3ee9",
    CellTags->{"GoGCompanion", "GoGSectionDiffusion"}]},
  "GoGDiffusionText"->{
-  Cell[111389, 2744, 497, 12, 70, "Text",ExpressionUUID->"0e4922dc-3c14-27ed-159c-384813274f09",
+  Cell[111529, 2746, 503, 12, 70, "Text",ExpressionUUID->"0e4922dc-3c14-27ed-159c-384813274f09",
    CellTags->{"GoGCompanion", "GoGDiffusionText"}]},
  "GoGDiffusionLab"->{
-  Cell[111889, 2758, 70183, 1438, 70, "Output",ExpressionUUID->"7a008bda-56b4-16ff-73f2-fe7b115ab322",
+  Cell[112035, 2760, 88196, 1773, 70, "Output",ExpressionUUID->"7a008bda-56b4-16ff-73f2-fe7b115ab322",
    CellTags->{"GoGCompanion", "GoGDiffusionLab"}]},
  "GoGDiffusionLabCaption"->{
-  Cell[182075, 4198, 517, 13, 70, "Caption",ExpressionUUID->"c0f4f445-ffe4-866d-18c7-4a02898cbbb4",
+  Cell[200234, 4535, 517, 13, 70, "Caption",ExpressionUUID->"c0f4f445-ffe4-866d-18c7-4a02898cbbb4",
    CellTags->{"GoGCompanion", "GoGDiffusionLabCaption"}]},
  "GoGDiffusionHeading"->{
-  Cell[182595, 4213, 530, 17, 70, "Text",ExpressionUUID->"4323540e-703f-b8ba-05e0-bdb8acdcd19d",
+  Cell[200754, 4550, 530, 17, 70, "Text",ExpressionUUID->"4323540e-703f-b8ba-05e0-bdb8acdcd19d",
    CellTags->{"GoGCompanion", "GoGDiffusionHeading"}]},
  "GoGDiffusionInput"->{
-  Cell[183150, 4234, 564, 16, 70, "Input",ExpressionUUID->"e4f868fc-b14a-15de-2a8b-dec08664c86c",
+  Cell[201309, 4571, 564, 16, 70, "Input",ExpressionUUID->"e4f868fc-b14a-15de-2a8b-dec08664c86c",
    CellTags->{"GoGCompanion", "GoGDiffusionInput"}]},
  "GoGDiffusionOutput"->{
-  Cell[183717, 4252, 669, 21, 70, "Output",ExpressionUUID->"ca3a32b9-45f2-b6da-457b-f74c4f2d8825",
+  Cell[201876, 4589, 669, 21, 70, "Output",ExpressionUUID->"ca3a32b9-45f2-b6da-457b-f74c4f2d8825",
    CellTags->{"GoGCompanion", "GoGDiffusionOutput"}]},
  "GoGSectionEnumeration"->{
-  Cell[184435, 4279, 273, 8, 70, "Section",ExpressionUUID->"e4b2ecac-883d-80be-7384-b60e80143df4",
+  Cell[202594, 4616, 273, 8, 70, "Section",ExpressionUUID->"e4b2ecac-883d-80be-7384-b60e80143df4",
    CellTags->{"GoGCompanion", "GoGSectionEnumeration"}]},
  "GoGEnumerationText"->{
-  Cell[184711, 4289, 504, 13, 70, "Text",ExpressionUUID->"9e988fb1-a727-de73-f7e8-e7a868e7e57d",
+  Cell[202870, 4626, 504, 13, 70, "Text",ExpressionUUID->"9e988fb1-a727-de73-f7e8-e7a868e7e57d",
    CellTags->{"GoGCompanion", "GoGEnumerationText"}]},
  "GoGEnumerationGrowth"->{
-  Cell[185218, 4304, 14945, 357, 70, "Output",ExpressionUUID->"2a86b59f-6f0d-538c-96a5-4819965052b2",
+  Cell[203377, 4641, 14945, 357, 70, "Output",ExpressionUUID->"2a86b59f-6f0d-538c-96a5-4819965052b2",
    CellTags->{"GoGCompanion", "GoGEnumerationGrowth"}]},
  "GoGEnumerationGrowthCaption"->{
-  Cell[200166, 4663, 474, 14, 70, "Caption",ExpressionUUID->"ce58f912-5368-be57-70aa-ab16103058e9",
+  Cell[218325, 5000, 474, 14, 70, "Caption",ExpressionUUID->"ce58f912-5368-be57-70aa-ab16103058e9",
    CellTags->{"GoGCompanion", "GoGEnumerationGrowthCaption"}]},
  "GoGEnumerationHeading"->{
-  Cell[200643, 4679, 533, 18, 70, "Text",ExpressionUUID->"52b20d56-93d4-2102-32b5-51c3c69cefcd",
+  Cell[218802, 5016, 533, 18, 70, "Text",ExpressionUUID->"52b20d56-93d4-2102-32b5-51c3c69cefcd",
    CellTags->{"GoGCompanion", "GoGEnumerationHeading"}]},
  "GoGEnumerationInput"->{
-  Cell[201201, 4701, 920, 28, 70, "Input",ExpressionUUID->"9c8d32e1-1f87-0c4d-e4e3-5899f6bf479d",
+  Cell[219360, 5038, 920, 28, 70, "Input",ExpressionUUID->"9c8d32e1-1f87-0c4d-e4e3-5899f6bf479d",
    CellTags->{"GoGCompanion", "GoGEnumerationInput"}]},
  "GoGEnumerationOutput"->{
-  Cell[202124, 4731, 1016, 30, 70, "Output",ExpressionUUID->"a95f742d-a548-1914-3d73-947c69da1b4c",
+  Cell[220283, 5068, 1016, 30, 70, "Output",ExpressionUUID->"a95f742d-a548-1914-3d73-947c69da1b4c",
    CellTags->{"GoGCompanion", "GoGEnumerationOutput"}]},
  "GoGSectionScope"->{
-  Cell[203189, 4767, 259, 6, 70, "Section",ExpressionUUID->"5cda3607-adaa-9fce-ffb3-781b8bb4985d",
+  Cell[221348, 5104, 259, 6, 70, "Section",ExpressionUUID->"5cda3607-adaa-9fce-ffb3-781b8bb4985d",
    CellTags->{"GoGCompanion", "GoGSectionScope"}]},
  "GoGScopeText"->{
-  Cell[203451, 4775, 728, 16, 70, "Text",ExpressionUUID->"d5156a8d-281f-2a40-813e-f1dd60f44849",
+  Cell[221610, 5112, 728, 16, 70, "Text",ExpressionUUID->"d5156a8d-281f-2a40-813e-f1dd60f44849",
    CellTags->{"GoGCompanion", "GoGScopeText"}]}
  }
 *)
 (*CellTagsIndex
 CellTagsIndex->{
- {"GoGCompanion", 204857, 4813},
- {"GoGCompanionTitle", 212686, 4916},
- {"GoGCompanionSubtitle", 212859, 4919},
- {"GoGCompanionAuthor", 213036, 4922},
- {"GoGNotebookVisual", 213209, 4925},
- {"GoGBanner", 213369, 4928},
- {"GoGCompanionNavigation", 213542, 4931},
- {"GoGCompanionIntro", 213719, 4934},
- {"GoGSectionOverview", 213892, 4937},
- {"GoGVisualAbstract", 214067, 4940},
- {"GoGVisualAbstractCaption", 214251, 4943},
- {"GoGSectionLocalMove", 214436, 4946},
- {"GoGLocalMoveText", 214612, 4949},
- {"GoGWhiteheadMove", 214783, 4952},
- {"GoGWhiteheadMoveCaption", 214966, 4955},
- {"GoGVarianceDrop", 215147, 4958},
- {"GoGVarianceFormula", 215324, 4961},
- {"GoGVarianceDropCaption", 215514, 4964},
- {"GoGPairLossHeading", 215697, 4967},
- {"GoGPairLossInput", 215871, 4970},
- {"GoGPairLossOutput", 216045, 4973},
- {"GoGSectionConsensus", 216223, 4976},
- {"GoGConsensusText", 216400, 4979},
- {"GoGConsensusSchedules", 216577, 4982},
- {"GoGConsensusSchedulesCaption", 216771, 4985},
- {"GoGConsensusHeading", 216961, 4988},
- {"GoGConsensusInput", 217137, 4991},
- {"GoGConsensusOutput", 217315, 4994},
- {"GoGSectionClocks", 217491, 4997},
- {"GoGClockText", 217661, 5000},
- {"GoGValidationHeading", 217833, 5003},
- {"GoGValidationInput", 218011, 5006},
- {"GoGValidationOutput", 218190, 5009},
- {"GoGTransitionComparison", 218374, 5012},
- {"GoGTransitionComparisonCaption", 218572, 5015},
- {"GoGClockChecksHeading", 218767, 5018},
- {"GoGClockChecksInput", 218948, 5021},
- {"GoGClockChecksOutput", 219130, 5024},
- {"GoGSectionDiffusion", 219312, 5027},
- {"GoGDiffusionText", 219490, 5030},
- {"GoGDiffusionLab", 219662, 5033},
- {"GoGDiffusionLabCaption", 219846, 5036},
- {"GoGDiffusionHeading", 220031, 5039},
- {"GoGDiffusionInput", 220208, 5042},
- {"GoGDiffusionOutput", 220385, 5045},
- {"GoGSectionEnumeration", 220567, 5048},
- {"GoGEnumerationText", 220749, 5051},
- {"GoGEnumerationGrowth", 220928, 5054},
- {"GoGEnumerationGrowthCaption", 221121, 5057},
- {"GoGEnumerationHeading", 221313, 5060},
- {"GoGEnumerationInput", 221494, 5063},
- {"GoGEnumerationOutput", 221675, 5066},
- {"GoGSectionScope", 221854, 5069},
- {"GoGScopeText", 222024, 5072}
+ {"GoGCompanion", 223016, 5150},
+ {"GoGCompanionTitle", 230845, 5253},
+ {"GoGCompanionSubtitle", 231018, 5256},
+ {"GoGCompanionAuthor", 231195, 5259},
+ {"GoGNotebookVisual", 231368, 5262},
+ {"GoGBanner", 231528, 5265},
+ {"GoGCompanionNavigation", 231701, 5268},
+ {"GoGCompanionIntro", 231878, 5271},
+ {"GoGSectionOverview", 232051, 5274},
+ {"GoGVisualAbstract", 232226, 5277},
+ {"GoGVisualAbstractCaption", 232410, 5280},
+ {"GoGSectionLocalMove", 232595, 5283},
+ {"GoGLocalMoveText", 232771, 5286},
+ {"GoGWhiteheadMove", 232942, 5289},
+ {"GoGWhiteheadMoveCaption", 233125, 5292},
+ {"GoGVarianceDrop", 233306, 5295},
+ {"GoGVarianceFormula", 233483, 5298},
+ {"GoGVarianceDropCaption", 233673, 5301},
+ {"GoGPairLossHeading", 233856, 5304},
+ {"GoGPairLossInput", 234030, 5307},
+ {"GoGPairLossOutput", 234204, 5310},
+ {"GoGSectionConsensus", 234382, 5313},
+ {"GoGConsensusText", 234559, 5316},
+ {"GoGConsensusSchedules", 234736, 5319},
+ {"GoGConsensusSchedulesCaption", 234930, 5322},
+ {"GoGConsensusHeading", 235120, 5325},
+ {"GoGConsensusInput", 235296, 5328},
+ {"GoGConsensusOutput", 235474, 5331},
+ {"GoGSectionClocks", 235650, 5334},
+ {"GoGClockText", 235820, 5337},
+ {"GoGValidationHeading", 235992, 5340},
+ {"GoGValidationInput", 236170, 5343},
+ {"GoGValidationOutput", 236349, 5346},
+ {"GoGTransitionComparison", 236533, 5349},
+ {"GoGTransitionComparisonCaption", 236731, 5352},
+ {"GoGClockChecksHeading", 236926, 5355},
+ {"GoGClockChecksInput", 237107, 5358},
+ {"GoGClockChecksOutput", 237289, 5361},
+ {"GoGSectionDiffusion", 237471, 5364},
+ {"GoGDiffusionText", 237649, 5367},
+ {"GoGDiffusionLab", 237821, 5370},
+ {"GoGDiffusionLabCaption", 238005, 5373},
+ {"GoGDiffusionHeading", 238190, 5376},
+ {"GoGDiffusionInput", 238367, 5379},
+ {"GoGDiffusionOutput", 238544, 5382},
+ {"GoGSectionEnumeration", 238726, 5385},
+ {"GoGEnumerationText", 238908, 5388},
+ {"GoGEnumerationGrowth", 239087, 5391},
+ {"GoGEnumerationGrowthCaption", 239280, 5394},
+ {"GoGEnumerationHeading", 239472, 5397},
+ {"GoGEnumerationInput", 239653, 5400},
+ {"GoGEnumerationOutput", 239834, 5403},
+ {"GoGSectionScope", 240013, 5406},
+ {"GoGScopeText", 240183, 5409}
  }
 *)
 (*NotebookFileOutline
@@ -5144,126 +5481,126 @@ Cell[1331, 45, 288, 8, 70, "Author",ExpressionUUID->"2c2865f1-2b6e-2776-7029-281
  CellTags->{"GoGCompanion", "GoGCompanionAuthor"}],
 Cell[1622, 55, 881, 26, 70, "Text",ExpressionUUID->"5eb76d08-03e8-9518-7f29-e54731a869a9",
  CellTags->{"GoGNotebookVisual", "GoGBanner"}],
-Cell[2506, 83, 3068, 86, 70, "Text",ExpressionUUID->"f4cdfb3e-703f-af1a-3cb7-6aef6011f25d",
+Cell[2506, 83, 3066, 85, 70, "Text",ExpressionUUID->"f4cdfb3e-703f-af1a-3cb7-6aef6011f25d",
  CellTags->{"GoGCompanion", "GoGCompanionNavigation"}],
-Cell[5577, 171, 533, 14, 70, "Text",ExpressionUUID->"9b08c9d0-0099-41c2-6fb4-67cca3439218",
+Cell[5575, 170, 533, 14, 70, "Text",ExpressionUUID->"9b08c9d0-0099-41c2-6fb4-67cca3439218",
  CellTags->{"GoGCompanion", "GoGCompanionIntro"}],
 Cell[CellGroupData[{
-Cell[6135, 189, 258, 7, 70, "Section",ExpressionUUID->"fdbe342f-01a5-4e3f-2b15-89cb9f0033b0",
+Cell[6133, 188, 258, 7, 70, "Section",ExpressionUUID->"fdbe342f-01a5-4e3f-2b15-89cb9f0033b0",
  CellTags->{"GoGCompanion", "GoGSectionOverview"}],
-Cell[6396, 198, 28310, 636, 70, "Output",ExpressionUUID->"ec758236-f7fd-eca4-5199-214c60f59a0b",
+Cell[6394, 197, 28310, 636, 70, "Output",ExpressionUUID->"ec758236-f7fd-eca4-5199-214c60f59a0b",
  CellTags->{"GoGCompanion", "GoGVisualAbstract"}],
-Cell[34709, 836, 545, 15, 70, "Caption",ExpressionUUID->"3193abe9-c8f8-0412-5915-3c9e33e9e69c",
+Cell[34707, 835, 545, 15, 70, "Caption",ExpressionUUID->"3193abe9-c8f8-0412-5915-3c9e33e9e69c",
  CellTags->{"GoGCompanion", "GoGVisualAbstractCaption"}]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[35291, 856, 270, 7, 70, "Section",ExpressionUUID->"e336e041-8e83-73c6-a450-0aa974d419b6",
+Cell[35289, 855, 270, 7, 70, "Section",ExpressionUUID->"e336e041-8e83-73c6-a450-0aa974d419b6",
  CellTags->{"GoGCompanion", "GoGSectionLocalMove"}],
-Cell[35564, 865, 467, 12, 70, "Text",ExpressionUUID->"25e20be6-386a-39dc-7346-2c06d328f4c5",
+Cell[35562, 864, 467, 12, 70, "Text",ExpressionUUID->"25e20be6-386a-39dc-7346-2c06d328f4c5",
  CellTags->{"GoGCompanion", "GoGLocalMoveText"}],
-Cell[36034, 879, 21015, 457, 70, "Output",ExpressionUUID->"15351405-780c-3539-f808-795fccdfe663",
+Cell[36032, 878, 21019, 457, 70, "Output",ExpressionUUID->"15351405-780c-3539-f808-795fccdfe663",
  CellTags->{"GoGCompanion", "GoGWhiteheadMove"}],
-Cell[57052, 1338, 475, 13, 70, "Caption",ExpressionUUID->"8b2971ca-f8e6-833d-31ec-dcdc3c2f75e5",
+Cell[57054, 1337, 475, 13, 70, "Caption",ExpressionUUID->"8b2971ca-f8e6-833d-31ec-dcdc3c2f75e5",
  CellTags->{"GoGCompanion", "GoGWhiteheadMoveCaption"}],
-Cell[57530, 1353, 8703, 212, 70, "Output",ExpressionUUID->"580c5782-ad27-22fb-e671-387fb554280c",
+Cell[57532, 1352, 8703, 212, 70, "Output",ExpressionUUID->"580c5782-ad27-22fb-e671-387fb554280c",
  CellTags->{"GoGCompanion", "GoGVarianceDrop"}],
-Cell[66236, 1567, 807, 27, 70, "DisplayFormula",ExpressionUUID->"1e08d3f1-daed-1166-57a6-438e0c26edeb",
+Cell[66238, 1566, 807, 27, 70, "DisplayFormula",ExpressionUUID->"1e08d3f1-daed-1166-57a6-438e0c26edeb",
  CellTags->{"GoGCompanion", "GoGVarianceFormula"}],
-Cell[67046, 1596, 497, 13, 70, "Caption",ExpressionUUID->"f72e5919-ad94-a04b-5ba1-03bc661a2abd",
+Cell[67048, 1595, 497, 13, 70, "Caption",ExpressionUUID->"f72e5919-ad94-a04b-5ba1-03bc661a2abd",
  CellTags->{"GoGCompanion", "GoGVarianceDropCaption"}],
-Cell[67546, 1611, 519, 17, 70, "Text",ExpressionUUID->"bee941ba-2690-21ac-d48b-c4663bdf35e6",
+Cell[67548, 1610, 519, 17, 70, "Text",ExpressionUUID->"bee941ba-2690-21ac-d48b-c4663bdf35e6",
  CellTags->{"GoGCompanion", "GoGPairLossHeading"}],
 Cell[CellGroupData[{
-Cell[68090, 1632, 890, 29, 70, "Input",ExpressionUUID->"b3de0ca4-c072-d192-3860-8130e92d90a5",
+Cell[68092, 1631, 890, 29, 70, "Input",ExpressionUUID->"b3de0ca4-c072-d192-3860-8130e92d90a5",
  CellTags->{"GoGCompanion", "GoGPairLossInput"}],
-Cell[68983, 1663, 584, 19, 70, "Output",ExpressionUUID->"21da2f1d-690e-9e17-09af-325f5991f8eb",
+Cell[68985, 1662, 584, 19, 70, "Output",ExpressionUUID->"21da2f1d-690e-9e17-09af-325f5991f8eb",
  CellTags->{"GoGCompanion", "GoGPairLossOutput"}]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[69616, 1688, 275, 7, 70, "Section",ExpressionUUID->"1f01cf6d-a151-5123-98a4-47918647904c",
+Cell[69618, 1687, 270, 7, 70, "Section",ExpressionUUID->"1f01cf6d-a151-5123-98a4-47918647904c",
  CellTags->{"GoGCompanion", "GoGSectionConsensus"}],
-Cell[69894, 1697, 468, 12, 70, "Text",ExpressionUUID->"68191540-bce8-3462-6d97-c33131db4baf",
+Cell[69891, 1696, 556, 13, 70, "Text",ExpressionUUID->"68191540-bce8-3462-6d97-c33131db4baf",
  CellTags->{"GoGCompanion", "GoGConsensusText"}],
-Cell[70365, 1711, 17202, 373, 70, "Output",ExpressionUUID->"8878a585-6da7-6a3e-83de-e6d48e0c8431",
+Cell[70450, 1711, 17202, 373, 70, "Output",ExpressionUUID->"8878a585-6da7-6a3e-83de-e6d48e0c8431",
  CellTags->{"GoGCompanion", "GoGConsensusSchedules"}],
-Cell[87570, 2086, 527, 14, 70, "Caption",ExpressionUUID->"8dc749d0-1cb0-c3f5-0495-0dba429ebbfd",
+Cell[87655, 2086, 527, 14, 70, "Caption",ExpressionUUID->"8dc749d0-1cb0-c3f5-0495-0dba429ebbfd",
  CellTags->{"GoGCompanion", "GoGConsensusSchedulesCaption"}],
-Cell[88100, 2102, 526, 17, 70, "Text",ExpressionUUID->"89e78c47-cf53-b187-5b15-762c047bb75c",
+Cell[88185, 2102, 526, 17, 70, "Text",ExpressionUUID->"89e78c47-cf53-b187-5b15-762c047bb75c",
  CellTags->{"GoGCompanion", "GoGConsensusHeading"}],
 Cell[CellGroupData[{
-Cell[88651, 2123, 3688, 120, 70, "Input",ExpressionUUID->"8bb88894-8bda-ca80-2b5f-e68895186944",
+Cell[88736, 2123, 3688, 120, 70, "Input",ExpressionUUID->"8bb88894-8bda-ca80-2b5f-e68895186944",
  CellTags->{"GoGCompanion", "GoGConsensusInput"}],
-Cell[92342, 2245, 521, 16, 70, "Output",ExpressionUUID->"b44f34c7-b33b-b29e-9e8d-0931eb100b38",
+Cell[92427, 2245, 521, 16, 70, "Output",ExpressionUUID->"b44f34c7-b33b-b29e-9e8d-0931eb100b38",
  CellTags->{"GoGCompanion", "GoGConsensusOutput"}]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[92912, 2267, 262, 6, 70, "Section",ExpressionUUID->"508355fc-74dc-dd7e-43ce-dbb0e05a6f13",
+Cell[92997, 2267, 265, 6, 70, "Section",ExpressionUUID->"508355fc-74dc-dd7e-43ce-dbb0e05a6f13",
  CellTags->{"GoGCompanion", "GoGSectionClocks"}],
-Cell[93177, 2275, 506, 12, 70, "Text",ExpressionUUID->"5cfabb2c-93cf-ca1a-de5a-747f0e69e10d",
+Cell[93265, 2275, 502, 12, 70, "Text",ExpressionUUID->"5cfabb2c-93cf-ca1a-de5a-747f0e69e10d",
  CellTags->{"GoGCompanion", "GoGClockText"}],
-Cell[93686, 2289, 527, 17, 70, "Text",ExpressionUUID->"d0b6d6f3-8887-9aa2-3d81-f64b19696384",
+Cell[93770, 2289, 527, 17, 70, "Text",ExpressionUUID->"d0b6d6f3-8887-9aa2-3d81-f64b19696384",
  CellTags->{"GoGCompanion", "GoGValidationHeading"}],
 Cell[CellGroupData[{
-Cell[94238, 2310, 1114, 30, 70, "Input",ExpressionUUID->"5aa87342-1d99-c533-5736-16297dcfd0c6",
+Cell[94322, 2310, 1114, 30, 70, "Input",ExpressionUUID->"5aa87342-1d99-c533-5736-16297dcfd0c6",
  CellTags->{"GoGCompanion", "GoGValidationInput"}],
-Cell[95355, 2342, 718, 21, 70, "Output",ExpressionUUID->"c7832bb6-3131-987f-8f61-9ed84f0dd4cd",
+Cell[95439, 2342, 728, 21, 70, "Output",ExpressionUUID->"c7832bb6-3131-987f-8f61-9ed84f0dd4cd",
  CellTags->{"GoGCompanion", "GoGValidationOutput"}],
-Cell[96076, 2365, 11840, 265, 70, "Output",ExpressionUUID->"895abd3a-840d-7326-4451-0ad683edff71",
+Cell[96170, 2365, 11892, 267, 70, "Output",ExpressionUUID->"895abd3a-840d-7326-4451-0ad683edff71",
  CellTags->{"GoGCompanion", "GoGTransitionComparison"}]
 }, Open  ]],
-Cell[107931, 2633, 524, 14, 70, "Caption",ExpressionUUID->"d9606181-3f8b-a84e-ec4a-e4cc01f8767d",
+Cell[108077, 2635, 517, 14, 70, "Caption",ExpressionUUID->"d9606181-3f8b-a84e-ec4a-e4cc01f8767d",
  CellTags->{"GoGCompanion", "GoGTransitionComparisonCaption"}],
-Cell[108458, 2649, 526, 18, 70, "Text",ExpressionUUID->"a19e6596-b403-1a3a-13a3-e8d19279ef5e",
+Cell[108597, 2651, 527, 18, 70, "Text",ExpressionUUID->"a19e6596-b403-1a3a-13a3-e8d19279ef5e",
  CellTags->{"GoGCompanion", "GoGClockChecksHeading"}],
 Cell[CellGroupData[{
-Cell[109009, 2671, 1318, 36, 70, "Input",ExpressionUUID->"92a1479f-6ed0-65de-5bd8-c6e72a9b8886",
+Cell[109149, 2673, 1318, 36, 70, "Input",ExpressionUUID->"92a1479f-6ed0-65de-5bd8-c6e72a9b8886",
  CellTags->{"GoGCompanion", "GoGClockChecksInput"}],
-Cell[110330, 2709, 738, 20, 70, "Output",ExpressionUUID->"e3fa4ab7-bb4a-8f65-d06e-e4aaad354131",
+Cell[110470, 2711, 738, 20, 70, "Output",ExpressionUUID->"e3fa4ab7-bb4a-8f65-d06e-e4aaad354131",
  CellTags->{"GoGCompanion", "GoGClockChecksOutput"}]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[111117, 2735, 269, 7, 70, "Section",ExpressionUUID->"899aecc7-b9e4-c7dd-af99-6b95041b3ee9",
+Cell[111257, 2737, 269, 7, 70, "Section",ExpressionUUID->"899aecc7-b9e4-c7dd-af99-6b95041b3ee9",
  CellTags->{"GoGCompanion", "GoGSectionDiffusion"}],
-Cell[111389, 2744, 497, 12, 70, "Text",ExpressionUUID->"0e4922dc-3c14-27ed-159c-384813274f09",
+Cell[111529, 2746, 503, 12, 70, "Text",ExpressionUUID->"0e4922dc-3c14-27ed-159c-384813274f09",
  CellTags->{"GoGCompanion", "GoGDiffusionText"}],
-Cell[111889, 2758, 70183, 1438, 70, "Output",ExpressionUUID->"7a008bda-56b4-16ff-73f2-fe7b115ab322",
+Cell[112035, 2760, 88196, 1773, 70, "Output",ExpressionUUID->"7a008bda-56b4-16ff-73f2-fe7b115ab322",
  CellTags->{"GoGCompanion", "GoGDiffusionLab"}],
-Cell[182075, 4198, 517, 13, 70, "Caption",ExpressionUUID->"c0f4f445-ffe4-866d-18c7-4a02898cbbb4",
+Cell[200234, 4535, 517, 13, 70, "Caption",ExpressionUUID->"c0f4f445-ffe4-866d-18c7-4a02898cbbb4",
  CellTags->{"GoGCompanion", "GoGDiffusionLabCaption"}],
-Cell[182595, 4213, 530, 17, 70, "Text",ExpressionUUID->"4323540e-703f-b8ba-05e0-bdb8acdcd19d",
+Cell[200754, 4550, 530, 17, 70, "Text",ExpressionUUID->"4323540e-703f-b8ba-05e0-bdb8acdcd19d",
  CellTags->{"GoGCompanion", "GoGDiffusionHeading"}],
 Cell[CellGroupData[{
-Cell[183150, 4234, 564, 16, 70, "Input",ExpressionUUID->"e4f868fc-b14a-15de-2a8b-dec08664c86c",
+Cell[201309, 4571, 564, 16, 70, "Input",ExpressionUUID->"e4f868fc-b14a-15de-2a8b-dec08664c86c",
  CellTags->{"GoGCompanion", "GoGDiffusionInput"}],
-Cell[183717, 4252, 669, 21, 70, "Output",ExpressionUUID->"ca3a32b9-45f2-b6da-457b-f74c4f2d8825",
+Cell[201876, 4589, 669, 21, 70, "Output",ExpressionUUID->"ca3a32b9-45f2-b6da-457b-f74c4f2d8825",
  CellTags->{"GoGCompanion", "GoGDiffusionOutput"}]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[184435, 4279, 273, 8, 70, "Section",ExpressionUUID->"e4b2ecac-883d-80be-7384-b60e80143df4",
+Cell[202594, 4616, 273, 8, 70, "Section",ExpressionUUID->"e4b2ecac-883d-80be-7384-b60e80143df4",
  CellTags->{"GoGCompanion", "GoGSectionEnumeration"}],
-Cell[184711, 4289, 504, 13, 70, "Text",ExpressionUUID->"9e988fb1-a727-de73-f7e8-e7a868e7e57d",
+Cell[202870, 4626, 504, 13, 70, "Text",ExpressionUUID->"9e988fb1-a727-de73-f7e8-e7a868e7e57d",
  CellTags->{"GoGCompanion", "GoGEnumerationText"}],
-Cell[185218, 4304, 14945, 357, 70, "Output",ExpressionUUID->"2a86b59f-6f0d-538c-96a5-4819965052b2",
+Cell[203377, 4641, 14945, 357, 70, "Output",ExpressionUUID->"2a86b59f-6f0d-538c-96a5-4819965052b2",
  CellTags->{"GoGCompanion", "GoGEnumerationGrowth"}],
-Cell[200166, 4663, 474, 14, 70, "Caption",ExpressionUUID->"ce58f912-5368-be57-70aa-ab16103058e9",
+Cell[218325, 5000, 474, 14, 70, "Caption",ExpressionUUID->"ce58f912-5368-be57-70aa-ab16103058e9",
  CellTags->{"GoGCompanion", "GoGEnumerationGrowthCaption"}],
-Cell[200643, 4679, 533, 18, 70, "Text",ExpressionUUID->"52b20d56-93d4-2102-32b5-51c3c69cefcd",
+Cell[218802, 5016, 533, 18, 70, "Text",ExpressionUUID->"52b20d56-93d4-2102-32b5-51c3c69cefcd",
  CellTags->{"GoGCompanion", "GoGEnumerationHeading"}],
 Cell[CellGroupData[{
-Cell[201201, 4701, 920, 28, 70, "Input",ExpressionUUID->"9c8d32e1-1f87-0c4d-e4e3-5899f6bf479d",
+Cell[219360, 5038, 920, 28, 70, "Input",ExpressionUUID->"9c8d32e1-1f87-0c4d-e4e3-5899f6bf479d",
  CellTags->{"GoGCompanion", "GoGEnumerationInput"}],
-Cell[202124, 4731, 1016, 30, 70, "Output",ExpressionUUID->"a95f742d-a548-1914-3d73-947c69da1b4c",
+Cell[220283, 5068, 1016, 30, 70, "Output",ExpressionUUID->"a95f742d-a548-1914-3d73-947c69da1b4c",
  CellTags->{"GoGCompanion", "GoGEnumerationOutput"}]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[203189, 4767, 259, 6, 70, "Section",ExpressionUUID->"5cda3607-adaa-9fce-ffb3-781b8bb4985d",
+Cell[221348, 5104, 259, 6, 70, "Section",ExpressionUUID->"5cda3607-adaa-9fce-ffb3-781b8bb4985d",
  CellTags->{"GoGCompanion", "GoGSectionScope"}],
-Cell[203451, 4775, 728, 16, 70, "Text",ExpressionUUID->"d5156a8d-281f-2a40-813e-f1dd60f44849",
+Cell[221610, 5112, 728, 16, 70, "Text",ExpressionUUID->"d5156a8d-281f-2a40-813e-f1dd60f44849",
  CellTags->{"GoGCompanion", "GoGScopeText"}]
 }, Open  ]]
 }, Open  ]]

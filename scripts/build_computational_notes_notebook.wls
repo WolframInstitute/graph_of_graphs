@@ -1,6 +1,6 @@
 #!/usr/bin/env wolframscript
 
-(* Build an executable mini-notebook from the computational-notes narrative. *)
+(* Build the executable computational notebook. *)
 
 $requiredGogFieldDynamicsVersion = "0.2.0";
 $minimumWolframVersion = 14.3;
@@ -35,13 +35,13 @@ If[$VersionNumber < $minimumWolframVersion,
   fail["Wolfram Language 14.3 or newer is required; found " <> $Version]
 ];
 If[! DirectoryQ[paperPacletDirectory],
-  fail["local paclet not found: " <> paperPacletDirectory]
+  fail["local package not found: " <> paperPacletDirectory]
 ];
 
 Quiet @ Check[
   PacletDirectoryLoad[paperPacletDirectory];
   Needs["GogFieldDynamics`"],
-  fail["the repo-local GogFieldDynamics paclet could not be loaded"]
+  fail["the repo-local GogFieldDynamics package could not be loaded"]
 ];
 
 paperPaclet = Quiet[Check[PacletObject["GogFieldDynamics"], $Failed]];
@@ -68,7 +68,7 @@ Needs[\"GogFieldDynamics`\"];
 <|
   \"GogFieldDynamicsVersion\" ->
     PacletObject[\"GogFieldDynamics\"][\"Version\"],
-  \"PacletLoaded\" -> NameQ[\"GogFieldDynamics`GogAvailableSizes\"]
+  \"PackageLoaded\" -> NameQ[\"GogFieldDynamics`GogAvailableSizes\"]
 |>";
 
 code["pair-loss"] = "Clear[x, y];
@@ -84,82 +84,183 @@ code["averaging-matrix"] = "pairAverage[n_, {i_, j_}] := ReplacePart[
 ];
 
 a = pairAverage[4, {1, 3}];
-{
-  SymmetricMatrixQ[a],
-  a . a === a,
-  a . ConstantArray[1, 4] === ConstantArray[1, 4]
-}";
+<|
+  \"Symmetric\" -> SymmetricMatrixQ[a],
+  \"Idempotent\" -> (a . a === a),
+  \"Preserves constant fields\" ->
+    (a . ConstantArray[1, 4] === ConstantArray[1, 4])
+|>";
 
-code["resource-summary"] = "Table[
+code["resource-summary"] = "modelRows = Table[
   With[{m = GogSmallModel[n]},
     {n, m[\"NodeCount\"], m[\"EdgeCount\"],
      m[\"RuleASlotCount\"]}
   ],
   {n, GogAvailableSizes[]}
+];
+Grid[
+  Prepend[
+    modelRows,
+    {\"N\", \"Graph types\", \"GoG edges\", \"Rule A outcomes\"}
+  ],
+  Frame -> All,
+  Alignment -> Right
 ]";
 
 code["validation"] = "r = GogValidateSmallModels[];
-{
-  r[\"Valid\"],
-  AssociationMap[
+<|
+  \"All bundled models valid\" -> r[\"Valid\"],
+  \"Checks by N\" -> AssociationMap[
     r[\"Models\", #][\"Valid\"] &,
     GogAvailableSizes[]
   ]
-}";
+|>";
+
+code["class-atlas"] = "classAtlas = GogClassAtlas[4]";
+
+code["class-explorer"] =
+  "classExplorer = GogClassExplorer[\"InitialSize\" -> 8]";
 
 code["rule-a-counts"] = "countsA = GogTransitionCounts[4, \"A\"];
-{countsA, Total /@ countsA}";
+Column[
+  {
+    MatrixForm[countsA],
+    Row[{\"Row sums: \", Total /@ countsA}]
+  },
+  Spacings -> 0.5
+]";
 
 code["rule-a-stationary"] = "pA = GogTransitionMatrix[4, \"A\"];
 piA = First[
   NullSpace[Transpose[pA] - IdentityMatrix[Length[pA]]]
 ];
-piA/Total[piA]";
+stationaryA = piA/Total[piA];
+Grid[
+  Prepend[
+    MapIndexed[{\"G\" <> ToString[First[#2]], #1} &, stationaryA],
+    {\"Graph type\", \"Stationary probability\"}
+  ],
+  Frame -> All,
+  Alignment -> Right
+]";
 
-code["fixed-clock-b"] = "pB = GogTransitionMatrix[4, \"B\"];
+code["rule-b-matrix"] = "pB = GogTransitionMatrix[4, \"B\"];
 MatrixForm[pB]";
 
-code["symmetry-stationarity"] = "u = ConstantArray[1/5, 5];
-{SymmetricMatrixQ[pB], u . pB}";
+code["rule-b-spectrum"] = "eigenvaluesB = Sort[Eigenvalues[pB], Greater];
+<|
+  \"Eigenvalues of Rule B\" -> eigenvaluesB,
+  \"Spectral gap\" -> FullSimplify[1 - eigenvaluesB[[2]]]
+|>";
 
-code["b-versus-jump"] = "{
-  GogTransitionMatrix[2, \"B\"],
-  GogTransitionMatrix[2, \"BJump\"]
-}";
+code["symmetry-stationarity"] = "u = ConstantArray[1/5, 5];
+<|
+  \"Symmetric matrix\" -> SymmetricMatrixQ[pB],
+  \"Uniform distribution after one step\" -> (u . pB)
+|>";
+
+code["b-versus-jump"] = "Column[
+  {
+    Style[\"Rule B\", Bold],
+    MatrixForm[GogTransitionMatrix[2, \"B\"]],
+    Style[\"Jump chain obtained after removing holds\", Bold],
+    MatrixForm[GogTransitionMatrix[2, \"BJump\"]]
+  },
+  Spacings -> 0.4
+]";
 
 code["diffusion-a"] = "p4A = GogDiffusionState[4, \"A\", 1, 4];
-{p4A, N[p4A, 6]}";
+Grid[
+  Prepend[
+    MapIndexed[
+      {\"G\" <> ToString[First[#2]], #1, N[#1, 5]} &,
+      p4A
+    ],
+    {\"Graph type\", \"Exact probability\", \"Decimal\"}
+  ],
+  Frame -> All,
+  Alignment -> Right
+]";
 
 code["diffusion-b"] = "p4B = GogDiffusionState[4, \"B\", 1, 4];
-{p4B, N[p4B, 6]}";
+Grid[
+  Prepend[
+    MapIndexed[
+      {\"G\" <> ToString[First[#2]], #1, N[#1, 5]} &,
+      p4B
+    ],
+    {\"Graph type\", \"Exact probability\", \"Decimal\"}
+  ],
+  Frame -> All,
+  Alignment -> Right
+]";
 
-code["seeded-path"] =
-  "GogRandomTrajectory[4, \"A\", 1, 12, 2026]";
+code["diffusion-picture"] =
+  "diffusionPicture = GogDiffusionSnapshot[
+  8, \"A\", 1, 12, 273, \"PathSteps\" -> 48
+]";
+
+code["seeded-path"] = "samplePath =
+  GogRandomTrajectory[8, \"A\", 1, 48, 273];
+pathRows = MapIndexed[
+  {First[#2] - 1, \"G\" <> ToString[#1]} &,
+  samplePath
+];
+pathBlocks = Table[
+  PadRight[
+    Take[pathRows, {start, Min[start + 12, Length[pathRows]]}],
+    13,
+    {{\"\", \"\"}}
+  ],
+  {start, {1, 14, 27, 40}}
+];
+Column[
+  {
+    <|
+      \"Transitions\" -> Length[samplePath] - 1,
+      \"Distinct graph types visited\" ->
+        Length[DeleteDuplicates[samplePath]],
+      \"Holding steps\" ->
+        Count[Partition[samplePath, 2, 1], {x_, x_}]
+    |>,
+    Grid[
+      Prepend[
+        MapThread[Join, pathBlocks],
+        Flatten[ConstantArray[{\"t\", \"state\"}, 4]]
+      ],
+      Frame -> All,
+      Alignment -> Right
+    ]
+  },
+  Spacings -> 0.5
+]";
 
 code["matching-products"] = "matching[n_, edges_] :=
   Dot @@ (pairAverage[n, #] & /@ edges);
 
-k4Word =
+k4Product =
   matching[4, {{1, 3}, {2, 4}}] .
   matching[4, {{1, 2}, {3, 4}}];
 
-q3Word =
+q3Product =
   matching[8, {{1, 5}, {2, 6}, {3, 7}, {4, 8}}] .
   matching[8, {{1, 3}, {2, 4}, {5, 7}, {6, 8}}] .
   matching[8, {{1, 2}, {3, 4}, {5, 6}, {7, 8}}];
 
-{
-  k4Word === ConstantArray[1/4, {4, 4}],
-  q3Word === ConstantArray[1/8, {8, 8}]
-}";
+<|
+  \"K4 reaches exact consensus\" ->
+    (k4Product === ConstantArray[1/4, {4, 4}]),
+  \"Q3 reaches exact consensus\" ->
+    (q3Product === ConstantArray[1/8, {8, 8}])
+|>";
 
-code["k4-product"] = "k4Word // MatrixForm";
+code["k4-product"] = "k4Product // MatrixForm";
 
-code["self-test"] = "miniNotebookChecks = <|
-  \"PacletLoaded\" ->
+code["internal-checks"] = "notebookBuildChecks = <|
+  \"PackageLoaded\" ->
     NameQ[\"GogFieldDynamics`GogSmallModel\"],
   \"AvailableSizes\" ->
-    (GogAvailableSizes[] === {2, 4, 6}),
+    (GogAvailableSizes[] === {2, 4, 6, 8}),
   \"ModelsValidate\" ->
     TrueQ[GogValidateSmallModels[][\"Valid\"]],
   \"PairLoss\" ->
@@ -181,16 +282,24 @@ code["self-test"] = "miniNotebookChecks = <|
       ConstantArray[1/5, 5] . pB === ConstantArray[1/5, 5]),
   \"DiffusionMass\" ->
     (Total[p4A] === 1 && Total[p4B] === 1),
+  \"ClassPictures\" ->
+    (MatchQ[classAtlas, _Column] &&
+      MatchQ[classExplorer, _DynamicModule]),
+  \"DiffusionPicture\" ->
+    MatchQ[diffusionPicture, _Column],
   \"SeededTrajectory\" ->
-    (GogRandomTrajectory[4, \"A\", 1, 12, 2026] ===
-      {1, 3, 1, 3, 3, 3, 3, 5, 3, 1, 2, 2, 1}),
+    (GogRandomTrajectory[8, \"A\", 1, 48, 273] ===
+      {1, 28, 24, 29, 29, 9, 54, 9, 54, 54, 34, 54, 25, 54,
+       52, 20, 27, 20, 61, 61, 71, 69, 63, 63, 61, 61, 63, 36,
+       37, 66, 37, 49, 64, 64, 64, 64, 64, 49, 49, 49, 45, 26,
+       26, 26, 58, 51, 53, 55, 48}),
   \"FiniteConsensus\" ->
-    (k4Word === ConstantArray[1/4, {4, 4}] &&
-      q3Word === ConstantArray[1/8, {8, 8}])
+    (k4Product === ConstantArray[1/4, {4, 4}] &&
+      q3Product === ConstantArray[1/8, {8, 8}])
 |>;
 <|
-  \"AllTestsPassed\" -> And @@ Values[miniNotebookChecks],
-  \"Checks\" -> miniNotebookChecks
+  \"ChecksPassed\" -> And @@ Values[notebookBuildChecks],
+  \"Checks\" -> notebookBuildChecks
 |>";
 
 progress["evaluating all executable cell sources"];
@@ -203,8 +312,8 @@ Scan[
   ],
   Keys[code]
 ];
-If[! TrueQ[results["self-test"]["AllTestsPassed"]],
-  fail["the final notebook self-test did not pass"]
+If[! TrueQ[results["internal-checks"]["ChecksPassed"]],
+  fail["the internal notebook checks did not pass"]
 ];
 
 $navy = RGBColor[0.075, 0.13, 0.22];
@@ -261,13 +370,6 @@ captionCell[text_String, id_String] := noteCell[
   ShowCellBracket -> False
 ];
 
-bulletCell[text_String, id_String] := noteCell[
-  text,
-  "Item",
-  id,
-  FontSize -> 12
-];
-
 numberedCell[text_String, id_String] := noteCell[
   text,
   "ItemNumbered",
@@ -275,9 +377,8 @@ numberedCell[text_String, id_String] := noteCell[
   FontSize -> 12
 ];
 
-SetAttributes[formulaCell, HoldAllComplete];
-formulaCell[expression_, id_String] := noteCell[
-  BoxData[ToBoxes[expression, TraditionalForm]],
+formulaBoxCell[boxes_, id_String] := noteCell[
+  BoxData[FormBox[boxes, TraditionalForm]],
   "DisplayFormula",
   id,
   ShowCellBracket -> False,
@@ -290,22 +391,19 @@ codeBoxes[source_String] := ToBoxes[
   StandardForm
 ];
 
-cellHeading[topic_String, id_String] := noteCell[
-  TextData[{
-    StyleBox[
-      "MATHEMATICA CELLS: ",
-      FontWeight -> "Bold",
-      FontColor -> $blue
-    ],
-    topic
-  }],
-  "Text",
-  id <> "Heading",
-  ShowCellBracket -> False,
-  CellMargins -> {{48, 48}, {12, 3}},
-  TextAlignment -> Center,
-  FontSize -> 10,
-  FontColor -> $muted
+cellHeading[topic_String, id_String] := With[
+  {label = ToUpperCase[StringTake[topic, 1]] <> StringDrop[topic, 1]},
+  noteCell[
+    TextData[{
+      StyleBox[label, FontWeight -> "Bold", FontColor -> $navy]
+    }],
+    "Text",
+    id <> "Heading",
+    ShowCellBracket -> False,
+    CellMargins -> {{48, 48}, {14, 4}},
+    TextAlignment -> Left,
+    FontSize -> 11
+  ]
 ];
 
 inputCell[source_String, id_String, initialization_: False] := noteCell[
@@ -344,147 +442,92 @@ cellPair[topic_String, id_String, initialization_: False] := {
   ]
 };
 
-programCell[text_String, id_String] := noteCell[
-  text,
-  "Program",
-  id,
-  CellFrame -> True,
-  CellFrameStyle -> Directive[$line, AbsoluteThickness[1]],
-  CellFrameMargins -> {{9, 9}, {8, 8}},
-  Background -> $wash,
-  FontSize -> 10
-];
-
-visualMapCell[] := noteCell[
-  TextData[{
-    StyleBox["Visual abstract. ", FontWeight -> "Bold", FontColor -> $navy],
-    "Separates carrier field, fixed-labelled moves, multiplicity, and support.\n",
-    StyleBox["Whitehead move. ", FontWeight -> "Bold", FontColor -> $navy],
-    "Shows the selected edge, exposed half-edges, and two resolutions.\n",
-    StyleBox["Variance drop. ", FontWeight -> "Bold", FontColor -> $navy],
-    "Turns one pair average into the exact loss (f_i-f_j)^2/2.\n",
-    StyleBox["Consensus schedules. ", FontWeight -> "Bold", FontColor -> $navy],
-    "Displays finite consensus layers on K4 and Q3.\n",
-    StyleBox["Transition heat maps. ", FontWeight -> "Bold", FontColor -> $navy],
-    "Compares Rule A and fixed-clock Rule B at N=4.\n",
-    StyleBox["Diffusion laboratory. ", FontWeight -> "Bold", FontColor -> $navy],
-    "Separates exact rational mass from one sampled path.\n",
-    StyleBox["Enumeration growth. ", FontWeight -> "Bold", FontColor -> $navy],
-    "Compares class and Rule-A slot counts through N=14."
-  }],
-  "Text",
-  "VisualMapTable",
-  ShowCellBracket -> False,
-  CellMargins -> {{48, 48}, {8, 14}},
-  CellFrame -> True,
-  CellFrameStyle -> Directive[$line],
-  CellFrameMargins -> {{12, 12}, {10, 10}},
-  Background -> $wash,
-  FontSize -> 11,
-  LineSpacing -> {1.1, 2}
-];
-
-bannerCell[] := noteCell[
-  TextData[{
-    StyleBox[
-      "EXECUTABLE MINI-NOTEBOOK",
-      FontFamily -> "Helvetica",
-      FontWeight -> "Bold",
-      FontColor -> $blue
-    ],
-    StyleBox["   •   ", FontColor -> $line],
-    StyleBox[
-      "exact cells • local paclet • built-in self-test",
-      FontFamily -> "Helvetica",
-      FontColor -> $muted
-    ]
-  }],
-  "Text",
-  "EditionBanner",
-  ShowCellBracket -> False,
-  TextAlignment -> Center,
-  CellFrame -> True,
-  CellFrameStyle -> Directive[$line],
-  CellFrameMargins -> {{12, 12}, {8, 8}},
-  Background -> $wash
-];
-
 cells = Flatten[
   {
     noteCell[
       "Whitehead Field Dynamics",
       "Title",
       "Title",
-      TextAlignment -> Center,
-      FontColor -> $navy
+      TextAlignment -> Left,
+      FontColor -> $navy,
+      FontSize -> 28,
+      CellMargins -> {{48, 48}, {24, 5}}
     ],
     noteCell[
-      "Computational Notes — Executable Mini-Notebook",
+      "Computational notes",
       "Subtitle",
       "Subtitle",
-      TextAlignment -> Center,
-      FontColor -> $muted
+      TextAlignment -> Left,
+      FontColor -> $muted,
+      FontSize -> 16,
+      CellMargins -> {{48, 48}, {2, 8}}
     ],
     noteCell[
-      "Alexander Kolpakov",
-      "Author",
-      "Author",
-      TextAlignment -> Center
+      "Alexander Kolpakov  ·  September 2026",
+      "Text",
+      "Byline",
+      TextAlignment -> Left,
+      FontColor -> $muted,
+      FontSize -> 10,
+      CellMargins -> {{48, 48}, {2, 18}}
     ],
-    noteCell[
-      "September 21, 2026",
-      "Affiliation",
-      "Date",
-      TextAlignment -> Center,
-      FontColor -> $muted
-    ],
-    bannerCell[],
     textCell[
-      "This mini-notebook is the executable counterpart of " <>
-      "whitehead-field-dynamics-computational-notes.tex. It records the " <>
-      "local pair-averaging calculation, the exact small graph-of-graphs " <>
-      "models, the two transition clocks, exact diffusion snapshots, one " <>
-      "seeded path, and finite consensus products for K4 and Q3. Every " <>
-      "displayed number is computed exactly before a decimal approximation " <>
-      "is requested. Proofs remain in the full LaTeX manuscript.",
+      "This notebook accompanies whitehead-field-dynamics-computational-" <>
+      "notes.tex. It contains the exact calculations used in that note, " <>
+      "together with drawings of the graph-of-graphs models, an interactive " <>
+      "view of the cubic multigraph represented by each state, and an exact " <>
+      "71-state diffusion calculation. Proofs remain in the full LaTeX " <>
+      "manuscript.",
       "Abstract"
     ],
 
     noteCell["Start here", "Section", "SectionSetup"],
     textCell[
-      "Keep this notebook in the repository root. Choose Evaluation > " <>
-      "Evaluate Notebook to run the cells in order. The setup cell loads the " <>
-      "repo-local GogFieldDynamics paclet; no global installation and no " <>
-      "MathNotebook paclet are needed. SetReplace is optional and is not used " <>
-      "by the displayed native sample path.",
+      "Keep this file in the repository root and choose Evaluation > Evaluate " <>
+      "Notebook. The first cell loads the local GogFieldDynamics package; no " <>
+      "global installation is needed. SetReplace is optional.",
       "SetupGuide"
     ],
-    cellPair["local paclet", "setup", True],
-    captionCell[
-      "The final section contains a self-test. A successful complete run ends " <>
-      "with AllTestsPassed -> True.",
-      "SetupCaption"
-    ],
+    cellPair["load the companion package", "setup", True],
 
     noteCell["What is being computed", "Section", "SectionObjects"],
     textCell[
-      "The state space consists of isomorphism classes of connected cubic " <>
-      "multigraphs on an even number N of vertices; loops and parallel edges " <>
-      "are allowed. A Whitehead move selects a carrier edge, collapses it, " <>
-      "and chooses one of the two other pairings of the four exposed " <>
-      "half-edges. A scalar field f in R^N is carried along with the graph. " <>
-      "If the selected edge has endpoints i and j, their values are replaced " <>
-      "by their common mean.",
+      "A cubic multigraph is a graph in which every vertex has degree three; " <>
+      "loops count twice toward the degree, and parallel edges are allowed. " <>
+      "A graph type is an isomorphism class obtained after vertex labels are " <>
+      "forgotten. The graph of graphs (GoG) has one vertex for each connected " <>
+      "graph type and joins two types when one Whitehead move relates them. " <>
+      "Such a move selects a carrier edge, meaning a specific edge in a chosen " <>
+      "representative, collapses it, and chooses one of the two other pairings " <>
+      "of the four exposed half-edges. A field f in R^N travels with the graph; " <>
+      "on a carrier with endpoints i and j, those values are replaced by their " <>
+      "common mean.",
       "ObjectsIntro"
     ],
-    formulaCell[
-      HoldForm[
-        {Subscript[f, i], Subscript[f, j]} ->
-          {
-            (Subscript[f, i] + Subscript[f, j])/2,
-            (Subscript[f, i] + Subscript[f, j])/2
-          }
-      ],
+    formulaBoxCell[
+      RowBox[{
+        RowBox[{
+          "(",
+          SubscriptBox["f", "i"],
+          ",",
+          SubscriptBox["f", "j"],
+          ")"
+        }],
+        "\[LongRightArrow]",
+        RowBox[{
+          "(",
+          FractionBox[
+            RowBox[{SubscriptBox["f", "i"], "+", SubscriptBox["f", "j"]}],
+            "2"
+          ],
+          ",",
+          FractionBox[
+            RowBox[{SubscriptBox["f", "i"], "+", SubscriptBox["f", "j"]}],
+            "2"
+          ],
+          ")"
+        }]
+      }],
       "FieldUpdateFormula"
     ],
     textCell[
@@ -492,42 +535,68 @@ cells = Flatten[
       "ObjectsListIntro"
     ],
     numberedCell[
-      "The carrier field uses a concrete edge and, after an unlabelled move, " <>
-      "a settlement permutation for its coordinates.",
+      "The carrier field uses the concrete selected edge. After an unlabelled " <>
+      "move, a settlement permutation is the relabelling that identifies the " <>
+      "result with the stored representative of its graph type; the same " <>
+      "permutation is applied to the field coordinates.",
       "ObjectCarrier"
     ],
     numberedCell[
-      "Rule A is the quotient chain that retains all 3N compressed resolution " <>
-      "slots, including multiplicity and holding slots.",
+      "Rule A keeps every local outcome slot after labels are forgotten. A " <>
+      "cubic graph has 3N/2 edges and two resolutions per edge, hence 3N slots. " <>
+      "Different slots leading to the same type retain their multiplicity. A " <>
+      "slot returning to the current type is a holding event.",
       "ObjectRuleA"
     ],
     numberedCell[
-      "Fixed-clock Rule B gives one of the same 3N ticks to each distinct " <>
-      "nonself quotient neighbour and turns unused ticks into holds. BJump is " <>
-      "Rule B conditioned on moving and is a different chain.",
+      "Rule B gives one of the 3N equally weighted slots to each different " <>
+      "adjacent graph type and assigns every unused slot to staying put. Its " <>
+      "jump chain, called BJump in the code, is the conditional chain given " <>
+      "that the graph type changes; removing the holds changes path " <>
+      "probabilities and elapsed time.",
       "ObjectRuleB"
     ],
     textCell[
-      "The interactive laboratory in whitehead-field-dynamics.nb bundles " <>
-      "complete quotient data only for N=2,4,6. Larger finite tables come " <>
-      "from the Python enumeration pipeline and are not part of the compact " <>
-      "notebook resource.",
+      "The local package contains every graph type, every one-move connection, " <>
+      "and the exact transition counts for N=2,4,6,8. The N=8 model already " <>
+      "has 71 states; larger data sets can be generated separately.",
       "ObjectsBoundary"
     ],
 
-    noteCell["A visual map of the companion", "Section", "SectionVisualMap"],
+    noteCell[
+      "The graph of graphs",
+      "Section",
+      "SectionVisualMap"
+    ],
     textCell[
-      "The separate visual companion whitehead-field-dynamics.nb is " <>
-      "deliberately not a copy of the paper. Its seven pictures provide entry " <>
-      "points into the following computational questions.",
+      "A GoG vertex represents an entire graph type, not one vertex of the " <>
+      "underlying cubic multigraph. The small N=4 atlas makes this distinction " <>
+      "visible: its five GoG vertices are shown together with the five cubic " <>
+      "multigraphs they represent.",
       "VisualMapIntro"
     ],
-    visualMapCell[],
+    cellPair[
+      "N=4 graph of graphs",
+      "class-atlas"
+    ],
+    captionCell[
+      "The upper diagram shows the one-move connections among G1 through G5. " <>
+      "The drawings below it show the cubic multigraph represented by each " <>
+      "of those five vertices.",
+      "ClassAtlasCaption"
+    ],
     textCell[
-      "This mini-notebook keeps the fuller explanatory text and executable " <>
-      "transcript. Every input/output pair has one shared MATHEMATICA CELLS " <>
-      "heading. Inputs are pale blue and exact outputs are warm cream.",
+      "The next output is live and opens on the 71-vertex N=8 model. Choose " <>
+      "N=2, 4, 6, or 8, then click any GoG vertex. Hovering gives its G-number; " <>
+      "the panel on the right redraws the cubic multigraph represented there.",
       "VisualMapBoundary"
+    ],
+    cellPair["inspect a graph type", "class-explorer"],
+    captionCell[
+      "The selected GoG vertex is orange; its underlying cubic multigraph " <>
+      "appears on the right. Labels are suppressed on the 71-state view to " <>
+      "keep the graph legible, but every vertex remains clickable.",
+      "ClassExplorerCaption"
     ],
 
     noteCell[
@@ -540,13 +609,19 @@ cells = Flatten[
       "projection onto the hyperplane f_i=f_j.",
       "AverageIntro"
     ],
-    formulaCell[
-      HoldForm[
-        Subscript[A, i, j] ==
-          Subscript[identity, n] -
-            1/2 (Subscript[e, i] - Subscript[e, j])
-              Superscript[(Subscript[e, i] - Subscript[e, j]), T]
-      ],
+    formulaBoxCell[
+      RowBox[{
+        SubscriptBox["A", RowBox[{"i", "j"}]],
+        "=",
+        SubscriptBox["I", "N"],
+        "-",
+        FractionBox["1", "2"],
+        RowBox[{"(", SubscriptBox["e", "i"], "-", SubscriptBox["e", "j"], ")"}],
+        SuperscriptBox[
+          RowBox[{"(", SubscriptBox["e", "i"], "-", SubscriptBox["e", "j"], ")"}],
+          "T"
+        ]
+      }],
       "AverageMatrixFormula"
     ],
     textCell[
@@ -555,109 +630,224 @@ cells = Flatten[
       "the whole matrix.",
       "AverageProperties"
     ],
-    cellPair["one-pair loss", "pair-loss"],
+    cellPair["energy lost by averaging one pair", "pair-loss"],
     textCell[
-      "The sum and therefore the mean are unchanged. Applied to the centered " <>
-      "field, the identity is an exact Lyapunov law.",
+      "Write the mean as f-bar and the centered energy as V(f). Pair " <>
+      "averaging preserves the mean and has an exact one-step loss.",
       "VarianceIntro"
     ],
-    formulaCell[
-      HoldForm[
-        V[Subscript[A, i, j] f] ==
-          V[f] -
-            (Subscript[f, i] - Subscript[f, j])^2/2
+    formulaBoxCell[
+      GridBox[
+        {
+          {
+            RowBox[{
+              OverscriptBox["f", "_"],
+              "=",
+              FractionBox["1", "N"],
+              UnderoverscriptBox["\[Sum]", RowBox[{"k", "=", "1"}], "N"],
+              SubscriptBox["f", "k"]
+            }]
+          },
+          {
+            RowBox[{
+              RowBox[{"V", "(", "f", ")"}],
+              "=",
+              UnderoverscriptBox["\[Sum]", RowBox[{"k", "=", "1"}], "N"],
+              SuperscriptBox[
+                RowBox[{"(", SubscriptBox["f", "k"], "-", OverscriptBox["f", "_"], ")"}],
+                "2"
+              ]
+            }]
+          },
+          {
+            RowBox[{
+              RowBox[{
+                "V",
+                "(",
+                SubscriptBox["A", RowBox[{"i", "j"}]],
+                "f",
+                ")"
+              }],
+              "=",
+              RowBox[{"V", "(", "f", ")"}],
+              "-",
+              FractionBox[
+                SuperscriptBox[
+                  RowBox[{"(", SubscriptBox["f", "i"], "-", SubscriptBox["f", "j"], ")"}],
+                  "2"
+                ],
+                "2"
+              ]
+            }]
+          }
+        },
+        GridBoxAlignment -> {"Columns" -> {{Center}}},
+        GridBoxSpacings -> {"Rows" -> {{0.7}}}
       ],
       "VarianceFormula"
     ],
-    cellPair["averaging matrix", "averaging-matrix"],
+    cellPair["the averaging matrix", "averaging-matrix"],
     textCell[
       "A settlement is a permutation matrix. It preserves sums and Euclidean " <>
       "norms, so it cannot change this one-step variance identity. It can " <>
-      "change which persistent coordinate pair is averaged later; a quotient " <>
-      "trajectory alone therefore does not reconstruct the full field cocycle.",
+      "change which persistent pair of field coordinates is averaged later. " <>
+      "A list of unlabelled graph types therefore does not contain enough " <>
+      "information to reconstruct the later field values.",
       "SettlementBoundary"
     ],
 
     noteCell[
-      "Loading and validating the notebook models",
+      "Bundled models",
       "Section",
       "SectionModels"
     ],
     textCell[
-      "The setup cell loaded the local companion paclet. For each bundled " <>
-      "size, the next query records {N, number of classes, support edges, " <>
-      "total Rule-A slots}.",
+      "For each bundled size, the table records the number of graph types, " <>
+      "the number of GoG edges, and the number of Rule A outcomes.",
       "ModelsIntro"
     ],
-    cellPair["resource summary", "resource-summary"],
+    cellPair["available small models", "resource-summary"],
     textCell[
-      "The class counts 2, 5, and 17 agree with the corresponding first terms " <>
-      "of OEIS A005967. The total slot counts independently satisfy classes " <>
-      "times 3N: 2*6=12, 5*12=60, and 17*18=306.",
+      "The class counts 2, 5, 17, and 71 agree with the corresponding terms " <>
+      "of OEIS A005967. Multiplying each class count by the 3N possible Rule A " <>
+      "outcomes gives the totals below.",
       "SlotCheckText"
     ],
+    formulaBoxCell[
+      GridBox[
+        {
+          {RowBox[{SubscriptBox["c", "2"], "\[CenterDot]", "6", "=", "12"}]},
+          {RowBox[{SubscriptBox["c", "4"], "\[CenterDot]", "12", "=", "60"}]},
+          {RowBox[{SubscriptBox["c", "6"], "\[CenterDot]", "18", "=", "306"}]},
+          {RowBox[{SubscriptBox["c", "8"], "\[CenterDot]", "24", "=", "1704"}]}
+        },
+        GridBoxAlignment -> {"Columns" -> {{Center}}},
+        GridBoxSpacings -> {"Rows" -> {{0.55}}}
+      ],
+      "SlotCountFormula"
+    ],
     textCell[
-      "The paclet validator checks completeness metadata, node and slot " <>
-      "counts, support edges, row sums, stochasticity, Rule-B symmetry, and " <>
-      "uniform Rule-B stationarity.",
+      "The next cell checks that every bundled table is complete, that the " <>
+      "node and outcome counts agree, and that every transition row sums to " <>
+      "one. It also checks Rule-B symmetry and verifies that a uniform " <>
+      "starting distribution remains uniform after one step.",
       "ValidationIntro"
     ],
-    cellPair["compact validation report", "validation"],
-    captionCell[
-      "These are complete finite checks of the bundled data and implemented " <>
-      "matrix conventions; they are not an asymptotic theorem.",
-      "ValidationBoundary"
-    ],
+    cellPair["check the bundled models", "validation"],
 
     noteCell["An exact five-state example", "Section", "SectionFiveState"],
     textCell[
-      "At N=4 there are five unlabelled carrier classes. Rule A retains the " <>
-      "integer multiplicity of every compressed resolution.",
+      "At N=4 there are five unlabelled graph types, shown above. Rule A " <>
+      "counts every local move outcome, including repeated outcomes that lead " <>
+      "to the same graph type.",
       "FiveStateIntro"
     ],
-    cellPair["Rule-A counts", "rule-a-counts"],
+    cellPair["Rule A move counts", "rule-a-counts"],
     textCell[
       "Every row sums to 3N=12. Dividing the count matrix by 12 gives the " <>
       "exact Rule-A transition matrix. It is not symmetric.",
       "RuleAMatrixText"
     ],
-    formulaCell[HoldForm[Subscript[P, A] == MatrixForm[pA]], "RuleAMatrix"],
+    formulaBoxCell[
+      RowBox[{
+        SubscriptBox["P", "A"],
+        "=",
+        FractionBox[SubscriptBox["C", "A"], RowBox[{"3", "N"}]]
+      }],
+      "RuleAMatrix"
+    ],
     textCell[
-      "Solving pi_A P_A = pi_A with exact arithmetic gives a nonuniform law.",
+      "A stationary distribution is a probability row vector pi satisfying " <>
+      "pi P = pi. The left 1-eigenspace of P_A gives it exactly.",
       "StationaryIntro"
     ],
-    cellPair["Rule-A stationary law", "rule-a-stationary"],
+    cellPair["stationary distribution for Rule A", "rule-a-stationary"],
     textCell[
-      "This is the finite N=4 instance of the projected cubic " <>
-      "configuration-model law. Treating Rule A as uniform on isomorphism " <>
-      "classes would change the process.",
+      "The distribution is nonuniform because graph types with different " <>
+      "numbers of labelled realizations receive different weights. Treating " <>
+      "Rule A as uniform on graph types would change the process.",
       "StationaryMeaning"
     ],
     textCell[
-      "For fixed-clock Rule B, every distinct nonself support neighbour has " <>
-      "probability 1/12 and the remaining ticks hold.",
+      "Rule B assigns weight 1/(3N) to each adjacent graph type and puts the " <>
+      "unused probability on the diagonal. Its support graph keeps one edge " <>
+      "whenever a nonself move is possible and discards all multiplicities; " <>
+      "L_supp below is the Laplacian of that simple graph.",
       "RuleBIntro"
     ],
-    cellPair["fixed-clock Rule B", "fixed-clock-b"],
+    formulaBoxCell[
+      GridBox[
+        {
+          {
+            RowBox[{
+              RowBox[{SubscriptBox["P", "B"], "(", "g", ",", "h", ")"}],
+              "=",
+              FractionBox["1", RowBox[{"3", "N"}]],
+              ",",
+              RowBox[{"g", "\[Tilde]", "h"}],
+              ",",
+              RowBox[{"g", "\[NotEqual]", "h"}]
+            }]
+          },
+          {
+            RowBox[{
+              RowBox[{SubscriptBox["P", "B"], "(", "g", ",", "g", ")"}],
+              "=",
+              "1",
+              "-",
+              FractionBox[RowBox[{"deg", "(", "g", ")"}], RowBox[{"3", "N"}]]
+            }]
+          },
+          {
+            RowBox[{
+              "I",
+              "-",
+              SubscriptBox["P", "B"],
+              "=",
+              FractionBox[SubscriptBox["L", "supp"], RowBox[{"3", "N"}]]
+            }]
+          }
+        },
+        GridBoxAlignment -> {"Columns" -> {{Center}}},
+        GridBoxSpacings -> {"Rows" -> {{0.7}}}
+      ],
+      "RuleBDefinition"
+    ],
+    cellPair["Rule B transition matrix", "rule-b-matrix"],
     textCell[
-      "The defining symmetry and stationarity checks can be made directly.",
+      "The defining symmetry and stationarity checks can be made directly. " <>
+      "For this symmetric transition matrix, the spectral gap means one minus " <>
+      "its second-largest eigenvalue.",
       "RuleBChecksIntro"
     ],
     cellPair[
       "symmetry and stationarity",
       "symmetry-stationarity"
     ],
-    formulaCell[
-      HoldForm[
-        IdentityMatrix[n] - Subscript[P, B] ==
-          Subscript[L, supp]/(3 n)
-      ],
-      "RuleBLaplacianFormula"
+    cellPair[
+      "Rule B eigenvalues and spectral gap",
+      "rule-b-spectrum"
+    ],
+    formulaBoxCell[
+      RowBox[{
+        "1",
+        "-",
+        RowBox[{
+          SubscriptBox["\[Lambda]", "2"],
+          "(",
+          SubscriptBox["P", "B"],
+          ")"
+        }],
+        "=",
+        FractionBox[RowBox[{"3", "-", SqrtBox["5"]}], "24"]
+      }],
+      "RuleBGapFormula"
     ],
     textCell[
-      "Holding cannot simply be discarded. Already at N=2, the fixed clock " <>
-      "and the chain conditioned on moving have the same nonself support but " <>
-      "different clocks, spectra, and path probabilities.",
+      "A holding step leaves the graph type unchanged but still consumes one " <>
+      "step. Already at N=2, Rule B and its jump chain allow the same changes " <>
+      "to other types, yet assign different path probabilities and have " <>
+      "different spectra.",
       "JumpChainIntro"
     ],
     cellPair["Rule B versus its jump chain", "b-versus-jump"],
@@ -668,141 +858,156 @@ cells = Flatten[
       "SectionDiffusion"
     ],
     textCell[
-      "The blue node fill in the visual laboratory is exact row-vector matrix " <>
-      "evolution. Its default view uses N=4, Rule A, start class 1, and t=4.",
+      "Here diffusion means the evolution of a probability distribution over " <>
+      "graph types: p_t = p_0 P^t. We first start at G1 in the five-state N=4 " <>
+      "model and apply Rule A four times so that every exact probability can " <>
+      "be inspected directly.",
       "DiffusionIntro"
     ],
-    cellPair["default exact snapshot", "diffusion-a"],
+    formulaBoxCell[
+      GridBox[
+        {
+          {
+            RowBox[{
+              SubscriptBox["p", "t"],
+              "=",
+              SuperscriptBox[SubscriptBox["e", RowBox[{"G", "1"}]], "T"],
+              SuperscriptBox["P", "t"]
+            }]
+          },
+          {
+            RowBox[{
+              SubscriptBox["p", RowBox[{"t", "+", "1"}]],
+              "=",
+              SubscriptBox["p", "t"],
+              "P",
+              ",",
+              UnderscriptBox[
+                "\[Sum]",
+                RowBox[{
+                  "g",
+                  "\[Element]",
+                  SubscriptBox["\[ScriptCapitalG]", "4"]
+                }]
+              ],
+              RowBox[{SubscriptBox["p", "t"], "(", "g", ")"}],
+              "=",
+              "1"
+            }]
+          }
+        },
+        GridBoxAlignment -> {"Columns" -> {{Center}}},
+        GridBoxSpacings -> {"Rows" -> {{0.7}}}
+      ],
+      "DiffusionFormula"
+    ],
+    cellPair["Rule A after four steps", "diffusion-a"],
     textCell[
       "All five classes are reachable by time four, but the mass is far from " <>
-      "the stationary vector. The same initial condition under fixed-clock " <>
-      "Rule B retains much more mass at the starting class.",
+      "the stationary vector. From the same starting point, Rule B retains " <>
+      "much more probability at G1 because it more often stays in place.",
       "DiffusionComparisonIntro"
     ],
-    cellPair["Rule-B comparison", "diffusion-b"],
+    cellPair["Rule B after four steps", "diffusion-b"],
     textCell[
-      "This compares quotient clocks; it does not specify a Rule-B lift that " <>
-      "chooses which concrete carrier edge to average. The orange trail in " <>
-      "the visual notebook is one random realization, not an estimate of the " <>
-      "blue exact distribution.",
+      "These distributions live on graph types. Transporting a scalar field " <>
+      "under Rule B additionally requires a rule for choosing the actual " <>
+      "carrier edge to average. The next calculation moves to the complete " <>
+      "N=8 GoG: blue encodes the exact 71-state distribution at t=12, while " <>
+      "orange traces a separate 48-step sample.",
       "DiffusionBoundary"
     ],
-    cellPair["one reproducible trajectory", "seeded-path"],
+    cellPair[
+      "N=8 diffusion and a 48-step sample",
+      "diffusion-picture"
+    ],
+    cellPair["path data used in the picture", "seeded-path"],
     captionCell[
-      "Repeated class labels are genuine holding events. The fixed seed makes " <>
-      "this native sample reproducible.",
+      "The path visits 27 different graph types. Its 13 repeated consecutive " <>
+      "labels are holding steps, and the fixed seed makes the sample " <>
+      "reproducible.",
       "PathCaption"
     ],
 
-    noteCell["Finite consensus words", "Section", "SectionConsensus"],
+    noteCell["Finite-time consensus", "Section", "SectionConsensus"],
     textCell[
-      "Pair averages on disjoint edges commute, so a perfect matching is one " <>
-      "block. Two matching layers on K4 and three coordinate matchings on Q3 " <>
-      "give exact finite consensus.",
+      "Consensus means that every field coordinate equals the arithmetic mean " <>
+      "of the initial field. Finite-time consensus means this happens after a " <>
+      "finite product of pair-averaging matrices, equivalently that the product " <>
+      "equals J_N. A perfect matching is a set of disjoint pairs covering all " <>
+      "N coordinates. For such a matching, M denotes the product of its " <>
+      "commuting pair averages; successive products act from right to left.",
       "ConsensusIntro"
     ],
-    formulaCell[
-      HoldForm[
-        Subscript[J, 4] == ConstantArray[1/4, {4, 4}] &&
-          Subscript[J, 8] == ConstantArray[1/8, {8, 8}]
+    formulaBoxCell[
+      GridBox[
+        {
+          {
+            RowBox[{
+              SubscriptBox["J", "N"],
+              "=",
+              FractionBox["1", "N"],
+              SubscriptBox[StyleBox["1", FontWeight -> "Bold"], "N"],
+              SuperscriptBox[
+                SubscriptBox[StyleBox["1", FontWeight -> "Bold"], "N"],
+                "T"
+              ]
+            }]
+          },
+          {
+            RowBox[{
+              SubscriptBox["J", "N"],
+              "f",
+              "=",
+              OverscriptBox["f", "_"],
+              SubscriptBox[StyleBox["1", FontWeight -> "Bold"], "N"]
+            }]
+          },
+          {
+            RowBox[{
+              SubscriptBox["M", RowBox[{"13", "|", "24"}]],
+              "=",
+              SubscriptBox["A", "13"],
+              SubscriptBox["A", "24"]
+            }]
+          },
+          {
+            RowBox[{
+              SubscriptBox["M", RowBox[{"13", "|", "24"}]],
+              SubscriptBox["M", RowBox[{"12", "|", "34"}]],
+              "=",
+              SubscriptBox["J", "4"]
+            }]
+          },
+          {
+            RowBox[{
+              SubscriptBox["M", RowBox[{"15", "|", "26", "|", "37", "|", "48"}]],
+              SubscriptBox["M", RowBox[{"13", "|", "24", "|", "57", "|", "68"}]],
+              SubscriptBox["M", RowBox[{"12", "|", "34", "|", "56", "|", "78"}]],
+              "=",
+              SubscriptBox["J", "8"]
+            }]
+          }
+        },
+        GridBoxAlignment -> {"Columns" -> {{Center}}},
+        GridBoxSpacings -> {"Rows" -> {{0.75}}}
       ],
       "ConsensusFormula"
     ],
-    cellPair["matching products", "matching-products"],
+    cellPair["verify the consensus products", "matching-products"],
     textCell[
-      "For example, the K4 word is returned exactly as the consensus matrix.",
+      "For example, the K4 product is returned exactly as the consensus matrix.",
       "K4Intro"
     ],
     cellPair["the K4 product", "k4-product"],
     textCell[
       "Every initial field therefore reaches its exact mean after the stated " <>
       "schedule. This exceptional finite-time consensus should not be " <>
-      "extrapolated to arbitrary N: pair averaging has a dyadic denominator " <>
-      "obstruction, and (0,0,1) cannot reach its mean after a finite word of " <>
-      "pair averages.",
+      "extrapolated to arbitrary N. Every entry of a finite product of pair " <>
+      "averages has denominator a power of two, whereas the mean of (0,0,1) " <>
+      "requires a factor 1/3.",
       "ConsensusBoundary"
     ],
-
-    noteCell["Interpretation limits", "Section", "SectionLimits"],
-    textCell[
-      "The executable transcript supports the following precise conclusions.",
-      "LimitsPositiveIntro"
-    ],
-    bulletCell[
-      "Pair averaging is an orthogonal projection with exact variance loss.",
-      "LimitPositive1"
-    ],
-    bulletCell[
-      "Each Rule-A row contains exactly 3N resolution slots.",
-      "LimitPositive2"
-    ],
-    bulletCell[
-      "The N=4 Rule-A class law is nonuniform.",
-      "LimitPositive3"
-    ],
-    bulletCell[
-      "Fixed-clock Rule B is symmetric and has uniform class stationarity.",
-      "LimitPositive4"
-    ],
-    bulletCell[
-      "Diffusion is exact rational matrix evolution, and the K4/Q3 schedules " <>
-      "are exact finite consensus words.",
-      "LimitPositive5"
-    ],
-    textCell[
-      "There are also three important non-conclusions.",
-      "LimitsNegativeIntro"
-    ],
-    numberedCell[
-      "The bundled quotient model omits carrier edges, resolution identifiers, " <>
-      "and settlement permutations, so it cannot by itself produce a pathwise " <>
-      "transported field or Lyapunov exponent.",
-      "LimitNegative1"
-    ],
-    numberedCell[
-      "A single sampled trajectory does not approximate the exact distribution.",
-      "LimitNegative2"
-    ],
-    numberedCell[
-      "Complete finite checks through N=6 here or N=14 in the Python tables " <>
-      "do not prove an asymptotic spectral or mixing statement.",
-      "LimitNegative3"
-    ],
-
-    noteCell["Reproduction and self-test", "Section", "SectionReproduction"],
-    textCell[
-      "The transcript was regenerated with Wolfram 15.0.0 for macOS ARM. The " <>
-      "following shell commands reproduce the textual transcript, byte-check " <>
-      "the small-model resource, rebuild the TeX note, and validate this " <>
-      "mini-notebook. They are shown as program text rather than Mathematica " <>
-      "input cells.",
-      "ReproductionIntro"
-    ],
-    programCell[
-      "/Applications/Wolfram.app/Contents/MacOS/WolframKernel -noinit " <>
-      "-noprompt -script scripts/notebook_report_outputs.wls",
-      "TranscriptCommand"
-    ],
-    programCell[
-      "python3 scripts/build_small_gog_models.py --check",
-      "DataCheckCommand"
-    ],
-    programCell[
-      "latexmk -pdf -interaction=nonstopmode -halt-on-error " <>
-      "whitehead-field-dynamics-computational-notes.tex",
-      "TeXCommand"
-    ],
-    programCell[
-      "make computational-notes-notebook-check",
-      "NotebookCheckCommand"
-    ],
-    textCell[
-      "Run the final Mathematica cell after evaluating the notebook. Every " <>
-      "entry in Checks should be True, and the first line should report " <>
-      "AllTestsPassed -> True.",
-      "SelfTestIntro"
-    ],
-    cellPair["complete mini-notebook self-test", "self-test"],
 
     noteCell["References", "Section", "SectionReferences"],
     textCell[
@@ -817,8 +1022,7 @@ cells = Flatten[
       "ReferenceLi"
     ],
     captionCell[
-      "Mathematical proofs remain in whitehead-field-dynamics.tex. The claim " <>
-      "ledger remains in docs/status.rst.",
+      "Proofs are in whitehead-field-dynamics.tex.",
       "ClosingBoundary"
     ]
   },
@@ -837,10 +1041,9 @@ notebook = Notebook[
   PrintingOptions -> {"PrintCellBrackets" -> False},
   TaggingRules -> <|
     "GoGComputationalNotes" -> <|
-      "Edition" -> "ExecutableMiniNotebook",
+      "Edition" -> "ComputationalNotes",
       "SchemaVersion" -> 1,
-      "Source" -> "whitehead-field-dynamics-computational-notes.tex",
-      "SelfTestExpected" -> True
+      "Source" -> "whitehead-field-dynamics-computational-notes.tex"
     |>
   |>,
   ExpressionUUID -> uuidFromSeed["NotebookRoot"]
@@ -849,16 +1052,19 @@ notebook = Notebook[
 inputCount = Count[notebook, Cell[_, "Input", ___], Infinity];
 outputCount = Count[notebook, Cell[_, "Output", ___], Infinity];
 sectionCount = Count[notebook, Cell[_, "Section", ___], Infinity];
-If[inputCount =!= Length[code],
-  fail["expected " <> ToString[Length[code]] <> " input cells"]
+If[inputCount =!= Length[code] - 1,
+  fail["expected " <> ToString[Length[code] - 1] <> " input cells"]
 ];
-If[outputCount =!= Length[code],
+If[outputCount =!= Length[code] - 1,
   fail["every input cell must have a committed expected output"]
 ];
-If[sectionCount < 9 || sectionCount > 12,
+If[sectionCount =!= 9,
   fail["unexpected section count: " <> ToString[sectionCount]]
 ];
-If[! FreeQ[notebook, $Failed], fail["a failed result entered the notebook"]];
+If[
+  AnyTrue[Values[results], SameQ[#, $Failed] &],
+  fail["a failed result entered the notebook"]
+];
 
 $uuidPattern = RegularExpression[
   "[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-" <>
@@ -886,18 +1092,14 @@ normalizeSerializedUUIDs[file_String] := Module[
   Length[existing]
 ];
 
-progress["saving through the Mathematica front end"];
+progress["saving the portable Notebook expression"];
 saved = Quiet @ Check[
-  UsingFrontEnd[
-    notebookObject = NotebookPut[notebook];
-    NotebookSave[notebookObject, notebookFile];
-    NotebookClose[notebookObject];
-    notebookFile
-  ],
+  Put[notebook, notebookFile];
+  notebookFile,
   $Failed
 ];
 If[saved =!= notebookFile || ! FileExistsQ[notebookFile],
-  fail["the front end did not save the notebook"]
+  fail["the kernel did not save the notebook expression"]
 ];
 
 uuidCount = normalizeSerializedUUIDs[notebookFile];
@@ -910,7 +1112,7 @@ Print @ <|
   "Sections" -> sectionCount,
   "InputCells" -> inputCount,
   "ExpectedOutputs" -> outputCount,
-  "SelfTestPassed" -> results["self-test"]["AllTestsPassed"],
+  "InternalChecksPassed" -> results["internal-checks"]["ChecksPassed"],
   "DeterministicUUIDs" -> uuidCount,
   "NotebookSHA256" -> hash
 |>;

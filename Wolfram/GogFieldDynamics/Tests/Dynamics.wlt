@@ -1,6 +1,6 @@
 VerificationTest[
   GogFieldDynamics`GogAvailableSizes[],
-  {2, 4, 6},
+  {2, 4, 6, 8},
   TestID -> "bundled-sizes"
 ]
 
@@ -19,7 +19,7 @@ VerificationTest[
 VerificationTest[
   GogFieldDynamics`GogTransitionMatrix[2, "B"],
   {{5/6, 1/6}, {1/6, 5/6}},
-  TestID -> "n2-rule-b-fixed-clock"
+  TestID -> "n2-rule-b-with-holds"
 ]
 
 VerificationTest[
@@ -59,7 +59,7 @@ VerificationTest[
     ] === counts && AllTrue[Total /@ counts, # === 12 &]
   ],
   True,
-  TestID -> "n4-rule-b-fixed-clock-rewrite-rules"
+  TestID -> "n4-rule-b-rewrite-rules-with-holds"
 ]
 
 VerificationTest[

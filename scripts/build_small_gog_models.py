@@ -35,7 +35,7 @@ DEFAULT_OUTPUT = (
     / "Data"
     / "small-models.json"
 )
-SMALL_SIZES = (2, 4, 6)
+SMALL_SIZES = (2, 4, 6, 8)
 
 
 def build_model(n: int, backend: str) -> dict[str, Any]:
