@@ -69,8 +69,8 @@ on an even number $N$ of vertices, with loops and parallel edges allowed.  We
 study the Markov chain that chooses one of the $3N/2$ individual edge
 occurrences (parallel edges being counted separately), chooses one of its two
 Whitehead resolutions, and then forgets all vertex labels.  A loop has two
-holding resolutions.  Every state therefore has exactly $3N$ move slots, but
-distinct slots can have the same target isomorphism class.
+holding resolutions.  Every state therefore has exactly $3N$ resolution
+slots, but distinct slots can have the same target isomorphism class.
 
 We identify the stationary law exactly: it is the cubic configuration model,
 conditioned on connectedness and projected to isomorphism classes.  This makes
@@ -79,14 +79,15 @@ asymmetric.  We prove that every eigenvalue of the transition matrix lies in
 $[-1/2,1]$.  An exact Dirichlet-form identity for loop count then yields, for
 every fixed $r$, an upper bound $2r/(3N)+o(N^{-1})$ for the $(r+1)$st
 eigenvalue of the Markov Laplacian $I-P_N$.  We also identify all moves crossing
-the bridged--bridgeless cut.  The resulting conductance is
+the cut between bridged and bridgeless graphs.  The conductance of this cut is
 $2/(3N)(1+o(1))$, giving an explicit linear lower bound for total-variation
 mixing.  The loop test with $r=1$ gives a linear lower bound for relaxation.
 
 The proofs are accompanied by a complete canonical-labelling enumeration for
 every even $N$ from $2$ through $14$.  The $N=14$ run covers $21{,}096$ classes
-and $886{,}032$ resolution slots.  The finite data suggest a closed conductance
-formula, which we record as a conjecture.
+and $886{,}032$ resolution slots.  In all seven cases, the conductance of the
+bridged--bridgeless cut is $1/(3N/2-1)$; we conjecture that the same formula
+holds for every even $N$.
 \end{abstract}
 
 \noindent\textbf{Keywords:} Whitehead move, cubic multigraph, configuration
@@ -98,38 +99,49 @@ model, Markov chain, conductance, reconfiguration graph.
 \section{Introduction}
 
 A Whitehead move collapses one edge of a cubic graph and expands the resulting
-four-valent vertex in another direction.  Repeating this local operation gives
-a reconfiguration graph whose vertices are themselves cubic graphs.  Cubic
-multigraphs also occur as dual graphs of pants decompositions: put one vertex
-in each pair of pants and one edge across each glued cuff.  The surface retains
-information that the abstract dual graph forgets; see Hatcher
-\cite{Hatcher1999} for the corresponding complex of pants decompositions.
-Grave de Peralta and Kolpakov defined a directed multigraph with one directed
-edge for each Whitehead move and proved that its outer conductance tends to
-zero \cite{GraveDePeraltaKolpakov2024}.  Their volume is the number of outgoing
-move edges.  Since every class has $3N$ outgoing slots, this volume is
-proportional to the number of isomorphism classes in a set.  Li instead studied
-the Laplacians of the simple labelled and unlabelled
-support graphs, in which repeated moves between the same two states are
-collapsed \cite{Li2024}.
+four-valent vertex in another direction.  Repeating this operation gives a
+reconfiguration graph whose vertices are themselves cubic graphs.  We allow
+loops and parallel edges because the local resolutions naturally lead to
+multigraphs.
 
-Here we normalize the outgoing move slots to obtain a Markov kernel.  Its
-conductance is measured with the stationary law, which is not uniform on
-isomorphism classes.  This distinction matters because an edge has two
-resolutions, different edge objects can produce isomorphic targets, and a
-resolution can return to the same class.  Already at $N=2$, the two classes
-communicate with multiplicities three in one direction and two in the other.
+There is a geometric reason to study the same move.  When $N=2g-2$, a cubic
+multigraph can be used as the dual graph of a pants decomposition of a closed
+surface of genus $g$: put one vertex in each pair of pants and one edge across
+each glued cuff.  The surface retains gluing data that the abstract graph
+forgets.  Hatcher describes the corresponding complex of pants decompositions
+\cite{Hatcher1999}; Rafi and Tao relate Whitehead moves on trivalent graphs to
+the geometry of moduli space \cite{RafiTao2013}.
 
-We study the resulting multiplicity-weighted chain directly.  Before the
-quotient by isomorphism, the move is a symmetric exchange of paired
-half-edges, so uniform measure on configurations supplies the stationary law.
-Conditioning on the edge being updated reduces the local operator to the
-six-state walk on the Johnson graph $J(4,2)$; this controls the negative
-spectrum.  Loop count gives low-Rayleigh-quotient test functions, while bridge
-count identifies a bottleneck.
+A random local move gives a further reason for keeping multiplicities.  One
+can choose an edge occurrence, choose one of its two resolutions, and repeat.
+After vertex labels are forgotten, however, the isomorphism classes are not
+sampled uniformly: several choices can lead to the same class, and the reverse
+move need not have the same multiplicity.  Thus the first question for the
+resulting walk is not how fast it mixes, but what measure it mixes to.
 
-More precisely, if $G$ has adjacency multiplicities $(m_{ij})$, its
-stationary weight is proportional to
+Several operators can be built from the same move relation.  Grave de Peralta
+and Kolpakov retain one directed edge for every Whitehead move and measure
+outer conductance using outgoing-edge volume
+\cite{GraveDePeraltaKolpakov2024}.  Since every class has $3N$ resolution
+slots, their volume is proportional to the number of classes in a set.  Li
+studies the Laplacians of the simple labelled and unlabelled support graphs,
+where repeated moves between two states are collapsed \cite{Li2024}.  Here we
+divide the resolution multiplicities by $3N$ and study the resulting Markov
+kernel with its own stationary measure.  These choices give different
+operators even though they start from the same local move.
+
+The proofs have a common simple core.  On labelled configurations, a
+resolution is a symmetric exchange of paired half-edges, which reveals the
+stationary measure.  With the updated edge fixed, the four remaining ends give
+the six-state walk on the Johnson graph $J(4,2)$, which controls the negative
+spectrum.  Each loop has exactly two resolutions that destroy it.  A graph
+with one bridge has exactly two resolutions that cross to the bridgeless set.
+The rest of the argument turns these four local facts into global statements.
+
+More precisely, let $m_{ii}$ count the loops at vertex $i$, let $m_{ij}$ count
+the edges between distinct vertices $i$ and $j$, and let $\Aut_v(G)$ be the
+group of vertex permutations preserving these multiplicities.  The stationary
+weight of the class of $G$ is proportional to
 \begin{equation}\label{eq:intro-weight}
   \frac{1}{|\Aut_v(G)|}
   \frac{(3!)^N}
@@ -145,21 +157,19 @@ $2/(3N)(1+o(1))$.  Hence, for fixed $\varepsilon<1-e^{-1}$,
   t_{\mathrm{mix}}(\varepsilon)
   \geq \frac{3N}{2}\bigl(1-e^{-1}-\varepsilon\bigr)(1+o(1)).
 \]
-The asymptotic arguments use the configuration model, not an extrapolation of
-finite data.  The computation instead checks the quotient construction and
-records exact values for $N=2,4,6,8,10,12,14$.  The ancillary program and its
-machine-readable audit summary reproduce every row.
-
-We first define the chain and its stationary measure, then prove the spectral,
-loop, and bridge estimates.  The final section gives the enumeration algorithm
-and its audit checks.  All limits are taken through even $N$.
+The stationary law is proved in \cref{thm:stationary}, the spectral interval in
+\cref{prop:spectral-interval}, the loop bounds in \cref{thm:loop-form}, and the
+bridge flow and mixing bound in \cref{thm:bridge-flow,cor:mixing}.  These
+asymptotic results do not depend on the finite computations.  The enumeration
+in \cref{sec:enumeration} reconstructs the quotient chain and records exact
+values for $N=2,4,6,8,10,12,14$.  All limits are taken through even $N$.
 
 \section{The Local Whitehead Chain}\label{sec:chain}
 
 We allow loops and parallel edges, and a loop contributes two to the degree.
-An \emph{edge object} means an individual edge occurrence, so parallel edges
-are distinct objects.  Let $\C_N$ be the set of isomorphism classes of
-connected cubic multigraphs on $N$ vertices.
+An \emph{edge occurrence} is one member of the edge multiset, so parallel
+edges give distinct occurrences.  Let $\C_N$ be the set of isomorphism
+classes of connected cubic multigraphs on $N$ vertices.
 
 Let $e=uv$ be a non-loop edge.  Besides $e$, two half-edges $a,b$ are
 incident with $u$ and two half-edges $c,d$ are incident with $v$.  The current
@@ -175,7 +185,7 @@ Collapsing $e$ and expanding again gives the two other partitions
 \]
 These are the two Whitehead resolutions of $e$; see
 \cref{fig:whitehead-move}.  The symbols $a,b,c,d$ denote half-edges, not
-necessarily four distinct edge objects.  This point matters when parallel
+necessarily four distinct edge occurrences.  This point matters when parallel
 edges or loops are present.
 
 \begin{figure}[ht]
@@ -192,7 +202,8 @@ If the chosen edge is a loop, collapsing it does not expose two distinct
 endpoints.  We follow the convention of
 \cite{GraveDePeraltaKolpakov2024}: both formal resolutions of a loop are
 holding moves.  This convention keeps the clock uniform.  A cubic graph has
-$3N/2$ edge objects and hence $3N$ resolution slots.  For
+$3N/2$ edge occurrences and hence $3N$ resolution slots.  A resolution slot
+is an edge occurrence together with one of its two formal resolutions.  For
 $G,H\in\C_N$, let $m_{GH}$ be the number of slots of a representative of
 $G$ whose target is isomorphic to $H$.  This number does not depend on the
 representative, and
@@ -207,7 +218,42 @@ The transition matrix $P_N$ on $\C_N$ is
 \end{equation}
 \end{definition}
 
-The support of this chain is connected \cite{GraveDePeraltaKolpakov2024}.
+\begin{proposition}[Connected support]\label{prop:connected-support}
+The support of $P_N$ is connected for every even $N\geq2$.
+\end{proposition}
+
+\begin{proof}
+This is the connectivity assertion in
+\cite[Theorem~2.2]{GraveDePeraltaKolpakov2024}, proved there with the same move
+and loop conventions.  We include the reduction because connectivity is also
+what makes the enumeration in \cref{sec:enumeration} exhaustive.  For $N=2$,
+the two classes are adjacent, as the explicit chain below shows.
+
+Suppose $N\geq4$.  If the non-loop edges contain a cycle, choose a shortest
+one, of length $k\geq2$.  It has no chord.  At one of its edges, one resolution
+places the two neighbouring cycle half-edges at the same endpoint of the
+central edge.  The cycle is thereby shortened from length $k$ to length
+$k-1$; when $k=2$, the remaining edge becomes a loop.  Continuing along the
+shortened cycle turns it into a loop after $k-1$ moves.  This operation does
+not remove any loop already present, so repetition must stop.  At that point
+the non-loop edges are acyclic.  They are also connected, since loops do not
+join different vertices.  They therefore form a tree, and every leaf of that
+tree carries a loop.  There are $3N/2-(N-1)=N/2+1$ loops, so all resulting
+rooted trees have the same number of leaves.
+
+It remains to connect all such looped trees.  Choose a leaf $v$, delete all
+loops, delete $v$ and its remaining incident edge, and mark the newly exposed
+vertex as the root.  The result is a rooted full binary tree: after orienting
+its edges away from the root, every non-leaf has two children.  Resolving an
+internal edge performs an ordinary tree rotation.  Give the two children at
+each vertex an arbitrary left--right order.  Successive rotations along the
+path to the leftmost leaf make that leaf a child of the root.  Keep it fixed
+and apply the same procedure to the other branch.  Induction on the number of
+internal vertices transforms every rooted full binary tree into the same
+comb.  Restoring the deleted leaf and the loops gives a fixed looped cubic
+tree, determined only by $N$.  Hence every class can be joined to that class.
+\end{proof}
+
 Thus $P_N$ is irreducible.  It is also aperiodic: the support contains a graph
 with a loop, and each loop supplies two holding slots.  These two facts give a
 unique stationary distribution.  They do not identify that distribution,
@@ -279,14 +325,14 @@ class of $G$.  Multiplication by $c(G)$ proves
 \end{proof}
 
 We next lift the local move to configurations.  Regard each matched pair as an
-edge object whose two ends occupy vertex slots.  If a chosen pair joins
+edge occurrence whose two ends occupy vertex slots.  If a chosen pair joins
 distinct triples $u$ and $v$, choose one of the two noncentral edge ends at
 $u$ and one of the two at $v$, and exchange the slots occupied by those two
 ends.  There are four choices.  In the notation of
 \cref{fig:whitehead-move}, exchanging $a$ with $c$ or $b$ with $d$ gives one
 resolution, while exchanging $a$ with $d$ or $b$ with $c$ gives the other.
 If the chosen pair is a loop, all four choices are holding moves.  Thus every
-configuration has $(3N/2)\cdot4=6N$ micro-slots.
+configuration has $(3N/2)\cdot4=6N$ lifted exchanges.
 
 \begin{lemma}[Symmetric lift]\label{lem:symmetric-lift}
 The lifted configuration kernel is symmetric.  Its restriction to connected
@@ -296,7 +342,7 @@ classes it is the kernel $P_N$ of \eqref{eq:kernel}.
 
 \begin{proof}
 Each exchange is an involution: its reverse exchanges the same two edge ends.
-Hence the number of micro-slots from a configuration $x$ to a configuration
+Hence the number of lifted exchanges from a configuration $x$ to a configuration
 $y$ equals the number from $y$ to $x$.  Uniform measure on configurations is
 therefore reversible.  Relabelling vertices or permuting the three slots at a
 vertex commutes with the lifted transition, so its projection is a Markov
@@ -309,7 +355,7 @@ subset.
 
 For a non-loop edge, each unlabelled resolution has two endpoint-oriented
 realizations.  Its projected probability is thus $2/(6N)=1/(3N)$.  Four
-holding micro-slots at a loop project to the two holding resolution slots,
+holding exchanges at a loop project to the two holding resolution slots,
 again with the same probability.  Summing over slots with isomorphic targets
 gives $m_{GH}/(3N)$.
 \end{proof}
@@ -367,6 +413,7 @@ side has at least three vertices is $O(N^{-1})$.
 \end{lemma}
 
 \begin{proof}
+\noindent\emph{Disconnected configurations.}
 Write $\mathcal C_N$ for the event that $\widehat G_N$ is connected.  We first
 bound $\Pp(\mathcal C_N^c)$.  If a set of $k\leq N/2$ vertices is a union of
 connected components, then all $3k$ half-edges in the set are paired
@@ -437,7 +484,9 @@ $H(1/4)$; even after summing $O(N)$ terms, the contribution is exponentially
 small.  A union bound now proves
 $\Pp(\mathcal C_N^c)=O(N^{-1})$.
 
-We next consider loops.  A vertex supports at most one loop in a cubic
+\smallskip
+\noindent\emph{Loops.}
+A vertex supports at most one loop in a cubic
 configuration.  To specify an ordered $r$-tuple of loops, choose $r$ distinct
 vertices, choose one of the three pairs of half-edges at each vertex, and
 require those $r$ pairs to occur in the random matching.  Therefore, for
@@ -470,7 +519,9 @@ Moreover, for every event $E$ determined by $L$,
 Conditioning therefore preserves both the distributional limit and every
 fixed moment.
 
-Finally, suppose a bridge cuts off a vertex set $S$ of size $k\leq N/2$.
+\smallskip
+\noindent\emph{Large bridge sides.}
+Suppose a bridge cuts off a vertex set $S$ of size $k\leq N/2$.
 The degree sum on $S$ gives $3k=2|E(S)|+1$, so $k$ is odd.  To count candidate
 sets, choose one crossing half-edge on each side and pair all remaining
 half-edges internally.  For odd $k\geq3$, the expected number of $k$-sets
@@ -501,8 +552,13 @@ $C\sqrt N$, while the entropy exponent is again $N H-3NH/2$.  Thus
  \qquad 3\leq k\leq N/2.
 \end{equation}
 For $k\leq N/4$, this is at most
-$v_k=C\sqrt N(k/N)^{k/2}$.  The same calculation as above gives
-$v_{k+2}/v_k\leq e/4$ whenever $k+2\leq N/4$.  The odd tail beginning at
+$v_k=C\sqrt N(k/N)^{k/2}$.  If $k+2\leq N/4$, then
+\[
+ \frac{v_{k+2}}{v_k}
+ =\frac{k+2}{N}\left(1+\frac2k\right)^{k/2}
+ \leq\frac e4.
+\]
+The odd tail beginning at
 $k=5$ is therefore $O(v_5)=O(N^{-2})$.  In the central range, summing
 \eqref{eq:one-crossing-entropy-bound} gives
 $O(N^{3/2}e^{-NH(1/4)/2})$.  Together with the displayed value of $A_{N,3}$,
@@ -533,8 +589,8 @@ For every even $N$,
 
 \begin{proof}
 Let $\widetilde\Omega_N$ be the following labelled cover of the connected
-configuration space.  Fix $3N/2$ labelled abstract edge objects, give each
-object two distinguishable ends, and assign the $3N$ ends bijectively to three
+configuration space.  Fix $3N/2$ labelled abstract edges, give each edge two
+distinguishable ends, and assign the $3N$ ends bijectively to three
 labelled slots at each of $N$ labelled vertices, retaining the assignments
 whose induced multigraph is connected.  Equip this finite set with uniform
 measure.  Every connected configuration has
@@ -542,8 +598,8 @@ exactly
 \[
   2^{3N/2}(3N/2)!
 \]
-preimages, obtained by labelling and orienting its edge objects.  If $q$ sends
-a point of $\widetilde\Omega_N$ to its unlabelled graph class, then the
+preimages, obtained by labelling and orienting its edge occurrences.  If $q$
+sends a point of $\widetilde\Omega_N$ to its unlabelled graph class, then the
 pushforward of uniform measure by $q$ is $\pi_N$.  Consequently
 \[
  U:L^2(\pi_N)\longrightarrow L^2(\widetilde\Omega_N),
@@ -551,7 +607,7 @@ pushforward of uniform measure by $q$ is $\pi_N$.  Consequently
 \]
 is an isometric embedding.
 
-Fix an abstract edge object $e$.  Define $K_e$ on the cover as follows.  If
+Fix a labelled edge $e$.  Define $K_e$ on the cover as follows.  If
 the two ends of $e$ occupy different vertex boxes, choose one of the two
 noncentral slots in each box and exchange the edge ends occupying those slots;
 $K_e$ averages the four possible exchanges.  Each exchange is an involution,
@@ -559,20 +615,33 @@ so $K_e$ is self-adjoint for uniform measure.  If $e$ is a loop, set $K_e$ to
 be the identity, in accordance with the holding convention.
 
 We now determine the quadratic form of $K_e$ on functions in the range of
-$U$.  On the event that $e$ is not a loop, freeze its two ends and all slots
-outside its endpoint boxes.  The four remaining edge ends can be assigned to
-the four noncentral slots in $4!$ ways.  All these assignments remain in the
-connected cover: the exchange graph on them is connected, and every exchange
-is a Whitehead move and hence preserves connectedness.  A graph-class function is invariant
-under permutations of the two slots within either box, so its value depends
-only on the two-subset of ends placed in the first box.  Each of the six
-two-subsets has four preimages in the fiber and hence has the uniform measure.
-One exchange removes one member of the two-subset and inserts one member of
-its complement.  The induced four-neighbour walk is therefore the normalized
-adjacency operator of the Johnson graph $J(4,2)$.
+$U$.  On the event that $e$ is not a loop, condition on the positions of its
+two ends and on all slots outside its endpoint boxes.  These data divide the
+event into fibers.  Within one fiber, the four remaining edge ends can be
+assigned to the four noncentral slots in $4!$ ways.  Regard those four slots
+as the vertices of $K_{2,2}$, with one part in each endpoint box.  The allowed
+exchanges are precisely the transpositions along its four edges.  Since a
+connected graph's edge transpositions generate the full symmetric group, the
+$4!$ assignments form one exchange class.  Starting from any connected
+assignment, every one of them remains connected because each exchange is a
+Whitehead move.
 
-Let $A$ be the adjacency matrix of this six-vertex graph.  Pair every
-two-subset with its complement and let $C$ be the resulting involution.  Then
+Label the four unfrozen ends $1,2,3,4$.  A graph-class function is invariant
+under permutations of the two slots within either box, so its value depends
+only on the two-subset placed in the first box.  The six possibilities are
+\[
+  12,\ 13,\ 14,\ 23,\ 24,\ 34.
+\]
+Each has four preimages among the $4!$ assignments and therefore has uniform
+measure.  An exchange replaces one member of the two-subset by one member of
+its complement.  Thus two states are adjacent exactly when their intersection
+has size one.  This is the four-neighbour walk on the Johnson graph $J(4,2)$,
+which is the graph of an octahedron.
+
+Let $A$ be its adjacency matrix.  The three complementary pairs are
+$12\leftrightarrow34$, $13\leftrightarrow24$, and
+$14\leftrightarrow23$.  Let $C$ be the involution that exchanges each pair.
+Then
 \[
   A=J-I-C,
 \]
@@ -635,12 +704,14 @@ one.
 
 \begin{proof}
 A vertex $u$ carrying a loop $\ell$ has one remaining incident edge $s$, its
-\emph{stem}.  The two resolutions of $s$ put the two ends of $\ell$ at
-different endpoints of $s$ and therefore destroy $\ell$; see
-\cref{fig:loop-resolution}.  They cannot create another loop at the same time.
-Indeed, that would require the two noncentral ends at the other endpoint of
-$s$ to be paired to each other.  Both endpoints of $s$ would then carry loops,
-all their degrees would be used, and connectedness would force $N=2$.
+\emph{stem}.  Write $v$ for the other endpoint of $s$, and $c,d$ for the two
+noncentral ends at $v$.  The two resolutions of $s$ separate the two ends of
+$\ell$ and therefore destroy it; see \cref{fig:loop-resolution}.  They destroy
+a second loop only if $c$ and $d$ are paired to each other.  In that case both
+$u$ and $v$ carry loops and $s$ uses their remaining degrees, so connectedness
+forces $N=2$.  Nor can either resolution create a loop: such a loop would have
+to come from an edge parallel to $s$, but the two noncentral ends at $u$ are
+already paired to form $\ell$.
 
 No other chosen edge can destroy $\ell$: choosing $\ell$ gives a holding move,
 and only its stem can move one of its ends to another vertex.  Distinct loop
@@ -651,7 +722,7 @@ with each loop are distinct and give exactly $2k$ lowering slots.
 Finally, a resolution can create a loop only by putting the two ends of an
 edge parallel to the chosen central edge into the same new vertex.  Creating
 two loops at once would require both pairs of noncentral ends to be paired
-across the two central vertices.  Those two edge objects together with the
+across the two central vertices.  Those two edge occurrences together with the
 central edge would form an isolated triple edge, again forcing $N=2$.
 Applying the same argument to the inverse resolution also rules out the
 destruction of two loops.  Hence $|L(G')-L(G)|\leq1$.
@@ -804,21 +875,21 @@ that a crossing move must act on the unique bridge.
 
 For the converse, suppose that $e=uv$ is the unique bridge, and let $A$ and
 $B$ be the components of $G-e$ containing $u$ and $v$.  Neither side contains
-a bridge.  In one of the two resolutions, let $a=ux$ be the edge object whose
-end at $u$ moves to $v$, and let $b=vy$ be the object whose end at $v$ moves
-to $u$.  Thus, after the resolution, the incidences of the three crossing
-objects are
+a bridge.  In one of the two resolutions, let $a=ux$ be the edge occurrence
+whose end at $u$ moves to $v$, and let $b=vy$ be the occurrence whose end at
+$v$ moves to $u$.  Thus, after the resolution, the incidences of the three
+crossing edges are
 \[
  e=uv,\qquad a=vx,\qquad b=uy.
 \]
 The other resolution has the same description after choosing the other
-incident object on each side.  This notation also covers a loop: if $a$ was a
+incident edge on each side.  This notation also covers a loop: if $a$ was a
 loop at $u$, then $x=u$, and moving one of its ends turns it into the edge
 $vu$.
 
 Because $a$ is not a bridge of $A$, the graph $A-a$ contains a path $P_A$
 from $u$ to $x$; similarly, $B-b$ contains a path $P_B$ from $v$ to $y$.
-The three crossing objects lie on the following cycles in $G'$:
+The three crossing edges lie on the following cycles in $G'$:
 \[
  e+a+P_A,\qquad e+b+P_B,\qquad a+P_B+b+P_A.
 \]
@@ -888,7 +959,7 @@ We use the usual worst-case total-variation mixing time
   t_{\mathrm{mix}}(\varepsilon)=
   \min\bigl\{t:\max_G\|P_N^t(G,\cdot)-\pi_N\|_{\TV}\leq\varepsilon\bigr\}.
 \]
-and define the relaxation time by
+We define the relaxation time by
 $t_{\rm rel}=1/\lambda_2(I-P_N)$.
 
 \begin{corollary}[Mixing Lower Bound]\label{cor:mixing}
@@ -948,20 +1019,20 @@ definitions.
 \section{Exact Enumeration}\label{sec:enumeration}
 
 For fixed $N$, the computation constructs every canonical state and every
-entry of the integer multiplicity matrix $M_N=(m_{GH})$.  It is an exhaustive
-breadth-first search, not a simulation.  The resulting matrices distinguish
-the slot-multiplicity chain from its simple support graph and test the finite
-identity stated below.
+entry of the integer multiplicity matrix $M_N=(m_{GH})$.  The breadth-first
+search exhausts the connected support.  At the same time it retains the
+resolution multiplicities that a simple support graph would discard.  This
+produces the finite chains used in the two tables below.
 
 \subsection{Canonical Representation}
 
 Store a cubic multigraph by its upper-triangular adjacency-multiplicity
 matrix, with diagonal entries counting loops.  To compare two such matrices,
 form a coloured simple incidence graph.  Its first colour class consists of
-the $N$ original vertices.  Every non-loop edge object becomes a vertex of a
-second colour, adjacent to its two endpoints.  Every loop object becomes a
+the $N$ original vertices.  Every non-loop edge occurrence becomes a vertex of a
+second colour, adjacent to its two endpoints.  Every loop occurrence becomes a
 vertex of a third colour, adjacent to its single incident original vertex.
-Keeping loop and non-loop objects in different colours retains the information
+Keeping loop and non-loop occurrences in different colours retains the information
 lost by replacing a loop's double incidence with one simple incidence.
 Parallel edges remain distinct incidence vertices.
 
@@ -971,16 +1042,16 @@ way to avoid duplicate isomorphism classes in exhaustive generation
 \cite{McKay1998}.  We use nauty/Traces \cite{McKayPiperno2014} to canonically
 label the incidence graph.  Reading the original-vertex colour class in
 canonical order and writing the corresponding upper triangle produces a
-canonical code.  Equality of codes is therefore equivalent to multigraph
-isomorphism, not merely a hash collision test.
+canonical code.  Two codes are equal exactly when the corresponding
+multigraphs are isomorphic.
 
 \subsection{Half-Edge Rewrite and Breadth-First Search}
 
 The implementation of a resolution is explicit.  Expand the
-$3N/2$ edge objects into pairs of stubs, and store for each stub the vertex
+$3N/2$ edge occurrences into pairs of stubs, and store for each stub the vertex
 whose slot it occupies.  For a non-loop edge $e=uv$, let $s_u,s_v$ be its
 stubs, let $a,b$ be the other stubs at $u$, and let $c,d$ be the other stubs at
-$v$.  The matching of stubs into edge objects is not changed.  The two targets
+$v$.  The matching of stubs into edge occurrences is unchanged.  The two targets
 are obtained by changing only the vertex-incidence map:
 \begin{align*}
  &(a,c)\text{ occupy the two noncentral slots at }u,
@@ -991,7 +1062,7 @@ are obtained by changing only the vertex-incidence map:
 The stubs $s_u,s_v$ remain at $u,v$.  Converting the resulting incidence map
 back to an adjacency-multiplicity matrix implements exactly the two
 partitions in \cref{fig:whitehead-move}, including cases in which two of
-$a,b,c,d$ belong to the same edge object.
+$a,b,c,d$ belong to the same edge occurrence.
 
 \begin{algorithm}[Complete transition enumeration]\label{alg:enumeration}
 Fix an even $N$ and a connected cubic starting graph.  Maintain a set
@@ -1000,8 +1071,8 @@ containing only the starting code.  While the queue is nonempty:
 
 \begin{enumerate}
 \item remove one code and reconstruct its adjacency multigraph;
-\item expand its $3N/2$ edge objects into paired stubs, keeping parallel
-objects distinct;
+\item expand its $3N/2$ edge occurrences into paired stubs, keeping parallel
+occurrences distinct;
 \item for a loop, increment the holding multiplicity twice; for a non-loop
 edge, apply the two incidence rewrites displayed above;
 \item canonicalize each non-loop target, increment its transition
@@ -1013,9 +1084,11 @@ $M_N=(m_{GH})$.
 \end{algorithm}
 
 The starting graph used by the implementation is explicit.  For $N=2$ it is
-the triple edge.  For $N\geq4$ it is a path with a loop at each endpoint and
-a second copy of every other path edge.  The alternating single and double
-edges give degree three at every internal vertex.
+the triple edge.  For $N\geq4$, take a path
+$v_1v_2\cdots v_N$, put a loop at each endpoint, and give the edge
+$v_iv_{i+1}$ multiplicity one when $i$ is odd and two when $i$ is even.
+Adjacent path edges then have total multiplicity three at every internal
+vertex, while each endpoint has its loop and one path edge.
 
 \begin{proposition}[Correctness of the enumeration]
 \Cref{alg:enumeration} terminates and returns every class in $\C_N$ exactly
@@ -1030,28 +1103,37 @@ the isomorphism classes, which proves that no class is stored twice.  Every
 generated target is cubic because each of $u$ and $v$ retains three occupied
 slots.  It is connected because collapsing $e$ gives a connected graph and
 either displayed expansion reconnects the two new vertices by $e$.  The
-Whitehead support on $\C_N$ is connected
-\cite{GraveDePeraltaKolpakov2024}; hence a shortest support path from the
-starting class to any class is discovered inductively by the breadth-first
-search.  Finally, the inner loop visits each edge object and both resolution
+Whitehead support on $\C_N$ is connected by
+\cref{prop:connected-support}; hence a shortest support path from the starting
+class to any class is discovered inductively by the breadth-first search.
+Finally, the inner loop visits each edge occurrence and both resolution
 slots.  It increments rather than deduplicates equal targets, so it records
 the multiplicities in \eqref{eq:kernel}.
 \end{proof}
+
+The breadth-first organization is useful because the desired output is the
+transition matrix, not only a list of graph classes.  Every stored state must
+have all $3N$ resolution slots examined.  Canonicalizing each target both
+locates its matrix column and discovers a new state when necessary, while
+termination of the queue supplies an internal completion criterion.  The
+independent class counts used below provide a second check on completion.
 
 Let $C_N=|\C_N|$, and let $T_{\rm can}(N)$ denote the maximum time for one
 canonical labelling of the coloured incidence graphs used here.  Such a graph
 has $5N/2$ vertices and at most $3N$ incidence edges.  The search generates
 exactly $3NC_N$ resolution slots and makes at most that many canonical-labelling
-calls.  With the dense $N\times N$ matrices used in the implementation, its
-time is
+calls.  For each of the $C_N$ states, constructing and copying the dense
+$N\times N$ target matrices for $3N$ slots costs $O(N^3)$ time.  Canonical
+labelling contributes at most $3N T_{\rm can}(N)$ per state.  The total time is
 \[
  O\!\left(C_N\bigl(N^3+N T_{\rm can}(N)\bigr)\right).
 \]
-The stored canonical codes and concrete transition records occupy
-$O(N^2C_N)$ machine words.  These are output-sensitive bounds; no
-polynomial-time worst-case bound for canonical labelling is being assumed.
+Storing a dense code for each state costs $O(N^2C_N)$ machine words, while the
+sparse transition records use $O(NC_N)$ more.  Thus the total storage is
+$O(N^2C_N)$.  The bounds are expressed in terms of the output size; they make
+no assumption of a polynomial worst-case bound for canonical labelling.
 
-\subsection{Exact Audits and Results}
+\subsection{Verification and Results}
 
 All combinatorial counts are integers, and all stationary quantities are
 computed as reduced rational numbers.  For each $N$, the verifier performs
@@ -1068,39 +1150,42 @@ propagated by $w_Gm_{GH}=w_Hm_{HG}$ agree around the entire connected support;
 with one bridge has exactly two slots into $\mathcal B_0$, while a class with
 more than one bridge has none;
 \item the stationary masses, cut flow, and conductance are recomputed as
-reduced fractions from those rational weights.
+reduced fractions from those rational weights;
 \item deterministic SHA-256 digests are computed for the ordered canonical
-codes and for the sparse integer transition matrix, so an independent rerun
-can be compared byte-for-byte at the mathematical-data level.
+codes and for the sparse integer transition matrix, so reruns can be compared
+without storing the full matrix.
 \end{enumerate}
 
-The rational weights in the audit are recovered from transition reciprocity,
-independently of the closed formula in \cref{thm:stationary}.  The verifier
-does not compute vertex-automorphism groups, so it does not constitute a
-second class-by-class proof of that formula.
+The rational weights are recovered from transition reciprocity, using only
+the multiplicity matrix and not the formula in \cref{thm:stationary}.  The
+resulting masses and flows can therefore be checked directly against the
+values in the table.  The verifier does not recompute vertex-automorphism
+groups, so this check does not separately test every factor in the stationary
+formula.
 
 The reported batch used the native Traces backend with one worker on an Apple
-M5 computer with 24 GB of memory.  The audit summary records the Python and
-nauty modes, source-file hashes, generation time for each $N$, and digests of
-the states and transition counts.  All seven sizes
+M5 computer with 24 GB of memory.  The accompanying JSON records the Python
+and nauty versions, hashes of the code used in the run, the generation and
+total running times, and digests of the states and transition counts.
+All seven sizes
 $N=2,4,6,8,10,12,14$ were generated in that batch.  At $N=14$ the search
-visits $21{,}096$ classes and all $886{,}032$ resolution slots.
+visited $21{,}096$ classes and all $886{,}032$ resolution slots.
 
-The JSON file is an audit summary, not a full transition certificate: the
-ancillary verifier regenerates the transition matrix rather than storing all
-of it in the submission package.  The build checks that all seven sizes are
-present and that every slot total is $3NC_N$, then generates the table rows.
-It does not require the conjectured conductance formula to hold.  The
-support-edge column counts unordered pairs of distinct classes joined by at
-least one slot; holding transitions are excluded.
+The JSON stores the aggregate values and the two digests; the ancillary
+verifier reconstructs the transition matrix on a fresh run.  The table build
+checks that all seven sizes are present and that every slot total is
+$3NC_N$.  The conductance is computed before it is compared with the pattern
+in \eqref{eq:finite-identity}; no part of the enumeration assumes that pattern.
+The support-edge column counts unordered pairs of distinct classes joined by
+at least one slot; holding transitions are excluded.
 
 \input{rule-a-enumeration-table.tex}
 
 \begin{table}[ht]
 \centering
-\caption{Size and one-worker running time of every completely enumerated
-chain.  Times are for the machine described in the text and exclude table
-rendering.}
+\caption{Complete enumerations and their running times.  Times include
+generation and verification with one worker on the machine described in the
+text; table rendering is excluded.}
 \label{tab:enumeration-size}
 \begin{tabular}{@{}r r r r r@{}}
 \toprule
@@ -1137,23 +1222,27 @@ For every enumerated size, including $N=14$, the last column of
 \end{equation}
 In all seven cases $\mathcal B_0$ is the smaller side.  Combining
 \eqref{eq:finite-identity} with the exact flow formula
-\eqref{eq:exact-bridge-flow} gives an equivalent integer-weight statement.
-If $C_0$ and $C_1$ are the total configuration weights of the zero-bridge and
-one-bridge classes, then
+\eqref{eq:exact-bridge-flow} gives an equivalent counting statement.  Set
+\[
+ W_i=\sum_{G\in\mathcal B_i}
+       \frac{N!}{|\Aut_v(G)|}c(G),
+ \qquad i=0,1.
+\]
+By \cref{lem:configuration-fibers}, $W_i$ is the number of connected
+half-edge configurations whose unlabelled graph has $i$ bridges.  Then
 \begin{equation}\label{eq:finite-weight-identity}
-  (3N/2-1)C_1=(3N/2)C_0.
+  (3N/2-1)W_1=(3N/2)W_0.
 \end{equation}
 
-\begin{conjecture}[Finite bridge identity]
+\begin{conjecture}
 Equations \eqref{eq:finite-identity} and
 \eqref{eq:finite-weight-identity} hold for every even $N\geq2$.
 \end{conjecture}
 
-The computation proves this statement only for the seven displayed values of
-$N$.  The proof of \cref{thm:bridge-flow} derives the asymptotic conductance
-from the configuration model and does not use the conjecture.  The generator,
-verifier, audit summary, and table renderer accompany the paper as ancillary
-files.
+The computation proves this statement for the seven displayed values of $N$.
+The asymptotic argument in \cref{thm:bridge-flow} is independent of the
+conjecture.  The generator, verifier, JSON record, and table renderer accompany
+the paper as ancillary files.
 
 \section{Concluding Remarks}
 
@@ -1168,8 +1257,8 @@ convergence.  Charlier polynomials in loop count form
 finite-dimensional spaces with Laplacian Rayleigh quotients of order $N^{-1}$.
 The bridge cut has conductance $2/(3N)(1+o(1))$ and yields an explicit linear
 mixing lower bound.  Exact enumeration through $N=14$ checks the quotient
-multiplicities and suggests the stronger finite identity
-\eqref{eq:finite-identity}.
+multiplicities and suggests that \eqref{eq:finite-identity} holds at every even
+order.
 
 The most immediate open problem is to prove or disprove that identity.  A
 more structural problem is to determine whether there is an absolute

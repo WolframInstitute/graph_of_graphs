@@ -271,6 +271,18 @@ if __name__ == "__main__":
     if arguments.json:
         generator_path = Path(generator_module.__file__).resolve()
         verifier_path = Path(__file__).resolve()
+        project_dir = generator_path.parent
+        source_paths = (
+            generator_path,
+            verifier_path,
+            project_dir / "build_nauty_bridge.py",
+            project_dir / "gog_nauty_bridge.c",
+        )
+        binary_paths = (
+            project_dir / "gog_nauty_bridge.dylib",
+            project_dir / "gog_nauty_bridge.so",
+            project_dir / "gog_nauty_bridge.dll",
+        )
         payload = {
             "schema": "rule-a-enumeration-v2",
             "generated_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -284,8 +296,10 @@ if __name__ == "__main__":
                 "nauty": detected_nauty_version(),
             },
             "source_sha256": {
-                generator_path.name: sha256_file(generator_path),
-                verifier_path.name: sha256_file(verifier_path),
+                path.name: sha256_file(path) for path in source_paths if path.is_file()
+            },
+            "binary_sha256": {
+                path.name: sha256_file(path) for path in binary_paths if path.is_file()
             },
             "all_complete": True,
             "results": results,
