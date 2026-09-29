@@ -5,6 +5,7 @@ gog_nauty_bridge.so
 
 # LaTeX build products (the canonical PDF is retained explicitly).
 *.aux
+*.blg
 *.fdb_latexmk
 *.fls
 *.log
@@ -16,3 +17,7 @@ docs/_build/
 
 # Locally generated enumeration tables and diagnostics.
 artifacts/
+
+# Rebuildable journal/arXiv upload bundles.
+rule-a-paper/dist/
+rule-a-paper/local-whitehead-chain-review.bbl

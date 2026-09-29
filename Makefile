@@ -4,11 +4,12 @@ WOLFRAM_KERNEL ?= /Applications/Wolfram.app/Contents/MacOS/WolframKernel
 
 .PHONY: all check paper computational-notes docs lean python-check \
 	notebook-data-check notebook notebook-paclet-check notebook-check \
-	computational-notes-notebook computational-notes-notebook-check clean
+	computational-notes-notebook computational-notes-notebook-check \
+	rule-a-paper rule-a-paper-packages clean
 
 all: check
 
-check: paper computational-notes docs lean python-check notebook-data-check
+check: paper rule-a-paper computational-notes docs lean python-check notebook-data-check
 
 paper:
 	$(LATEXMK) -pdf -interaction=nonstopmode -halt-on-error whitehead-field-dynamics.tex
@@ -16,6 +17,12 @@ paper:
 computational-notes:
 	$(LATEXMK) -pdf -interaction=nonstopmode -halt-on-error \
 		whitehead-field-dynamics-computational-notes.tex
+
+rule-a-paper:
+	$(MAKE) -C rule-a-paper all
+
+rule-a-paper-packages:
+	$(MAKE) -C rule-a-paper packages
 
 docs:
 	$(MAKE) -C docs html SPHINXOPTS="-W --keep-going"
@@ -27,7 +34,8 @@ python-check:
 	$(PYTHON) -m py_compile \
 		gog_generate.py gog_ball_growth.py gog_degree_diagnostics.py \
 		gog_edge_model_experiments.py gog_support_feature_analysis.py \
-		scripts/build_small_gog_models.py
+		scripts/build_small_gog_models.py rule-a-paper/verify_rule_a.py \
+		rule-a-paper/render_rule_a_table.py
 
 notebook-data-check:
 	$(PYTHON) scripts/build_small_gog_models.py --check
@@ -55,4 +63,5 @@ computational-notes-notebook-check: notebook-data-check
 clean:
 	$(LATEXMK) -c whitehead-field-dynamics.tex
 	$(LATEXMK) -c whitehead-field-dynamics-computational-notes.tex
+	$(MAKE) -C rule-a-paper clean
 	$(MAKE) -C docs clean

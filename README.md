@@ -18,6 +18,7 @@ boundaries.
 |---|---|
 | [`whitehead-field-dynamics.tex`](whitehead-field-dynamics.tex) | Canonical editable manuscript and source of record. |
 | [`whitehead-field-dynamics.pdf`](whitehead-field-dynamics.pdf) | PDF built from the canonical LaTeX source. |
+| [`rule-a-paper/`](rule-a-paper/) | Self-contained regular paper on the Rule-A chain, with clean arXiv and line-numbered JGAA builds. |
 | [`whitehead-field-dynamics.nb`](whitehead-field-dynamics.nb) | Concise generated Mathematica companion with seven native figures and a playable graph-of-graphs diffusion lab. |
 | [`whitehead-field-dynamics-computational-notes.tex`](whitehead-field-dynamics-computational-notes.tex) | Standalone TeX companion with annotated Mathematica input/output cells. |
 | [`whitehead-field-dynamics-computational-notes.pdf`](whitehead-field-dynamics-computational-notes.pdf) | Built companion report. |
@@ -52,7 +53,7 @@ the [convention dictionary](docs/overview.rst) before comparing results.
 
 ## Verification
 
-The ordinary repository check builds the paper, the computational companion,
+The ordinary repository check builds both papers, the computational companion,
 and Sphinx documentation, checks Lean, compiles every Python entry point, and
 regenerates the committed small Wolfram models in memory:
 
@@ -69,6 +70,19 @@ Build the standalone computational notes with:
 ```sh
 make computational-notes
 ```
+
+Build the standalone Rule-A article in clean and line-numbered review forms
+with:
+
+```sh
+make rule-a-paper
+make rule-a-paper-packages
+```
+
+The second command prepares an arXiv source archive with ancillary reproduction
+code, a JGAA review PDF, and a separate code supplement under
+`rule-a-paper/dist/`. Submission metadata, overlap wording, and the required
+JGAA AI disclosure are in [`rule-a-paper/SUBMISSION.md`](rule-a-paper/SUBMISSION.md).
 
 Its displayed Mathematica transcript can be regenerated independently with
 `scripts/notebook_report_outputs.wls`; this does not modify the canonical
