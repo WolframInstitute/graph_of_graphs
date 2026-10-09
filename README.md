@@ -18,7 +18,7 @@ boundaries.
 |---|---|
 | [`whitehead-field-dynamics.tex`](whitehead-field-dynamics.tex) | Canonical editable manuscript and source of record. |
 | [`whitehead-field-dynamics.pdf`](whitehead-field-dynamics.pdf) | PDF built from the canonical LaTeX source. |
-| [`rule-a-paper/`](rule-a-paper/) | Self-contained regular paper on the Rule-A chain, with clean arXiv and line-numbered JGAA builds. |
+| [`rule-a-paper/`](rule-a-paper/) | Self-contained paper on the local Whitehead chain, with a clean arXiv build and a line-numbered review build. |
 | [`whitehead-field-dynamics.nb`](whitehead-field-dynamics.nb) | Concise generated Mathematica companion with seven native figures and a playable graph-of-graphs diffusion lab. |
 | [`whitehead-field-dynamics-computational-notes.tex`](whitehead-field-dynamics-computational-notes.tex) | Standalone TeX companion with annotated Mathematica input/output cells. |
 | [`whitehead-field-dynamics-computational-notes.pdf`](whitehead-field-dynamics-computational-notes.pdf) | Built companion report. |
@@ -71,8 +71,8 @@ Build the standalone computational notes with:
 make computational-notes
 ```
 
-Build the standalone Rule-A article in clean and line-numbered review forms
-with:
+Build the standalone Whitehead-chain article in clean and line-numbered review
+forms with:
 
 ```sh
 make rule-a-paper
@@ -80,12 +80,13 @@ make rule-a-paper-packages
 ```
 
 The second command prepares an arXiv source archive with ancillary reproduction
-code, a JGAA review PDF, and a separate code supplement under
-`rule-a-paper/dist/`. Submission metadata, overlap wording, and the required
-JGAA AI disclosure are in [`rule-a-paper/SUBMISSION.md`](rule-a-paper/SUBMISSION.md).
+code, a line-numbered review PDF, and a separate code supplement under
+`rule-a-paper/dist/`. The supplement contains the programs, data, and instructions
+needed to reproduce the paper's tables without the rest of this repository.
+Submission notes are in [`rule-a-paper/SUBMISSION.md`](rule-a-paper/SUBMISSION.md).
 
-Its displayed Mathematica transcript can be regenerated independently with
-`scripts/notebook_report_outputs.wls`; this does not modify the canonical
+The computational notes' Mathematica transcript can be regenerated independently
+with `scripts/notebook_report_outputs.wls`; this does not modify the canonical
 manuscript or generated notebook.
 
 Build and test the executable version of the report with:

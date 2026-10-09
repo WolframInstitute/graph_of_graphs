@@ -10,9 +10,10 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage[capitalise,noabbrev]{cleveref}
 
-% Define \JGAAREVIEW in a wrapper to produce the line-numbered journal copy.
-\ifdefined\JGAAREVIEW
+% Define \REVIEWCOPY in a wrapper to produce a line-numbered, double-spaced copy.
+\ifdefined\REVIEWCOPY
   \usepackage[mathlines,switch]{lineno}
+  \usepackage{setspace}
 \fi
 
 \newcommand{\C}{\mathcal G}
@@ -53,41 +54,45 @@
 \title{The Local Whitehead-Move Chain on Cubic Multigraphs}
 \author{Alexander Kolpakov\\
 \small Center for Science, Technology, Engineering, and Mathematics\\
-\small University of Austin, Austin, Texas, United States}
+\small University of Austin, Austin, Texas, United States\\
+\small \texttt{akolpakov@uaustin.org}}
 \date{}
 
 \begin{document}
+\ifdefined\REVIEWCOPY
+  \doublespacing
+\fi
 \maketitle
 
-\ifdefined\JGAAREVIEW
+\ifdefined\REVIEWCOPY
   \linenumbers
 \fi
 
 \begin{abstract}
-Let $\C_N$ be the set of isomorphism classes of connected cubic multigraphs
-on an even number $N$ of vertices, with loops and parallel edges allowed.  We
-study the Markov chain that chooses one of the $3N/2$ individual edge
-occurrences (parallel edges being counted separately), chooses one of its two
-Whitehead resolutions, and then forgets all vertex labels.  A loop has two
-holding resolutions.  Every state therefore has exactly $3N$ resolution
-slots, but distinct slots can have the same target isomorphism class.
+A Whitehead move reconnects the four half-edges adjacent to a chosen non-loop
+edge of a cubic graph.  For even $N\geq2$, we study the chain on isomorphism
+classes of connected cubic multigraphs with $N$ vertices that chooses an edge
+occurrence and one of its two resolutions uniformly.  Loops and parallel edges
+are allowed; both resolutions of a loop leave the graph unchanged.  Write
+$P_N$ for the transition matrix.  Several choices may have the same outcome,
+so this is not the simple random walk on the graph of isomorphism classes.
 
-The stationary law is the cubic configuration model,
-conditioned on connectedness and projected to isomorphism classes.  This makes
-the chain reversible even though its transition matrix is generally
-asymmetric.  We prove that every eigenvalue of the transition matrix lies in
-$[-1/2,1]$.  A Dirichlet-form identity for loop count then yields, for
-every fixed $r$, an upper bound $2r/(3N)+o(N^{-1})$ for the $(r+1)$st
-eigenvalue of the Markov Laplacian $I-P_N$.  We also identify all moves crossing
-the cut between bridged and bridgeless graphs.  The conductance of this cut is
-$2/(3N)(1+o(1))$, giving a linear lower bound for total-variation
-mixing.  The loop test with $r=1$ gives a linear lower bound for relaxation.
+We identify the stationary distribution: it is the cubic configuration model
+conditioned on connectedness and then passed to isomorphism classes.  The chain
+is reversible for this nonuniform measure, although its transition matrix is
+generally asymmetric.  Its spectrum lies in $[-1/2,1]$.  An identity for
+functions of the loop count shows that, for every fixed $r$, the $(r+1)$st
+smallest eigenvalue of the Markov Laplacian $I-P_N$ is at most
+$2r/(3N)+o(N^{-1})$.  We also determine which moves cross between bridged and
+bridgeless graphs.  The resulting cut has conductance
+$2/(3N)(1+o(1))$ and gives a linear lower bound for mixing time.  The
+loop-count estimate gives a linear lower bound for relaxation time.
 
-The proofs are accompanied by an exhaustive canonical-labeling enumeration for
-every even $N$ from $2$ through $14$.  The $N=14$ run covers $21{,}096$ classes
-and $886{,}032$ resolution slots.  In all seven cases, the conductance of the
-bridged--bridgeless cut is $1/(3N/2-1)$; we conjecture that the same formula
-holds for every even $N$.
+Finally, we reconstruct the finite chain by exhaustive canonical-labeling
+enumeration for every even $N$ from $2$ through $14$.  At $N=14$ this comprises
+$21{,}096$ classes and $886{,}032$ resolution slots.  In all seven cases, the
+conductance of the bridged--bridgeless cut is $1/(3N/2-1)$; we conjecture that
+this formula holds for every even $N$.
 \end{abstract}
 
 \noindent\textbf{Keywords:} Whitehead move, cubic multigraph, configuration
@@ -130,13 +135,13 @@ divide the resolution multiplicities by $3N$ and study the resulting Markov
 kernel with its own stationary measure.  These choices give different
 operators even though they start from the same local move.
 
-Four local observations drive the proofs.  On labeled configurations, a
-resolution is a symmetric exchange of paired half-edges, which reveals the
-stationary measure.  With the updated edge fixed, the four remaining ends give
-the six-state walk on the Johnson graph $J(4,2)$, which controls the negative
-spectrum.  Each loop has exactly two resolutions that destroy it.  A graph
-with one bridge has exactly two resolutions that cross to the bridgeless set.
-The rest of the argument turns these four local facts into global statements.
+The proofs use four elementary features of the move.  On labeled
+configurations, resolving an edge amounts to a symmetric exchange of paired
+half-edges; this identifies the stationary measure.  If the chosen edge is held
+fixed, the four remaining ends give the six-state walk on the Johnson graph
+$J(4,2)$; this supplies the lower bound on the spectrum.  The other two facts
+are direct counts: each loop has two resolutions that destroy it, and a graph
+with one bridge has two resolutions that lead to a bridgeless graph.
 
 More precisely, let $m_{ii}$ count the loops at vertex $i$, let $m_{ij}$ count
 the edges between distinct vertices $i$ and $j$, and let $\Aut_v(G)$ be the
@@ -684,9 +689,8 @@ Since $P_N$ is self-adjoint, the Rayleigh-quotient characterization of its
 extreme eigenvalues proves the proposition.
 \end{proof}
 
-The bound is dimension-free and applies to the entire spectrum.  The
-eigenvalues near $1$, in contrast, are governed by global observables.  Loop
-count supplies a family of such observables.
+This spectral bound is independent of $N$.  To obtain bounds for eigenvalues
+near $1$, we next use functions of the loop count.
 
 \section{Loop Count and Low Eigenvalues}\label{sec:loops}
 
@@ -946,14 +950,17 @@ Each slot has probability $1/(3N)$.  Averaging this conditional escape
 probability under $\pi_N$ gives \eqref{eq:exact-bridge-flow}.
 
 In a connected cubic multigraph with $N\geq4$, every loop vertex is joined to
-the rest of the graph by a bridge.  If there is no bridge cutting off three or
-more vertices, these singleton-side bridges are all the bridges.  By
+the rest of the graph by a bridge.  Conversely, a bridge that cuts off a single
+vertex must have a loop at that vertex.  Each side of a bridge has odd order,
+so, if no bridge has at least three vertices on its smaller side, these
+singleton-side bridges are all the bridges.  By
 \cref{lem:configuration-estimates}, the exceptional event has probability
 $O(N^{-1})$ under $\pi_N$.  It follows that $\mathcal B_0$ differs from
 $\{L=0\}$ by a set of stationary mass $O(N^{-1})$, and that
 $\mathcal B_1$ differs from $\{L=1\}$ by such a set.  The Poisson limit for
-$L$ proves the first two limits in \eqref{eq:bridge-masses}; the third is
-their complement.  Since $e^{-1}<1-e^{-1}$, $\mathcal B_0$ is the smaller
+$L$ proves the first two limits in \eqref{eq:bridge-masses}; the third follows
+because $\mathcal B_N$ is the complement of $\mathcal B_0$.
+Since $e^{-1}<1-e^{-1}$, $\mathcal B_0$ is the smaller
 side for all sufficiently large $N$.  Substitution in
 \eqref{eq:exact-bridge-flow} gives \eqref{eq:bridge-conductance}.
 \end{proof}
@@ -1126,10 +1133,13 @@ labeling contributes at most $3N T_{\rm can}(N)$ per state.  The total time is
 \[
  O\!\left(C_N\bigl(N^3+N T_{\rm can}(N)\bigr)\right).
 \]
-Storing a dense code for each state costs $O(N^2C_N)$ machine words, while the
-sparse transition records use $O(NC_N)$ more.  Thus the total storage is
-$O(N^2C_N)$.  The bounds are expressed in terms of the output size; they make
-no assumption of a polynomial worst-case bound for canonical labeling.
+Storing a dense code for each state costs $O(N^2C_N)$ machine words.  If
+transitions are stored as pairs of state indices with multiplicities, they
+use $O(NC_N)$ more, giving $O(N^2C_N)$ total storage.  The supplied program
+instead retains a separate record for every resolution slot, including its
+target code and vertex permutations.  Its storage bound is therefore
+$O(N^3C_N)$.  These bounds are expressed in terms of the output size; they
+make no assumption of a polynomial worst-case bound for canonical labeling.
 
 \subsection{Checks and Results}
 
@@ -1160,20 +1170,19 @@ multiplicity matrix, without invoking the formula in
 the individual automorphism factors in the stationary formula.
 
 The reported batch used the native Traces backend with one worker on an Apple
-M5 computer with 24 GB of memory.  The accompanying JSON records the Python
-and nauty versions, hashes of the code used in the run, the generation and
-total running times, and digests of the states and transition counts.
-All seven sizes
+M5 computer with 24 GB of memory.  All seven sizes
 $N=2,4,6,8,10,12,14$ were generated in that batch.  At $N=14$ the search
-visited $21{,}096$ classes and all $886{,}032$ resolution slots.
+visited $21{,}096$ classes and all $886{,}032$ resolution slots.  The saved
+record contains the aggregate values, running times, software versions, source
+hashes, and the two digests; the full transition matrices are reconstructed
+by the verifier rather than included in the archive.
 
-The JSON stores the aggregate values and the two digests; the ancillary
-verifier reconstructs the transition matrix on a rerun.  The table build
-checks that all seven sizes are present and that every slot total is
-$3NC_N$.  The conductance is computed before it is compared with the pattern
-in \eqref{eq:finite-identity}; no part of the enumeration assumes that pattern.
-The support-edge column counts unordered pairs of distinct classes joined by
-at least one slot; holding transitions are excluded.
+The tables are generated from this record, with checks that all seven sizes
+are present and every slot total is $3NC_N$.  The conductance is computed
+before it is compared with the pattern in \eqref{eq:finite-identity}; no part
+of the enumeration assumes that pattern.  The support-edge column counts
+unordered pairs of distinct classes joined by at least one slot; holding
+transitions are excluded.
 
 \input{rule-a-enumeration-table.tex}
 
@@ -1181,7 +1190,8 @@ at least one slot; holding transitions are excluded.
 \centering
 \caption{Enumeration sizes and running times.  Times include
 generation and verification with one worker on the machine described in the
-text; table rendering is excluded.}
+text; table rendering is excluded.  The first row also includes loading the
+native library.}
 \label{tab:enumeration-size}
 \begin{tabular}{@{}r r r r r@{}}
 \toprule
@@ -1196,7 +1206,7 @@ $N$ & $|\C_N|$ & support edges & resolution slots & seconds \\
 \centering
 \small
 \setlength{\tabcolsep}{7pt}
-\renewcommand{\arraystretch}{1.45}
+\renewcommand{\arraystretch}{2.2}
 \caption{Stationary bridge data computed from the full transition matrices.
 Here $\mathcal B_0$ is the bridgeless set, $\mathcal B_1$ is the
 one-bridge set, and $\mathcal B_N$ is the set of all bridged classes.}
@@ -1237,23 +1247,27 @@ Equations \eqref{eq:finite-identity} and
 
 The computation proves this statement for the seven displayed values of $N$.
 The asymptotic argument in \cref{thm:bridge-flow} is independent of the
-conjecture.  The generator, verifier, JSON record, and table renderer accompany
-the paper as ancillary files.
+conjecture.
+
+The programs and data used to produce
+\cref{tab:enumeration-size,tab:enumeration-bridge} accompany the arXiv version
+as ancillary files.  Instructions are included for reproducing the
+computations for every even $N$ from $2$ through $14$.
 
 \section{Concluding Remarks}
 
-Sampling a resolution slot and then forgetting labels preserves slot
-multiplicity and gives the configuration-model measure
-\eqref{eq:stationary}.  Sampling uniformly from the distinct adjacent classes
-defines a different chain, as the $N=2$ transition matrix already shows.
+The way the move is randomized matters.  Our chain samples a resolution slot
+and only then forgets the labels, so it retains multiplicity and has the
+configuration-model measure \eqref{eq:stationary}.  Sampling uniformly from
+the distinct adjacent classes would define a different chain, as the $N=2$
+transition matrix already shows.
 
-Loop count and bridge count obstruct convergence in different ways.  Charlier
-polynomials in loop count form
-finite-dimensional spaces with Laplacian Rayleigh quotients of order $N^{-1}$.
-The bridge cut has conductance $2/(3N)(1+o(1))$ and yields a linear mixing
-lower bound.  Enumeration through $N=14$ checks the quotient
-multiplicities and suggests that \eqref{eq:finite-identity} holds at every even
-order.
+Loops and bridges reveal two different sources of slow convergence.  Charlier
+polynomials in the loop count give finite-dimensional spaces with Laplacian
+Rayleigh quotients of order $N^{-1}$.  The cut between bridged and bridgeless
+graphs has conductance $2/(3N)(1+o(1))$ and gives a linear mixing lower bound.
+The computations through $N=14$ also suggest that
+\eqref{eq:finite-identity} holds at every even order.
 
 The first open problem is to prove or disprove that identity.  A more
 structural problem is to determine whether there is an absolute
@@ -1266,6 +1280,10 @@ relaxation scale up to constants.  A second question is whether the Charlier
 upper bounds describe actual low-lying eigenvalues or only a family of useful
 test functions.  Both questions require control beyond the one-dimensional
 statistics used here.
+
+\section*{Declaration of interests}
+
+The author has no competing interests to declare.
 
 \bibliographystyle{abbrv}
 \bibliography{local-whitehead-chain}

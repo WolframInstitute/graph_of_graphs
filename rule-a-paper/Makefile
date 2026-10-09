@@ -5,6 +5,9 @@ TABLE_TEX := rule-a-enumeration-table.tex
 FIGURE_TEX := fig-whitehead-move.tex fig-two-state-chain.tex \
 	fig-loop-change.tex fig-bridge-resolution.tex
 FIGURE_PDF := $(FIGURE_TEX:.tex=.pdf)
+ANCILLARY := anc/README.md anc/gog_generate.py anc/verify_rule_a.py \
+	anc/build_nauty_bridge.py anc/gog_nauty_bridge.c \
+	anc/render_rule_a_table.py anc/$(TABLE_JSON)
 
 .PHONY: all figures table arxiv review packages clean
 
@@ -39,13 +42,10 @@ packages: all
 	tar -czf dist/local-whitehead-chain-arxiv.tar.gz -C dist/arxiv \
 		local-whitehead-chain.tex local-whitehead-chain.bib \
 		local-whitehead-chain.bbl $(TABLE_TEX) $(FIGURE_PDF) \
-		anc/README.md anc/gog_generate.py \
-		anc/verify_rule_a.py anc/build_nauty_bridge.py \
-		anc/gog_nauty_bridge.c anc/render_rule_a_table.py \
-		anc/$(TABLE_JSON)
-	tar -czf dist/local-whitehead-chain-code.tar.gz -C dist/arxiv anc
+		$(ANCILLARY)
+	tar -czf dist/local-whitehead-chain-code.tar.gz -C dist/arxiv $(ANCILLARY)
 	cp local-whitehead-chain-review.pdf \
-		dist/local-whitehead-chain-jgaa-review.pdf
+		dist/local-whitehead-chain-review.pdf
 
 clean:
 	$(LATEXMK) -c local-whitehead-chain.tex

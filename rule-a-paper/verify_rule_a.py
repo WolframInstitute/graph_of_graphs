@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reproduce the exact Rule-A counts and bridge conductance table.
+"""Reproduce the Whitehead-chain counts and bridge conductance table.
 
 The script deliberately uses only the transition generator and the Python
 standard library.  For N=10,12,14, use a nauty/Traces canonical-labelling
@@ -58,6 +58,7 @@ def transition_count_digest(counts: list[Counter[int]]) -> str:
 
 def detected_nauty_version() -> str | None:
     commands = (
+        ["pkg-config", "--modversion", "libnauty"],
         ["pkg-config", "--modversion", "nauty"],
         ["brew", "list", "--versions", "nauty"],
     )

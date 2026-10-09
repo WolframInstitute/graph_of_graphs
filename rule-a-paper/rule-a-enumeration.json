@@ -2,7 +2,7 @@
   "all_complete": true,
   "backend": "native",
   "binary_sha256": {
-    "gog_nauty_bridge.dylib": "5521d0c6e2275b39d071fd157644a2b428fb753a304a55e58d3fa8a06ee6d8d7"
+    "gog_nauty_bridge.dylib": "d824a75d62fbda46235e6dec709309a31804e029052364e9b0666444dc2e90ad"
   },
   "command": [
     "verify_rule_a.py",
@@ -20,26 +20,26 @@
     "--jobs",
     "1",
     "--json",
-    "rule-a-enumeration.json"
+    "verified-enumeration.json"
   ],
   "environment": {
     "nauty": "2.9.3",
     "platform": "macOS-26.4.1-arm64-arm-64bit-Mach-O",
     "python": "3.14.6"
   },
-  "generated_at_utc": "2026-09-29T22:11:01.295083+00:00",
+  "generated_at_utc": "2026-10-09T07:50:33.045948+00:00",
   "jobs": 1,
   "nauty_mode": "traces",
   "results": [
     {
       "N": 2,
-      "audit_seconds": 0.002979,
+      "audit_seconds": 0.003134,
       "bridge_conductance": "1/2",
       "bridge_flow": "1/5",
       "classes": 2,
       "finite_pattern": "1/2",
       "finite_pattern_matches": true,
-      "generation_seconds": 0.002795,
+      "generation_seconds": 0.003027,
       "pi_B0": "2/5",
       "pi_B1": "3/5",
       "slots": 12,
@@ -49,13 +49,13 @@
     },
     {
       "N": 4,
-      "audit_seconds": 0.002363,
+      "audit_seconds": 0.00132,
       "bridge_conductance": "1/5",
       "bridge_flow": "1/15",
       "classes": 5,
       "finite_pattern": "1/5",
       "finite_pattern_matches": true,
-      "generation_seconds": 0.002149,
+      "generation_seconds": 0.001203,
       "pi_B0": "1/3",
       "pi_B1": "2/5",
       "slots": 60,
@@ -65,13 +65,13 @@
     },
     {
       "N": 6,
-      "audit_seconds": 0.012929,
+      "audit_seconds": 0.008589,
       "bridge_conductance": "1/8",
       "bridge_flow": "44/1105",
       "classes": 17,
       "finite_pattern": "1/8",
       "finite_pattern_matches": true,
-      "generation_seconds": 0.012157,
+      "generation_seconds": 0.008081,
       "pi_B0": "352/1105",
       "pi_B1": "396/1105",
       "slots": 306,
@@ -81,13 +81,13 @@
     },
     {
       "N": 8,
-      "audit_seconds": 0.141556,
+      "audit_seconds": 0.087436,
       "bridge_conductance": "1/11",
       "bridge_flow": "49/1695",
       "classes": 71,
       "finite_pattern": "1/11",
       "finite_pattern_matches": true,
-      "generation_seconds": 0.135578,
+      "generation_seconds": 0.078811,
       "pi_B0": "539/1695",
       "pi_B1": "196/565",
       "slots": 1704,
@@ -97,13 +97,13 @@
     },
     {
       "N": 10,
-      "audit_seconds": 1.648397,
+      "audit_seconds": 0.560667,
       "bridge_conductance": "1/14",
       "bridge_flow": "9528/414125",
       "classes": 388,
       "finite_pattern": "1/14",
       "finite_pattern_matches": true,
-      "generation_seconds": 1.557002,
+      "generation_seconds": 0.526634,
       "pi_B0": "133392/414125",
       "pi_B1": "28584/82825",
       "slots": 11640,
@@ -113,13 +113,13 @@
     },
     {
       "N": 12,
-      "audit_seconds": 17.67314,
+      "audit_seconds": 5.899187,
       "bridge_conductance": "1/17",
       "bridge_flow": "379/19675",
       "classes": 2592,
       "finite_pattern": "1/17",
       "finite_pattern_matches": true,
-      "generation_seconds": 16.514228,
+      "generation_seconds": 5.595445,
       "pi_B0": "6443/19675",
       "pi_B1": "6822/19675",
       "slots": 93312,
@@ -129,13 +129,13 @@
     },
     {
       "N": 14,
-      "audit_seconds": 238.605989,
+      "audit_seconds": 68.695228,
       "bridge_conductance": "1/20",
       "bridge_flow": "21328896/1282031525",
       "classes": 21096,
       "finite_pattern": "1/20",
       "finite_pattern_matches": true,
-      "generation_seconds": 223.604143,
+      "generation_seconds": 64.461714,
       "pi_B0": "85315584/256406305",
       "pi_B1": "447906816/1282031525",
       "slots": 886032,
@@ -149,6 +149,6 @@
     "build_nauty_bridge.py": "2ae0de2669fd524fa2d708adf2c3215c60f71c1783663edee9e695712b6f5a73",
     "gog_generate.py": "8b146daba518941279c48f922d1abdb5f085b75604350464add8537351c5221b",
     "gog_nauty_bridge.c": "01f1789bb65d0ef00e18ead3aa7041796d4de239b3133faa76fdf1abf1465af0",
-    "verify_rule_a.py": "109f4df02a24df6db9d6d8abbd8d2a73d41186b402debdd489d1b8195753638c"
+    "verify_rule_a.py": "d4cacf144a7854192a7085d23ea8d2e04d5a2362fdc043166f0127c5c7667dc7"
   }
 }
