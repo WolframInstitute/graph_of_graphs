@@ -1,177 +1,93 @@
-# Whitehead field dynamics and reconfiguration graphs
+# Whitehead moves on cubic graphs
 
-This repository studies Whitehead moves on connected cubic multigraphs and a
-scalar field averaged along the rewritten carrier edge. Loops and parallel
-edges are allowed. The project combines a mathematical manuscript, complete
-finite enumeration, spectral diagnostics, a compact Mathematica companion,
-and a deliberately small Lean verification layer.
+This repository contains papers and computations on Whitehead moves on
+connected cubic multigraphs. A Whitehead move collapses a non-loop edge and expands
+the resulting four-valent vertex in one of two other ways. Loops and parallel
+edges are allowed.
 
-This is a research repository, not a package release. Results have different
-evidence levels: manuscript proofs, deductions from named external inputs,
-complete finite computations, machine-checked finite algebra, and open
-conjectures. The [claim-status ledger](docs/status.rst) records those
-boundaries.
+The paper in [`rule-a-paper/`](rule-a-paper/) studies the random walk obtained
+by choosing an edge and one of its two Whitehead moves uniformly. It
+determines the stationary distribution, bounds the spectrum, and uses loops
+and bridges to obtain lower bounds for relaxation and mixing times. The
+accompanying code enumerates the full chain for every even number of vertices
+from 2 through 14.
 
-## Start here
+[`whitehead-field-dynamics.tex`](whitehead-field-dynamics.tex) studies a related
+process in which a scalar field is averaged across an edge before the graph
+is changed. Mathematica notebooks illustrate both the graph walk and the
+field dynamics.
 
-| Artifact | Role |
+## Papers and code
+
+| File or directory | Contents |
 |---|---|
-| [`whitehead-field-dynamics.tex`](whitehead-field-dynamics.tex) | Canonical editable manuscript and source of record. |
-| [`whitehead-field-dynamics.pdf`](whitehead-field-dynamics.pdf) | PDF built from the canonical LaTeX source. |
-| [`rule-a-paper/`](rule-a-paper/) | Self-contained paper on the local Whitehead chain, with a clean arXiv build and a line-numbered review build. |
-| [`whitehead-field-dynamics.nb`](whitehead-field-dynamics.nb) | Concise generated Mathematica companion with seven native figures and a playable graph-of-graphs diffusion lab. |
-| [`whitehead-field-dynamics-computational-notes.tex`](whitehead-field-dynamics-computational-notes.tex) | Standalone TeX companion with annotated Mathematica input/output cells. |
-| [`whitehead-field-dynamics-computational-notes.pdf`](whitehead-field-dynamics-computational-notes.pdf) | Built companion report. |
-| [`whitehead-field-dynamics-computational-notes.nb`](whitehead-field-dynamics-computational-notes.nb) | Computational notebook with 19 input/output pairs, a GoG atlas, a click-to-inspect vertex viewer, exact diffusion tables and pictures, and local-package setup. |
-| [`Wolfram/GogFieldDynamics/`](Wolfram/GogFieldDynamics/) | Repo-local Wolfram package for exact small graph-type models, diffusion, and SetReplace trajectories. |
-| [`docs/`](docs/) | Project guide, conventions, evidence status, and reproducibility instructions. |
-| [`gog_generate.py`](gog_generate.py) and analysis scripts | Exact finite enumeration and diagnostics. |
-| [`lean/`](lean/) | Lean/Std proofs of a limited finite-algebra boundary. |
+| [`rule-a-paper/local-whitehead-chain.pdf`](rule-a-paper/local-whitehead-chain.pdf) | The local Whitehead-chain paper; [LaTeX source](rule-a-paper/local-whitehead-chain.tex). |
+| [`whitehead-field-dynamics.pdf`](whitehead-field-dynamics.pdf) | The field-dynamics manuscript; [LaTeX source](whitehead-field-dynamics.tex). |
+| [`whitehead-field-dynamics.nb`](whitehead-field-dynamics.nb) | A short Mathematica companion with figures and an interactive random walk. |
+| [`whitehead-field-dynamics-computational-notes.pdf`](whitehead-field-dynamics-computational-notes.pdf) | Worked computations, also available as [LaTeX](whitehead-field-dynamics-computational-notes.tex) and an [executable notebook](whitehead-field-dynamics-computational-notes.nb). |
+| [`gog_generate.py`](gog_generate.py) | Enumeration of cubic multigraphs and Whitehead moves, with Python and nauty/Traces backends. |
+| [`Wolfram/GogFieldDynamics/`](Wolfram/GogFieldDynamics/) | Wolfram Language code for exact transition matrices, diffusion, and random paths. |
+| [`lean/`](lean/) | Lean proofs of the finite algebraic identities described in its README. |
+| [`docs/`](docs/) | Mathematical conventions, computation instructions, and notebook documentation. |
 
-The notebook is a committed derived artifact, not a second manuscript source
-and not a paper wrapped in notebook cells. Its seven short sections combine
-six executable input cells, exact outputs, seven native visuals, and one
-interactive laboratory. Proofs and longer mathematical discussion remain in
-the canonical LaTeX manuscript.
+The [status page](docs/status.rst) lists the proved results, finite
+computations, and conjectures. The Lean files cover only the identities
+specified there.
 
-## Four objects that must not be conflated
+## Random walks used here
 
-“Graph of graphs” refers to several related but inequivalent objects here.
+Different ways of choosing a move give different random walks. The papers and
+code use the following conventions, with `N` denoting the number of vertices.
 
-| Case | State space | One-step convention | Natural law or operator |
-|---|---|---|---|
-| 1. Carrier field | A cubic multigraph `G` and a field `f` on its vertices | Average one carrier-edge pair, perform a Whitehead rewrite, then settle coordinates | Carrier Laplacian and a specified Rule-A or Rule-B lift |
-| 2. Fixed-labelled simple GoG | Cubic multigraphs on the fixed vertex set `[N]` | Keep distinct nonself labelled targets from four endpoint-oriented moves | Degree-stationary simple walk, or a padded symmetric `6N` clock |
-| 3. GDPK multiplicity chain | Unlabelled isomorphism classes | Retain two resolutions per edge object, including multiplicity and holding slots | `P_A(G,H)=m(G,H)/(3N)` and the configuration-model quotient law |
-| 4. Unlabelled simple support | The same classes as Case 3 | Give every distinct nonself target probability `1/(3N)` and use the remaining probability for staying put | Rule B is symmetric and uniform; its jump chain has stationary mass proportional to `q(G)` |
+| Walk | States and transition rule | Stationary distribution |
+|---|---|---|
+| Rule A | Unlabelled isomorphism classes. Choose one of the `3N/2` edges, then one of its two Whitehead moves. A move on a loop leaves the graph unchanged. Different moves leading to the same class are counted separately. | The cubic configuration model, conditioned on connectedness and projected to isomorphism classes. |
+| Rule B | The same classes. Assign probability `1/(3N)` to each distinct neighbour other than the current state, and use the remaining probability to stay put. | Uniform on isomorphism classes. The jump chain instead has mass proportional to the number of neighbours. |
+| Walk on labelled graphs | Graphs on the fixed vertex set `[N]`. Retain each distinct target other than the current state from the four endpoint-oriented moves on each edge, and choose a neighbour uniformly. | Proportional to degree. The alternative symmetric chain with `6N` equally likely choices, allowing the state to remain unchanged, has uniform stationary distribution. |
 
-Cases 3 and 4 share reachability after self-targets are removed, but not path
-counts, probabilities, stationary measures, conductance, or normalized
-spectra. Case 2 has a different state space and step convention. Case 1 is a field
-cocycle over a chosen base chain, not another scalar walk on the quotient. See
-the [convention dictionary](docs/overview.rst) before comparing results.
+Rules A and B have the same adjacent classes, but their transition
+probabilities and stationary distributions differ. For the field process,
+one must also specify how the field is transported when the graph changes.
+The details are in the [mathematical overview](docs/overview.rst).
 
-## Verification
+## Building the papers
 
-The ordinary repository check builds both papers, the computational companion,
-and Sphinx documentation, checks Lean, compiles every Python entry point, and
-regenerates the committed small Wolfram models in memory:
-
-```sh
-python3 -m pip install -r docs/requirements.txt
-make check
-```
-
-It requires Python 3, a TeX distribution with `latexmk` and `pdflatex`, Sphinx
-8 or 9, and the Lean toolchain pinned in `lean/lean-toolchain`.
-
-Build the standalone computational notes with:
-
-```sh
-make computational-notes
-```
-
-Build the standalone Whitehead-chain article in clean and line-numbered review
-forms with:
+The LaTeX builds require `latexmk` and `pdflatex`. To build the Whitehead-chain
+paper and a double-spaced copy with line numbers, run:
 
 ```sh
 make rule-a-paper
+```
+
+To prepare the arXiv source archive and a code supplement containing the
+enumeration programs and data:
+
+```sh
 make rule-a-paper-packages
 ```
 
-The second command prepares an arXiv source archive with ancillary reproduction
-code, a line-numbered review PDF, and a separate code supplement under
-`rule-a-paper/dist/`. The supplement contains the programs, data, and instructions
-needed to reproduce the paper's tables without the rest of this repository.
-Submission notes are in [`rule-a-paper/SUBMISSION.md`](rule-a-paper/SUBMISSION.md).
+The files are written to `rule-a-paper/dist/`. See the
+[submission notes](rule-a-paper/SUBMISSION.md) for their contents.
 
-The computational notes' Mathematica transcript can be regenerated independently
-with `scripts/notebook_report_outputs.wls`; this does not modify the canonical
-manuscript or generated notebook.
-
-Build and test the executable version of the report with:
+The other two LaTeX documents can be built separately:
 
 ```sh
-make computational-notes-notebook
-make computational-notes-notebook-check
+make paper
+make computational-notes
 ```
 
-Alternatively, open `whitehead-field-dynamics-computational-notes.nb` and
-choose **Evaluation > Evaluate Notebook**. The notebook needs only the
-repo-local `GogFieldDynamics` package; SetReplace is not required. The command
-above evaluates all visible cells again in a fresh kernel and checks the
-mathematical results and visual objects.
+## Reproducing the computations
 
-The Wolfram checks require a licensed local installation.
-`whitehead-field-dynamics.nb` also requires a front end:
+The [reproduction notes](rule-a-paper/REPRODUCIBILITY.md) give the commands for
+the exact tables in the Whitehead-chain paper. For a small run without
+nauty/Traces:
 
 ```sh
-make notebook
-make notebook-check
+python3 rule-a-paper/verify_rule_a.py 8 --backend python --jobs 1
 ```
 
-`make notebook-check` also runs the small-model regeneration check and nine
-companion-package tests, including a real SetReplace trajectory.
-
-## Mathematica computational companion
-
-The notebook build uses Wolfram Language 14.3 or newer and the built-in
-`Default.nb` stylesheet. It is constructed directly from
-`scripts/notebook_visuals.wl`; it has no MathNotebook conversion dependency.
-
-The repo-local `GogFieldDynamics` package is loaded directly by the build; it
-does not need to be installed globally. It bundles complete `N=2,4,6,8`
-unlabelled quotient data derived from `gog_generate.py` and provides exact
-Rule-A, Rule-B, and Rule-B jump-chain matrices, rational diffusion,
-native random paths, and a singleton-hypergraph bridge to
-[WolframInstitute/SetReplace](https://github.com/WolframInstitute/SetReplace).
-
-In the lab:
-
-- blue node fill is the exact distribution after `t` graph-type steps;
-- the orange ring and trail are one sampled trajectory;
-- Rule A repeats a SetReplace rule once per resolution slot, so duplicates and
-  holding events retain their exact multiplicity;
-- Rule B uses one rule per distinct nonself support neighbour and pads every
-  row to `3N` with holding rules;
-- exact matrix diffusion remains separate from the sample path.
-
-SetReplace is optional for opening the notebook and using exact/native
-diffusion. It is required by `make notebook-paclet-check` and therefore by the
-full `make notebook-check` used on this audited installation. The validated
-local version is `0.3.196`.
-
-The build adds a banner and seven section links, then presents a visual
-abstract, the local Whitehead move, the exact variance drop, finite consensus
-schedules, a Rule-A/Rule-B heat-map comparison, the diffusion lab, and enumeration
-growth. It verifies the named visual IDs, bounds the notebook size, rejects
-paper-style theorem/proof cells, normalizes cell UUIDs, saves through the
-Mathematica front end, and reopens and renders the artifact. The constructor
-currently emits 52 cells; the front end normalizes this to 66 cells with 2,547
-narrative characters, seven sections, six input cells, and seven visuals.
-
-The separate computational notebook follows the longer TeX
-transcript and now places its key pictures alongside the relevant calculations.
-It has nine sections and 19 executable cell pairs, including an `N=4` GoG
-atlas, a live viewer for the cubic multigraph represented by each GoG vertex,
-an exact-distribution/sample-path panel, and an exact Rule-B spectral-gap
-calculation. Its checker evaluates every cell in order from a fresh kernel and
-verifies the mathematics, formula formatting, graph spacing, and visual
-objects without requiring a front end.
-
-Use a different kernel path when necessary:
-
-```sh
-make notebook WOLFRAM_KERNEL=/path/to/WolframKernel
-make notebook-check WOLFRAM_KERNEL=/path/to/WolframKernel
-```
-
-The detailed paclet boundary, visualization-tool audit, editing policy, and
-troubleshooting notes are in the [notebook guide](docs/notebook.rst).
-
-## Computational reproduction
-
-For a modest complete unlabelled table:
+For enumeration followed by the repository's spectral and graph-statistic
+analyses:
 
 ```sh
 mkdir -p artifacts/csv
@@ -190,25 +106,57 @@ python3 gog_support_feature_analysis.py \
   --summary-json artifacts/feature-summary-N8.json
 ```
 
-The generator has a pure-Python fallback; production canonical labelling
-should use nauty/Traces. A complete `N=8` run has 71 classes and 1,704 Rule-A
-slot records. Enumeration through `N=14` has 21,096 classes and 886,032 slot
-records. See the [computational guide](docs/computation.rst) for backends, file
-contracts, expected counts, and interpretation guardrails.
+At `N=8` there are 71 isomorphism classes and 1,704 Whitehead moves counted
+with multiplicity. At `N=14` there are 21,096 classes and 886,032 moves.
+The Python backend suffices for small examples; nauty/Traces is faster for
+larger enumerations. See the [computational guide](docs/computation.rst) for
+installation and file formats.
 
-## Editing discipline
+## Mathematica notebooks
 
-When changing a result:
+The notebooks use Wolfram Language 14.3 or later and the local
+`GogFieldDynamics` package. They include exact models for `N=2,4,6,8`,
+transition matrices for Rules A and B, and comparisons of exact distributions
+with sampled paths.
 
-1. name which of the four objects it concerns;
-2. state the move clock, normalization, and stationary law;
-3. distinguish proof, external input, finite computation, and conjecture;
-4. state the settlement convention for a transported-field claim;
-5. update the status ledger and reproducibility notes with the manuscript;
-6. rebuild the PDF and notebook before committing synchronized artifacts.
+To rebuild and check the computational notebook:
 
-Edit visual-notebook presentation code in `scripts/notebook_visuals.wl`, the
-computational-notebook source in `scripts/build_computational_notes_notebook.wls`, or
-exact dynamics in the `GogFieldDynamics` paclet. Never hand-edit either
-generated `.nb`. Generated large tables and local diagnostics belong under
-ignored `artifacts/`.
+```sh
+make computational-notes-notebook
+make computational-notes-notebook-check
+```
+
+It can also be evaluated with **Evaluation > Evaluate Notebook** in
+Mathematica. SetReplace is not required for this notebook.
+
+The shorter companion includes an optional
+[SetReplace](https://github.com/WolframInstitute/SetReplace) simulation. For
+Rule A, repeated rules account for the multiplicity of Whitehead moves; for
+Rule B, there is one rule per distinct neighbour, with additional rules that
+leave the state unchanged. Its build requires a Mathematica front end, and
+the full check also tests SetReplace:
+
+```sh
+make notebook
+make notebook-check
+```
+
+To use a kernel at another location, pass
+`WOLFRAM_KERNEL=/path/to/WolframKernel` to `make`. The
+[notebook guide](docs/notebook.rst) describes the builds and dependencies.
+Edit the notebook-building scripts rather than the generated `.nb` files.
+
+## Repository checks
+
+The checks build both papers, the computational notes, and the Sphinx
+documentation; compile the Python entry points; check the Lean proofs; and
+compare regenerated small Wolfram models with the saved data:
+
+```sh
+python3 -m pip install -r docs/requirements.txt
+make check
+```
+
+This requires Python 3, LaTeX, Sphinx 8 or 9, and the Lean toolchain specified
+in [`lean/lean-toolchain`](lean/lean-toolchain). The Mathematica notebook
+checks are run separately with the commands above.
