@@ -1,0 +1,1108 @@
+{
+  "model": "stable Hermitian quartic integral",
+  "torsor": "GL2 frame torsor with the quartic rank-two differential connection",
+  "local_fields": [
+    "Qbar((t))(exp(1/(4t)))",
+    "Qbar((t-1/M))",
+    "Qbar((t^(-1/4)))"
+  ],
+  "arithmetic_precision_bits": 2048,
+  "formal_checks": {
+    "exact_formal_order": 24,
+    "weak_Wronskian": "-t^(-1) exp(1/(4t))",
+    "strong_Wronskian": "-2 t^(-1) exp(1/(4t))",
+    "matrix_size_two_ODE": "8 lambda^4 Z''' + 4 lambda^2 (16 lambda+3) Z'' + 2 (55 lambda^2+18 lambda+2) Z' + 3 (10 lambda+3) Z = 0",
+    "finite_field_jet_checks": [
+      {
+        "prime": 53,
+        "rational_strong_basis_jets_checked_through_order": 24
+      },
+      {
+        "prime": 59,
+        "rational_strong_basis_jets_checked_through_order": 24
+      },
+      {
+        "prime": 61,
+        "rational_strong_basis_jets_checked_through_order": 24
+      }
+    ]
+  },
+  "p_curvature_checks": [
+    {
+      "prime": 3,
+      "trace": {
+        "6": 1
+      },
+      "determinant": {},
+      "Laurent_exponent_convention": "e denotes t^(-e)",
+      "full_horizontal_frame_over_Fp_Laurent_series": false
+    },
+    {
+      "prime": 5,
+      "trace": {
+        "10": 4
+      },
+      "determinant": {},
+      "Laurent_exponent_convention": "e denotes t^(-e)",
+      "full_horizontal_frame_over_Fp_Laurent_series": false
+    },
+    {
+      "prime": 7,
+      "trace": {
+        "14": 2
+      },
+      "determinant": {},
+      "Laurent_exponent_convention": "e denotes t^(-e)",
+      "full_horizontal_frame_over_Fp_Laurent_series": false
+    },
+    {
+      "prime": 11,
+      "trace": {
+        "22": 3
+      },
+      "determinant": {},
+      "Laurent_exponent_convention": "e denotes t^(-e)",
+      "full_horizontal_frame_over_Fp_Laurent_series": false
+    }
+  ],
+  "error_bounds": "Taylor integral remainders, including Arb rounding enclosures",
+  "absolute_error_target": "1e-10",
+  "results": [
+    {
+      "matrix_dimension": 1,
+      "coupling": "1/100",
+      "reference_Bessel_ball": "[0.992803907978981284377571094528225125031027481 +/- 1.02e-46]",
+      "methods": {
+        "weak": {
+          "first_order_certifying_absolute_error_below_tolerance": 12,
+          "best_order_within_search": 24,
+          "best_absolute_remainder_bound_ball": "[1.560571017338323510015866e-12 +/- 1.67e-37]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[0.99280390970412243330329656600952148 +/- 4.38e-36]",
+              "absolute_remainder_bound_ball": "[2.329974951112288981676102e-9 +/- 3.16e-34]",
+              "certified_lower_endpoint": "[0.9928039073741474821910075843334197998047 +/- 1.26e-41]",
+              "certified_upper_endpoint": "[0.9928039097041224333032965660095214843750 +/- 1e-45]"
+            },
+            {
+              "order": 12,
+              "terms": 13,
+              "approximation_ball": "[0.99280390802629488988726655371716333 +/- 3.21e-36]",
+              "absolute_remainder_bound_ball": "[7.131637738723047815628679e-11 +/- 1.83e-37]",
+              "certified_lower_endpoint": "[0.9928039079549785125000360755608765430225 +/- 4.07e-41]",
+              "certified_upper_endpoint": "[0.9928039080262948898872665537171633332036 +/- 4.36e-41]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[0.99280390798378807321094464011383794 +/- 3.20e-36]",
+              "absolute_remainder_bound_ball": "[8.001751881155128893290024e-12 +/- 3.48e-37]",
+              "certified_lower_endpoint": "[0.9928039079757863213297895112205479195451 +/- 1.50e-41]",
+              "certified_upper_endpoint": "[0.9928039079837880732109446401138379431975 +/- 3.18e-41]"
+            }
+          ]
+        },
+        "strong": {
+          "first_order_certifying_absolute_error_below_tolerance": 170,
+          "best_order_within_search": 1024,
+          "best_absolute_remainder_bound_ball": "[1.173907030668719026421872e-452 +/- 1.53e-477]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[12781.902143849769515495527834275483 +/- 2.58e-31]",
+              "absolute_remainder_bound_ball": "[40773.60433493688284200207 +/- 1.91e-21]",
+              "certified_lower_endpoint": "[-27991.70219108711332650654025840485167199 +/- 1.32e-36]",
+              "certified_upper_endpoint": "[12781.90214384976951549552783427548325753 +/- 2.35e-36]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[2245496.2369079859649640017702662910 +/- 3.00e-29]",
+              "absolute_remainder_bound_ball": "[5943476.523534520165832724 +/- 1.52e-19]",
+              "certified_lower_endpoint": "[-3697980.286626534200868722380850505962264 +/- 3.24e-35]",
+              "certified_upper_endpoint": "[2245496.236907985964964001770266291029917 +/- 2.36e-34]"
+            },
+            {
+              "order": 170,
+              "terms": 171,
+              "approximation_ball": "[0.99280390802229157792706374252785710 +/- 4.91e-36]",
+              "absolute_remainder_bound_ball": "[6.661723448736348269774078e-11 +/- 3.81e-37]",
+              "certified_lower_endpoint": "[0.9928039079556743434397002598301163245208 +/- 7.44e-42]",
+              "certified_upper_endpoint": "[0.9928039080222915779270637425278571049005 +/- 9.38e-42]"
+            }
+          ]
+        },
+        "ordinary_at_one": {
+          "outside_chosen_Cauchy_circle": true,
+          "first_order_certifying_absolute_error_below_tolerance": null
+        }
+      }
+    },
+    {
+      "matrix_dimension": 1,
+      "coupling": "1/10",
+      "reference_Bessel_ball": "[0.944501801674171350529963598896660962003048762 +/- 2.55e-46]",
+      "methods": {
+        "weak": {
+          "first_order_certifying_absolute_error_below_tolerance": null,
+          "best_order_within_search": 2,
+          "best_absolute_remainder_bound_ball": "[0.02707031250000000000000000 +/- 3e-31]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[1.4854072055743634700775146484375000 +/- 3e-39]",
+              "absolute_remainder_bound_ball": "[2.329974951112288981676102 +/- 3.16e-25]",
+              "certified_lower_endpoint": "[-0.8445677455379255115985870361328125000000 +/- 1e-45]",
+              "certified_upper_endpoint": "[1.485407205574363470077514648437500000000 +/- 1e-44]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[107255.34875898611946634712627038644 +/- 3.83e-30]",
+              "absolute_remainder_bound_ball": "[800175.1881155128893290024 +/- 3.48e-20]",
+              "certified_lower_endpoint": "[-692919.8393565267698626552389712943136324 +/- 1.43e-36]",
+              "certified_upper_endpoint": "[107255.3487589861194663471262703864361754 +/- 1.42e-35]"
+            }
+          ]
+        },
+        "strong": {
+          "first_order_certifying_absolute_error_below_tolerance": 38,
+          "best_order_within_search": 1024,
+          "best_absolute_remainder_bound_ball": "[2.087534701938113325773104e-965 +/- 3.47e-990]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[1.3752058911367204298041538599869638 +/- 1.08e-35]",
+              "absolute_remainder_bound_ball": "[0.7250686106189202530428728 +/- 1.13e-26]",
+              "certified_lower_endpoint": "[0.6501372805178001767612810487215029866847 +/- 2.12e-41]",
+              "certified_upper_endpoint": "[1.375205891136720429804153859986963789239 +/- 2.27e-40]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[0.95146967216402256412257848856949696 +/- 2.04e-36]",
+              "absolute_remainder_bound_ball": "[0.01056916192585115439044361 +/- 3.89e-28]",
+              "certified_lower_endpoint": "[0.9409005102381714097321348781807762202369 +/- 1.65e-41]",
+              "certified_upper_endpoint": "[0.9514696721640225641225784885694969579653 +/- 1.21e-41]"
+            },
+            {
+              "order": 38,
+              "terms": 39,
+              "approximation_ball": "[0.94450180170756620655489056782775624 +/- 1.31e-36]",
+              "absolute_remainder_bound_ball": "[4.509027579868095695905002e-11 +/- 1.79e-36]",
+              "certified_lower_endpoint": "[0.9445018016624759307562096108687062230861 +/- 1.76e-41]",
+              "certified_upper_endpoint": "[0.9445018017075662065548905678277562413020 +/- 4.63e-41]"
+            }
+          ]
+        },
+        "ordinary_at_one": {
+          "outside_chosen_Cauchy_circle": true,
+          "first_order_certifying_absolute_error_below_tolerance": null
+        }
+      }
+    },
+    {
+      "matrix_dimension": 1,
+      "coupling": "9/10",
+      "reference_Bessel_ball": "[0.782778854929931619659925384083276116331883336 +/- 1.20e-46]",
+      "methods": {
+        "weak": {
+          "first_order_certifying_absolute_error_below_tolerance": null,
+          "best_order_within_search": 0,
+          "best_absolute_remainder_bound_ball": "[0.6750000000000000000000000 +/- 3e-30]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[30079284.331912921469062566757202148 +/- 4.38e-28]",
+              "absolute_remainder_bound_ball": "[902680034.9176740911902674 +/- 4.58e-17]",
+              "certified_lower_endpoint": "[-872600750.5857611697212047874927520751953 +/- 1.26e-32]",
+              "certified_upper_endpoint": "[30079284.33191292146906256675720214843750 +/- 1e-37]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[227317769389888501097.40614503343010 +/- 2.04e-16]",
+              "absolute_remainder_bound_ball": "[13344667003767285830883.22 +/- 5.36e-5]",
+              "certified_lower_endpoint": "[-13117349234377397329785.81380162998559009 +/- 2.10e-18]",
+              "certified_upper_endpoint": "[227317769389888501097.4061450334301002039 +/- 4.35e-20]"
+            }
+          ]
+        },
+        "strong": {
+          "first_order_certifying_absolute_error_below_tolerance": 16,
+          "best_order_within_search": 1024,
+          "best_absolute_remainder_bound_ball": "[1.075937361934391116687241e-1454 +/- 9.80e-1481]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[0.78279620877943684570851562326474119 +/- 2.12e-36]",
+              "absolute_remainder_bound_ball": "[2.126802608960938648549762e-5 +/- 4.90e-30]",
+              "certified_lower_endpoint": "[0.7827749407533472363220301256398449779605 +/- 2.16e-41]",
+              "certified_upper_endpoint": "[0.7827962087794368457085156232647411878875 +/- 2.55e-41]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[0.78277885497026927919355581045139636 +/- 6.42e-37]",
+              "absolute_remainder_bound_ball": "[4.725182577784811570737805e-11 +/- 1.67e-36]",
+              "certified_lower_endpoint": "[0.7827788549230174534157076947440183076959 +/- 3.36e-41]",
+              "certified_upper_endpoint": "[0.7827788549702692791935558104513963593583 +/- 4.13e-41]"
+            }
+          ]
+        },
+        "ordinary_at_one": {
+          "first_order_certifying_absolute_error_below_tolerance": 10,
+          "Cauchy_circle_radius": "9/10",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[0.78277885492666059270412079445675715 +/- 2.28e-36]",
+              "absolute_remainder_bound_ball": "[2.903821640677346829738785e-9 +/- 4.47e-34]"
+            },
+            {
+              "order": 10,
+              "terms": 11,
+              "approximation_ball": "[0.78277885492991101149978188124781209 +/- 1.31e-36]",
+              "absolute_remainder_bound_ball": "[3.584964988490551641652822e-11 +/- 4.61e-36]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[0.78277885492993161965322919097497169 +/- 3.00e-36]",
+              "absolute_remainder_bound_ball": "[6.745744096692862691536448e-17 +/- 1.46e-42]"
+            }
+          ],
+          "seed_period_evaluation_required": true
+        }
+      }
+    },
+    {
+      "matrix_dimension": 1,
+      "coupling": "1",
+      "reference_Bessel_ball": "[0.772052177852982266452094734142691373578983347 +/- 2.32e-47]",
+      "methods": {
+        "weak": {
+          "first_order_certifying_absolute_error_below_tolerance": null,
+          "best_order_within_search": 0,
+          "best_absolute_remainder_bound_ball": "0.7500000000000000000000000",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "70139795.087698340415954589843750000",
+              "absolute_remainder_bound_ball": "[2329974951.112288981676102 +/- 3.16e-16]",
+              "certified_lower_endpoint": "-2259835156.024590641260147094726562500000",
+              "certified_upper_endpoint": "70139795.08769834041595458984375000000000"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[1228969418966573837324.0836533442512 +/- 1.78e-14]",
+              "absolute_remainder_bound_ball": "[80017518811551288932900.24 +/- 3.48e-3]",
+              "certified_lower_endpoint": "[-78788549392584715095576.15287082382379857 +/- 3.93e-18]",
+              "certified_upper_endpoint": "[1228969418966573837324.083653344251182205 +/- 4.84e-19]"
+            }
+          ]
+        },
+        "strong": {
+          "first_order_certifying_absolute_error_below_tolerance": 16,
+          "best_order_within_search": 1024,
+          "best_absolute_remainder_bound_ball": "[3.712219978198286719723639e-1478 +/- 3.75e-1503]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[0.77206279957991426121758078812978369 +/- 3.71e-36]",
+              "absolute_remainder_bound_ball": "[1.289374581129154943824043e-5 +/- 1.21e-30]",
+              "certified_lower_endpoint": "[0.7720499058341029696681425476985819997067 +/- 4.27e-41]",
+              "certified_upper_endpoint": "[0.7720627995799142612175807881297836862946 +/- 3.70e-41]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[0.77205217786914877366622036904504696 +/- 1.99e-37]",
+              "absolute_remainder_bound_ball": "[1.879492303410843596601617e-11 +/- 2.53e-36]",
+              "certified_lower_endpoint": "[0.7720521778503538506321119330790307923295 +/- 1.79e-41]",
+              "certified_upper_endpoint": "[0.7720521778691487736662203690450469598013 +/- 1.20e-41]"
+            }
+          ]
+        },
+        "ordinary_at_one": {
+          "first_order_certifying_absolute_error_below_tolerance": 0,
+          "Cauchy_circle_radius": "9/10",
+          "selected_approximations": [
+            {
+              "order": 0,
+              "terms": 1,
+              "approximation_ball": "[0.77205217785298226645209473414269137 +/- 3.58e-36]",
+              "absolute_remainder_bound_ball": "0"
+            },
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[0.77205217785298226645209473414269137 +/- 3.58e-36]",
+              "absolute_remainder_bound_ball": "0"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[0.77205217785298226645209473414269137 +/- 3.58e-36]",
+              "absolute_remainder_bound_ball": "0"
+            }
+          ],
+          "seed_period_evaluation_required": true
+        }
+      }
+    },
+    {
+      "matrix_dimension": 1,
+      "coupling": "11/10",
+      "reference_Bessel_ball": "[0.762191585336296752113764225740447668560130275 +/- 4.05e-46]",
+      "methods": {
+        "weak": {
+          "first_order_certifying_absolute_error_below_tolerance": null,
+          "best_order_within_search": 0,
+          "best_absolute_remainder_bound_ball": "[0.8250000000000000000000000 +/- 3e-30]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[150817367.20828153106436133384704590 +/- 1.57e-27]",
+              "absolute_remainder_bound_ball": "[5493959056.063059686067905 +/- 2.78e-16]",
+              "certified_lower_endpoint": "[-5343141688.854778155003543943166732788086 +/- 6.26e-32]",
+              "certified_upper_endpoint": "[150817367.2082815310643613338470458984375 +/- 1e-36]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[5655484895280105387886.9865548224299 +/- 2.24e-15]",
+              "absolute_remainder_bound_ball": "[404446171111849397741866.0 +/- 0.0262]",
+              "certified_lower_endpoint": "[-398790686216569292353978.9872737388574224 +/- 3.63e-17]",
+              "certified_upper_endpoint": "[5655484895280105387886.986554822429902231 +/- 4.05e-19]"
+            }
+          ]
+        },
+        "strong": {
+          "first_order_certifying_absolute_error_below_tolerance": 15,
+          "best_order_within_search": 1024,
+          "best_absolute_remainder_bound_ball": "[2.215819544858302276582303e-1499 +/- 1.33e-1524]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[0.76219839582075521448663702281857746 +/- 2.72e-36]",
+              "absolute_remainder_bound_ball": "[8.199055944339929949681127e-6 +/- 4.70e-31]",
+              "certified_lower_endpoint": "[0.7621901967648108745566873416911077219945 +/- 1.87e-42]",
+              "certified_upper_endpoint": "[0.7621983958207552144866370228185774572868 +/- 3.18e-43]"
+            },
+            {
+              "order": 15,
+              "terms": 16,
+              "approximation_ball": "[0.76219158529191869429556079207023932 +/- 3.22e-36]",
+              "absolute_remainder_bound_ball": "[5.144569691752626466956221e-11 +/- 3.18e-36]",
+              "certified_lower_endpoint": "[0.7621915852919186942955607920702393232188 +/- 2.97e-41]",
+              "certified_upper_endpoint": "[0.7621915853433643912130870567398015363901 +/- 5.97e-42]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[0.76219158534336439121308705673980154 +/- 3.62e-36]",
+              "absolute_remainder_bound_ball": "[8.163089468857518812080097e-12 +/- 1.37e-38]",
+              "certified_lower_endpoint": "[0.7621915853352013017442295379277214394035 +/- 2.08e-41]",
+              "certified_upper_endpoint": "[0.7621915853433643912130870567398015363901 +/- 5.97e-42]"
+            }
+          ]
+        },
+        "ordinary_at_one": {
+          "first_order_certifying_absolute_error_below_tolerance": 10,
+          "Cauchy_circle_radius": "9/10",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[0.76219158533909052679003127536198295 +/- 3.05e-36]",
+              "absolute_remainder_bound_ball": "[2.903821640677346829738785e-9 +/- 4.47e-34]"
+            },
+            {
+              "order": 10,
+              "terms": 11,
+              "approximation_ball": "[0.76219158533631427434321121908542352 +/- 4.39e-36]",
+              "absolute_remainder_bound_ball": "[3.584964988490551641652822e-11 +/- 4.61e-36]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[0.76219158533629675211941062440157382 +/- 2.67e-36]",
+              "absolute_remainder_bound_ball": "[6.745744096692862691536448e-17 +/- 1.46e-42]"
+            }
+          ],
+          "seed_period_evaluation_required": true
+        }
+      }
+    },
+    {
+      "matrix_dimension": 1,
+      "coupling": "10",
+      "reference_Bessel_ball": "[0.520160763704750250042527097068257742150871497 +/- 3.15e-46]",
+      "methods": {
+        "weak": {
+          "first_order_certifying_absolute_error_below_tolerance": null,
+          "best_order_within_search": 0,
+          "best_absolute_remainder_bound_ball": "7.500000000000000000000000",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "7236516198591405.3614196777343750000",
+              "absolute_remainder_bound_ball": "[2329974951112288981.676102 +/- 3.16e-7]",
+              "certified_lower_endpoint": "-2322738434913697576.314682006835937500000",
+              "certified_upper_endpoint": "7236516198591405.361419677734375000000000"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[1.2473354402660463638426619003090096e+37 +/- 3.78e+2]",
+              "absolute_remainder_bound_ball": "[8.001751881155128893290024e+39 +/- 3.48e+14]",
+              "certified_lower_endpoint": "[-7.989278526752468429651597033413717401700e+39 +/- 0.206]",
+              "certified_upper_endpoint": "[12473354402660463638426619003090096377.64 +/- 1.30e-3]"
+            }
+          ]
+        },
+        "strong": {
+          "first_order_certifying_absolute_error_below_tolerance": 9,
+          "best_order_within_search": 1024,
+          "best_absolute_remainder_bound_ball": "[6.601364352765152171277437e-1991 +/- 2.25e-2016]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[0.52016076391957659694755167981482471 +/- 3.17e-36]",
+              "absolute_remainder_bound_ball": "[2.292868269449536857828403e-10 +/- 3.56e-35]",
+              "certified_lower_endpoint": "[0.5201607636902897700025979940319843712475 +/- 4.95e-41]",
+              "certified_upper_endpoint": "[0.5201607639195765969475516798148247068328 +/- 4.19e-41]"
+            },
+            {
+              "order": 9,
+              "terms": 10,
+              "approximation_ball": "[0.52016076369028977000259799403198437 +/- 1.25e-36]",
+              "absolute_remainder_bound_ball": "[1.539281114303166574403891e-11 +/- 2.10e-36]",
+              "certified_lower_endpoint": "[0.5201607636902897700025979940319843712475 +/- 4.95e-41]",
+              "certified_upper_endpoint": "[0.5201607637056825811456296597760232833413 +/- 9.26e-42]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[0.52016076370475025007431898847695471 +/- 3.28e-36]",
+              "absolute_remainder_bound_ball": "[3.342262464482131043897370e-20 +/- 3.23e-45]",
+              "certified_lower_endpoint": "[0.5201607637047502500408963638321334028347 +/- 9.47e-42]",
+              "certified_upper_endpoint": "[0.5201607637047502500743189884769547132737 +/- 3.58e-41]"
+            }
+          ]
+        },
+        "ordinary_at_one": {
+          "outside_chosen_Cauchy_circle": true,
+          "first_order_certifying_absolute_error_below_tolerance": null
+        }
+      }
+    },
+    {
+      "matrix_dimension": 1,
+      "coupling": "100",
+      "reference_Bessel_ball": "[0.312886454958452932499204465565055573258002242 +/- 1.14e-46]",
+      "methods": {
+        "weak": {
+          "first_order_certifying_absolute_error_below_tolerance": null,
+          "best_order_within_search": 0,
+          "best_absolute_remainder_bound_ball": "75.00000000000000000000000",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "725967565067543584641503.14843750000",
+              "absolute_remainder_bound_ball": "[2.329974951112288981676102e+27 +/- 3.16e+2]",
+              "certified_lower_endpoint": "-2329248983547221438091460181.421875000000",
+              "certified_upper_endpoint": "725967565067543584641503.1484375000000000"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[1.2492044279095438419865833996632792e+53 +/- 7.10e+17]",
+              "absolute_remainder_bound_ball": "[8.001751881155128893290024e+56 +/- 3.48e+31]",
+              "certified_lower_endpoint": "[-8.000502676727219349448037069017144218871e+56 +/- 2.55e+16]",
+              "certified_upper_endpoint": "[1.249204427909543841986583399663279207098e+53 +/- 1.01e+13]"
+            }
+          ]
+        },
+        "strong": {
+          "first_order_certifying_absolute_error_below_tolerance": 6,
+          "best_order_within_search": 1024,
+          "best_absolute_remainder_bound_ball": "[1.173907030668719026421872e-2503 +/- 1.53e-2528]",
+          "selected_approximations": [
+            {
+              "order": 6,
+              "terms": 7,
+              "approximation_ball": "[0.31288645496610215323669796142929368 +/- 3.71e-36]",
+              "absolute_remainder_bound_ball": "[7.828532032307881505664397e-12 +/- 7.39e-38]",
+              "certified_lower_endpoint": "[0.3128864549582736212043900799236292866287 +/- 4.19e-41]",
+              "certified_upper_endpoint": "[0.3128864549661021532366979614292936837025 +/- 3.65e-41]"
+            },
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[0.31288645495845692502638818531161767 +/- 6.22e-37]",
+              "absolute_remainder_bound_ball": "[4.077360433493688284200207e-15 +/- 1.91e-40]",
+              "certified_lower_endpoint": "[0.3128864549584528476659546916233334691722 +/- 8.33e-42]",
+              "certified_upper_endpoint": "[0.3128864549584569250263881853116176693790 +/- 1.76e-41]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[0.31288645495845293249920446562354244 +/- 4.08e-36]",
+              "absolute_remainder_bound_ball": "[5.943476523534520165832724e-29 +/- 1.52e-54]",
+              "certified_lower_endpoint": "[0.3128864549584529324992044655641076706916 +/- 1.72e-41]",
+              "certified_upper_endpoint": "[0.3128864549584529324992044656235424359269 +/- 2.81e-41]"
+            }
+          ]
+        },
+        "ordinary_at_one": {
+          "outside_chosen_Cauchy_circle": true,
+          "first_order_certifying_absolute_error_below_tolerance": null
+        }
+      }
+    },
+    {
+      "matrix_dimension": 2,
+      "coupling": "1/100",
+      "reference_Bessel_ball": "[0.978342596756159020160748477837495248152177223 +/- 2.98e-46]",
+      "methods": {
+        "weak": {
+          "first_order_certifying_absolute_error_below_tolerance": 9,
+          "best_order_within_search": 49,
+          "best_absolute_remainder_bound_ball": "[3.114301109661190364855677e-21 +/- 2.15e-46]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[0.97834259690502527500003576278686523 +/- 4.38e-36]",
+              "absolute_remainder_bound_ball": "[1.779457308977566659450531e-10 +/- 5.87e-37]",
+              "certified_lower_endpoint": "[0.9783425967270795441022790968418121337891 +/- 3.76e-41]",
+              "certified_upper_endpoint": "[0.9783425969050252750000357627868652343750 +/- 1e-45]"
+            },
+            {
+              "order": 9,
+              "terms": 10,
+              "approximation_ball": "[0.97834259672707954410227909684181213 +/- 3.79e-36]",
+              "absolute_remainder_bound_ball": "[3.533872189853639435023069e-11 +/- 3.82e-36]",
+              "certified_lower_endpoint": "[0.9783425967270795441022790968418121337891 +/- 3.76e-41]",
+              "certified_upper_endpoint": "[0.9783425967624182660008154911920428276062 +/- 1.18e-42]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[0.97834259675616221608927150270690931 +/- 4.24e-36]",
+              "absolute_remainder_bound_ball": "[4.327831629908091929828876e-15 +/- 8.86e-41]",
+              "certified_lower_endpoint": "[0.9783425967561578882576415946149794853588 +/- 1.94e-41]",
+              "certified_upper_endpoint": "[0.9783425967561622160892715027069093142347 +/- 3.08e-41]"
+            }
+          ]
+        },
+        "strong": {
+          "first_order_certifying_absolute_error_below_tolerance": 590,
+          "best_order_within_search": 1024,
+          "best_absolute_remainder_bound_ball": "[2.541257797438865687340098e-141 +/- 4.69e-166]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[753722428.13943630041030685270360139 +/- 4.74e-27]",
+              "absolute_remainder_bound_ball": "[4146561472.236399038890519 +/- 1.36e-16]",
+              "certified_lower_endpoint": "[-3392839044.096962738480212011593741847370 +/- 3.65e-31]",
+              "certified_upper_endpoint": "[753722428.1394363004103068527036013947326 +/- 2.87e-32]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[40072127305509.995926816726947882395 +/- 2.24e-22]",
+              "absolute_remainder_bound_ball": "[174204142282400.7824386984 +/- 2.87e-11]",
+              "certified_lower_endpoint": "[-134132014976890.7865118816444169527185898 +/- 1.50e-26]",
+              "certified_upper_endpoint": "[40072127305509.99592681672694788239477616 +/- 2.42e-27]"
+            },
+            {
+              "order": 590,
+              "terms": 591,
+              "approximation_ball": "[0.97834259681268023928243113589324776 +/- 3.99e-36]",
+              "absolute_remainder_bound_ball": "[8.936977668269939679499737e-11 +/- 2.66e-37]",
+              "certified_lower_endpoint": "[0.9783425967233104625997317390982503942522 +/- 2.17e-41]",
+              "certified_upper_endpoint": "[0.9783425968126802392824311358932477639888 +/- 2.04e-41]"
+            }
+          ]
+        },
+        "ordinary_at_one": {
+          "outside_chosen_Cauchy_circle": true,
+          "first_order_certifying_absolute_error_below_tolerance": null
+        }
+      }
+    },
+    {
+      "matrix_dimension": 2,
+      "coupling": "1/10",
+      "reference_Bessel_ball": "[0.833619781598932232713934950465318816171499235 +/- 3.97e-46]",
+      "methods": {
+        "weak": {
+          "first_order_certifying_absolute_error_below_tolerance": null,
+          "best_order_within_search": 4,
+          "best_absolute_remainder_bound_ball": "[0.03894318237304687500000000 +/- 3e-31]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[0.89588731203636527061462402343750000 +/- 3e-40]",
+              "absolute_remainder_bound_ball": "[0.1779457308977566659450531 +/- 5.87e-28]",
+              "certified_lower_endpoint": "[0.7179415811386086046695709228515625000000 +/- 3e-45]",
+              "certified_upper_endpoint": "[0.8958873120363652706146240234375000000000 +/- 1e-45]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[98.310678077489803732721756782009237 +/- 1.46e-35]",
+              "absolute_remainder_bound_ball": "[432.7831629908091929828876 +/- 8.86e-24]",
+              "certified_lower_endpoint": "[-334.4724849133193892501658343605064338533 +/- 1.17e-38]",
+              "certified_upper_endpoint": "[98.31067807748980373272175678200923698569 +/- 3.42e-39]"
+            }
+          ]
+        },
+        "strong": {
+          "first_order_certifying_absolute_error_below_tolerance": 90,
+          "best_order_within_search": 1024,
+          "best_absolute_remainder_bound_ball": "[8.036162761569625469185874e-655 +/- 6.53e-681]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[5449.8463320707520760984690270414979 +/- 2.74e-33]",
+              "absolute_remainder_bound_ball": "[13112.57871016807017031647 +/- 2.43e-21]",
+              "certified_lower_endpoint": "[-7662.732378097318094218003393562359019726 +/- 2.69e-37]",
+              "certified_upper_endpoint": "[5449.846332070752076098469027041497902739 +/- 7.14e-39]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[26861.012538720511023098257164103498 +/- 3.64e-31]",
+              "absolute_remainder_bound_ball": "[55088.18674484297825813670 +/- 2.93e-21]",
+              "certified_lower_endpoint": "[-28227.17420612246723503844575646003199134 +/- 1.35e-36]",
+              "certified_upper_endpoint": "[26861.01253872051102309825716410349763634 +/- 4.72e-36]"
+            },
+            {
+              "order": 90,
+              "terms": 91,
+              "approximation_ball": "[0.83361978165256482588509832219559492 +/- 1.22e-36]",
+              "absolute_remainder_bound_ball": "[7.861220371339512217027306e-11 +/- 1.40e-36]",
+              "certified_lower_endpoint": "[0.8336197815739526221717032000253218598202 +/- 4.41e-41]",
+              "certified_upper_endpoint": "[0.8336197816525648258850983221955949212186 +/- 2.09e-41]"
+            }
+          ]
+        },
+        "ordinary_at_one": {
+          "outside_chosen_Cauchy_circle": true,
+          "first_order_certifying_absolute_error_below_tolerance": null
+        }
+      }
+    },
+    {
+      "matrix_dimension": 2,
+      "coupling": "9/10",
+      "reference_Bessel_ball": "[0.428570822280093121046261729399159181754876846 +/- 3.86e-46]",
+      "methods": {
+        "weak": {
+          "first_order_certifying_absolute_error_below_tolerance": null,
+          "best_order_within_search": 0,
+          "best_absolute_remainder_bound_ball": "[2.025000000000000000000000 +/- 3e-29]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[4014751.8036592349012792110443115234 +/- 3.76e-29]",
+              "absolute_remainder_bound_ball": "[68939822.07987129652344212 +/- 6.43e-19]",
+              "certified_lower_endpoint": "[-64925070.27621206162216290831565856933594 +/- 2.51e-33]",
+              "certified_upper_endpoint": "[4014751.803659234901279211044311523437500 +/- 1e-38]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[228417257355581964.72137795349194873 +/- 1.88e-18]",
+              "absolute_remainder_bound_ball": "[7217603445754137018.586793 +/- 1.52e-7]",
+              "certified_lower_endpoint": "[-6989186188398555053.865414894641618513406 +/- 2.12e-22]",
+              "certified_upper_endpoint": "[228417257355581964.7213779534919487318709 +/- 4.86e-23]"
+            }
+          ]
+        },
+        "strong": {
+          "first_order_certifying_absolute_error_below_tolerance": 28,
+          "best_order_within_search": 1024,
+          "best_absolute_remainder_bound_ball": "[7.971134314781157855371051e-1145 +/- 2.71e-1170]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[0.47917698350945395938634524901072628 +/- 1.88e-36]",
+              "absolute_remainder_bound_ball": "[0.07402089061721660637954056 +/- 4.74e-27]",
+              "certified_lower_endpoint": "[0.4051560928922373530068046842785893734186 +/- 3.38e-41]",
+              "certified_upper_endpoint": "[0.4791769835094539593863452490107262818757 +/- 5.00e-41]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[0.42860598616487022041475511265144189 +/- 3.00e-36]",
+              "absolute_remainder_bound_ball": "[4.739741298232592809354206e-5 +/- 4.27e-30]",
+              "certified_lower_endpoint": "[0.4285585887518878944866615705957105009068 +/- 3.30e-41]",
+              "certified_upper_endpoint": "[0.4286059861648702204147551126514418929978 +/- 2.43e-41]"
+            },
+            {
+              "order": 28,
+              "terms": 29,
+              "approximation_ball": "[0.42857082230463647435555058313419489 +/- 1.06e-36]",
+              "absolute_remainder_bound_ball": "[3.118550745516547374354638e-11 +/- 2.66e-36]",
+              "certified_lower_endpoint": "[0.4285708222734509669003851093906485083973 +/- 1.12e-41]",
+              "certified_upper_endpoint": "[0.4285708223046364743555505831341948910510 +/- 2.72e-41]"
+            }
+          ]
+        },
+        "ordinary_at_one": {
+          "first_order_certifying_absolute_error_below_tolerance": 10,
+          "Cauchy_circle_radius": "9/10",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[0.42857082226822996653326170421721563 +/- 4.16e-36]",
+              "absolute_remainder_bound_ball": "[2.903821640677346829738785e-9 +/- 4.47e-34]"
+            },
+            {
+              "order": 10,
+              "terms": 11,
+              "approximation_ball": "[0.42857082228002011765304577388823390 +/- 8.29e-37]",
+              "absolute_remainder_bound_ball": "[3.584964988490551641652822e-11 +/- 4.61e-36]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[0.42857082228009312102508139306997657 +/- 4.14e-36]",
+              "absolute_remainder_bound_ball": "[6.745744096692862691536448e-17 +/- 1.46e-42]"
+            }
+          ],
+          "seed_period_evaluation_required": true
+        }
+      }
+    },
+    {
+      "matrix_dimension": 2,
+      "coupling": "1",
+      "reference_Bessel_ball": "[0.407287926710171186684044001175463288454031285 +/- 3.63e-46]",
+      "methods": {
+        "weak": {
+          "first_order_certifying_absolute_error_below_tolerance": null,
+          "best_order_within_search": 0,
+          "best_absolute_remainder_bound_ball": "2.250000000000000000000000",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "9387128.6192363500595092773437500000",
+              "absolute_remainder_bound_ball": "[177945730.8977566659450531 +/- 5.86e-19]",
+              "certified_lower_endpoint": "-168558602.2785203158855438232421875000000",
+              "certified_upper_endpoint": "9387128.619236350059509277343750000000000"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[1236818214183458894.1211742332964363 +/- 1.56e-17]",
+              "absolute_remainder_bound_ball": "[43278316299080919298.28876 +/- 8.86e-7]",
+              "certified_lower_endpoint": "[-42041498084897460404.16758488095513079941 +/- 2.99e-21]",
+              "certified_upper_endpoint": "[1236818214183458894.121174233296436284490 +/- 4.83e-22]"
+            }
+          ]
+        },
+        "strong": {
+          "first_order_certifying_absolute_error_below_tolerance": 26,
+          "best_order_within_search": 1024,
+          "best_absolute_remainder_bound_ball": "[2.541257797438865687340098e-1168 +/- 4.69e-1193]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[0.43610941381677827457370307939970458 +/- 2.18e-36]",
+              "absolute_remainder_bound_ball": "[0.04146561472236399038890519 +/- 1.36e-27]",
+              "certified_lower_endpoint": "[0.3946437990944142841847978907567311497493 +/- 3.02e-41]",
+              "certified_upper_endpoint": "[0.4361094138167782745737030793997045821704 +/- 4.78e-41]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[0.40730102516730523607619119044981087 +/- 4.43e-36]",
+              "absolute_remainder_bound_ball": "[1.742041422824007824386984e-5 +/- 2.87e-30]",
+              "certified_lower_endpoint": "[0.4072836047530769959979473206126743909169 +/- 4.42e-41]",
+              "certified_upper_endpoint": "[0.4073010251673052360761911904498108744283 +/- 1.93e-41]"
+            },
+            {
+              "order": 26,
+              "terms": 27,
+              "approximation_ball": "[0.40728792678007998928110040239077384 +/- 3.08e-36]",
+              "absolute_remainder_bound_ball": "[8.847693635963343286724327e-11 +/- 1.13e-36]",
+              "certified_lower_endpoint": "[0.4072879266916030529214669695235305657983 +/- 4.58e-41]",
+              "certified_upper_endpoint": "[0.4072879267800799892811004023907738369205 +/- 4.61e-41]"
+            }
+          ]
+        },
+        "ordinary_at_one": {
+          "first_order_certifying_absolute_error_below_tolerance": 0,
+          "Cauchy_circle_radius": "9/10",
+          "selected_approximations": [
+            {
+              "order": 0,
+              "terms": 1,
+              "approximation_ball": "[0.40728792671017118668404400117546329 +/- 1.55e-36]",
+              "absolute_remainder_bound_ball": "0"
+            },
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[0.40728792671017118668404400117546329 +/- 1.55e-36]",
+              "absolute_remainder_bound_ball": "0"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[0.40728792671017118668404400117546329 +/- 1.55e-36]",
+              "absolute_remainder_bound_ball": "0"
+            }
+          ],
+          "seed_period_evaluation_required": true
+        }
+      }
+    },
+    {
+      "matrix_dimension": 2,
+      "coupling": "11/10",
+      "reference_Bessel_ball": "[0.388348789629950086785959500903004213303280454 +/- 1.38e-46]",
+      "methods": {
+        "weak": {
+          "first_order_certifying_absolute_error_below_tolerance": null,
+          "best_order_within_search": 0,
+          "best_absolute_remainder_bound_ball": "[2.475000000000000000000000 +/- 3e-29]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[20229898.417561396704524755477905273 +/- 4.38e-28]",
+              "absolute_remainder_bound_ball": "[419586725.2936726875449963 +/- 8.61e-18]",
+              "certified_lower_endpoint": "[-399356826.8761112908404715359210968017578 +/- 1.26e-32]",
+              "certified_upper_endpoint": "[20229898.41756139670452475547790527343750 +/- 1e-37]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[5698822322571678292.1861742389200343 +/- 4.90e-17]",
+              "absolute_remainder_bound_ball": "[218748963718230035383.2677 +/- 4.82e-5]",
+              "certified_lower_endpoint": "[-213050141395658357091.0815738680363197707 +/- 3.25e-20]",
+              "certified_upper_endpoint": "[5698822322571678292.186174238920034348971 +/- 4.35e-22]"
+            }
+          ]
+        },
+        "strong": {
+          "first_order_certifying_absolute_error_below_tolerance": 25,
+          "best_order_within_search": 1024,
+          "best_absolute_remainder_bound_ball": "[1.412228252130976256399379e-1189 +/- 1.16e-1214]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[0.40565989690806456876985706783331790 +/- 4.66e-36]",
+              "absolute_remainder_bound_ball": "[0.02454869102200254752076420 +/- 4.98e-28]",
+              "certified_lower_endpoint": "[0.3811112058860620212490928683309314011837 +/- 3.35e-41]",
+              "certified_upper_endpoint": "[0.4056598969080645687698570678333179046553 +/- 3.79e-41]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[0.38835414830587511601409167588854169 +/- 1.52e-36]",
+              "absolute_remainder_bound_ball": "[7.044139833629813029774353e-6 +/- 3.40e-31]",
+              "certified_lower_endpoint": "[0.3883471041660414862010619015358810972387 +/- 4.28e-41]",
+              "certified_upper_endpoint": "[0.3883541483058751160140916758885416884821 +/- 6.52e-42]"
+            },
+            {
+              "order": 25,
+              "terms": 26,
+              "approximation_ball": "[0.38834878956118959827930422002247718 +/- 1.69e-36]",
+              "absolute_remainder_bound_ball": "[8.648655018425065328102976e-11 +/- 2.41e-36]",
+              "certified_lower_endpoint": "[0.3883487895611895982793042200224771816843 +/- 2.81e-41]",
+              "certified_upper_endpoint": "[0.3883487896476761484635548733035069440903 +/- 3.70e-41]"
+            }
+          ]
+        },
+        "ordinary_at_one": {
+          "first_order_certifying_absolute_error_below_tolerance": 10,
+          "Cauchy_circle_radius": "9/10",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[0.38834878964009828569773801551187528 +/- 2.31e-36]",
+              "absolute_remainder_bound_ball": "[2.903821640677346829738785e-9 +/- 4.47e-34]"
+            },
+            {
+              "order": 10,
+              "terms": 11,
+              "approximation_ball": "[0.38834878963001231407626654780203478 +/- 2.34e-36]",
+              "absolute_remainder_bound_ball": "[3.584964988490551641652822e-11 +/- 4.61e-36]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[0.38834878962995008680388480637957888 +/- 3.01e-36]",
+              "absolute_remainder_bound_ball": "[6.745744096692862691536448e-17 +/- 1.46e-42]"
+            }
+          ],
+          "seed_period_evaluation_required": true
+        }
+      }
+    },
+    {
+      "matrix_dimension": 2,
+      "coupling": "10",
+      "reference_Bessel_ball": "[0.0901594958905986162683971835660982972012087048 +/- 2.05e-47]",
+      "methods": {
+        "weak": {
+          "first_order_certifying_absolute_error_below_tolerance": null,
+          "best_order_within_search": 0,
+          "best_absolute_remainder_bound_ball": "22.50000000000000000000000",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "991315772504832.80526733398437500000",
+              "absolute_remainder_bound_ball": "[177945730897756665.9450531 +/- 5.86e-10]",
+              "certified_lower_endpoint": "-176954415125251833.1397857666015625000000",
+              "certified_upper_endpoint": "991315772504832.8052673339843750000000000"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[1.2714988004073346837993351845074886e+34 +/- 0.434]",
+              "absolute_remainder_bound_ball": "[4.327831629908091929828876e+36 +/- 8.86e+10]",
+              "certified_lower_endpoint": "[-4315116641904018582990882559580081822.824 +/- 4.84e-4]",
+              "certified_upper_endpoint": "[12714988004073346837993351845074885.56623 +/- 3.40e-6]"
+            }
+          ]
+        },
+        "strong": {
+          "first_order_certifying_absolute_error_below_tolerance": 12,
+          "best_order_within_search": 1024,
+          "best_absolute_remainder_bound_ball": "[8.036162761569625469185874e-1682 +/- 6.53e-1708]",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[0.090159611160316088625191797054952382 +/- 4.12e-37]",
+              "absolute_remainder_bound_ball": "[1.311257871016807017031647e-7 +/- 2.43e-32]",
+              "certified_lower_endpoint": "[0.09015948003452898694449009389022817554968 +/- 3.00e-42]",
+              "certified_upper_endpoint": "[0.09015961116031608862519179705495238158825 +/- 3.78e-42]"
+            },
+            {
+              "order": 12,
+              "terms": 13,
+              "approximation_ball": "[0.090159495922538637776784818394736869 +/- 2.36e-37]",
+              "absolute_remainder_bound_ball": "[3.568452885435845228169350e-11 +/- 3.16e-36]",
+              "certified_lower_endpoint": "[0.09015949588685410892242636611304336608509 +/- 4.40e-42]",
+              "certified_upper_endpoint": "[0.09015949592253863777678481839473686923510 +/- 4.25e-42]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[0.090159495890603606501069769606379384 +/- 4.26e-37]",
+              "absolute_remainder_bound_ball": "[5.508818674484297825813670e-15 +/- 2.93e-40]",
+              "certified_lower_endpoint": "[0.09015949589059809768239528530855356990421 +/- 1.58e-42]",
+              "certified_upper_endpoint": "[0.09015949589060360650106976960637938357450 +/- 3.63e-42]"
+            }
+          ]
+        },
+        "ordinary_at_one": {
+          "outside_chosen_Cauchy_circle": true,
+          "first_order_certifying_absolute_error_below_tolerance": null
+        }
+      }
+    },
+    {
+      "matrix_dimension": 2,
+      "coupling": "100",
+      "reference_Bessel_ball": "[0.0121833855400135266562400465267393092210246602 +/- 3.24e-47]",
+      "methods": {
+        "weak": {
+          "first_order_certifying_absolute_error_below_tolerance": null,
+          "best_order_within_search": 0,
+          "best_absolute_remainder_bound_ball": "225.0000000000000000000000",
+          "selected_approximations": [
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "99694895300036047392915.648437500000",
+              "absolute_remainder_bound_ball": "[1.779457308977566659450531e+26 +/- 0.586]",
+              "certified_lower_endpoint": "-177846036002456629897660184.9375000000000",
+              "certified_upper_endpoint": "99694895300036047392915.64843750000000000"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[1.2750812817350415868417920432440144e+50 +/- 3.18e+15]",
+              "absolute_remainder_bound_ball": "[4.327831629908091929828876e+53 +/- 8.86e+27]",
+              "certified_lower_endpoint": "[-4.326556548626356888242034119381912694022e+53 +/- 4.65e+13]",
+              "certified_upper_endpoint": "[1.275081281735041586841792043244014368215e+50 +/- 2.71e+10]"
+            }
+          ]
+        },
+        "strong": {
+          "first_order_certifying_absolute_error_below_tolerance": 7,
+          "best_order_within_search": 1024,
+          "best_absolute_remainder_bound_ball": "[2.541257797438865687340098e-2195 +/- 4.69e-2220]",
+          "selected_approximations": [
+            {
+              "order": 7,
+              "terms": 8,
+              "approximation_ball": "[0.012183385531288015893569083912426565 +/- 3.22e-37]",
+              "absolute_remainder_bound_ball": "[9.122940167987153328207322e-12 +/- 3.51e-37]",
+              "certified_lower_endpoint": "[0.01218338553128801589356908391242656532184 +/- 1.93e-42]",
+              "certified_upper_endpoint": "[0.01218338554041095606155623724063388767221 +/- 1.33e-42]"
+            },
+            {
+              "order": 8,
+              "terms": 9,
+              "approximation_ball": "[0.012183385540410956061556237240633888 +/- 3.28e-37]",
+              "absolute_remainder_bound_ball": "[4.146561472236399038890519e-13 +/- 1.36e-38]",
+              "certified_lower_endpoint": "[0.01218338553999629991433259733674483578578 +/- 1.07e-42]",
+              "certified_upper_endpoint": "[0.01218338554041095606155623724063388767221 +/- 1.33e-42]"
+            },
+            {
+              "order": 16,
+              "terms": 17,
+              "approximation_ball": "[0.012183385540013526656241733228425996 +/- 6.64e-38]",
+              "absolute_remainder_bound_ball": "[1.742041422824007824386984e-24 +/- 2.87e-49]",
+              "certified_lower_endpoint": "[0.01218338554001352665623999118700317192583 +/- 3.16e-42]",
+              "certified_upper_endpoint": "[0.01218338554001352665624173322842599593366 +/- 2.46e-42]"
+            }
+          ]
+        },
+        "ordinary_at_one": {
+          "outside_chosen_Cauchy_circle": true,
+          "first_order_certifying_absolute_error_below_tolerance": null
+        }
+      }
+    }
+  ]
+}

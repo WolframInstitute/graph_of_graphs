@@ -35,9 +35,6 @@
 \newaliascnt{corollary}{theorem}
 \newtheorem{corollary}[corollary]{Corollary}
 \aliascntresetthe{corollary}
-\newaliascnt{conjecture}{theorem}
-\newtheorem{conjecture}[conjecture]{Conjecture}
-\aliascntresetthe{conjecture}
 \theoremstyle{definition}
 \newaliascnt{definition}{theorem}
 \newtheorem{definition}[definition]{Definition}
@@ -84,14 +81,13 @@ viewed on isomorphism classes.  For its transition matrix $P_N$, we show that
 $\Spec(P_N)\subseteq[-1/2,1]$.  Functions of the number of loops give, for
 every fixed $r$, the bound $2r/(3N)+o(N^{-1})$ on the $(r+1)$st smallest
 eigenvalue of $I-P_N$.  We also prove that the cut between bridged and
-bridgeless graphs has conductance $2/(3N)(1+o(1))$.  These estimates give
+bridgeless graphs has conductance exactly $1/(3N/2-1)$.  These estimates give
 linear lower bounds for relaxation and mixing times.
 
 An exhaustive enumeration gives the full transition matrices for every even
 $N$ from $2$ through $14$, reaching $21{,}096$ classes and $886{,}032$
-Whitehead moves at $N=14$.  In each case, the conductance of the
-bridged--bridgeless cut equals $1/(3N/2-1)$.  We conjecture that this equality
-holds for every even $N$.
+Whitehead moves at $N=14$.  The computations verify the stationary weights,
+bridge flow, and exact conductance formula.
 \end{abstract}
 
 \noindent\textbf{Keywords:} Whitehead move, cubic multigraph, configuration
@@ -155,7 +151,10 @@ We prove that $\Spec(P_N)\subseteq[-1/2,1]$ and that, for every fixed $r$,
   \lambda_{r+1}(I-P_N)\leq \frac{2r}{3N}+o(N^{-1}).
 \]
 For the bridged--bridgeless cut we obtain conductance
-$2/(3N)(1+o(1))$.  Hence, for fixed $\varepsilon<1-e^{-1}$,
+$1/(3N/2-1)$ for every even $N\geq2$.  The proof uses the formal
+generating functions of connected and bridgeless cubic graphs, related by
+the combinatorial Legendre transform \cite[Section~5.8]{Borinsky2018}.
+Hence, for fixed $\varepsilon<1-e^{-1}$,
 \[
   t_{\mathrm{mix}}(\varepsilon)
   \geq \frac{3N}{2}\bigl(1-e^{-1}-\varepsilon\bigr)(1+o(1)).
@@ -163,7 +162,7 @@ $2/(3N)(1+o(1))$.  Hence, for fixed $\varepsilon<1-e^{-1}$,
 The stationary distribution is given in \cref{thm:stationary}.  The spectral
 and loop-count estimates are proved in
 \cref{prop:spectral-interval,thm:loop-form}, and the conductance and mixing
-bounds in \cref{thm:bridge-flow,cor:mixing}.  Finally,
+bounds in \cref{thm:bridge-flow,thm:exact-conductance,cor:mixing}.  Finally,
 \cref{sec:enumeration} gives an exhaustive enumeration for
 $N=2,4,6,8,10,12,14$.  All limits are taken through even $N$.
 
@@ -957,6 +956,92 @@ side for all sufficiently large $N$.  Substitution in
 \eqref{eq:exact-bridge-flow} gives \eqref{eq:bridge-conductance}.
 \end{proof}
 
+\begin{theorem}[Exact bridge conductance]\label{thm:exact-conductance}
+For every even $N\geq2$, writing $E_N=3N/2$, we have
+\begin{equation}\label{eq:bridge-mass-ratio}
+ (E_N-1)\pi_N(\mathcal B_1)=E_N\pi_N(\mathcal B_0).
+\end{equation}
+The bridgeless set $\mathcal B_0$ is the smaller side of the cut, and
+\begin{equation}\label{eq:finite-identity}
+ \Phi_N(\mathcal B_N)=\frac{1}{E_N-1}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Let $a_G$ be the order of the full incidence automorphism group, including
+loop flips and permutations of parallel edges.  Thus
+\[
+ a_G=|\Aut_v(G)|\prod_i2^{m_{ii}}m_{ii}!\prod_{i<j}m_{ij}!,
+\]
+and the stationary weight is proportional to $a_G^{-1}$.  Define
+$B(t)=\sum_Gt^{|V(G)|}/a_G$ over connected bridgeless cubic graphs, and
+$D(t)$ over connected cubic graphs with exactly one bridge.  Let $A(t)$
+count connected cubic graphs with one external half-edge and no internal
+bridge, with automorphisms fixing that half-edge.  Deleting the unique
+bridge gives an unordered pair of graphs counted by $A$.  Removing the
+external half-edge and suppressing its vertex gives a bridgeless cubic
+graph with a distinguished edge, except for the one-loop graph of weight
+$t/2$.  Accounting for symmetry factors gives
+\begin{equation}\label{eq:bridge-series-decomposition}
+ D=\frac{A^2}{2},\qquad A=\frac t2+\frac32t^2B'.
+\end{equation}
+
+All series below are formal.  For a standard Gaussian variable $X$, set
+\[
+ W(t,J)=\log\E e^{tX^3/6+JX},\qquad
+ \phi=W_J(t,J),\qquad \Gamma(t,\phi)=J\phi-W(t,J).
+\]
+The combinatorial Legendre transform expresses $\Gamma$ in terms of
+connected graphs without internal bridges; see
+\cite[Section~5.8]{Borinsky2018}.  With the present sign convention its
+constant and linear terms are
+\[
+ \Gamma(t,0)=-B(t),\qquad \Gamma_\phi(t,0)=-A(t).
+\]
+These terms include vacuum graphs and the one-loop one-point graph.
+For completeness, the cubic change of variables gives
+\begin{equation}\label{eq:cubic-effective-action}
+ \Gamma(t,\phi)=\frac{\phi^2}{2}-\frac{t\phi^3}{6}
+ +\frac12\log(1-t\phi)
+ -B\bigl(t(1-t\phi)^{-3/2}\bigr).
+\end{equation}
+Indeed, put $m=1-t\phi$, $s=tm^{-3/2}$, and
+$K=(J-\phi+t\phi^2/2)/\sqrt m$.  Formal Gaussian translation and scaling
+give
+\[
+ e^{W(t,J)}=m^{-1/2}
+ e^{-\phi^2/2+t\phi^3/6+J\phi}e^{W(s,K)}.
+\]
+The condition $W_J(t,J)=\phi$ is equivalent to $W_J(s,K)=0$, so
+$W(s,K)=B(s)$, proving \eqref{eq:cubic-effective-action}.
+This identity is also given in \cite[Section~7.5]{Borinsky2018}.
+
+Twice differentiating \eqref{eq:cubic-effective-action} at $\phi=0$ and
+using \eqref{eq:bridge-series-decomposition} yields
+\[
+ \Gamma_{\phi\phi}(t,0)=1+\frac t2A-\frac{3t^2}{2}A'.
+\]
+At the zero-mean source $J=-A(t)$, Gaussian integration by parts and the
+inverse-Hessian identity give
+\[
+ A=\frac t2\langle X^2\rangle_{t,-A(t)}
+   =\frac{t}{2\Gamma_{\phi\phi}(t,0)}.
+\]
+Here the brackets denote the normalized formal expectation.  Consequently,
+\[
+ 3tAA'-A^2=\frac{2A}{t}-1,
+ \qquad
+ \left(\frac32t\frac{d}{dt}-1\right)D
+ =\frac32tB'.
+\]
+Taking the coefficient of $t^N$ proves
+$(E_N-1)[t^N]D=E_N[t^N]B$, hence \eqref{eq:bridge-mass-ratio}.
+Bridgeless cubic graphs exist at every even order, for instance a cycle
+with a perfect matching added.  Since $\mathcal B_1\subseteq\mathcal B_N$
+and $E_N/(E_N-1)>1$, the bridgeless side is strictly smaller.  The exact flow
+formula \eqref{eq:exact-bridge-flow} now gives \eqref{eq:finite-identity}.
+\end{proof}
+
 We use the usual worst-case total-variation mixing time
 \[
   t_{\mathrm{mix}}(\varepsilon)=
@@ -966,7 +1051,12 @@ We define the relaxation time by
 $t_{\rm rel}=1/\lambda_2(I-P_N)$.
 
 \begin{corollary}[Mixing lower bound]\label{cor:mixing}
-For every fixed $\varepsilon<1-e^{-1}$,
+For every even $N\geq2$ and $0<\varepsilon<1$,
+\begin{equation}\label{eq:finite-mixing-lower}
+ t_{\mathrm{mix}}(\varepsilon)
+ \geq(3N/2-1)\bigl(1-\pi_N(\mathcal B_0)-\varepsilon\bigr).
+\end{equation}
+In particular, for every fixed $\varepsilon<1-e^{-1}$,
 \begin{equation}\label{eq:mixing-lower}
   t_{\mathrm{mix}}(\varepsilon)
   \geq \frac{3N}{2}
@@ -996,16 +1086,16 @@ A union bound over the first $t$ steps gives
                        {\pi_N(\mathcal B_0)}
   =1-t\Phi_N(\mathcal B_N)
 \]
-for all sufficiently large $N$; the equality uses reversibility and the fact
-that $\mathcal B_0$ is then the smaller side.  Testing total variation on
+for every even $N\geq2$; the equality uses reversibility and
+\cref{thm:exact-conductance}.  Testing total variation on
 $\mathcal B_0$ gives
 \[
  \|\mu_0P_N^t-\pi_N\|_{\TV}
  \geq1-t\Phi_N(\mathcal B_N)-\pi_N(\mathcal B_0).
 \]
-Using
-\eqref{eq:bridge-masses}--\eqref{eq:bridge-conductance} proves
-\eqref{eq:mixing-lower}.  Finally, convexity of total variation gives
+Using \eqref{eq:finite-identity} proves \eqref{eq:finite-mixing-lower}, and
+the limit in \eqref{eq:bridge-masses} gives \eqref{eq:mixing-lower}.
+Finally, convexity of total variation gives
 \[
  \|\mu_0P_N^t-\pi_N\|_{\TV}
  \leq\sum_G\mu_0(G)\|P_N^t(G,\cdot)-\pi_N\|_{\TV}
@@ -1196,14 +1286,9 @@ $N$ & $\pi_N(\mathcal B_0)$ & $\pi_N(\mathcal B_1)$
 \end{tabular}
 \end{table}
 
-For every enumerated size, including $N=14$, the last column of
-\cref{tab:enumeration-bridge} equals
-\begin{equation}\label{eq:finite-identity}
-  \Phi_N(\mathcal B_N)=\frac{1}{3N/2-1}.
-\end{equation}
-In all seven cases $\mathcal B_0$ is the smaller side.  Combining
-\eqref{eq:finite-identity} with the exact flow formula
-\eqref{eq:exact-bridge-flow} gives an equivalent counting statement.  Set
+The last column of \cref{tab:enumeration-bridge} verifies
+\cref{thm:exact-conductance} for all seven enumerated sizes.  The
+corresponding configuration-count identity is obtained by setting
 \[
  W_i=\sum_{G\in\mathcal B_i}
        \frac{N!}{|\Aut_v(G)|}c(G),
@@ -1215,14 +1300,8 @@ half-edge configurations whose unlabelled graph has $i$ bridges.  Then
   (3N/2-1)W_1=(3N/2)W_0.
 \end{equation}
 
-\begin{conjecture}
-Equations \eqref{eq:finite-identity} and
-\eqref{eq:finite-weight-identity} hold for every even $N\geq2$.
-\end{conjecture}
-
-The conjecture holds for the seven values of $N$ in
-\cref{tab:enumeration-bridge}.  The asymptotic result in
-\cref{thm:bridge-flow} does not depend on it.
+This is \eqref{eq:bridge-mass-ratio} multiplied by the common stationary
+normalizing factor, and holds for every even $N\geq2$.
 
 The programs and data used to produce
 \cref{tab:enumeration-size,tab:enumeration-bridge} accompany the arXiv version
@@ -1236,9 +1315,8 @@ in which every move is counted with multiplicity.  Its stationary measure is
 given by \eqref{eq:stationary}.  The spectral and conductance estimates show
 that both relaxation and mixing require at least a linear number of steps.
 
-The exact conductance formula \eqref{eq:finite-identity}, verified through
-$N=14$, remains to be proved for general $N$.  It would also be interesting
-to determine whether there is an absolute
+The bridge cut has the exact conductance \eqref{eq:finite-identity}.
+It remains to determine whether there is an absolute
 $c>0$ such that
 \[
   \lambda_2(I-P_N)\geq \frac{c}{N}.

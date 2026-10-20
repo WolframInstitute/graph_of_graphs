@@ -7,8 +7,9 @@ edges are allowed.
 
 The paper in [`rule-a-paper/`](rule-a-paper/) studies the random walk obtained
 by choosing an edge and one of its two Whitehead moves uniformly. It
-determines the stationary distribution, bounds the spectrum, and uses loops
-and bridges to obtain lower bounds for relaxation and mixing times. The
+determines the stationary distribution, bounds the spectrum, and proves that
+the bridged--bridgeless cut has conductance `1/(3N/2-1)`. Loops and bridges
+give lower bounds for relaxation and mixing times. The
 accompanying code enumerates the full chain for every even number of vertices
 from 2 through 14.
 
@@ -29,6 +30,8 @@ field dynamics.
 | [`Wolfram/GogFieldDynamics/`](Wolfram/GogFieldDynamics/) | Wolfram Language code for exact transition matrices, diffusion, and random paths. |
 | [`lean/`](lean/) | Lean proofs of the finite algebraic identities described in its README. |
 | [`docs/`](docs/) | Mathematical conventions, computation instructions, and notebook documentation. |
+| [`research/whitehead-topology/`](research/whitehead-topology/PLAN.md) | Research plan, proof notes, literature, and exact checks for the ribbon, Outer-space, and matrix-model extensions. |
+| [`research/integral-torsor/`](research/integral-torsor/README.md) | A quartic differential period torsor with three local series, certified approximation bounds, and prime-field checks. |
 
 The [status page](docs/status.rst) lists the proved results, finite
 computations, and conjectures. The Lean files cover only the identities
