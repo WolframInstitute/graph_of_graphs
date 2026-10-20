@@ -45,6 +45,9 @@ approximations to all scalar sextic correlation functions. At degree eight
 and above, a moment-indeterminacy example shows why positivity and all
 perturbative coefficients can still be insufficient. Exact computations
 illustrate the bounds for Hermitian matrices of sizes one through four.
+Worked examples on finite rewrite graphs and hypergraph incidence graphs
+express nonlinear field correlations through the same quartic periods
+and spanning-forest counts.
 \end{abstract}
 
 \section{Introduction}
@@ -108,6 +111,8 @@ The present paper keeps that motivation separate from the analysis of
 the integral. In particular, a restriction to some graphs is not
 automatically a specialization of a period torsor, nor does it automatically
 bound the error in an integral.
+Section~\ref{sec:rewrite} gives a concrete application to finite graphs
+of rewrite histories and to hypergraph incidence graphs.
 
 \section{The differential torsor}\label{sec:torsor}
 For a rapid-decay contour $\gamma$, put
@@ -570,7 +575,8 @@ does not worsen this estimate.
 
 By the extremal description, increasing $n$ increases the lower bound
 and decreases the upper bound. The discrete Gauss and Radau measures
-are tight since their first moments are fixed. For any fixed moment,+a higher fixed even moment bounds the tails uniformly as $n$ grows;
+are tight since their first moments are fixed. For any fixed moment,
+a higher fixed even moment bounds the tails uniformly as $n$ grows;
 thus every weak limit has all the prescribed moments. Determinacy
 forces every such limit to be $\rho_\beta$. Finally, $h_\beta$ is bounded
 and continuous, so both quadratures converge to its integral.
@@ -652,6 +658,176 @@ give $0.0742<\langle x^2\rangle<1.4575$; the intersection improves the
 upper bound to $0.9154$. The archived calculation certifies both
 intervals. This elementary improvement uses an exact equation in addition
 to the separate positive moment representations.
+
+\section{Fields on rewrite graphs and hypergraphs}\label{sec:rewrite}
+A rewrite system gives a directed graph whose vertices are states and
+whose arrows are individual rule applications. Equal states are merged;
+this convention matters when independent updates can be performed in
+either order. Such state graphs, including those of hypergraph rewriting,
+are studied in \cite[Sections 5.3 and 6.2]{Wolfram}. We use finite connected
+portions and their underlying undirected graphs. The field model below
+is an additional choice; the rewrite rules alone do not prescribe it.
+
+Let $H$ be a connected graph with $n\ge2$ vertices and positive algebraic edge
+conductances $c_e$. Fix a vertex $r$, put $x_r=0$, and set $d=n-1$ and
+\[
+ E_H(x)=\sum_{uv\in E(H)}c_{uv}(x_u-x_v)^2=x^{\mathsf T}L_rx,
+ \qquad
+ I_H(\lambda)=\int_{\mathbb R^d}
+ e^{-E_H(x)/2-\lambda E_H(x)^2/4}\dd x.
+\]
+Here $L_r$ is the grounded weighted Laplacian. Write $\tau(H)$ for the
+weighted spanning-tree sum, $R_H(u,v)$ for effective resistance, and
+$\langle\cdot\rangle_{H,\lambda}$ for normalized expectation in this
+integral. The quadratic model at $\lambda=0$ is a pinned Gaussian
+field on a network \cite{LyonsPeres}.
+
+\begin{proposition}\label{prop:graphfield}
+Define $Z_d(\lambda)=\E\exp(-\lambda |Y|^4/4)$ for a standard Gaussian
+$Y\in\mathbb R^d$. Then
+\begin{align}
+ I_H(\lambda)&=\frac{(2\pi)^{d/2}}{\sqrt{\tau(H)}}Z_d(\lambda),
+ \label{eq:graphpartition}\\
+ \langle(x_u-x_v)^2\rangle_{H,\lambda}
+ &=\frac{Z_{d+2}(\lambda)}{Z_d(\lambda)}R_H(u,v).
+ \label{eq:graphcorrelation}
+\end{align}
+The exact positive-kernel order of $Z_d$ is $a=d/4$, with
+\begin{equation}\label{eq:graphmoments}
+ Z_d(\lambda)=\E(1+4\lambda G_{a+1/2})^{-a},\qquad
+ w_{d,j}=\frac{4^j(a)_j(a+1/2)_j}{j!}.
+\end{equation}
+If $n$ is even, then
+\begin{equation}\label{eq:graphperiod}
+ Z_d(\lambda)=\frac{q_{d-1}(\lambda)}{(d-2)!!}.
+\end{equation}
+Consequently $Z_d$ and the normalized even
+polynomial correlations are rational expressions in $q_0,q_2$.
+The same differential period torsor applies at every even vertex number.
+\end{proposition}
+\begin{proof}
+The matrix-tree theorem gives $\det L_r=\tau(H)$; set $y=L_r^{1/2}x$.
+Rotational symmetry gives
+$\langle yy^{\mathsf T}\rangle=(Z_{d+2}/Z_d)I$.
+The usual network identity
+$(e_u-e_v)^{\mathsf T}L_r^{-1}(e_u-e_v)=R_H(u,v)$, with the rooted
+coordinate omitted, proves \eqref{eq:graphcorrelation}.
+Theorem~\ref{thm:exactorder} applied to $Q(y)=|y|^4/4$ proves
+\eqref{eq:graphmoments}, and radial integration proves
+\eqref{eq:graphperiod}. For odd $d$, recurrence \eqref{eq:ibp}
+reduces every required even moment to $q_0,q_2$.
+For higher correlations the spherical moment formula gives
+$Z_{d+2k}/Z_d$ times the Gaussian Wick sum of products of entries
+of $L_r^{-1}$. Finally, the adjacent moment pairs are related by
+\[
+ \binom{q_{2j+2}}{q_{2j+4}}
+ =\begin{pmatrix}0&1\\(2j+1)/\lambda&-1/\lambda\end{pmatrix}
+   \binom{q_{2j}}{q_{2j+2}}.
+\]
+The determinant is nonzero, so these pairs are rational changes of
+basis of the original rank-two connection.
+\end{proof}
+
+The graph factors have their own combinatorial descriptions.
+The resistance is the spanning two-forest sum separating $u,v$, divided
+by $\tau(H)$ \cite[Theorem 2]{BarrettForests}. A killed-random-walk
+expansion of $L_r^{-1}$ gives another convergent series
+\cite[Chapter 2]{LyonsPeres}. Either can be combined with the period
+bounds. If $L_d\le Z_d\le U_d$ and
+$L_{d+2}\le Z_{d+2}\le U_{d+2}$ are positive enclosures, then
+\[
+ R_H(u,v)\frac{L_{d+2}}{U_d}
+ \le\langle(x_u-x_v)^2\rangle_{H,\lambda}
+ \le R_H(u,v)\frac{U_{d+2}}{L_d}.
+\]
+
+\subsection*{Independent and dependent rewrites}
+Consider the string rule $A\to AB$. Starting from $A^k$, each state
+has the unique form $AB^{m_1}\cdots AB^{m_k}$, and one update increases
+one $m_i$. Retaining the states between $A^k$ and $(AB)^k$ gives the
+oriented cube $Q_k$. It has $2^k$ states and $k!$ complete histories.
+Equivalently, represent a word by a directed path with edge colors
+$A,B$, and subdivide an $A$-edge into consecutive $A$- and $B$-edges.
+Isomorphism of these directed colored paths is equality of words.
+The examples are therefore also graph-rewrite systems with unnamed vertices.
+For $k=2$ the two paths are
+\[
+ AA\longrightarrow ABA\longrightarrow ABAB,
+ \qquad
+ AA\longrightarrow AAB\longrightarrow ABAB.
+\]
+The underlying graph is $C_4$. In contrast,
+$A\to AB\to ABB\to ABBB$ gives $P_4$, a four-state chain.
+Both use $Z_3=q_2$, but their spanning-tree counts are $4$ and $1$,
+and their initial-to-terminal resistances are $1$ and $3$.
+Thus $I_{C_4}=I_{P_4}/2$, whereas the chain's endpoint variance is
+three times the diamond's at every positive coupling. At $\lambda=1$,
+16-node bounds give respectively
+$0.3777<\langle(x_u-x_v)^2\rangle_{C_4,1}<0.3809$ and
+$1.1333<\langle(x_u-x_v)^2\rangle_{P_4,1}<1.1425$.
+
+Three independent rewrites already change the admissible approximation
+class: $Q_3$ has $d=7$ and exact order $7/4$, so no ordinary Stieltjes
+representation exists. There is a finite certificate. At ordinary
+order one the candidate moments are $\mu_j=w_{7,j}$, and
+\[
+ \det(\mu_{i+j})_{0\le i,j\le2}
+ =-\frac{3745374633}{65536}<0.
+\]
+At order $7/4$ all the required Hankel matrices are positive.
+At coupling one, the 16-node interval has width below $0.000841$;
+order $11/4$, using the same coefficients, has width above $0.00437$.
+The example gives an exclusion test and an optimal choice among the
+admissible orders.
+
+For completeness, the cube's Laplacian eigenvalues are $2j$ with
+multiplicity $\binom{k}{j}$, as follows by using the characters of
+$(\mathbb Z/2)^k$. The matrix-tree theorem and the same characters give
+\[
+ \tau(Q_k)=2^{2^k-k-1}\prod_{j=1}^k j^{\binom{k}{j}},\qquad
+ R_{Q_k}(u,\bar u)=\frac2{2^k}
+       \sum_{\substack{1\le j\le k\\j\text{ odd}}}
+          \frac{\binom{k}{j}}j.
+\]
+These formulas provide examples of arbitrary size within the same torsor.
+
+\subsection*{Hypergraphs and the choice of interaction}
+For a finite hypergraph $\mathcal H$, use its incidence graph
+$B_{\mathcal H}$: vertices and hyperedges form its two vertex classes,
+and incidence gives its edges. This construction retains the hyperedges
+as separate objects. For
+$V=\{0,1,2,3\}$ and $E=\{\{0,1,2\},\{1,2,3\}\}$, the unit-weight
+incidence graph has six vertices, $\tau=4$, and $R(0,3)=3$.
+Its partition function uses $Z_5=q_4/3=(q_0-q_2)/(3\lambda)$ and
+has exact order $5/4$.
+
+\begin{table}[ht]
+\centering
+\small\input{rewrite-table.tex}
+\caption{Rewrite and incidence graphs with unit conductances. The
+resistance is between initial and terminal states, between antipodes
+for $Q_k$, or between vertices $0,3$ in the hypergraph example.
+Bounds use 16 Gauss nodes and 17 Radau nodes at minimal order;
+endpoints are rounded outward.}\label{tab:rewrite}
+\end{table}
+
+The square $E_H^2$ is a global interaction and has a precise limitation:
+at fixed $n$, integrating out the field weights graphs by
+$\tau(H)^{-1/2}$ independently of $\lambda$. The nonlinear coupling
+changes field correlations but not these relative graph weights.
+An edge-local quartic instead gives
+\[
+ \widetilde I_H(\lambda)=\int
+ e^{-\frac12\sum_e y_e^2-\frac\lambda4\sum_e y_e^4}\dd x,
+ \qquad y_e=\sqrt{c_e}(x_u-x_v).
+\]
+On a tree the $d$ edge differences are independent Gaussian coordinates,
+so $\widetilde I_H=(2\pi)^{d/2}\tau(H)^{-1/2}q_0^d$.
+This is a symmetric-power expression in the same periods, again with
+exact order $d/4$. On graphs with cycles, this factorization generally
+fails, although Theorems~\ref{thm:exactorder}--\ref{thm:convergence}
+still apply. The accompanying example notes give the walk series,
+leaf-history coefficients, and checks for the edge-local $P_4$ model.
 
 \section{Certified computations and practical choices}\label{sec:computations}
 The accompanying program constructs \eqref{eq:Hankel} with rational

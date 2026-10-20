@@ -7,6 +7,7 @@ all:
 
 check:
 	$(PYTHON) check_restrictions.py --nodes 16
+	$(PYTHON) check_rewrite_examples.py --nodes 16
 	$(PYTHON) ../research/integral-torsor/check_quartic_torsor.py \
 		--json /private/tmp/gog-quartic-torsor-recheck.json
 
