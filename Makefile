@@ -6,9 +6,8 @@ WOLFRAM_KERNEL ?= /Applications/Wolfram.app/Contents/MacOS/WolframKernel
 	notebook-data-check notebook notebook-paclet-check notebook-check \
 	computational-notes-notebook computational-notes-notebook-check \
 	rule-a-paper rule-a-paper-packages integral-torsor integral-torsor-check \
-	straight-cycle-paper straight-cycle-check tanasa-check graph-local-check \
-	outer-forest-check tanasa-scheme-check tanasa-sampler-check sextic-sd-check \
-	matrix-resurgence-check clean
+	outer-space-paper outer-space-check outer-forest-check \
+	bessel-recursion-paper bessel-recursion-check clean
 
 all: check
 
@@ -33,39 +32,22 @@ integral-torsor:
 integral-torsor-check:
 	$(MAKE) -C integral-torsor-paper check
 
-straight-cycle-paper:
-	$(MAKE) -C straight-cycle-paper all
+outer-space-paper:
+	$(MAKE) -C outer-space-paper all
 
-straight-cycle-check:
-	$(MAKE) -C straight-cycle-paper check
+outer-space-check:
+	$(MAKE) -C outer-space-paper check
 
-graph-local-check:
-	$(PYTHON) research/graph-local-periods/check_local_bounds.py --nodes 16
+bessel-recursion-paper:
+	$(MAKE) -C bessel-recursion-paper all
+
+bessel-recursion-check:
+	$(MAKE) -C bessel-recursion-paper check
 
 outer-forest-check:
 	$(PYTHON) research/outer-forest-complex/check_forested_complex.py --max-rank 4
 	$(PYTHON) research/outer-forest-complex/check_witness.py
 	$(PYTHON) research/outer-forest-complex/check_backends.py
-
-tanasa-scheme-check:
-	$(PYTHON) research/tanasa-schemes/check_chain_schemes.py \
-		--max-pairs 3 --word-length 8
-
-tanasa-sampler-check:
-	$(PYTHON) research/tanasa-schemes/check_decoration_sampler.py \
-		--max-pairs 3 --walk-steps 300
-
-sextic-sd-check:
-	$(PYTHON) research/sextic-sd/check_sextic_sd.py
-
-matrix-resurgence-check:
-	$(PYTHON) research/matrix-resurgence/check_seed_transport.py
-	$(PYTHON) research/matrix-resurgence/check_uniform_descent.py
-
-tanasa-check:
-	$(PYTHON) research/whitehead-topology/check_tanasa_bipartite.py \
-		--max-pairs 3 --switches \
-		--json research/whitehead-topology/tanasa-bipartite.json
 
 docs:
 	$(MAKE) -C docs html SPHINXOPTS="-W --keep-going"

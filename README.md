@@ -24,7 +24,8 @@ field dynamics.
 |---|---|
 | [`rule-a-paper/local-whitehead-chain.pdf`](rule-a-paper/local-whitehead-chain.pdf) | The local Whitehead-chain paper; [LaTeX source](rule-a-paper/local-whitehead-chain.tex). |
 | [`integral-torsor-paper/integral-torsor.pdf`](integral-torsor-paper/integral-torsor.pdf) | The quartic period torsor, optimal positive moment bounds, and worked examples on rewrite graphs and hypergraph incidence graphs; [source and checks](integral-torsor-paper/README.md). |
-| [`straight-cycle-paper/straight-cycle-bound.pdf`](straight-cycle-paper/straight-cycle-bound.pdf) | A short proof of the straight-circuit inequality conjectured by Carrozza, Ferrari, Tanasa and Valette, with a rank refinement; [source, checks and priority assessment](straight-cycle-paper/README.md). |
+| [`bessel-recursion-paper/`](bessel-recursion-paper/README.md) | A short proof identifying the Broadhurst--Roberts recursion with the Bessel de Rham pairing and proving integrality of its factorial-scaled inverse. |
+| [`outer-space-paper/`](outer-space-paper/README.md) | A separate draft on cubic refinements and Euler characteristics of Outer space; its [novelty audit](outer-space-paper/NOVELTY.md) remains open. |
 | [`whitehead-field-dynamics.pdf`](whitehead-field-dynamics.pdf) | The field-dynamics manuscript; [LaTeX source](whitehead-field-dynamics.tex). |
 | [`whitehead-field-dynamics.nb`](whitehead-field-dynamics.nb) | A short Mathematica companion with figures and an interactive random walk. |
 | [`whitehead-field-dynamics-computational-notes.pdf`](whitehead-field-dynamics-computational-notes.pdf) | Worked computations, also available as [LaTeX](whitehead-field-dynamics-computational-notes.tex) and an [executable notebook](whitehead-field-dynamics-computational-notes.nb). |
@@ -32,17 +33,19 @@ field dynamics.
 | [`Wolfram/GogFieldDynamics/`](Wolfram/GogFieldDynamics/) | Wolfram Language code for exact transition matrices, diffusion, and random paths. |
 | [`lean/`](lean/) | Lean proofs of the finite algebraic identities described in its README. |
 | [`docs/`](docs/) | Mathematical conventions, computation instructions, and notebook documentation. |
-| [`research/whitehead-topology/`](research/whitehead-topology/PLAN.md) | Research plan, proof notes, literature, and exact checks for the ribbon, Outer-space, and matrix-model extensions. |
 | [`research/integral-torsor/`](research/integral-torsor/README.md) | A quartic differential period torsor with three local series, certified approximation bounds, and prime-field checks. |
-| [`research/graph-local-periods/`](research/graph-local-periods/README.md) | Local quartic fields on cyclic rewrite graphs: exact scalar-period transforms, graph-polynomial bounds, exponent selection and certified acceptance decisions. |
 | [`research/outer-forest-complex/`](research/outer-forest-complex/README.md) | Oriented forested complexes of Outer space, a checked two-term Morita cycle, and ordinary Euler characteristics under the cubic walk. |
-| [`research/tanasa-schemes/`](research/tanasa-schemes/README.md) | Quartic chain boundary operators, field restrictions, exact scheme weights and tails, and an exact conditional decoration sampler with reversible scheme dynamics. |
-| [`research/sextic-sd/`](research/sextic-sd/README.md) | A proof of convergence for sextic ordinary-moment Schwinger–Dyson truncations, using hard-rod graphs and positive moment determinacy, with certified error intervals. |
-| [`research/matrix-resurgence/`](research/matrix-resurgence/README.md) | A proved contour estimate uniform in matrix size, convergent closed-walk series with explicit errors, and an exact Painleve IV reduction. Full Borel reconstruction of the genus expansion remains unproved here. |
+| [`research/bessel-recursion/`](research/bessel-recursion/README.md) | Exact checks of the recursion, symmetric-power operator and residue pairing, including resonant cases. |
 
 The [status page](docs/status.rst) lists the proved results, finite
 computations, and conjectures. The Lean files cover only the identities
 specified there.
+
+The retained extensions are Outer space, the quartic period/series
+work, and the Bessel recursion application of period-frame descent.
+Other investigations have been moved to an ignored local archive
+after checking whether they use the torsor essentially. Preliminary tests
+of new problems also stay outside Git until that contribution is clear.
 
 ## Random walks used here
 
@@ -85,6 +88,8 @@ The other LaTeX documents can be built separately:
 make paper
 make computational-notes
 make integral-torsor
+make outer-space-paper
+make bessel-recursion-paper
 ```
 
 ## Reproducing the computations

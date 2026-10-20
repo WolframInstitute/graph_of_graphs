@@ -1,0 +1,535 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,microtype}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\C}{\mathbb C}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\Res}{\operatorname{res}}
+\newcommand{\BR}{\mathrm{BR}}
+\numberwithin{equation}{section}
+\title{The Broadhurst--Roberts Recursion and Bessel Period Pairings}
+\author{Alexander Kolpakov\\[0.5ex]
+\small Center for Science, Technology, Engineering, and Mathematics\\
+\small University of Austin, Austin, Texas, United States\\
+\small \texttt{akolpakov@uaustin.org}\\[0.75ex]
+\small The Wolfram Institute for Computational Foundations of Science\\
+\small \texttt{akolpakov@wolframinstitute.org}}
+\date{Research draft, 20 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Broadhurst and Roberts gave a recursion for rational matrices appearing
+in quadratic relations between Bessel moments. Fres\'an, Sabbah and Yu
+proved the period relations with a geometric intersection matrix,
+leaving its identification with that recursion open.
+We identify the recursion matrix with coefficients of the
+symmetric-power Bessel operator and then with the inverse de Rham
+pairing. The argument includes the resonant symmetric powers.
+In particular, the inverse middle pairing multiplied by $N!$ has
+integer entries, answering a second question of Fres\'an--Sabbah--Yu.
+The main step sums the auxiliary recursion in a period-ratio coordinate;
+formal residues then recover the intersection form.
+\end{abstract}
+
+\section{Introduction and statements}
+Put $\theta_z=z\,d/dz$ and consider the rank-two connection
+\begin{equation}\label{eq:connection}
+ \theta_z v_0=v_1,\qquad \theta_z v_1=zv_0.
+\end{equation}
+This is the Kloosterman connection $\mathrm{Kl}_2$ in the normalization
+of Fres\'an--Sabbah--Yu \cite{FSY}. For $N\ge3$, set
+\[
+ r=\left\lfloor\frac{N-1}{2}\right\rfloor,\qquad q=r+1.
+\]
+Let $S_N$ denote their middle de Rham intersection matrix in the basis
+of \cite[Corollary 3.11]{FSY}. If $4\nmid N$, its basis is
+$\omega_i=[z^iv_0^N\,dz/z]$, $1\le i\le r$.
+If $N=4\ell$, remove index $\ell$ and use
+\begin{equation}\label{eq:middlebasis}
+ \omega'_i=\omega_i-\gamma_{N,i}\omega_\ell,\qquad
+ i\in I_N=\{1,\ldots,r\}\setminus\{\ell\},
+\end{equation}
+where
+\begin{equation}\label{eq:gamma}
+ 2^N\bigl(I_0(2\sqrt z)K_0(2\sqrt z)\bigr)^{N/2}
+ \sim\sum_{j\ge\ell}\gamma_{N,j}z^{-j},\qquad
+ \gamma_{N,\ell}=1.
+\end{equation}
+For $4\nmid N$, let $I_N=\{1,\ldots,r\}$.
+Indices in a submatrix always retain their original order.
+For $N=4$ the middle matrix is empty; the identities below use the
+usual zero-dimensional convention.
+
+Define differential operators in $\Z[z,\theta_z]$ by
+\begin{equation}\label{eq:operatorrecursion}
+ P^-_0=1,\quad P^-_1=\theta_z,\qquad
+ P^-_{k+1}=\theta_zP^-_k-k(N+1-k)zP^-_{k-1},\quad 1\le k\le N.
+\end{equation}
+Write $\mathcal L_N=P^-_{N+1}$ and form the integer matrix
+\begin{equation}\label{eq:E}
+ E_N(a,b)=[z^a]\mathcal L_Nz^{-b},\qquad 1\le a,b\le r.
+\end{equation}
+The operator recursion is established: it is the
+Bronstein--Mulders--Weil construction, as stated and proved in
+Borwein--Salvy \cite[Lemmas 2--3]{BS}.
+
+\begin{theorem}\label{thm:pairing}
+With the above normalization,
+\begin{equation}\label{eq:mainpairing}
+ N!S_N^{-1}=(-1)^NE_N[I_N,I_N].
+\end{equation}
+In particular $N!S_N^{-1}$ has integer entries for every $N\ge3$.
+\end{theorem}
+
+Broadhurst--Roberts \cite[formulas (5.7)--(5.12)]{BR} define a rational
+$r\times r$ matrix $D_N^{\BR}$ through a bivariate recursion, recalled
+in Section~\ref{sec:series}. Put
+$T_N=\diag((-4)^1,\ldots,(-4)^r)$ and $T_I=T_N[I_N,I_N]$.
+
+\begin{theorem}\label{thm:BR}
+The literal Broadhurst--Roberts recursion satisfies
+\begin{align}
+ D_N^{\BR}&=T_N^{-1}E_NT_N^{-1},\label{eq:BRfull}\\
+ D_N^{\BR}[I_N,I_N]
+   &=(-1)^NN!\,(T_IS_NT_I)^{-1}.\label{eq:BRmiddle}
+\end{align}
+\end{theorem}
+
+Equation~\eqref{eq:BRmiddle} proves the matrix identifications left
+open in \cite[Remark 5.12]{FSY}. Equation~\eqref{eq:mainpairing}
+answers the integrality question in the same remark.
+The quadratic period relations themselves were proved in \cite{FSY},
+with a different proof in Zhou \cite{Zhou}. Zhou also distinguishes
+the recursion question in \cite[Section 4.3]{Zhou}.
+Our argument supplies that identification, using their established
+geometric pairing and residue formulas. It does not address the
+conjecture that quadratic relations exhaust all algebraic relations
+between these periods.
+
+\section{Summing the auxiliary recursion}\label{sec:series}
+
+\subsection{The local period coordinate}
+Set $x=t^2/4$ and
+\[
+ J(x)=J_0(2\sqrt x)=\sum_{n\ge0}\frac{(-1)^nx^n}{(n!)^2},\qquad
+ \theta=x\frac d{dx}.
+\]
+Thus $(\theta^2+x)J=0$. Define formal series
+\begin{equation}\label{eq:CVW}
+ C(x)=\frac{2(1-J^2+2xJJ')}{3x^2},\qquad
+ V=\frac{J^2}{C}=\sum_{n\ge0}\frac{v_nx^n}{n!},\qquad
+ W=-\frac{JJ'}{C}=\sum_{n\ge0}\frac{w_nx^n}{n!}.
+\end{equation}
+They have constant term one. These are exactly the series in
+\cite[formulas (5.7)--(5.9)]{BR}: the change of variable uses
+$J'_0(t)=-J_1(t)$.
+
+There is a unique $\beta\in x\Q[[x]]$ such that
+\begin{equation}\label{eq:beta}
+ \beta'=\frac{J^{-2}-1}{x}.
+\end{equation}
+Put $w=\log x+\beta$. The two solutions $J,Jw$ have
+$\theta$-Wronskian one, since $\theta w=J^{-2}$.
+In particular,
+\begin{equation}\label{eq:coordinate}
+ Q=x\exp\beta,\qquad
+ \frac{dQ}{Q}=\frac{dx}{xJ^2},\qquad
+ Q\frac d{dQ}=J^2\theta.
+\end{equation}
+Here $Q=x+O(x^2)$ has a formal compositional inverse.
+
+\subsection{The bivariate polynomials}
+The polynomials of \cite[formula (5.10)]{BR} have $H_0=1$, $H_{-1}=0$,
+and, for $s\ge1$,
+\begin{equation}\label{eq:H}
+ H_s(Y,Z)=ZH_{s-1}-(s-1)YH_{s-2}
+ -\sum_{k=1}^{s-1}\binom{s-1}{k}
+       \bigl(v_kH_{s-k}-w_kZH_{s-k-1}\bigr).
+\end{equation}
+Set
+\begin{equation}\label{eq:dD}
+ d_s(N,c)=\frac{H_s(3c/2,N+2-2c)}{4^ss!},\qquad
+ D_N^{\BR}(a,b)=\sum_{c=-b}^{a}
+     d_{a-c}(N,-c)d_{b+c}(N,c)c^{N+1}.
+\end{equation}
+
+\begin{lemma}\label{lem:sum}
+For every integer $c$,
+\begin{equation}\label{eq:sum}
+ \sum_{s\ge0}d_s(N,c)(4x)^s
+     =J^{-N-2}\exp(-c\beta).
+\end{equation}
+\end{lemma}
+\begin{proof}
+Let $H(x)=\sum_sH_s(Y,Z)x^s/s!$.
+Multiply \eqref{eq:H} by $x^{s-1}/(s-1)!$ and sum.
+The convolution terms are $(V-1)H'$ and $Z(W-1)H$, giving
+\[
+ VH'=(ZW-Yx)H.
+\]
+From \eqref{eq:CVW} and \eqref{eq:beta},
+\[
+ \frac WV=-\frac{J'}J,\qquad
+ \frac{xC}{J^2}=\frac23\left(\beta'+2\frac{J'}J\right).
+\]
+For $Y=3c/2$ and $Z=N+2-2c$, it follows that
+$H'/H=-(N+2)J'/J-c\beta'$. The initial value is $H(0)=1$,
+which proves \eqref{eq:sum}.
+\end{proof}
+
+\begin{proposition}\label{prop:coefficient}
+Define
+\begin{equation}\label{eq:Bol}
+ L_N=J^{-N-2}(J^2\theta)^{N+1}J^{-N}.
+\end{equation}
+Then, for all $a,b\ge1$,
+\begin{equation}\label{eq:coefficient}
+ D_N^{\BR}(a,b)=4^{-a-b}[x^a]L_Nx^{-b}.
+\end{equation}
+\end{proposition}
+\begin{proof}
+Put $f=J^{-N-2}$. Lemma~\ref{lem:sum} rewrites $4^{a+b}D_N^{\BR}(a,b)$
+as the coefficient of $x^a$ in
+\[
+ f(x)\sum_{c\in\Z}c^{N+1}Q(x)^cg_c,\qquad
+ g_c=[y^{b+c}]f(y)\exp(-c\beta(y)).
+\]
+Only $-b\le c\le a$ contributes. In the residue defining $g_c$,
+make the formal substitution $Q=y\exp\beta(y)$.
+Equation~\eqref{eq:coordinate} gives
+\[
+ g_c=\Res_{y=0}f(y)y^{-b}Q^{-c}\frac{dy}{y}
+    =[Q^c]y(Q)^{-b}J(y(Q))^{-N}.
+\]
+Multiplication of the $c$th coefficient by $c^{N+1}$ is the operator
+$(Q\,d/dQ)^{N+1}$. Substituting back and using
+\eqref{eq:coordinate} gives exactly \eqref{eq:Bol}.
+All operations concern formal Laurent coefficients; no summability
+assumption is involved.
+\end{proof}
+
+\section{The symmetric-power operator}
+
+\begin{lemma}\label{lem:operator}
+The operator $L_N$ is the monic symmetric power of $\theta^2+x$.
+It belongs to $\Z[x,\theta]$, has $x$-degree at most $q$, and
+\begin{equation}\label{eq:adjoint}
+ L_N^*=(-1)^{N+1}L_N
+\end{equation}
+for the formal adjoint associated with $dx/x$.
+Moreover $\mathcal L_N=L_N|_{x=-z}$.
+\end{lemma}
+\begin{proof}
+For completeness, apply the established recursion to
+$u_k=y^{N-k}(\theta y)^k$, where $(\theta^2+x)y=0$.
+Since $\theta u_k=(N-k)u_{k+1}-kx u_{k-1}$, the operators
+\[
+ P_0=1,\quad P_1=\theta,\qquad
+ P_{k+1}=\theta P_k+k(N+1-k)xP_{k-1}
+\]
+satisfy $P_ku_0=N!u_k/(N-k)!$ for $k\le N$ and $P_{N+1}u_0=0$.
+Varying $y$ through linear combinations of $J$ and $Jw$ shows that
+$P_{N+1}$ kills their full symmetric power.
+The same is true of \eqref{eq:Bol}: multiplication by $J^{-N}$
+gives a polynomial of degree at most $N$ in $w$, and $J^2\theta w=1$.
+Both operators are monic of order $N+1$. Their common solution space
+has dimension $N+1$, so they coincide.
+This proves the integer-coefficient assertion and the substitution
+claim. Induction in the recursion bounds the weight of a term
+$x^j\theta^k$ by $2j+k\le N+1$.
+
+To compute the adjoint, put $A=J^2\theta$. Since $\theta^*=-\theta$,
+$A^*=-J^{-2}AJ^2$. Reverse the factors in \eqref{eq:Bol} and cancel
+the intervening powers of $J$. This gives \eqref{eq:adjoint}.
+\end{proof}
+
+The monic operator is independent of the chosen solution frame:
+every change of frame preserves the symmetric-power solution space.
+Thus the expression in local periods \eqref{eq:Bol} descends to the
+integer operator \eqref{eq:operatorrecursion}.
+The local series in the recursion determine coefficients of this
+common invariant. This is the useful period-frame step of the proof.
+
+\begin{lemma}\label{lem:leading}
+Write $\mathcal L_N=\sum_{j=0}^qz^jp_j(\theta_z)$. Then
+\begin{equation}\label{eq:leading}
+ p_q(\theta_z)=
+ \begin{cases}
+ (-1)^q((2q-1)!!)^2,&N=2q-1,\\
+ (-1)^q(2^qq!)^2(\theta_z+q/2),&N=2q.
+ \end{cases}
+\end{equation}
+The matrix $E_N$ satisfies
+\[
+ E_N^T=(-1)^{N+1}E_N,\qquad E_N(a,b)=0\quad(a+b>q).
+\]
+It is invertible if $4\nmid N$. If $N=4\ell$, it has rank $r-1$,
+and its principal submatrix on $I_N$ is invertible.
+\end{lemma}
+\begin{proof}
+For $N=2q-1$, the top coefficient of $z^j$ in $P^-_{2j}$ is
+$(-1)^j\prod_{h=1}^j(2h-1)(N+2-2h)$, directly from the recursion.
+This gives the first formula.
+
+For $N=2q$, the weight bound gives $\deg p_q\le1$.
+In the associated commutative symbol, derivative commutators have
+lower weight. The recurrence becomes the determinant recurrence for
+the tridiagonal symmetric-power matrix with off-diagonal entries
+$N-a$ and $az$. Its eigenvalues are $(N-2a)\sqrt z$,
+$0\le a\le N$: these are the eigenvalues of the symmetric power of
+the matrix with eigenvalues $\sqrt z,-\sqrt z$.
+The coefficient of $z^q\theta_z$ in its characteristic polynomial is
+$(-1)^q(2^qq!)^2$. Adjointness requires
+$p_q(-\theta_z-q)=-p_q(\theta_z)$, fixing its constant term.
+
+The adjoint identity, applied to the constant term of
+$z^{-a}\mathcal L_Nz^{-b}$, proves the stated symmetry of $E_N$.
+The degree bound gives its zero entries. On the anti-diagonal
+$a+b=q$ its entries are $p_q(-b)$.
+They are nonzero for odd $N$ and for $N\equiv2\pmod4$.
+When $N=4\ell$, only the central anti-diagonal entry vanishes;
+deleting its index leaves an invertible anti-triangular matrix.
+The full matrix is skew-symmetric of odd size, so its rank is
+exactly $r-1$.
+\end{proof}
+
+Proposition~\ref{prop:coefficient} and the substitution $x=-z$ now give
+\begin{equation}\label{eq:ED}
+ E_N(a,b)=(-4)^{a+b}D_N^{\BR}(a,b).
+\end{equation}
+This proves \eqref{eq:BRfull}.
+
+\section{Formal primitives and the intersection matrix}
+
+We use the existence of formal primitives and the residue description
+of the pairing from \cite[Lemma 3.3, Proposition 3.8 and Section 3.b]{FSY}.
+We recall the normalization to keep track of the sign and transpose.
+For $u_a=v_0^{N-a}v_1^a$, their algebraic pairing is
+\begin{equation}\label{eq:algebraicpairing}
+ \langle u_a,u_b\rangle=
+ \begin{cases}(-1)^a/\binom Na,&a+b=N,\\0,&a+b\ne N.
+ \end{cases}
+\end{equation}
+The primitive at zero has coefficients in $z\C[[z]]$ for the
+positive-power sources used here, so its residue contribution is zero.
+
+Suppose a formal primitive at infinity is
+$m=\sum_{a=0}^Nf_au_a$ and
+$\nabla m=g(z)u_0\,dz/z$. Its components satisfy
+\begin{align}\label{eq:components}
+ \theta_zf_a+(N-a+1)f_{a-1}+(a+1)zf_{a+1}&=0
+                      &&(1\le a\le N),\\
+ \theta_zf_0+zf_1&=g.\nonumber
+\end{align}
+Put $\eta=f_N$.
+
+\begin{lemma}\label{lem:primitive}
+These equations imply
+\begin{equation}\label{eq:elimination}
+ \mathcal L_N\eta=(-1)^NN!g.
+\end{equation}
+If $\deg g\le q-1$, every formal Laurent solution $\eta$ at infinity
+has only strictly negative powers of $z$.
+\end{lemma}
+\begin{proof}
+The equations with $a\ge1$ determine the other components from $\eta$.
+The coefficient of $\theta_z^{N+1}\eta$ in the last equation is
+$(-1)^N/N!$. The homogeneous eliminant has as solutions the top
+components of horizontal symmetric-power sections.
+For a horizontal rank-two section, its top component solves
+$(\theta_z^2-z)y=0$. Products of those sections therefore give exactly
+the full symmetric-power solution space in the top component.
+The monic eliminant is consequently $\mathcal L_N$, proving
+\eqref{eq:elimination} including its factor.
+
+Write the highest exponent of a nonzero Laurent series $\eta$ as $M$.
+If $M\ge0$, Lemma~\ref{lem:leading} gives $p_q(M)\ne0$.
+The highest exponent on the left of \eqref{eq:elimination} is then
+$M+q>\deg g$, a contradiction.
+\end{proof}
+
+Let $M_{bi}=[z^{-b}]\eta_i$ for a family of primitives with sources
+$g_i$. A term $z^{-b}$ with $b\ge q$ cannot contribute to a positive
+power under $\mathcal L_N$. The lemma therefore gives the finite identity
+\begin{equation}\label{eq:finite}
+ E_NM=(-1)^NN!G,
+\end{equation}
+where $G_{ai}=[z^a]g_i$, $1\le a\le r$.
+
+\subsection{Nonresonant powers}
+Suppose $4\nmid N$ and take $g_i=z^i$.
+Then $G=1$ and $M=(-1)^NN!E_N^{-1}$.
+By \eqref{eq:algebraicpairing}, the residue at infinity is
+\begin{equation}\label{eq:residue}
+ S_N(i,j)=(-1)^{N+1}M_{ji};
+\end{equation}
+this is \cite[formula (3.15)]{FSY}.
+Thus
+\[
+ S_N=-N!E_N^{-T},\qquad N!S_N^{-1}=(-1)^NE_N,
+\]
+where the second equality uses Lemma~\ref{lem:leading}.
+
+\subsection{Resonant powers}
+Suppose $N=4\ell$ and let
+$h=(\gamma_{N,1},\ldots,\gamma_{N,r})^T$.
+The formal series in \eqref{eq:gamma} solves $\mathcal L_Nh(z)=0$:
+it is the product of $N/2$ copies of each scalar Bessel solution.
+Taking positive coefficients gives $E_Nh=0$.
+Since $h_\ell=1$, Lemma~\ref{lem:leading} shows that this vector
+spans the kernel.
+
+Let $U$ be the $r\times(r-1)$ matrix whose columns are
+\begin{equation}\label{eq:U}
+ U_i=e_i-h_ie_\ell,\qquad i\in I_N.
+\end{equation}
+For the middle sources $g_i=z^i-h_iz^\ell$,
+equation~\eqref{eq:finite} becomes $E_NM=N!U$.
+The ambiguity of a primitive is a multiple of the horizontal formal
+section whose top component is \eqref{eq:gamma}; see
+\cite[Proposition 3.8]{FSY}. We may therefore impose the gauge
+$M_{\ell i}=0$.
+Writing $\bar E=E_N[I_N,I_N]$ gives
+\[
+ M[I_N,I_N]=N!\bar E^{-1}.
+\]
+The residue with the corrected source is
+\[
+ S_N(i,j)=-(M_{ji}-h_jM_{\ell i})=-M_{ji}.
+\]
+Adding a horizontal section does not change it, since
+$h_j-h_jh_\ell=0$. Thus the gauge computes the same pairing as
+\cite[formula (3.16)]{FSY}, independently of their normalization of
+the primitive. We obtain
+\[
+ S_N=-N!\bar E^{-T}=N!\bar E^{-1},\qquad N!S_N^{-1}=\bar E.
+\]
+This proves Theorem~\ref{thm:pairing} in all cases.
+Combining it with \eqref{eq:ED} proves \eqref{eq:BRmiddle} and
+Theorem~\ref{thm:BR}.
+
+\section{The quadratic relation, including the singular matrix}
+
+For clarity we also recover the original normalization.
+Let $M(a,b,c)=\int_0^\infty I_0(t)^aK_0(t)^bt^c\,dt$ and
+$Z(s)=|B_s|/s!$, with $B_s$ the Bernoulli number.
+The matrices in \cite[formulas (5.2)--(5.6)]{BR} are
+\begin{align*}
+ F_{2r+1}(u,a)&=\frac{(-1)^{a-1}}{\pi^u}
+                  M(r+1-u,r+u,2a-1),\\
+ F_{2r+2}(u,a)&=\frac{(-1)^{a-1}}{\pi^{u+1/2}}
+                  M(r+1-u,r+1+u,2a-1),\\
+ B_{2r+1}^{\BR}(u,v)&=(-1)^{u+r}2^{-2r-2}
+                  (r+u)!(r+v)!Z(u+v),\\
+ B_{2r+2}^{\BR}(u,v)&=(-1)^{u+r}2^{-2r-3}
+                  (r+u+1)!(r+v+1)!Z(u+v+1),
+\end{align*}
+with all indices from $1$ to $r$.
+
+\begin{corollary}\label{cor:quadratic}
+For every $N\ge3$, with the literal recursion matrix,
+\[
+ F_ND_N^{\BR}F_N^T=B_N^{\BR}.
+\]
+\end{corollary}
+\begin{proof}
+If $4\nmid N$, this follows at once from Theorem~\ref{thm:BR} and
+\cite[Corollary 5.10]{FSY}.
+We give the pullback argument needed for $N=4\ell$.
+Write $P$ and $B$ for the $r\times r$ matrices of
+\cite[Sections 4--5]{FSY}, retaining indices $1,\ldots,r$.
+The period matrix on the middle sources, with all these homology rows,
+is $Q=PU$. Both its rows and the pairing $B$ factor through the map
+from rapid-decay homology to middle homology:
+$\alpha_i\mapsto\beta_i$, as in \cite[formula (4.5)]{FSY}.
+The basis of the latter space is $\beta_2,\ldots,\beta_r$.
+If $A$ records the coordinates of all $\beta_i$ in that basis, then
+\[
+ Q=AP^{\rm mid},\qquad B=AB^{\rm mid}A^T.
+\]
+The established middle period relation
+\cite[Theorem 5.3]{FSY} consequently gives
+\[
+ QS_N^{-1}Q^T=(-2\pi\mathrm i)^{N+1}B.
+\]
+The identity $E_Nh=0$, with $h_\ell=1$, implies
+$E_N=U\bar EU^T$: the blocks on $I_N\times I_N$ agree, and the
+kernel determines the remaining row and column. Since
+$S_N^{-1}=\bar E/N!$, we obtain
+\[
+ PE_NP^T=N!(-2\pi\mathrm i)^{N+1}B.
+\]
+Finally the normalizations in \cite[formula (5.9)]{FSY} are
+\[
+ F_N=(-2\sqrt\pi)^{-N-1}R^TPT_N,\qquad
+ B_N^{\BR}=-\frac{\mathrm i^{N+1}N!}{2^{N+1}}R^TBR,
+\]
+where $R=\operatorname{antidiag}(\mathrm i,\ldots,\mathrm i^r)$.
+Substitute \eqref{eq:BRfull}. The scalar factor is
+$(-2\sqrt\pi)^{-2N-2}N!(-2\pi\mathrm i)^{N+1}
+=-\mathrm i^{N+1}N!/2^{N+1}$ because $N$ is even.
+This proves the full singular relation as well.
+\end{proof}
+
+\section{Examples and the role of the period frame}
+
+For $N=5,6$, the formulas give
+\[
+ D_5^{\BR}=\begin{pmatrix}13/8&225/64\\225/64&0\end{pmatrix},\quad
+ S_5=\begin{pmatrix}0&8/15\\8/15&208/3375\end{pmatrix},
+\]
+\[
+ D_6^{\BR}=\begin{pmatrix}0&-18\\18&0\end{pmatrix},\qquad
+ S_6=\begin{pmatrix}0&-5/8\\5/8&0\end{pmatrix}.
+\]
+The pairings reproduce \cite[Examples 3.19--3.20]{FSY}.
+For $N=8$, the first nontrivial resonant example is
+\[
+ D_8^{\BR}=\begin{pmatrix}0&-288&-576\\288&0&0\\576&0&0\end{pmatrix},
+ \qquad S_8=\begin{pmatrix}0&35/128\\-35/128&0\end{pmatrix},
+\]
+with $I_8=\{1,3\}$ and $h=(0,1,1/8)^T$.
+The omitted row and column reflect a horizontal formal solution,
+not a failure of the coefficient formula.
+
+The proof separates a local series presentation from the invariant
+it determines. A determinant-one frame $(J,Jw)$ belongs to the
+torsor of normalized solution frames of the rank-two connection.
+The period ratio supplies $Q$, in which the convolution in
+\eqref{eq:dD} becomes an Euler derivative.
+Returning to $x$ gives \eqref{eq:Bol}; frame invariance then identifies
+it with the integer symmetric-power operator. The established
+residue pairing turns its finite coefficients into $S_N^{-1}$.
+Thus the frame comparison connects the local recursion with a global
+intersection form. The same reasoning is expressible in the language
+of differential modules. The term torsor introduces no additional
+hypothesis or new period relation.
+
+This is a separate application of the period-frame approach used for
+quartic periods in \cite{Quartic}. The quartic connection and its
+positive moment bounds are not inputs to the present proof.
+No field change is interpreted as a numerical approximation here.
+
+The accompanying exact checker compares the literal recursion with
+\eqref{eq:operatorrecursion} for $3\le N\le32$.
+An independent downward elimination in the full connection checks
+the residue signs and normalization, including the corrected sources
+and kernel in every resonant case in that range.
+All factorial-scaled inverse matrices are integral, as the theorem
+requires. These finite checks supplement the formal proofs above.
+The source and data are in \path{research/bessel-recursion};
+\texttt{make bessel-recursion-check} reproduces them.
+
+\bibliographystyle{abbrvurl}
+\bibliography{bessel-recursion}
+\end{document}

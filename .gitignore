@@ -21,3 +21,7 @@ artifacts/
 # Rebuildable journal/arXiv upload bundles.
 rule-a-paper/dist/
 rule-a-paper/local-whitehead-chain-review.bbl
+
+# Set-aside research and preliminary problem tests stay local.
+.research-archive/
+.research-scratch/

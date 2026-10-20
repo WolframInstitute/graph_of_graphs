@@ -1,0 +1,272 @@
+[
+  {
+    "Bessel_factors": 3,
+    "matrix_size": 1,
+    "rank": 1,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 4,
+    "matrix_size": 1,
+    "rank": 0,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": true,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 5,
+    "matrix_size": 2,
+    "rank": 2,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 6,
+    "matrix_size": 2,
+    "rank": 2,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 7,
+    "matrix_size": 3,
+    "rank": 3,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 8,
+    "matrix_size": 3,
+    "rank": 2,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": true,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 9,
+    "matrix_size": 4,
+    "rank": 4,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 10,
+    "matrix_size": 4,
+    "rank": 4,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 11,
+    "matrix_size": 5,
+    "rank": 5,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 12,
+    "matrix_size": 5,
+    "rank": 4,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": true,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 13,
+    "matrix_size": 6,
+    "rank": 6,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 14,
+    "matrix_size": 6,
+    "rank": 6,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 15,
+    "matrix_size": 7,
+    "rank": 7,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 16,
+    "matrix_size": 7,
+    "rank": 6,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": true,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 17,
+    "matrix_size": 8,
+    "rank": 8,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 18,
+    "matrix_size": 8,
+    "rank": 8,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 19,
+    "matrix_size": 9,
+    "rank": 9,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 20,
+    "matrix_size": 9,
+    "rank": 8,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": true,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 21,
+    "matrix_size": 10,
+    "rank": 10,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 22,
+    "matrix_size": 10,
+    "rank": 10,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 23,
+    "matrix_size": 11,
+    "rank": 11,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 24,
+    "matrix_size": 11,
+    "rank": 10,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": true,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 25,
+    "matrix_size": 12,
+    "rank": 12,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 26,
+    "matrix_size": 12,
+    "rank": 12,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 27,
+    "matrix_size": 13,
+    "rank": 13,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 28,
+    "matrix_size": 13,
+    "rank": 12,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": true,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 29,
+    "matrix_size": 14,
+    "rank": 14,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 30,
+    "matrix_size": 14,
+    "rank": 14,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 31,
+    "matrix_size": 15,
+    "rank": 15,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": false,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  },
+  {
+    "Bessel_factors": 32,
+    "matrix_size": 15,
+    "rank": 14,
+    "original_recursion_equals_operator_form": true,
+    "independent_full_connection_residue_check": true,
+    "resonance_and_middle_sources_checked": true,
+    "factorial_scaled_inverse_pairing_is_integral": true
+  }
+]

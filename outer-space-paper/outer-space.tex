@@ -1,0 +1,450 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,graphicx,microtype}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\Out}{\operatorname{Out}}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Var}{\operatorname{Var}}
+\numberwithin{equation}{section}
+\title{Cubic Refinements and Euler Characteristics of Outer Space}
+\author{Alexander Kolpakov\\[0.5ex]
+\small Center for Science, Technology, Engineering, and Mathematics\\
+\small University of Austin, Austin, Texas, United States\\
+\small \texttt{akolpakov@uaustin.org}\\[0.75ex]
+\small The Wolfram Institute for Computational Foundations of Science\\
+\small \texttt{akolpakov@wolframinstitute.org}}
+\date{Research draft, 20 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The stationary law of the local Whitehead chain on cubic multigraphs is
+proportional to the reciprocal of the full incidence automorphism order.
+We use cubic refinements to transfer finite sums over all stable
+rank-$r$ graphs to expectations under this law at $2r-2$ vertices.
+The refinement multiplicity at a vertex of valence $d$ is $(2d-5)!!$.
+Applying this identity to the established forest formulas gives distinct
+observables for the ordinary and virtual Euler characteristics of
+$\Out(F_r)$. We explain the orientation and stabilizer data required by
+the forested chain complex, and give exact low-rank checks, variances,
+and a two-term representative of the known first Morita class.
+The transfer does not give an efficient sampling algorithm: the present
+observables sum forests, and their stationary variances omit
+autocorrelation. The topology and Euler formulas used here are known;
+the purpose is to relate them precisely to the cubic walk.
+\end{abstract}
+
+\section{Introduction}
+A Whitehead move on a cubic graph collapses an edge and expands the
+resulting four-valent vertex in a different way. This is also a basic
+local operation in Outer space, but the finite graph of cubic
+isomorphism classes records only part of its structure. It forgets
+markings, edge lengths, forests, and orientation characters.
+These omissions matter both for homology and for Euler characteristics.
+
+Let $\mathcal G_N$ be the connected cubic multigraphs on $N$ vertices,
+up to isomorphism, with loops and parallel edges allowed. The local
+chain of \cite{Kolpakov} chooses an edge and one of its two alternative
+resolutions, counting moves with multiplicity. A choice of a loop
+leaves the graph unchanged. Its stationary distribution is
+\begin{equation}\label{eq:stationary}
+ \pi_N(G)=\frac{1}{C_N|\Aut(G)|},\qquad
+ C_N=\sum_{[G]\in\mathcal G_N}\frac1{|\Aut(G)|}.
+\end{equation}
+Here and below $\Aut(G)$ acts on vertices and half-edges. Loop flips
+and permutations of parallel edges belong to this group.
+
+For a fixed rank $r\ge2$, every connected stable graph is a contraction
+of a cubic graph on $N=2r-2$ vertices. Counting those contractions
+without their multiplicities gives an incorrect sum. Our main
+identity restores the multiplicities explicitly.
+
+\begin{theorem}[Refinement transfer]\label{thm:transfer}
+Let $\mathcal S_r$ be the connected rank-$r$ multigraphs with all
+valences at least three. For $H\in\mathcal S_r$ put
+\[
+ R(H)=\prod_{v\in V(H)}(2\deg(v)-5)!!.
+\]
+For every isomorphism-invariant function $u:\mathcal S_r\to\Q$,
+\begin{equation}\label{eq:transfer}
+ \sum_{[H]\in\mathcal S_r}\frac{u(H)}{|\Aut(H)|}
+ =C_N\E_{\pi_N}\!
+   \left[\sum_{\substack{F\subseteq E(G)\\F\ {\rm forest}}}
+                     \frac{u(G/F)}{R(G/F)}\right].
+\end{equation}
+Each subset of parallel edges is counted separately in the inner sum.
+Loops cannot belong to a forest.
+\end{theorem}
+
+The proof is an orbit--stabilizer count, an instance of the established
+groupoid-cardinality principle \cite{Groupoidification}.
+The identity is useful because
+the right side uses a single fixed cubic state space while retaining
+all stable strata. We make no priority claim for the underlying
+refinement count. The following sections apply it to established
+topological formulas and make the associated finite checks reproducible.
+
+Culler--Vogtmann introduced Outer space in \cite{CV86}.
+Conant--Vogtmann describe the relevant forested graph complexes in
+\cite{ConantVogtmann}. The virtual Euler generating function originates
+with Smillie--Vogtmann \cite{SmillieVogtmann}; Borinsky--Vogtmann develop
+its asymptotics and formal-integral description in
+\cite{BV2020,BVQFT}. The ordinary Euler characteristic and its generating
+function are treated separately in \cite{BV2023}. None of these formulas,
+or the low-rank homology groups reported below, is proposed as a new
+topological invariant.
+
+\section{Cubic chambers and forested cells}
+
+\subsection{What a move records}
+A rank-$r$ cubic graph has $2r-2$ vertices and $3r-3$ edges.
+Positive edge lengths with total length one give a metric simplex
+of dimension $3r-4$. A marking identifies its fundamental group with
+$F_r$. Forgetting both the marking and the lengths gives a state of
+the finite walk.
+
+The spine of Outer space has dimension $2r-3$. If $e$ is a non-loop
+edge and a Whitehead move changes $G$ to $G'$, it records a span
+\[
+ G\longrightarrow G/e\longleftarrow G'.
+\]
+This span is a path of two edges in the spine. Higher-dimensional
+cells require several compatible forest collapses. Chamber adjacency
+alone therefore does not recover the spine's chain complex.
+
+\subsection{Orientations and stabilizers}
+Let $C_k(r)$ be the rational vector space generated by pairs $(G,F)$,
+where $G\in\mathcal S_r$ and $F$ is a forest of $k$ ordered edges.
+An odd permutation of the forest order changes the sign, and graph
+isomorphisms identify generators. In particular, a forest whose
+stabilizer contains an odd permutation represents zero.
+
+For the order $e_0,\ldots,e_{k-1}$ define
+\begin{align}\label{eq:differential}
+ \partial_c(G,F)&=\sum_i(-1)^i(G/e_i,F/e_i),\\
+ \partial_u(G,F)&=\sum_i(-1)^i(G,F\setminus e_i),\qquad
+ \partial=\partial_c-\partial_u.\nonumber
+\end{align}
+The remaining edge order is inherited. Two successive contractions
+cancel in opposite orders, as do two unmarkings. A contraction and an
+unmarking anticommute. Thus
+\[
+ \partial_c^2=\partial_u^2
+ =\partial_c\partial_u+\partial_u\partial_c=\partial^2=0.
+\]
+With finite stabilizers treated in characteristic zero, this is the
+forested cubical model computing $H_*(\Out(F_r);\Q)$
+\cite[Section 3.2]{ConantVogtmann}. The presentation by cubic graphs
+modulo IHX arises from a further filtration; it is not the same
+generator list.
+
+The full incidence group is essential. If $l_v$ is the number of
+loops at $v$ and $m_{uv}$ the number of edges between distinct vertices,
+then
+\begin{equation}\label{eq:aut}
+ |\Aut(G)|=|\Aut_{\rm vertices}(G)|
+               \prod_v2^{l_v}l_v!\prod_{u<v}m_{uv}!.
+\end{equation}
+If a forest uses one edge of a parallel class, the corresponding
+factor in its stabilizer is divided by $m_{uv}$, after restricting
+the vertex group to preserve the marked pairs. A forest uses at most
+one edge from each parallel class. One may quotient those choices when
+building a chain basis, but must restore their multiplicities in
+stabilizer-weighted sums.
+
+At rank two, the rose with two loops has automorphism order eight.
+The marked theta and dumbbell contract to it with coefficient one
+in the oriented orbit basis. In the stabilizer pairing
+$\langle [G,F],[G,F]\rangle=|\Aut(G,F)|$, the adjoint contraction sends
+the rose to $2\,\theta+\mathrm{dumbbell}$. An ordinary matrix transpose
+would give coefficients one and one. Move multiplicities and cellular
+boundary coefficients therefore require different pairings.
+
+\section{The refinement identity}
+
+\begin{proposition}\label{prop:trees}
+A trivalent tree with $d$ distinctly labelled incident leaves has
+$(2d-5)!!$ isomorphism classes.
+\end{proposition}
+\begin{proof}
+There is one tree for three leaves. Given a tree with $d-1$ leaves,
+subdivide any of its $2d-5$ edges and attach the last labelled leaf.
+Removing that leaf and suppressing the resulting bivalent vertex is
+the unique inverse operation. Induction gives the formula.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:transfer}]
+Fix a stable graph $H$. Replace each vertex of valence $d$ by a
+trivalent tree with its incident half-edges as distinct leaf labels.
+Proposition~\ref{prop:trees} gives $R(H)$ choices. The inserted tree
+edges form a forest $F$ in a cubic graph $G$, and $G/F\cong H$.
+Conversely every such pair $(G,F)$ determines one of these refinements
+after choosing an identification of its contraction with $H$.
+
+The group $\Aut(H)$ acts on the refinement choices, and their orbits
+are precisely the isomorphism classes of these pairs. The stabilizer
+of a refinement is $\Aut(G,F)$: an automorphism of a trivalent tree
+fixing all its incident labels is trivial. Orbit--stabilizer gives
+\begin{equation}\label{eq:fibre}
+ \sum_{\substack{[(G,F)]\\G/F\cong H}}\frac1{|\Aut(G,F)|}
+              =\frac{R(H)}{|\Aut(H)|}.
+\end{equation}
+For each fixed cubic $G$, summing over its forest orbits with weight
+$1/|\Aut(G,F)|$ equals summing over all its individual forests with
+weight $1/|\Aut(G)|$. Multiply \eqref{eq:fibre} by $u(H)/R(H)$ and
+sum over $H$. Equation~\eqref{eq:stationary} proves
+\eqref{eq:transfer}. All sums are finite.
+\end{proof}
+
+The correction can be calculated directly on a cubic graph.
+A component of $F$ with $s$ vertices contracts to a vertex of valence
+$3s-2(s-1)=s+2$. Consequently
+\begin{equation}\label{eq:components}
+ R(G/F)=\prod_{K\in\pi_0(F)}(2|V(K)|-1)!!,
+\end{equation}
+including isolated vertices as forest components.
+No graph automorphism calculation is needed for this denominator.
+
+\begin{remark}
+The theorem applies to any stable-graph observable, including one
+which depends on a known automorphism order or orientation character.
+It does not remove the cost of evaluating that observable.
+In particular, its use in an expectation does not by itself give a
+polynomial-time randomized algorithm.
+\end{remark}
+
+\section{The two Euler characteristics}
+
+\subsection{The virtual invariant}
+Write
+\[
+ f_H(-1)=\sum_{\substack{F\subseteq E(H)\\F\ {\rm forest}}}(-1)^{|F|}.
+\]
+The established forest formula is
+\begin{equation}\label{eq:virtual}
+ \chi_{\rm virt}(\Out(F_r))
+       =\sum_{[H]\in\mathcal S_r}\frac{f_H(-1)}{|\Aut(H)|};
+\end{equation}
+see \cite[Section 4]{BVQFT}. The sign records cube dimension, while
+the denominator records its finite stabilizer.
+For a connected graph the Tutte subset formula gives
+\[
+ f_H(-1)=(-1)^{|V(H)|-1}T_H(0,1).
+\]
+If $H$ has a bridge, adding or removing that bridge pairs forests of
+opposite signs, so $f_H(-1)=0$.
+
+Theorem~\ref{thm:transfer} now gives the following complete expectation.
+\begin{corollary}\label{cor:virtual}
+For $N=2r-2$,
+\[
+ \chi_{\rm virt}(\Out(F_r))=C_N\E_{\pi_N}X(G),\qquad
+ X(G)=\sum_{F\ {\rm forest\ in}\ G}\frac{f_{G/F}(-1)}{R(G/F)}.
+\]
+\end{corollary}
+By contrast, $-C_N\E_{\pi_N}T_G(0,1)$ gives only the cubic contribution
+to \eqref{eq:virtual}. Lower-vertex strata must be restored.
+
+\subsection{The ordinary invariant}
+Let $a_k(H)$ be the number of $\Aut(H)$-orbits of $k$-edge forests
+whose stabilizer contains no odd permutation of the forest. Set
+\begin{equation}\label{eq:epsilon}
+ \epsilon(H)=\sum_k(-1)^k a_k(H).
+\end{equation}
+The oriented quotient chain complex gives
+\[
+ e(\Out(F_r))=\sum_{[H]\in\mathcal S_r}\epsilon(H).
+\]
+This is the ordinary rational Euler characteristic. It is generally
+different from the virtual one.
+
+For clarity, the character form of Burnside's formula reads
+\begin{equation}\label{eq:burnside}
+ \epsilon(H)=\frac1{|\Aut(H)|}
+  \sum_{\alpha\in\Aut(H)}
+   \sum_{\substack{F\ {\rm forest}\\\alpha F=F}}
+                         (-1)^{c(\alpha|_F)},
+\end{equation}
+where $c$ counts cycles of the permutation on the forest edges.
+Indeed the trace of $\alpha$ on the oriented forest basis is
+$\operatorname{sgn}(\alpha|_F)$. Multiplying by $(-1)^{|F|}$ gives
+$(-1)^{c(\alpha|_F)}$. Averaging projects to the invariant subspace.
+This is the formula of \cite[Theorem 2.1]{BV2023}, grouped here by
+the underlying graph.
+
+The identity automorphism contribution to the sum over $H$ is
+\eqref{eq:virtual}. The other automorphisms supply the difference
+between the invariants. If parallel choices have first been
+quotiented out, the identity of the remaining vertex group alone
+does not recover that contribution.
+
+Apply Theorem~\ref{thm:transfer} to
+$u(H)=|\Aut(H)|\epsilon(H)$.
+\begin{corollary}\label{cor:ordinary}
+For $N=2r-2$,
+\[
+ e(\Out(F_r))=C_N\E_{\pi_N}Y(G),\qquad
+ Y(G)=\sum_{F\ {\rm forest\ in}\ G}
+       \frac{|\Aut(G/F)|\epsilon(G/F)}{R(G/F)}.
+\]
+\end{corollary}
+The factors $|\Aut(G/F)|$ cannot be omitted: the target sum over
+stable graph types is unweighted.
+
+\subsection{Rank two}
+There are three stable graph types: the rose with two loops, the theta,
+and the dumbbell. Their automorphism orders are $8,12,8$.
+The respective forest sums are $1,-2,0$, so
+\[
+ \chi_{\rm virt}(\Out(F_2))=\frac18-\frac2{12}=-\frac1{24}.
+\]
+The rose has $\epsilon=1$ and the other two types have $\epsilon=0$,
+giving $e(\Out(F_2))=1$.
+
+The cubic law has $C_2=5/24$ and probabilities $(2/5,3/5)$ on
+the theta and dumbbell. The corrected observables are
+\[
+ (X(\theta),X(\mathrm{dumbbell}))=(-1,1/3),\qquad
+ (Y(\theta),Y(\mathrm{dumbbell}))=(8,8/3).
+\]
+Their expectations give both invariants with the same cubic law.
+This example detects missing parallel-edge choices, missing loop
+flips and the confusion between the two Euler characteristics.
+
+\section{Exact computations and their scope}
+
+\subsection{Independent enumeration checks}
+Every stable graph is reached by repeatedly contracting non-loop
+edges in a cubic refinement. The programs enumerate those types,
+deduplicate them, and compute the signed forest sum.
+For each stable type they separately verify the fibre identity
+\eqref{eq:fibre} using exact rational arithmetic.
+
+An independent check uses the formal Gaussian generating integral
+of \cite{BVQFT}. If $Z$ is a standard real Gaussian, put
+\[
+ T(x)=-x-x^2/2+(1+x)\log(1+x),\qquad
+ \exp\mathcal Y(\hbar)=
+       \E\exp\{-\hbar^{-1}T(\sqrt\hbar Z)\}.
+\]
+Then $[\hbar^{r-1}]\mathcal Y=\chi_{\rm virt}(\Out(F_r))$.
+The checker computes the same coefficients from vertex-degree profiles
+and Gaussian moments, without enumerating graphs or forests.
+
+\begin{center}
+\begin{tabular}{rrrrr}
+\toprule
+Rank & Stable types & Cubic types & $\chi_{\rm virt}$ & $e$\\
+\midrule
+2 & 3 & 2 & $-1/24$ & 1\\
+3 & 15 & 5 & $-1/48$ & 1\\
+4 & 111 & 17 & $-161/5760$ & 2\\
+5 & 1076 & 71 & $-367/5760$ & 1\\
+\bottomrule
+\end{tabular}
+\end{center}
+These reproduce known values. The virtual fibre check extends through
+rank six, with 388 cubic classes and 2,746,060 individual forests.
+The ordinary values are also checked against the alternating dimensions
+of the oriented chain complex.
+
+\subsection{Sampling variance}
+For independent samples from $\pi_N$, the relative variances are:
+\begin{center}
+\begin{tabular}{rrr}
+\toprule
+Rank & $\Var(X)/(\E X)^2$ & $\Var(Y)/(\E Y)^2$\\
+\midrule
+2 & 10.667 & 0.29630\\
+3 & 17.052 & 0.50612\\
+4 & 20.452 & 3.96064\\
+5 & 21.284 & 74.40849\\
+\bottomrule
+\end{tabular}
+\end{center}
+The observables estimate different targets, so the table does not
+compare two algorithms for the same invariant. The calculations also
+omit Markov-chain autocorrelation and the cost of the forest sum.
+The small-rank values prove no asymptotic variance bound.
+
+\subsection{A concrete cycle certificate}
+The full oriented chain dimensions through rank four are
+\[
+ (3,2),\qquad (15,22,9,1),\qquad (111,310,385,312,181,53).
+\]
+Exact rational ranks give $H_0=\Q$ in ranks two and three and
+$H_0=H_4=\Q$ in rank four, with other groups zero.
+The separate rank-five certificate also recovers $H_0=\Q$ and no
+positive-degree homology. These are established low-rank results.
+
+One compact representative is worth recording. On the triangular
+prism with triangles $012$ and $345$ and matching edges $03,14,25$,
+let the ordered forests be
+\[
+ A=(01,02,34,35),\qquad B=(01,12,34,35),\qquad z=A-2B.
+\]
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.82\textwidth]{prism-cycle.pdf}
+\caption{The two ordered forests in the prism representative.}
+\end{figure}
+For a triangle with ordered edges $a,b,c$, the forest chain
+$t=a\wedge b-a\wedge c+b\wedge c$ has $\partial_u t=0$.
+The product for the two triangles has nine terms. In the oriented
+prism quotient, three terms give $3A$ and six give $-6B$.
+The attached certificate verifies
+\[
+ \partial_c z=\partial_u z=0,\qquad
+ \phi\partial_5=0,\qquad \phi(z)=4
+\]
+for an integer cochain $\phi$ with 18 nonzero terms. Thus $z$ is
+not a boundary. The serialized graphs, edge orders and coefficients
+allow an independent check without trusting a rank or nullspace search.
+This is the known first Morita class: the prism is obtained by
+expanding the vertices of the three-edge theta graph into circles,
+as in \cite[Section 6.1]{Morita}. It is not a new homology class.
+
+\section{What remains open}
+The refinement identity transfers exact sums, but its usefulness for
+large rank depends on the cost and variance of the resulting observable.
+A useful next result would control one of those quantities, or replace
+the forest sum by a cheaper estimator with a proved error bound.
+
+For homology, restricting to three-edge-connected graphs substantially
+reduces the finite complexes. Grego--V{\'i}tek--Willwacher
+\cite[Appendix A]{GVW} distinguish the full differential from the
+contracting differential. Their Conjecture 8 states that contracting
+homology in the three-edge-connected complex is concentrated in excess
+zero, and is checked there through rank seven. Our smaller computations
+do not extend that range. A general contraction argument must control
+separating pairs created by refinements; an argument for unrestricted
+vertex expansions does not automatically preserve three-edge-connectivity.
+
+The general nonvanishing of Morita classes is no longer an open
+target: see Kupers--Miller--Patzt \cite{KMP}. The present two-term
+certificate concerns a known low-rank class. These questions are
+independent of the quartic period torsor and its series realizations.
+
+\subsection*{Reproduction}
+The accompanying repository contains the source, exact archives and
+standalone checks in \path{research/outer-forest-complex}.
+The commands \texttt{make outer-space-paper} and
+\texttt{make outer-space-check} build the manuscript and run the
+default finite checks. The Python and native graph canonicalizers
+are compared independently. Rational ranks are computed exactly
+through rank four. The rank-five archive states separately where
+modular rank bounds and acyclic quotient arguments certify the
+rational answer. Agreement modulo two primes alone is not used as
+a rational-rank certificate.
+
+\bibliographystyle{abbrvurl}
+\bibliography{outer-space}
+\end{document}

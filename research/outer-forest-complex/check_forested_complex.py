@@ -24,7 +24,6 @@ from flint import fmpz_mat, nmod_mat
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT))
-sys.path.insert(0,str(ROOT/'research'/'whitehead-topology'))
 import gog_generate as gog
 from check_outer_euler import contract, gaussian_euler_coefficients, stable_graphs
 from check_cubic_euler import contract_partition, forest_partitions, odd_double_factorial
