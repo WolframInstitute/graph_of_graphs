@@ -37,6 +37,7 @@ field dynamics.
 | [`research/graph-local-periods/`](research/graph-local-periods/README.md) | Local quartic fields on cyclic rewrite graphs: exact scalar-period transforms, graph-polynomial bounds, exponent selection and certified acceptance decisions. |
 | [`research/outer-forest-complex/`](research/outer-forest-complex/README.md) | Oriented forested complexes of Outer space, a checked two-term Morita cycle, and ordinary Euler characteristics under the cubic walk. |
 | [`research/tanasa-schemes/`](research/tanasa-schemes/README.md) | Quartic chain boundary operators, field restrictions, exact scheme weights and tails, and an exact conditional decoration sampler with reversible scheme dynamics. |
+| [`research/sextic-sd/`](research/sextic-sd/README.md) | A proof of convergence for sextic ordinary-moment Schwinger–Dyson truncations, using hard-rod graphs and positive moment determinacy, with certified error intervals. |
 
 The [status page](docs/status.rst) lists the proved results, finite
 computations, and conjectures. The Lean files cover only the identities

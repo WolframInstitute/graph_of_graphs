@@ -7,7 +7,7 @@ WOLFRAM_KERNEL ?= /Applications/Wolfram.app/Contents/MacOS/WolframKernel
 	computational-notes-notebook computational-notes-notebook-check \
 	rule-a-paper rule-a-paper-packages integral-torsor integral-torsor-check \
 	straight-cycle-paper straight-cycle-check tanasa-check graph-local-check \
-	outer-forest-check tanasa-scheme-check tanasa-sampler-check clean
+	outer-forest-check tanasa-scheme-check tanasa-sampler-check sextic-sd-check clean
 
 all: check
 
@@ -53,6 +53,9 @@ tanasa-scheme-check:
 tanasa-sampler-check:
 	$(PYTHON) research/tanasa-schemes/check_decoration_sampler.py \
 		--max-pairs 3 --walk-steps 300
+
+sextic-sd-check:
+	$(PYTHON) research/sextic-sd/check_sextic_sd.py
 
 tanasa-check:
 	$(PYTHON) research/whitehead-topology/check_tanasa_bipartite.py \
