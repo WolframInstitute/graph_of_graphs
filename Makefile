@@ -7,7 +7,7 @@ WOLFRAM_KERNEL ?= /Applications/Wolfram.app/Contents/MacOS/WolframKernel
 	computational-notes-notebook computational-notes-notebook-check \
 	rule-a-paper rule-a-paper-packages integral-torsor integral-torsor-check \
 	straight-cycle-paper straight-cycle-check tanasa-check graph-local-check \
-	outer-forest-check clean
+	outer-forest-check tanasa-scheme-check clean
 
 all: check
 
@@ -45,6 +45,10 @@ outer-forest-check:
 	$(PYTHON) research/outer-forest-complex/check_forested_complex.py --max-rank 4
 	$(PYTHON) research/outer-forest-complex/check_witness.py
 	$(PYTHON) research/outer-forest-complex/check_backends.py
+
+tanasa-scheme-check:
+	$(PYTHON) research/tanasa-schemes/check_chain_schemes.py \
+		--max-pairs 3 --word-length 8
 
 tanasa-check:
 	$(PYTHON) research/whitehead-topology/check_tanasa_bipartite.py \
