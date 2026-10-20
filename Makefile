@@ -60,6 +60,7 @@ sextic-sd-check:
 
 matrix-resurgence-check:
 	$(PYTHON) research/matrix-resurgence/check_seed_transport.py
+	$(PYTHON) research/matrix-resurgence/check_uniform_descent.py
 
 tanasa-check:
 	$(PYTHON) research/whitehead-topology/check_tanasa_bipartite.py \
