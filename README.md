@@ -36,7 +36,7 @@ field dynamics.
 | [`research/integral-torsor/`](research/integral-torsor/README.md) | A quartic differential period torsor with three local series, certified approximation bounds, and prime-field checks. |
 | [`research/graph-local-periods/`](research/graph-local-periods/README.md) | Local quartic fields on cyclic rewrite graphs: exact scalar-period transforms, graph-polynomial bounds, exponent selection and certified acceptance decisions. |
 | [`research/outer-forest-complex/`](research/outer-forest-complex/README.md) | Oriented forested complexes of Outer space, a checked two-term Morita cycle, and ordinary Euler characteristics under the cubic walk. |
-| [`research/tanasa-schemes/`](research/tanasa-schemes/README.md) | Quartic chain boundary operators, their field restrictions, exact scheme weights and certified chain tails, with a reversible scheme-chain check. |
+| [`research/tanasa-schemes/`](research/tanasa-schemes/README.md) | Quartic chain boundary operators, field restrictions, exact scheme weights and tails, and an exact conditional decoration sampler with reversible scheme dynamics. |
 
 The [status page](docs/status.rst) lists the proved results, finite
 computations, and conjectures. The Lean files cover only the identities
