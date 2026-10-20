@@ -38,7 +38,7 @@ packages: all
 	cp ../gog_generate.py verify_rule_a.py ../build_nauty_bridge.py \
 		../gog_nauty_bridge.c render_rule_a_table.py $(TABLE_JSON) \
 		dist/arxiv/anc/
-	cp REPRODUCIBILITY.md dist/arxiv/anc/README.md
+	cp ../README.md dist/arxiv/anc/README.md
 	tar -czf dist/local-whitehead-chain-arxiv.tar.gz -C dist/arxiv \
 		local-whitehead-chain.tex local-whitehead-chain.bib \
 		local-whitehead-chain.bbl $(TABLE_TEX) $(FIGURE_PDF) \

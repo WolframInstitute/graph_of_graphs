@@ -1,7 +1,7 @@
 \documentclass[11pt]{article}
 \usepackage[T1]{fontenc}
 \usepackage[margin=1in]{geometry}
-\usepackage{amsmath,amssymb,amsthm,booktabs,graphicx,microtype}
+\usepackage{amsmath,amssymb,amsthm,booktabs,graphicx,microtype,tikz}
 \usepackage[hidelinks]{hyperref}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -393,7 +393,7 @@ let the ordered forests be
 \]
 \begin{figure}[ht]
 \centering
-\includegraphics[width=.82\textwidth]{prism-cycle.pdf}
+\input{prism-cycle.tex}
 \caption{The two ordered forests in the prism representative.}
 \end{figure}
 For a triangle with ordered edges $a,b,c$, the forest chain

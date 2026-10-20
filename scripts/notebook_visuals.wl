@@ -1486,7 +1486,7 @@ BuildCompanionNotebook[diffusionBoxes_] := Module[
       "This companion deliberately omits theorem and proof text.  The full " <>
       "mathematical source is whitehead-field-dynamics.tex; the annotated " <>
       "cell transcript is whitehead-field-dynamics-computational-notes.tex; " <>
-      "and docs/notebook.rst records the build and verification boundary.  " <>
+      "and README.md records the build and verification boundary.  " <>
       "The bundled quotient resource does not contain concrete carrier-edge " <>
       "choices or settlement maps, so it does not by itself define a " <>
       "pathwise transported-field cocycle.",

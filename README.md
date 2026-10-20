@@ -1,178 +1,155 @@
-# Whitehead moves on cubic graphs
+# Whitehead moves, periods and rewrite histories
 
-This repository contains papers and computations on Whitehead moves on
-connected cubic multigraphs. A Whitehead move collapses a non-loop edge and expands
-the resulting four-valent vertex in one of two other ways. Loops and parallel
-edges are allowed.
+This repository contains TeX manuscripts, Wolfram notebooks, and the code
+and data needed to reproduce their computations. Generated PDFs, working
+notes and exploratory scripts are kept locally.
 
-The paper in [`rule-a-paper/`](rule-a-paper/) studies the random walk obtained
-by choosing an edge and one of its two Whitehead moves uniformly. It
-determines the stationary distribution, bounds the spectrum, and proves that
-the bridged--bridgeless cut has conductance `1/(3N/2-1)`. Loops and bridges
-give lower bounds for relaxation and mixing times. The
-accompanying code enumerates the full chain for every even number of vertices
-from 2 through 14.
+## Manuscripts
 
-[`whitehead-field-dynamics.tex`](whitehead-field-dynamics.tex) studies a related
-process in which a scalar field is averaged across an edge before the graph
-is changed. Mathematica notebooks illustrate both the graph walk and the
-field dynamics.
-
-## Papers and code
-
-| File or directory | Contents |
+| Source | Contents |
 |---|---|
-| [`rule-a-paper/local-whitehead-chain.pdf`](rule-a-paper/local-whitehead-chain.pdf) | The local Whitehead-chain paper; [LaTeX source](rule-a-paper/local-whitehead-chain.tex). |
-| [`integral-torsor-paper/integral-torsor.pdf`](integral-torsor-paper/integral-torsor.pdf) | The quartic period torsor, optimal positive moment bounds, and worked examples on rewrite graphs and hypergraph incidence graphs; [source and checks](integral-torsor-paper/README.md). |
-| [`bessel-recursion-paper/`](bessel-recursion-paper/README.md) | A short proof identifying the Broadhurst--Roberts recursion with the Bessel de Rham pairing and proving integrality of its factorial-scaled inverse. |
-| [`outer-space-paper/`](outer-space-paper/README.md) | A separate draft on cubic refinements and Euler characteristics of Outer space; its [novelty audit](outer-space-paper/NOVELTY.md) remains open. |
-| [`whitehead-field-dynamics.pdf`](whitehead-field-dynamics.pdf) | The field-dynamics manuscript; [LaTeX source](whitehead-field-dynamics.tex). |
-| [`whitehead-field-dynamics.nb`](whitehead-field-dynamics.nb) | A short Mathematica companion with figures and an interactive random walk. |
-| [`whitehead-field-dynamics-computational-notes.pdf`](whitehead-field-dynamics-computational-notes.pdf) | Worked computations, also available as [LaTeX](whitehead-field-dynamics-computational-notes.tex) and an [executable notebook](whitehead-field-dynamics-computational-notes.nb). |
-| [`gog_generate.py`](gog_generate.py) | Enumeration of cubic multigraphs and Whitehead moves, with Python and nauty/Traces backends. |
-| [`Wolfram/GogFieldDynamics/`](Wolfram/GogFieldDynamics/) | Wolfram Language code for exact transition matrices, diffusion, and random paths. |
-| [`lean/`](lean/) | Lean proofs of the finite algebraic identities described in its README. |
-| [`docs/`](docs/) | Mathematical conventions, computation instructions, and notebook documentation. |
-| [`research/integral-torsor/`](research/integral-torsor/README.md) | A quartic differential period torsor with three local series, certified approximation bounds, and prime-field checks. |
-| [`research/outer-forest-complex/`](research/outer-forest-complex/README.md) | Oriented forested complexes of Outer space, a checked two-term Morita cycle, and ordinary Euler characteristics under the cubic walk. |
-| [`research/bessel-recursion/`](research/bessel-recursion/README.md) | Exact checks of the recursion, symmetric-power operator and residue pairing, including resonant cases. |
+| [Local Whitehead chain](rule-a-paper/local-whitehead-chain.tex) | Stationary distribution, spectral bounds, exact bridge conductance and mixing lower bounds for the local walk on cubic multigraphs. |
+| [Field dynamics](whitehead-field-dynamics.tex) | Pair averaging on evolving cubic graphs, finite consensus schedules and contraction estimates. |
+| [Computational companion](whitehead-field-dynamics-computational-notes.tex) | Worked finite calculations accompanying the field-dynamics manuscript and notebooks. |
+| [Quartic period torsor](integral-torsor-paper/integral-torsor.tex) | Local period series, finite matrix integrals and optimal positive moment bounds. |
+| [Outer space](outer-space-paper/outer-space.tex) | A proved cubic refinement-transfer identity, Euler observables and a certificate for the known first Morita class. Its topology and Euler formulas are established results; novelty of the transfer remains unestablished. |
+| [Bessel recursion](bessel-recursion-paper/bessel-recursion.tex) | Identification of the Broadhurst–Roberts recursion with the inverse de Rham pairing, including resonance, and factorial-scaled integrality. |
+| [Histories and states](history-state-paper/history-states.tex) | Permutation-torsor presentations, schedule weights, a criterion for observable states to inherit the history median, minimal event-bit repairs and confluent systems with nontrivial state topology. |
 
-The [status page](docs/status.rst) lists the proved results, finite
-computations, and conjectures. The Lean files cover only the identities
-specified there.
+The history paper gives full finite proofs and credits the established
+event-structure, median-algebra and cubical geometry. Its CAT(0) statement
+concerns occurrence prefixes. Identifying equal observable states requires
+a separate argument.
 
-The retained extensions are Outer space, the quartic period/series
-work, and the Bessel recursion application of period-frame descent.
-Other investigations have been moved to an ignored local archive
-after checking whether they use the torsor essentially. Preliminary tests
-of new problems also stay outside Git until that contribution is clear.
+Each manuscript has a build target. The research papers have their own
+folders. Bibliographies and figure sources are included; figures for the
+history paper and the Outer space prism are drawn directly in TeX.
+Paper PDFs are build outputs.
 
-## Random walks used here
+## Build and reproduce
 
-Different ways of choosing a move give different random walks. The papers and
-code use the following conventions, with `N` denoting the number of vertices.
+Python 3.11 or later, LaTeX with latexmk, pdflatex and BibTeX, and
+abbrvurl.bst are required. The tested Python package versions are recorded
+in [requirements-repro.txt](requirements-repro.txt):
 
-| Walk | States and transition rule | Stationary distribution |
-|---|---|---|
-| Rule A | Unlabelled isomorphism classes. Choose one of the `3N/2` edges, then one of its two Whitehead moves. A move on a loop leaves the graph unchanged. Different moves leading to the same class are counted separately. | The cubic configuration model, conditioned on connectedness and projected to isomorphism classes. |
-| Rule B | The same classes. Assign probability `1/(3N)` to each distinct neighbour other than the current state, and use the remaining probability to stay put. | Uniform on isomorphism classes. The jump chain instead has mass proportional to the number of neighbours. |
-| Walk on labelled graphs | Graphs on the fixed vertex set `[N]`. Retain each distinct target other than the current state from the four endpoint-oriented moves on each edge, and choose a neighbour uniformly. | Proportional to degree. The alternative symmetric chain with `6N` equally likely choices, allowing the state to remain unchanged, has uniform stationary distribution. |
+    python3 -m pip install -r requirements-repro.txt
+    make papers
 
-Rules A and B have the same adjacent classes, but their transition
-probabilities and stationary distributions differ. For the field process,
-one must also specify how the field is transported when the graph changes.
-The details are in the [mathematical overview](docs/overview.rst).
+To build one paper:
 
-## Building the papers
+    make rule-a-paper
+    make integral-torsor
+    make outer-space-paper
+    make bessel-recursion-paper
+    make history-state-paper
 
-The LaTeX builds require `latexmk` and `pdflatex`. To build the Whitehead-chain
-paper and a double-spaced copy with line numbers, run:
+The full non-notebook check builds the manuscripts, checks the Lean
+identities and small-model resource, and runs the paper-specific exact
+computations:
 
-```sh
-make rule-a-paper
-```
+    make check
 
-To prepare the arXiv source archive and a code supplement containing the
-enumeration programs and data:
+Use the interpreter in which the dependencies were installed. It can be
+selected explicitly with make check PYTHON=/path/to/python3.
 
-```sh
-make rule-a-paper-packages
-```
+Individual checks are also available:
 
-The files are written to `rule-a-paper/dist/`. See the
-[submission notes](rule-a-paper/SUBMISSION.md) for their contents.
+    python3 rule-a-paper/verify_rule_a.py 8 --backend python --jobs 1
+    make integral-torsor-check
+    make outer-space-check
+    make bessel-recursion-check
+    make history-state-check
 
-The other LaTeX documents can be built separately:
+The last command compares independent incidence and execution
+enumerations, exhaustively tests 4,890 observation partitions, and checks
+the additive criteria, repair sets and confluent counterexamples.
+The Bessel checker compares the literal recursion, differential operator
+and full connection elimination for 3 through 32 Bessel factors.
+Quartic checks use exact rational arithmetic and Arb enclosures.
+The Outer space checks include orientation signs, refinement
+multiplicities and the cycle/cocycle certificate.
 
-```sh
-make paper
-make computational-notes
-make integral-torsor
-make outer-space-paper
-make bessel-recursion-paper
-```
+[Lean sources](lean/GogVerification/Averaging.lean) verify the specified
+finite averaging and permutation identities and consensus schedules over
+the rationals. They do not formalize the full graph or probability
+arguments. The toolchain is fixed in [lean/lean-toolchain](lean/lean-toolchain).
 
-## Reproducing the computations
+## Whitehead computations
 
-The [reproduction notes](rule-a-paper/REPRODUCIBILITY.md) give the commands for
-the exact tables in the Whitehead-chain paper. For a small run without
-nauty/Traces:
+Rule A chooses one of the 3N/2 edges and one of its two Whitehead
+resolutions, retaining multiplicities; choosing a loop leaves the graph
+unchanged. Its stationary distribution is proportional to the reciprocal
+of the full incidence automorphism order, including loop flips and
+parallel-edge permutations. Rule B gives each distinct nonself neighbour
+probability 1/(3N) and stays put on the remaining ticks; its stationary
+distribution is uniform on unlabelled classes.
 
-```sh
-python3 rule-a-paper/verify_rule_a.py 8 --backend python --jobs 1
-```
+The complete unlabelled class counts for N=2,4,6,8,10,12,14 are
+2, 5, 17, 71, 388, 2592, 21096.
+For a small complete run:
 
-For enumeration followed by the repository's spectral and graph-statistic
-analyses:
+    mkdir -p artifacts/csv
+    python3 gog_generate.py 8 --backend auto --jobs 1 \
+      --save artifacts/gog_N8.json \
+      --save-transitions artifacts/transitions_N8.json
+    python3 gog_edge_model_experiments.py artifacts/transitions_N8.json \
+      --csv-dir artifacts/csv --summary-json artifacts/edge-summary-N8.json
+    python3 gog_support_feature_analysis.py artifacts/transitions_N8.json \
+      --max-cycle 4 --eigenvalues 6 \
+      --summary-json artifacts/feature-summary-N8.json
+    python3 gog_ball_growth.py --load artifacts/gog_N8.json \
+      --max-radius 4 --sample 71
 
-```sh
-mkdir -p artifacts/csv
-python3 gog_generate.py 8 --backend auto --jobs 1 \
-  --save artifacts/gog_N8.json \
-  --save-transitions artifacts/transitions_N8.json
+At N=8 the output contains 71 classes and 1,704 moves counted with
+multiplicity. Complete tables give finite evidence; a sampled trajectory
+does not establish an asymptotic claim. Truncated tables must not be used
+as complete enumerations.
 
-python3 gog_edge_model_experiments.py \
-  artifacts/transitions_N8.json \
-  --csv-dir artifacts/csv \
-  --summary-json artifacts/edge-summary-N8.json
+The pure Python canonicalizer handles small examples. Larger runs use
+nauty/Traces, either through dreadnaut or the optional native bridge:
 
-python3 gog_support_feature_analysis.py \
-  artifacts/transitions_N8.json \
-  --max-cycle 4 --eigenvalues 6 \
-  --summary-json artifacts/feature-summary-N8.json
-```
+    python3 build_nauty_bridge.py
+    python3 gog_degree_diagnostics.py artifacts/gog_N8.json --lowest 20
 
-At `N=8` there are 71 isomorphism classes and 1,704 Whitehead moves counted
-with multiplicity. At `N=14` there are 21,096 classes and 886,032 moves.
-The Python backend suffices for small examples; nauty/Traces is faster for
-larger enumerations. See the [computational guide](docs/computation.rst) for
-installation and file formats.
+The degree diagnostic requires dreadnaut. Set NAUTY_PREFIX or pass
+--nauty-prefix when the library is installed outside the usual locations.
+The Outer backend-comparison check requires the compiled native bridge;
+run the bridge build before make outer-space-check or make check.
 
-## Mathematica notebooks
+## Wolfram notebooks
 
-The notebooks use Wolfram Language 14.3 or later and the local
-`GogFieldDynamics` package. They include exact models for `N=2,4,6,8`,
-transition matrices for Rules A and B, and comparisons of exact distributions
-with sampled paths.
+Both notebooks remain in the repository:
 
-To rebuild and check the computational notebook:
+- [Interactive field-dynamics companion](whitehead-field-dynamics.nb)
+- [Executable computational notes](whitehead-field-dynamics-computational-notes.nb)
 
-```sh
-make computational-notes-notebook
-make computational-notes-notebook-check
-```
+They use Wolfram Language 14.3 or later and the local
+[GogFieldDynamics package](Wolfram/GogFieldDynamics/Kernel/init.wl).
+The bundled exact models cover N=2,4,6,8 and are checked with:
 
-It can also be evaluated with **Evaluation > Evaluate Notebook** in
-Mathematica. SetReplace is not required for this notebook.
+    make notebook-data-check
+    make notebook-paclet-check
+    make notebook-check
 
-The shorter companion includes an optional
-[SetReplace](https://github.com/WolframInstitute/SetReplace) simulation. For
-Rule A, repeated rules account for the multiplicity of Whitehead moves; for
-Rule B, there is one rule per distinct neighbour, with additional rules that
-leave the state unchanged. Its build requires a Mathematica front end, and
-the full check also tests SetReplace:
+To rebuild and check the computational-notes notebook:
 
-```sh
-make notebook
-make notebook-check
-```
+    make computational-notes-notebook
+    make computational-notes-notebook-check
 
-To use a kernel at another location, pass
-`WOLFRAM_KERNEL=/path/to/WolframKernel` to `make`. The
-[notebook guide](docs/notebook.rst) describes the builds and dependencies.
-Edit the notebook-building scripts rather than the generated `.nb` files.
+The interactive notebook build uses a Mathematica front end and has an
+optional SetReplace path engine. SetReplace is not required by the
+computational-notes notebook. Pass
+WOLFRAM_KERNEL=/path/to/WolframKernel to make when needed.
+The scripts under scripts/ build the notebooks, reproduce their text
+outputs and check their evaluations; edit those sources for future
+notebook changes.
 
-## Repository checks
+## Submission bundles
 
-The checks build both papers, the computational notes, and the Sphinx
-documentation; compile the Python entry points; check the Lean proofs; and
-compare regenerated small Wolfram models with the saved data:
+    make rule-a-paper-packages
 
-```sh
-python3 -m pip install -r docs/requirements.txt
-make check
-```
-
-This requires Python 3, LaTeX, Sphinx 8 or 9, and the Lean toolchain specified
-in [`lean/lean-toolchain`](lean/lean-toolchain). The Mathematica notebook
-checks are run separately with the commands above.
+This builds the Whitehead figures and both paper layouts, then writes the
+arXiv source and code archives under rule-a-paper/dist/. Build products,
+downloaded reference copies and working research notes are excluded from
+tracking. The published history is filtered to retain manuscript sources,
+notebooks and reproducibility dependencies.

@@ -1,0 +1,354 @@
+{
+  "incidence_cases": [
+    {
+      "degrees": [
+        3,
+        3
+      ],
+      "arities": [
+        2,
+        2,
+        2
+      ],
+      "types": [
+        {
+          "matrix": [
+            [
+              0,
+              1,
+              2
+            ],
+            [
+              2,
+              1,
+              0
+            ]
+          ],
+          "bijections": 432,
+          "incidence_automorphisms": 8
+        },
+        {
+          "matrix": [
+            [
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1
+            ]
+          ],
+          "bijections": 288,
+          "incidence_automorphisms": 12
+        }
+      ],
+      "mass": "5/24"
+    },
+    {
+      "degrees": [
+        2,
+        2
+      ],
+      "arities": [
+        2,
+        2
+      ],
+      "types": [
+        {
+          "matrix": [
+            [
+              0,
+              2
+            ],
+            [
+              2,
+              0
+            ]
+          ],
+          "bijections": 8,
+          "incidence_automorphisms": 8
+        },
+        {
+          "matrix": [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "bijections": 16,
+          "incidence_automorphisms": 4
+        }
+      ],
+      "mass": "3/8"
+    },
+    {
+      "degrees": [
+        2,
+        2,
+        2
+      ],
+      "arities": [
+        3,
+        3
+      ],
+      "types": [
+        {
+          "matrix": [
+            [
+              0,
+              2
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              0
+            ]
+          ],
+          "bijections": 432,
+          "incidence_automorphisms": 8
+        },
+        {
+          "matrix": [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "bijections": 288,
+          "incidence_automorphisms": 12
+        }
+      ],
+      "mass": "5/24"
+    }
+  ],
+  "posets": [
+    {
+      "events": 1,
+      "distinct_naturally_labelled_posets": 1
+    },
+    {
+      "events": 2,
+      "distinct_naturally_labelled_posets": 2
+    },
+    {
+      "events": 3,
+      "distinct_naturally_labelled_posets": 7
+    },
+    {
+      "events": 4,
+      "distinct_naturally_labelled_posets": 40
+    }
+  ],
+  "histories": {
+    "framed_histories": 48,
+    "causal_wirings": 8,
+    "orders_per_wiring": 6,
+    "sequential_execution_equals_torsor_restriction": true
+  },
+  "observations": {
+    "partitions_tested": 4890,
+    "compatible_partitions": 66,
+    "coordinate_quotients_and_cube_lifts": 706,
+    "additive_observations": 3450,
+    "explicit_failure_witnesses": 2742,
+    "repair_sets_checked": 2230,
+    "equal_effect_minimum_bits_checked_through": 6
+  },
+  "schedule_bias": {
+    "causal_wirings": 4,
+    "schedules": 20,
+    "schedule_counts": [
+      4,
+      4,
+      6,
+      6
+    ],
+    "ordered_probability_of_first_type": "2/5",
+    "debiased_probability_of_first_type": "1/2"
+  },
+  "confluent_family": [
+    {
+      "branches": 2,
+      "history_length": 3,
+      "vertices": 6,
+      "edges": 6,
+      "first_betti_number": 1,
+      "girth": 6,
+      "terminating_confluent": true,
+      "state_graph_is_median": false
+    },
+    {
+      "branches": 2,
+      "history_length": 4,
+      "vertices": 8,
+      "edges": 8,
+      "first_betti_number": 1,
+      "girth": 8,
+      "terminating_confluent": true,
+      "state_graph_is_median": false
+    },
+    {
+      "branches": 2,
+      "history_length": 5,
+      "vertices": 10,
+      "edges": 10,
+      "first_betti_number": 1,
+      "girth": 10,
+      "terminating_confluent": true,
+      "state_graph_is_median": false
+    },
+    {
+      "branches": 2,
+      "history_length": 6,
+      "vertices": 12,
+      "edges": 12,
+      "first_betti_number": 1,
+      "girth": 12,
+      "terminating_confluent": true,
+      "state_graph_is_median": false
+    },
+    {
+      "branches": 3,
+      "history_length": 3,
+      "vertices": 8,
+      "edges": 9,
+      "first_betti_number": 2,
+      "girth": 6,
+      "terminating_confluent": true,
+      "state_graph_is_median": false
+    },
+    {
+      "branches": 3,
+      "history_length": 4,
+      "vertices": 11,
+      "edges": 12,
+      "first_betti_number": 2,
+      "girth": 8,
+      "terminating_confluent": true,
+      "state_graph_is_median": false
+    },
+    {
+      "branches": 3,
+      "history_length": 5,
+      "vertices": 14,
+      "edges": 15,
+      "first_betti_number": 2,
+      "girth": 10,
+      "terminating_confluent": true,
+      "state_graph_is_median": false
+    },
+    {
+      "branches": 3,
+      "history_length": 6,
+      "vertices": 17,
+      "edges": 18,
+      "first_betti_number": 2,
+      "girth": 12,
+      "terminating_confluent": true,
+      "state_graph_is_median": false
+    },
+    {
+      "branches": 4,
+      "history_length": 3,
+      "vertices": 10,
+      "edges": 12,
+      "first_betti_number": 3,
+      "girth": 6,
+      "terminating_confluent": true,
+      "state_graph_is_median": false
+    },
+    {
+      "branches": 4,
+      "history_length": 4,
+      "vertices": 14,
+      "edges": 16,
+      "first_betti_number": 3,
+      "girth": 8,
+      "terminating_confluent": true,
+      "state_graph_is_median": false
+    },
+    {
+      "branches": 4,
+      "history_length": 5,
+      "vertices": 18,
+      "edges": 20,
+      "first_betti_number": 3,
+      "girth": 10,
+      "terminating_confluent": true,
+      "state_graph_is_median": false
+    },
+    {
+      "branches": 4,
+      "history_length": 6,
+      "vertices": 22,
+      "edges": 24,
+      "first_betti_number": 3,
+      "girth": 12,
+      "terminating_confluent": true,
+      "state_graph_is_median": false
+    },
+    {
+      "branches": 5,
+      "history_length": 3,
+      "vertices": 12,
+      "edges": 15,
+      "first_betti_number": 4,
+      "girth": 6,
+      "terminating_confluent": true,
+      "state_graph_is_median": false
+    },
+    {
+      "branches": 5,
+      "history_length": 4,
+      "vertices": 17,
+      "edges": 20,
+      "first_betti_number": 4,
+      "girth": 8,
+      "terminating_confluent": true,
+      "state_graph_is_median": false
+    },
+    {
+      "branches": 5,
+      "history_length": 5,
+      "vertices": 22,
+      "edges": 25,
+      "first_betti_number": 4,
+      "girth": 10,
+      "terminating_confluent": true,
+      "state_graph_is_median": false
+    },
+    {
+      "branches": 5,
+      "history_length": 6,
+      "vertices": 27,
+      "edges": 30,
+      "first_betti_number": 4,
+      "girth": 12,
+      "terminating_confluent": true,
+      "state_graph_is_median": false
+    }
+  ],
+  "confluent_six_cycle_is_not_median": true,
+  "permutation_equations_checked_over": [
+    2,
+    3,
+    5
+  ]
+}

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Exact rewrite graphs, tree/forest counts and certified quartic bounds.
 
-The graph model and its limitations are specified in REWRITE-EXAMPLES.md.
+The graph model and its limitations are specified in integral-torsor.tex,
+Section 8, Fields on rewrite graphs and hypergraphs.
 No sampled integral values enter the quadrature. Requires python-flint.
 """
 from __future__ import annotations

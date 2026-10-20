@@ -21,8 +21,7 @@ from flint import arb, arb_mat, ctx, fmpq, fmpq_mat, fmpq_poly
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'research' / 'integral-torsor'))
 from check_quartic_torsor import reference_moments, weak_coefficients
-sys.path.insert(0,str(ROOT / 'research' / 'whitehead-topology'))
-from check_stable_quartic import moments_by_topology
+from wick_pairings import moments_by_topology
 
 
 def rat(x):

@@ -1,19 +1,29 @@
 __pycache__/
 *.pyc
+.DS_Store
 gog_nauty_bridge.dylib
 gog_nauty_bridge.so
 
-# LaTeX build products (the canonical PDF is retained explicitly).
+# Manuscript build products remain local.
 *.aux
+*.bbl
 *.blg
 *.fdb_latexmk
 *.fls
 *.log
 *.out
+*.pdf
+*.png
+*.svg
 *.synctex.gz
 
-# Documentation builds.
-docs/_build/
+# Former documentation and source copies remain local.
+/docs/
+/gog-internal-work-memo.txt
+/grave-de-peralta-kolpakov-2303.13923-source
+/li-2405.14592-source
+/sources-gdpk/
+/sources-li/
 
 # Locally generated enumeration tables and diagnostics.
 artifacts/
@@ -25,3 +35,16 @@ rule-a-paper/local-whitehead-chain-review.bbl
 # Set-aside research and preliminary problem tests stay local.
 .research-archive/
 .research-scratch/
+
+# Research notes are local; the root README is the repository guide.
+*.md
+!/README.md
+
+# Former exploratory scripts and reports are preserved locally.
+/research/whitehead-topology/
+/research/graph-local-periods/
+/research/matrix-resurgence/
+/research/sextic-sd/
+/research/tanasa-schemes/
+/straight-cycle-paper/
+/research/outer-forest-complex/draw_prism.py
