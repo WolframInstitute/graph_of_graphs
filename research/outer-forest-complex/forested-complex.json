@@ -1,0 +1,3062 @@
+{
+  "convention": "d=contraction-unmarking; forest-edge order gives orientation; loops allowed",
+  "backend": "native",
+  "prime_for_rank_lower_bounds": 65521,
+  "nonlocal_refinement_obstruction": {
+    "rank": 5,
+    "six_parallel_edges": [
+      [
+        0,
+        6
+      ],
+      [
+        6,
+        0
+      ]
+    ],
+    "one_three_plus_three_split": [
+      [
+        0,
+        1,
+        3
+      ],
+      [
+        1,
+        0,
+        3
+      ],
+      [
+        3,
+        3,
+        0
+      ]
+    ],
+    "two_aligned_splits": [
+      [
+        0,
+        1,
+        3,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        3
+      ],
+      [
+        3,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        3,
+        1,
+        0
+      ]
+    ],
+    "three_edge_connected": [
+      true,
+      true,
+      false
+    ],
+    "separating_pair": [
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        3
+      ]
+    ]
+  },
+  "results": [
+    {
+      "rank": 2,
+      "stable_graph_types": 3,
+      "raw_simple_forest_masks": 5,
+      "orientation_reversing_orbits_killed": 0,
+      "d_squared_and_bicomplex_columns_checked": 0,
+      "virtual_Euler_characteristic": "-1/24",
+      "families": {
+        "full": {
+          "chain_dimensions": [
+            3,
+            2
+          ],
+          "boundary_ranks": [
+            0,
+            2
+          ],
+          "ranks_mod_65521": [
+            0,
+            2
+          ],
+          "rational_betti": [
+            1,
+            0
+          ],
+          "sparse_rank_reductions": [
+            {
+              "sparse_pivots": 2,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            }
+          ],
+          "ordinary_Euler_characteristic": 1,
+          "rational_homology_certified": true
+        },
+        "bridgeless": {
+          "chain_dimensions": [
+            2,
+            1
+          ],
+          "boundary_ranks": [
+            0,
+            1
+          ],
+          "ranks_mod_65521": [
+            0,
+            1
+          ],
+          "rational_betti": [
+            1,
+            0
+          ],
+          "sparse_rank_reductions": [
+            {
+              "sparse_pivots": 1,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            }
+          ],
+          "ordinary_Euler_characteristic": 1,
+          "rational_homology_certified": true
+        },
+        "three_connected": {
+          "chain_dimensions": [
+            2,
+            1
+          ],
+          "boundary_ranks": [
+            0,
+            1
+          ],
+          "ranks_mod_65521": [
+            0,
+            1
+          ],
+          "rational_betti": [
+            1,
+            0
+          ],
+          "sparse_rank_reductions": [
+            {
+              "sparse_pivots": 1,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            }
+          ],
+          "ordinary_Euler_characteristic": 1,
+          "rational_homology_certified": true
+        }
+      },
+      "quotients": {
+        "full/bridgeless": {
+          "chain_dimensions": [
+            1,
+            1
+          ],
+          "boundary_ranks": [
+            0,
+            1
+          ],
+          "ranks_mod_65521": [
+            0,
+            1
+          ],
+          "rational_betti": [
+            0,
+            0
+          ],
+          "sparse_rank_reductions": [
+            {
+              "sparse_pivots": 1,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            }
+          ],
+          "ordinary_Euler_characteristic": 0,
+          "filtration_homotopy_columns_verified": 2
+        },
+        "bridgeless/three_connected": {
+          "chain_dimensions": [
+            0,
+            0
+          ],
+          "boundary_ranks": [
+            0,
+            0
+          ],
+          "ranks_mod_65521": [
+            0,
+            0
+          ],
+          "rational_betti": [
+            0,
+            0
+          ],
+          "sparse_rank_reductions": [
+            {
+              "sparse_pivots": 0,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            }
+          ],
+          "ordinary_Euler_characteristic": 0
+        }
+      },
+      "contraction_homology_by_excess": {
+        "full": [
+          {
+            "p": 0,
+            "dimensions_by_excess": [
+              2
+            ],
+            "contraction_ranks": [],
+            "homology_by_excess": [
+              2
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 1,
+            "dimensions_by_excess": [
+              2,
+              1
+            ],
+            "contraction_ranks": [
+              1
+            ],
+            "homology_by_excess": [
+              1,
+              0
+            ],
+            "rational_ranks_certified": true
+          }
+        ],
+        "bridgeless": [
+          {
+            "p": 0,
+            "dimensions_by_excess": [
+              1
+            ],
+            "contraction_ranks": [],
+            "homology_by_excess": [
+              1
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 1,
+            "dimensions_by_excess": [
+              1,
+              1
+            ],
+            "contraction_ranks": [
+              1
+            ],
+            "homology_by_excess": [
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          }
+        ],
+        "three_connected": [
+          {
+            "p": 0,
+            "dimensions_by_excess": [
+              1
+            ],
+            "contraction_ranks": [],
+            "homology_by_excess": [
+              1
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 1,
+            "dimensions_by_excess": [
+              1,
+              1
+            ],
+            "contraction_ranks": [
+              1
+            ],
+            "homology_by_excess": [
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          }
+        ]
+      },
+      "ordinary_Euler_cubic_observable": {
+        "ordinary_Euler_characteristic": 1,
+        "cubic_symmetry_weight": "5/24",
+        "mean": "24/5",
+        "variance": "512/75",
+        "independent_sample_relative_variance": "8/27",
+        "graphs": [
+          {
+            "code": [
+              0,
+              3,
+              0
+            ],
+            "automorphism_order": 12,
+            "observable": "8",
+            "forests": 4
+          },
+          {
+            "code": [
+              1,
+              1,
+              1
+            ],
+            "automorphism_order": 8,
+            "observable": "8/3",
+            "forests": 2
+          }
+        ]
+      },
+      "rank_two_resolution_incidence": {
+        "target_automorphism_order": 8,
+        "sources": [
+          {
+            "source": "theta",
+            "source_forest_automorphism_order": 4,
+            "contraction_coefficient": 1,
+            "labelled_resolution_multiplicity": 2
+          },
+          {
+            "source": "dumbbell",
+            "source_forest_automorphism_order": 8,
+            "contraction_coefficient": 1,
+            "labelled_resolution_multiplicity": 1
+          }
+        ]
+      },
+      "boundary_matrix_sha256": [
+        "04e914170b410767e6ccff4a27d456158e9a991e57d9f280e1a58e3d4527488a"
+      ],
+      "degree_four_witness": null
+    },
+    {
+      "rank": 3,
+      "stable_graph_types": 15,
+      "raw_simple_forest_masks": 118,
+      "orientation_reversing_orbits_killed": 17,
+      "d_squared_and_bicomplex_columns_checked": 10,
+      "virtual_Euler_characteristic": "-1/48",
+      "families": {
+        "full": {
+          "chain_dimensions": [
+            15,
+            22,
+            9,
+            1
+          ],
+          "boundary_ranks": [
+            0,
+            14,
+            8,
+            1
+          ],
+          "ranks_mod_65521": [
+            0,
+            14,
+            8,
+            1
+          ],
+          "rational_betti": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "sparse_rank_reductions": [
+            {
+              "sparse_pivots": 14,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            },
+            {
+              "sparse_pivots": 8,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            },
+            {
+              "sparse_pivots": 1,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            }
+          ],
+          "ordinary_Euler_characteristic": 1,
+          "rational_homology_certified": true
+        },
+        "bridgeless": {
+          "chain_dimensions": [
+            8,
+            10,
+            3,
+            0
+          ],
+          "boundary_ranks": [
+            0,
+            7,
+            3,
+            0
+          ],
+          "ranks_mod_65521": [
+            0,
+            7,
+            3,
+            0
+          ],
+          "rational_betti": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "sparse_rank_reductions": [
+            {
+              "sparse_pivots": 7,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            },
+            {
+              "sparse_pivots": 3,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            },
+            {
+              "sparse_pivots": 0,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            }
+          ],
+          "ordinary_Euler_characteristic": 1,
+          "rational_homology_certified": true
+        },
+        "three_connected": {
+          "chain_dimensions": [
+            5,
+            5,
+            1,
+            0
+          ],
+          "boundary_ranks": [
+            0,
+            4,
+            1,
+            0
+          ],
+          "ranks_mod_65521": [
+            0,
+            4,
+            1,
+            0
+          ],
+          "rational_betti": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "sparse_rank_reductions": [
+            {
+              "sparse_pivots": 4,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            },
+            {
+              "sparse_pivots": 1,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            },
+            {
+              "sparse_pivots": 0,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            }
+          ],
+          "ordinary_Euler_characteristic": 1,
+          "rational_homology_certified": true
+        }
+      },
+      "quotients": {
+        "full/bridgeless": {
+          "chain_dimensions": [
+            7,
+            12,
+            6,
+            1
+          ],
+          "boundary_ranks": [
+            0,
+            7,
+            5,
+            1
+          ],
+          "ranks_mod_65521": [
+            0,
+            7,
+            5,
+            1
+          ],
+          "rational_betti": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "sparse_rank_reductions": [
+            {
+              "sparse_pivots": 7,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            },
+            {
+              "sparse_pivots": 5,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            },
+            {
+              "sparse_pivots": 1,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            }
+          ],
+          "ordinary_Euler_characteristic": 0,
+          "filtration_homotopy_columns_verified": 26
+        },
+        "bridgeless/three_connected": {
+          "chain_dimensions": [
+            3,
+            5,
+            2,
+            0
+          ],
+          "boundary_ranks": [
+            0,
+            3,
+            2,
+            0
+          ],
+          "ranks_mod_65521": [
+            0,
+            3,
+            2,
+            0
+          ],
+          "rational_betti": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "sparse_rank_reductions": [
+            {
+              "sparse_pivots": 3,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            },
+            {
+              "sparse_pivots": 2,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            },
+            {
+              "sparse_pivots": 0,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            }
+          ],
+          "ordinary_Euler_characteristic": 0
+        }
+      },
+      "contraction_homology_by_excess": {
+        "full": [
+          {
+            "p": 0,
+            "dimensions_by_excess": [
+              5
+            ],
+            "contraction_ranks": [],
+            "homology_by_excess": [
+              5
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 1,
+            "dimensions_by_excess": [
+              9,
+              5
+            ],
+            "contraction_ranks": [
+              5
+            ],
+            "homology_by_excess": [
+              4,
+              0
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 2,
+            "dimensions_by_excess": [
+              5,
+              9,
+              4
+            ],
+            "contraction_ranks": [
+              5,
+              4
+            ],
+            "homology_by_excess": [
+              0,
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 3,
+            "dimensions_by_excess": [
+              1,
+              4,
+              4,
+              1
+            ],
+            "contraction_ranks": [
+              1,
+              3,
+              1
+            ],
+            "homology_by_excess": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          }
+        ],
+        "bridgeless": [
+          {
+            "p": 0,
+            "dimensions_by_excess": [
+              2
+            ],
+            "contraction_ranks": [],
+            "homology_by_excess": [
+              2
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 1,
+            "dimensions_by_excess": [
+              3,
+              2
+            ],
+            "contraction_ranks": [
+              2
+            ],
+            "homology_by_excess": [
+              1,
+              0
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 2,
+            "dimensions_by_excess": [
+              1,
+              4,
+              3
+            ],
+            "contraction_ranks": [
+              1,
+              3
+            ],
+            "homology_by_excess": [
+              0,
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 3,
+            "dimensions_by_excess": [
+              0,
+              2,
+              3,
+              1
+            ],
+            "contraction_ranks": [
+              0,
+              2,
+              1
+            ],
+            "homology_by_excess": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          }
+        ],
+        "three_connected": [
+          {
+            "p": 0,
+            "dimensions_by_excess": [
+              1
+            ],
+            "contraction_ranks": [],
+            "homology_by_excess": [
+              1
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 1,
+            "dimensions_by_excess": [
+              1,
+              1
+            ],
+            "contraction_ranks": [
+              1
+            ],
+            "homology_by_excess": [
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 2,
+            "dimensions_by_excess": [
+              0,
+              2,
+              2
+            ],
+            "contraction_ranks": [
+              0,
+              2
+            ],
+            "homology_by_excess": [
+              0,
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 3,
+            "dimensions_by_excess": [
+              0,
+              1,
+              2,
+              1
+            ],
+            "contraction_ranks": [
+              0,
+              1,
+              1
+            ],
+            "homology_by_excess": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          }
+        ]
+      },
+      "ordinary_Euler_cubic_observable": {
+        "ordinary_Euler_characteristic": 1,
+        "cubic_symmetry_weight": "5/16",
+        "mean": "16/5",
+        "variance": "31744/6125",
+        "independent_sample_relative_variance": "124/245",
+        "graphs": [
+          {
+            "code": [
+              0,
+              0,
+              1,
+              2,
+              0,
+              2,
+              1,
+              0,
+              0,
+              0
+            ],
+            "automorphism_order": 16,
+            "observable": "192/35",
+            "forests": 32
+          },
+          {
+            "code": [
+              0,
+              1,
+              1,
+              1,
+              0,
+              1,
+              1,
+              0,
+              1,
+              0
+            ],
+            "automorphism_order": 24,
+            "observable": "256/35",
+            "forests": 38
+          },
+          {
+            "code": [
+              1,
+              0,
+              0,
+              1,
+              0,
+              2,
+              1,
+              0,
+              1,
+              0
+            ],
+            "automorphism_order": 8,
+            "observable": "16/7",
+            "forests": 20
+          },
+          {
+            "code": [
+              1,
+              0,
+              0,
+              1,
+              1,
+              0,
+              1,
+              1,
+              1,
+              0
+            ],
+            "automorphism_order": 48,
+            "observable": "16/35",
+            "forests": 8
+          },
+          {
+            "code": [
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0,
+              2,
+              0
+            ],
+            "automorphism_order": 16,
+            "observable": "32/35",
+            "forests": 12
+          }
+        ]
+      },
+      "rank_two_resolution_incidence": null,
+      "boundary_matrix_sha256": [
+        "612423203752c8460f29a116e005040d12ac9e3687844bd35bce4b3984c77216",
+        "fb77255a08052db381fd3aef3a6afd219cd593a50e2fb09fb5b62b1e84718c9d",
+        "348c4810883faad3ccec02044abb34682743fc6d822c8c05bcd1e03f9d497f40"
+      ],
+      "degree_four_witness": null
+    },
+    {
+      "rank": 4,
+      "stable_graph_types": 111,
+      "raw_simple_forest_masks": 3604,
+      "orientation_reversing_orbits_killed": 366,
+      "d_squared_and_bicomplex_columns_checked": 931,
+      "virtual_Euler_characteristic": "-161/5760",
+      "families": {
+        "full": {
+          "chain_dimensions": [
+            111,
+            310,
+            385,
+            312,
+            181,
+            53
+          ],
+          "boundary_ranks": [
+            0,
+            110,
+            200,
+            185,
+            127,
+            53
+          ],
+          "ranks_mod_65521": [
+            0,
+            110,
+            200,
+            185,
+            127,
+            53
+          ],
+          "rational_betti": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "sparse_rank_reductions": [
+            {
+              "sparse_pivots": 110,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            },
+            {
+              "sparse_pivots": 10,
+              "proportional_rows_removed": 8,
+              "dense_core_shape": [
+                285,
+                375
+              ]
+            },
+            {
+              "sparse_pivots": 20,
+              "proportional_rows_removed": 30,
+              "dense_core_shape": [
+                317,
+                292
+              ]
+            },
+            {
+              "sparse_pivots": 28,
+              "proportional_rows_removed": 34,
+              "dense_core_shape": [
+                210,
+                152
+              ]
+            },
+            {
+              "sparse_pivots": 53,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            }
+          ],
+          "ordinary_Euler_characteristic": 2,
+          "rational_homology_certified": true
+        },
+        "bridgeless": {
+          "chain_dimensions": [
+            43,
+            105,
+            124,
+            114,
+            82,
+            28
+          ],
+          "boundary_ranks": [
+            0,
+            42,
+            63,
+            61,
+            53,
+            28
+          ],
+          "ranks_mod_65521": [
+            0,
+            42,
+            63,
+            61,
+            53,
+            28
+          ],
+          "rational_betti": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "sparse_rank_reductions": [
+            {
+              "sparse_pivots": 42,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            },
+            {
+              "sparse_pivots": 6,
+              "proportional_rows_removed": 5,
+              "dense_core_shape": [
+                89,
+                118
+              ]
+            },
+            {
+              "sparse_pivots": 6,
+              "proportional_rows_removed": 13,
+              "dense_core_shape": [
+                101,
+                108
+              ]
+            },
+            {
+              "sparse_pivots": 8,
+              "proportional_rows_removed": 10,
+              "dense_core_shape": [
+                93,
+                73
+              ]
+            },
+            {
+              "sparse_pivots": 28,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            }
+          ],
+          "ordinary_Euler_characteristic": 2,
+          "rational_homology_certified": true
+        },
+        "three_connected": {
+          "chain_dimensions": [
+            19,
+            38,
+            38,
+            34,
+            28,
+            11
+          ],
+          "boundary_ranks": [
+            0,
+            18,
+            20,
+            18,
+            16,
+            11
+          ],
+          "ranks_mod_65521": [
+            0,
+            18,
+            20,
+            18,
+            16,
+            11
+          ],
+          "rational_betti": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "sparse_rank_reductions": [
+            {
+              "sparse_pivots": 18,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            },
+            {
+              "sparse_pivots": 3,
+              "proportional_rows_removed": 2,
+              "dense_core_shape": [
+                29,
+                35
+              ]
+            },
+            {
+              "sparse_pivots": 3,
+              "proportional_rows_removed": 4,
+              "dense_core_shape": [
+                30,
+                31
+              ]
+            },
+            {
+              "sparse_pivots": 2,
+              "proportional_rows_removed": 2,
+              "dense_core_shape": [
+                30,
+                25
+              ]
+            },
+            {
+              "sparse_pivots": 11,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            }
+          ],
+          "ordinary_Euler_characteristic": 2,
+          "rational_homology_certified": true
+        }
+      },
+      "quotients": {
+        "full/bridgeless": {
+          "chain_dimensions": [
+            68,
+            205,
+            261,
+            198,
+            99,
+            25
+          ],
+          "boundary_ranks": [
+            0,
+            68,
+            137,
+            124,
+            74,
+            25
+          ],
+          "ranks_mod_65521": [
+            0,
+            68,
+            137,
+            124,
+            74,
+            25
+          ],
+          "rational_betti": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "sparse_rank_reductions": [
+            {
+              "sparse_pivots": 68,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            },
+            {
+              "sparse_pivots": 6,
+              "proportional_rows_removed": 5,
+              "dense_core_shape": [
+                191,
+                255
+              ]
+            },
+            {
+              "sparse_pivots": 16,
+              "proportional_rows_removed": 21,
+              "dense_core_shape": [
+                208,
+                182
+              ]
+            },
+            {
+              "sparse_pivots": 23,
+              "proportional_rows_removed": 27,
+              "dense_core_shape": [
+                110,
+                75
+              ]
+            },
+            {
+              "sparse_pivots": 25,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            }
+          ],
+          "ordinary_Euler_characteristic": 0,
+          "filtration_homotopy_columns_verified": 856
+        },
+        "bridgeless/three_connected": {
+          "chain_dimensions": [
+            24,
+            67,
+            86,
+            80,
+            54,
+            17
+          ],
+          "boundary_ranks": [
+            0,
+            24,
+            43,
+            43,
+            37,
+            17
+          ],
+          "ranks_mod_65521": [
+            0,
+            24,
+            43,
+            43,
+            37,
+            17
+          ],
+          "rational_betti": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "sparse_rank_reductions": [
+            {
+              "sparse_pivots": 24,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            },
+            {
+              "sparse_pivots": 8,
+              "proportional_rows_removed": 4,
+              "dense_core_shape": [
+                53,
+                78
+              ]
+            },
+            {
+              "sparse_pivots": 5,
+              "proportional_rows_removed": 11,
+              "dense_core_shape": [
+                66,
+                75
+              ]
+            },
+            {
+              "sparse_pivots": 6,
+              "proportional_rows_removed": 10,
+              "dense_core_shape": [
+                61,
+                48
+              ]
+            },
+            {
+              "sparse_pivots": 17,
+              "proportional_rows_removed": 0,
+              "dense_core_shape": [
+                0,
+                0
+              ]
+            }
+          ],
+          "ordinary_Euler_characteristic": 0
+        }
+      },
+      "contraction_homology_by_excess": {
+        "full": [
+          {
+            "p": 0,
+            "dimensions_by_excess": [
+              17
+            ],
+            "contraction_ranks": [],
+            "homology_by_excess": [
+              17
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 1,
+            "dimensions_by_excess": [
+              55,
+              30
+            ],
+            "contraction_ranks": [
+              30
+            ],
+            "homology_by_excess": [
+              25,
+              0
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 2,
+            "dimensions_by_excess": [
+              84,
+              108,
+              36
+            ],
+            "contraction_ranks": [
+              72,
+              36
+            ],
+            "homology_by_excess": [
+              12,
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 3,
+            "dimensions_by_excess": [
+              97,
+              172,
+              102,
+              20
+            ],
+            "contraction_ranks": [
+              90,
+              82,
+              20
+            ],
+            "homology_by_excess": [
+              7,
+              0,
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 4,
+            "dimensions_by_excess": [
+              97,
+              164,
+              108,
+              38,
+              7
+            ],
+            "contraction_ranks": [
+              87,
+              77,
+              31,
+              7
+            ],
+            "homology_by_excess": [
+              10,
+              0,
+              0,
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 5,
+            "dimensions_by_excess": [
+              53,
+              84,
+              51,
+              21,
+              7,
+              1
+            ],
+            "contraction_ranks": [
+              48,
+              36,
+              15,
+              6,
+              1
+            ],
+            "homology_by_excess": [
+              5,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          }
+        ],
+        "bridgeless": [
+          {
+            "p": 0,
+            "dimensions_by_excess": [
+              5
+            ],
+            "contraction_ranks": [],
+            "homology_by_excess": [
+              5
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 1,
+            "dimensions_by_excess": [
+              12,
+              8
+            ],
+            "contraction_ranks": [
+              8
+            ],
+            "homology_by_excess": [
+              4,
+              0
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 2,
+            "dimensions_by_excess": [
+              15,
+              28,
+              13
+            ],
+            "contraction_ranks": [
+              15,
+              13
+            ],
+            "homology_by_excess": [
+              0,
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 3,
+            "dimensions_by_excess": [
+              22,
+              49,
+              39,
+              11
+            ],
+            "contraction_ranks": [
+              21,
+              28,
+              11
+            ],
+            "homology_by_excess": [
+              1,
+              0,
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 4,
+            "dimensions_by_excess": [
+              35,
+              62,
+              47,
+              21,
+              5
+            ],
+            "contraction_ranks": [
+              31,
+              31,
+              16,
+              5
+            ],
+            "homology_by_excess": [
+              4,
+              0,
+              0,
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 5,
+            "dimensions_by_excess": [
+              28,
+              47,
+              30,
+              13,
+              5,
+              1
+            ],
+            "contraction_ranks": [
+              26,
+              21,
+              9,
+              4,
+              1
+            ],
+            "homology_by_excess": [
+              2,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          }
+        ],
+        "three_connected": [
+          {
+            "p": 0,
+            "dimensions_by_excess": [
+              2
+            ],
+            "contraction_ranks": [],
+            "homology_by_excess": [
+              2
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 1,
+            "dimensions_by_excess": [
+              3,
+              2
+            ],
+            "contraction_ranks": [
+              2
+            ],
+            "homology_by_excess": [
+              1,
+              0
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 2,
+            "dimensions_by_excess": [
+              2,
+              7,
+              5
+            ],
+            "contraction_ranks": [
+              2,
+              5
+            ],
+            "homology_by_excess": [
+              0,
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 3,
+            "dimensions_by_excess": [
+              4,
+              13,
+              14,
+              5
+            ],
+            "contraction_ranks": [
+              4,
+              9,
+              5
+            ],
+            "homology_by_excess": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 4,
+            "dimensions_by_excess": [
+              11,
+              19,
+              16,
+              10,
+              4
+            ],
+            "contraction_ranks": [
+              9,
+              10,
+              6,
+              4
+            ],
+            "homology_by_excess": [
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          },
+          {
+            "p": 5,
+            "dimensions_by_excess": [
+              11,
+              17,
+              11,
+              7,
+              4,
+              1
+            ],
+            "contraction_ranks": [
+              10,
+              7,
+              4,
+              3,
+              1
+            ],
+            "homology_by_excess": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "rational_ranks_certified": true
+          }
+        ]
+      },
+      "ordinary_Euler_cubic_observable": {
+        "ordinary_Euler_characteristic": 2,
+        "cubic_symmetry_weight": "1105/1152",
+        "mean": "2304/1105",
+        "variance": "1121900563456/65155115025",
+        "independent_sample_relative_variance": "1095606019/276623424",
+        "graphs": [
+          {
+            "code": [
+              0,
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0
+            ],
+            "automorphism_order": 72,
+            "observable": "-5008/385",
+            "forests": 328
+          },
+          {
+            "code": [
+              0,
+              1,
+              0,
+              2,
+              0,
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              2,
+              0
+            ],
+            "automorphism_order": 48,
+            "observable": "-10784/1155",
+            "forests": 208
+          },
+          {
+            "code": [
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              1,
+              0,
+              1,
+              0
+            ],
+            "automorphism_order": 12,
+            "observable": "13672/1155",
+            "forests": 314
+          },
+          {
+            "code": [
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              2,
+              0
+            ],
+            "automorphism_order": 8,
+            "observable": "752/165",
+            "forests": 268
+          },
+          {
+            "code": [
+              0,
+              2,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              1,
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              2,
+              0
+            ],
+            "automorphism_order": 16,
+            "observable": "128/77",
+            "forests": 240
+          },
+          {
+            "code": [
+              0,
+              2,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              1,
+              1,
+              0,
+              2,
+              0
+            ],
+            "automorphism_order": 32,
+            "observable": "640/693",
+            "forests": 200
+          },
+          {
+            "code": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              2,
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0
+            ],
+            "automorphism_order": 16,
+            "observable": "16832/3465",
+            "forests": 136
+          },
+          {
+            "code": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              1,
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0
+            ],
+            "automorphism_order": 8,
+            "observable": "328/231",
+            "forests": 172
+          },
+          {
+            "code": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              2,
+              0,
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              1,
+              1,
+              0,
+              1,
+              0
+            ],
+            "automorphism_order": 8,
+            "observable": "544/385",
+            "forests": 152
+          },
+          {
+            "code": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              2,
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              2,
+              0
+            ],
+            "automorphism_order": 16,
+            "observable": "256/693",
+            "forests": 120
+          },
+          {
+            "code": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              2,
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+              1,
+              0
+            ],
+            "automorphism_order": 32,
+            "observable": "128/693",
+            "forests": 80
+          },
+          {
+            "code": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              1,
+              0,
+              0,
+              0,
+              1,
+              1,
+              0,
+              1,
+              0,
+              0,
+              2,
+              1,
+              0,
+              0,
+              0
+            ],
+            "automorphism_order": 32,
+            "observable": "256/3465",
+            "forests": 48
+          },
+          {
+            "code": [
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              1,
+              1,
+              0,
+              1,
+              1,
+              0,
+              0,
+              0
+            ],
+            "automorphism_order": 16,
+            "observable": "-2672/3465",
+            "forests": 96
+          },
+          {
+            "code": [
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              2,
+              0,
+              0,
+              0,
+              2,
+              0,
+              0,
+              0
+            ],
+            "automorphism_order": 32,
+            "observable": "512/3465",
+            "forests": 72
+          },
+          {
+            "code": [
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              2,
+              0,
+              1,
+              0,
+              1,
+              0,
+              0,
+              1,
+              0
+            ],
+            "automorphism_order": 16,
+            "observable": "304/495",
+            "forests": 88
+          },
+          {
+            "code": [
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              0,
+              1,
+              1,
+              0,
+              1,
+              0,
+              1,
+              0
+            ],
+            "automorphism_order": 128,
+            "observable": "128/3465",
+            "forests": 32
+          },
+          {
+            "code": [
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              0,
+              1,
+              0,
+              1,
+              1,
+              0,
+              1,
+              0
+            ],
+            "automorphism_order": 48,
+            "observable": "128/1155",
+            "forests": 56
+          }
+        ]
+      },
+      "rank_two_resolution_incidence": null,
+      "boundary_matrix_sha256": [
+        "8540356379e7279c4f27f3e82966ee2062dfb9477ad5ebb76c29b4e79d50b366",
+        "8fe99040bc7cc3d5e68b4e5bc5eb4ed093b4f4aa8c8f096d5015f7f80717714b",
+        "1a8305b3af965929c40c7bdd82eb95a6e81372005374169863e76576a0889a6f",
+        "2cca90e601b9677f47c542931ad3e9131326f335a8ab30ae19859bb48bd6cf19",
+        "a13f9beae20d5eba0628a121deaf2ab969bbd10b628f9cf1cfa3fb186b08a77d"
+      ],
+      "degree_four_witness": {
+        "degree": 4,
+        "cycle": [
+          {
+            "coefficient": 1,
+            "vertices": 6,
+            "code": [
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              1,
+              0,
+              1,
+              0
+            ],
+            "ordered_forest": [
+              [
+                0,
+                1
+              ],
+              [
+                0,
+                2
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ]
+          },
+          {
+            "coefficient": -2,
+            "vertices": 6,
+            "code": [
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              1,
+              0,
+              1,
+              0
+            ],
+            "ordered_forest": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ]
+          }
+        ],
+        "cocycle": [
+          {
+            "coefficient": -25,
+            "vertices": 5,
+            "code": [
+              0,
+              0,
+              1,
+              1,
+              1,
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0
+            ],
+            "ordered_forest": [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "coefficient": -39,
+            "vertices": 5,
+            "code": [
+              0,
+              0,
+              1,
+              1,
+              1,
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0
+            ],
+            "ordered_forest": [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ]
+            ]
+          },
+          {
+            "coefficient": 78,
+            "vertices": 5,
+            "code": [
+              0,
+              0,
+              1,
+              1,
+              1,
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0
+            ],
+            "ordered_forest": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                4
+              ]
+            ]
+          },
+          {
+            "coefficient": 80,
+            "vertices": 5,
+            "code": [
+              0,
+              0,
+              1,
+              1,
+              1,
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0
+            ],
+            "ordered_forest": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                4
+              ]
+            ]
+          },
+          {
+            "coefficient": 23,
+            "vertices": 5,
+            "code": [
+              0,
+              0,
+              1,
+              1,
+              1,
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0
+            ],
+            "ordered_forest": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                2,
+                4
+              ]
+            ]
+          },
+          {
+            "coefficient": -2,
+            "vertices": 5,
+            "code": [
+              0,
+              0,
+              1,
+              1,
+              1,
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0
+            ],
+            "ordered_forest": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                4
+              ]
+            ]
+          },
+          {
+            "coefficient": 40,
+            "vertices": 5,
+            "code": [
+              0,
+              1,
+              0,
+              2,
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              1
+            ],
+            "ordered_forest": [
+              [
+                0,
+                1
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                4
+              ]
+            ]
+          },
+          {
+            "coefficient": 39,
+            "vertices": 5,
+            "code": [
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              0,
+              1,
+              0,
+              2,
+              0
+            ],
+            "ordered_forest": [
+              [
+                0,
+                1
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                3,
+                4
+              ]
+            ]
+          },
+          {
+            "coefficient": 1,
+            "vertices": 5,
+            "code": [
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              0,
+              1,
+              0,
+              2,
+              0
+            ],
+            "ordered_forest": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                3,
+                4
+              ]
+            ]
+          },
+          {
+            "coefficient": 1,
+            "vertices": 5,
+            "code": [
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              0,
+              1,
+              0,
+              2,
+              0
+            ],
+            "ordered_forest": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                3,
+                4
+              ]
+            ]
+          },
+          {
+            "coefficient": 39,
+            "vertices": 5,
+            "code": [
+              0,
+              2,
+              0,
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              2,
+              0,
+              2,
+              0
+            ],
+            "ordered_forest": [
+              [
+                0,
+                1
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                4
+              ]
+            ]
+          },
+          {
+            "coefficient": 1,
+            "vertices": 5,
+            "code": [
+              0,
+              2,
+              0,
+              1,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              2,
+              0,
+              2,
+              0
+            ],
+            "ordered_forest": [
+              [
+                0,
+                1
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                2,
+                4
+              ],
+              [
+                3,
+                4
+              ]
+            ]
+          },
+          {
+            "coefficient": 24,
+            "vertices": 6,
+            "code": [
+              0,
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0
+            ],
+            "ordered_forest": [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ]
+            ]
+          },
+          {
+            "coefficient": 39,
+            "vertices": 6,
+            "code": [
+              0,
+              1,
+              0,
+              2,
+              0,
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              2,
+              0
+            ],
+            "ordered_forest": [
+              [
+                0,
+                1
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                4
+              ]
+            ]
+          },
+          {
+            "coefficient": -23,
+            "vertices": 6,
+            "code": [
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              1,
+              0,
+              1,
+              0
+            ],
+            "ordered_forest": [
+              [
+                0,
+                1
+              ],
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                4
+              ]
+            ]
+          },
+          {
+            "coefficient": -16,
+            "vertices": 6,
+            "code": [
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              1,
+              0,
+              1,
+              0
+            ],
+            "ordered_forest": [
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                4
+              ]
+            ]
+          },
+          {
+            "coefficient": 4,
+            "vertices": 6,
+            "code": [
+              0,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              1,
+              0,
+              1,
+              0
+            ],
+            "ordered_forest": [
+              [
+                0,
+                1
+              ],
+              [
+                0,
+                2
+              ],
+              [
+                3,
+                4
+              ],
+              [
+                3,
+                5
+              ]
+            ]
+          },
+          {
+            "coefficient": 40,
+            "vertices": 6,
+            "code": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              2,
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0
+            ],
+            "ordered_forest": [
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                3,
+                5
+              ]
+            ]
+          }
+        ],
+        "pairing": 4,
+        "cycle_supported_on_three_edge_connected_cubic_graphs": true,
+        "triangle_product": {
+          "triangles": [
+            [
+              0,
+              1,
+              2
+            ],
+            [
+              3,
+              4,
+              5
+            ]
+          ],
+          "nine_term_product_multiple_of_archived_cycle": 3
+        }
+      }
+    }
+  ]
+}

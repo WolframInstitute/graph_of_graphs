@@ -6,7 +6,8 @@ WOLFRAM_KERNEL ?= /Applications/Wolfram.app/Contents/MacOS/WolframKernel
 	notebook-data-check notebook notebook-paclet-check notebook-check \
 	computational-notes-notebook computational-notes-notebook-check \
 	rule-a-paper rule-a-paper-packages integral-torsor integral-torsor-check \
-	straight-cycle-paper straight-cycle-check tanasa-check graph-local-check clean
+	straight-cycle-paper straight-cycle-check tanasa-check graph-local-check \
+	outer-forest-check clean
 
 all: check
 
@@ -39,6 +40,11 @@ straight-cycle-check:
 
 graph-local-check:
 	$(PYTHON) research/graph-local-periods/check_local_bounds.py --nodes 16
+
+outer-forest-check:
+	$(PYTHON) research/outer-forest-complex/check_forested_complex.py --max-rank 4
+	$(PYTHON) research/outer-forest-complex/check_witness.py
+	$(PYTHON) research/outer-forest-complex/check_backends.py
 
 tanasa-check:
 	$(PYTHON) research/whitehead-topology/check_tanasa_bipartite.py \
