@@ -5,7 +5,8 @@ WOLFRAM_KERNEL ?= /Applications/Wolfram.app/Contents/MacOS/WolframKernel
 .PHONY: all check paper computational-notes docs lean python-check \
 	notebook-data-check notebook notebook-paclet-check notebook-check \
 	computational-notes-notebook computational-notes-notebook-check \
-	rule-a-paper rule-a-paper-packages integral-torsor integral-torsor-check clean
+	rule-a-paper rule-a-paper-packages integral-torsor integral-torsor-check \
+	straight-cycle-paper straight-cycle-check tanasa-check clean
 
 all: check
 
@@ -29,6 +30,17 @@ integral-torsor:
 
 integral-torsor-check:
 	$(MAKE) -C integral-torsor-paper check
+
+straight-cycle-paper:
+	$(MAKE) -C straight-cycle-paper all
+
+straight-cycle-check:
+	$(MAKE) -C straight-cycle-paper check
+
+tanasa-check:
+	$(PYTHON) research/whitehead-topology/check_tanasa_bipartite.py \
+		--max-pairs 3 --switches \
+		--json research/whitehead-topology/tanasa-bipartite.json
 
 docs:
 	$(MAKE) -C docs html SPHINXOPTS="-W --keep-going"
