@@ -38,6 +38,7 @@ field dynamics.
 | [`research/outer-forest-complex/`](research/outer-forest-complex/README.md) | Oriented forested complexes of Outer space, a checked two-term Morita cycle, and ordinary Euler characteristics under the cubic walk. |
 | [`research/tanasa-schemes/`](research/tanasa-schemes/README.md) | Quartic chain boundary operators, field restrictions, exact scheme weights and tails, and an exact conditional decoration sampler with reversible scheme dynamics. |
 | [`research/sextic-sd/`](research/sextic-sd/README.md) | A proof of convergence for sextic ordinary-moment Schwinger–Dyson truncations, using hard-rod graphs and positive moment determinacy, with certified error intervals. |
+| [`research/matrix-resurgence/`](research/matrix-resurgence/README.md) | A larger research target: rigorous nonperturbative reconstruction of the quartic matrix model, with a source audit and checked transport of scalar contour data to finite matrix size. The reconstruction theorem remains open in these notes. |
 
 The [status page](docs/status.rst) lists the proved results, finite
 computations, and conjectures. The Lean files cover only the identities

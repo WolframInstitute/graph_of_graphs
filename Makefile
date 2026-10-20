@@ -7,7 +7,8 @@ WOLFRAM_KERNEL ?= /Applications/Wolfram.app/Contents/MacOS/WolframKernel
 	computational-notes-notebook computational-notes-notebook-check \
 	rule-a-paper rule-a-paper-packages integral-torsor integral-torsor-check \
 	straight-cycle-paper straight-cycle-check tanasa-check graph-local-check \
-	outer-forest-check tanasa-scheme-check tanasa-sampler-check sextic-sd-check clean
+	outer-forest-check tanasa-scheme-check tanasa-sampler-check sextic-sd-check \
+	matrix-resurgence-check clean
 
 all: check
 
@@ -56,6 +57,9 @@ tanasa-sampler-check:
 
 sextic-sd-check:
 	$(PYTHON) research/sextic-sd/check_sextic_sd.py
+
+matrix-resurgence-check:
+	$(PYTHON) research/matrix-resurgence/check_seed_transport.py
 
 tanasa-check:
 	$(PYTHON) research/whitehead-topology/check_tanasa_bipartite.py \
