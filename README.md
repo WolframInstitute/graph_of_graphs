@@ -34,6 +34,7 @@ field dynamics.
 | [`docs/`](docs/) | Mathematical conventions, computation instructions, and notebook documentation. |
 | [`research/whitehead-topology/`](research/whitehead-topology/PLAN.md) | Research plan, proof notes, literature, and exact checks for the ribbon, Outer-space, and matrix-model extensions. |
 | [`research/integral-torsor/`](research/integral-torsor/README.md) | A quartic differential period torsor with three local series, certified approximation bounds, and prime-field checks. |
+| [`research/graph-local-periods/`](research/graph-local-periods/README.md) | Local quartic fields on cyclic rewrite graphs: exact scalar-period transforms, graph-polynomial bounds, exponent selection and certified acceptance decisions. |
 
 The [status page](docs/status.rst) lists the proved results, finite
 computations, and conjectures. The Lean files cover only the identities

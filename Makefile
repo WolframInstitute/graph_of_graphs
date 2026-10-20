@@ -6,7 +6,7 @@ WOLFRAM_KERNEL ?= /Applications/Wolfram.app/Contents/MacOS/WolframKernel
 	notebook-data-check notebook notebook-paclet-check notebook-check \
 	computational-notes-notebook computational-notes-notebook-check \
 	rule-a-paper rule-a-paper-packages integral-torsor integral-torsor-check \
-	straight-cycle-paper straight-cycle-check tanasa-check clean
+	straight-cycle-paper straight-cycle-check tanasa-check graph-local-check clean
 
 all: check
 
@@ -36,6 +36,9 @@ straight-cycle-paper:
 
 straight-cycle-check:
 	$(MAKE) -C straight-cycle-paper check
+
+graph-local-check:
+	$(PYTHON) research/graph-local-periods/check_local_bounds.py --nodes 16
 
 tanasa-check:
 	$(PYTHON) research/whitehead-topology/check_tanasa_bipartite.py \
