@@ -5,7 +5,7 @@ WOLFRAM_KERNEL ?= /Applications/Wolfram.app/Contents/MacOS/WolframKernel
 .PHONY: all check paper computational-notes docs lean python-check \
 	notebook-data-check notebook notebook-paclet-check notebook-check \
 	computational-notes-notebook computational-notes-notebook-check \
-	rule-a-paper rule-a-paper-packages clean
+	rule-a-paper rule-a-paper-packages integral-torsor integral-torsor-check clean
 
 all: check
 
@@ -23,6 +23,12 @@ rule-a-paper:
 
 rule-a-paper-packages:
 	$(MAKE) -C rule-a-paper packages
+
+integral-torsor:
+	$(MAKE) -C integral-torsor-paper all
+
+integral-torsor-check:
+	$(MAKE) -C integral-torsor-paper check
 
 docs:
 	$(MAKE) -C docs html SPHINXOPTS="-W --keep-going"

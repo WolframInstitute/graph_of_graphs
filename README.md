@@ -23,6 +23,7 @@ field dynamics.
 | File or directory | Contents |
 |---|---|
 | [`rule-a-paper/local-whitehead-chain.pdf`](rule-a-paper/local-whitehead-chain.pdf) | The local Whitehead-chain paper; [LaTeX source](rule-a-paper/local-whitehead-chain.tex). |
+| [`integral-torsor-paper/integral-torsor.pdf`](integral-torsor-paper/integral-torsor.pdf) | A separate research manuscript on the quartic period torsor, classification of positive representations, and optimal moment bounds; [source and checks](integral-torsor-paper/README.md). |
 | [`whitehead-field-dynamics.pdf`](whitehead-field-dynamics.pdf) | The field-dynamics manuscript; [LaTeX source](whitehead-field-dynamics.tex). |
 | [`whitehead-field-dynamics.nb`](whitehead-field-dynamics.nb) | A short Mathematica companion with figures and an interactive random walk. |
 | [`whitehead-field-dynamics-computational-notes.pdf`](whitehead-field-dynamics-computational-notes.pdf) | Worked computations, also available as [LaTeX](whitehead-field-dynamics-computational-notes.tex) and an [executable notebook](whitehead-field-dynamics-computational-notes.nb). |
@@ -72,11 +73,12 @@ make rule-a-paper-packages
 The files are written to `rule-a-paper/dist/`. See the
 [submission notes](rule-a-paper/SUBMISSION.md) for their contents.
 
-The other two LaTeX documents can be built separately:
+The other LaTeX documents can be built separately:
 
 ```sh
 make paper
 make computational-notes
+make integral-torsor
 ```
 
 ## Reproducing the computations

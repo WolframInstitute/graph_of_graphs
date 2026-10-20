@@ -1,0 +1,808 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,graphicx,microtype}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\C}{\mathbb C}
+\newcommand{\E}{\mathbb E}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\dd}{\,\mathrm d}
+\numberwithin{equation}{section}
+\title{A Quartic Period Torsor and Optimal Positive Moment Bounds}
+\author{Alexander Kolpakov\\[0.5ex]
+\small Center for Science, Technology, Engineering, and Mathematics\\
+\small University of Austin, Austin, Texas, United States\\
+\small \texttt{akolpakov@uaustin.org}\\[0.75ex]
+\small The Wolfram Institute for Computational Foundations of Science\\
+\small \texttt{akolpakov@wolframinstitute.org}}
+\date{Research manuscript, 20 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+The stable quartic integral has a rank-two differential period torsor.
+We describe its local realizations, their combinatorial expansions, and the
+additional data needed to recover the real integral. Every finite Hermitian
+matrix size is a matrix coefficient of a symmetric power of the same system.
+To compare approximations, we classify positive generalized Stieltjes
+representations: a positive homogeneous interaction of degree $2m$ in $d$
+Gaussian variables has exact order $d/(2m)$. The smallest admissible order
+gives the strongest Gauss and Gauss--Radau bounds from a fixed number of
+perturbative coefficients. For quartic and sextic interactions these bounds
+converge at every positive coupling. In particular, they give certified
+approximations to all scalar sextic correlation functions. At degree eight
+and above, a moment-indeterminacy example shows why positivity and all
+perturbative coefficients can still be insufficient. Exact computations
+illustrate the bounds for Hermitian matrices of sizes one through four.
+\end{abstract}
+
+\section{Introduction}
+An integral may have several combinatorial expansions with very different
+numerical behavior. A useful common object should explain their relations,
+specify the information each expansion retains, and help decide which one
+to use. A torsor of period comparisons suggests such an object, but the
+integral value itself is not a torsor. Even in a simple example one must
+distinguish the differential equation, a basis of solutions, an integration
+cycle, and an approximation to the chosen period.
+
+We work first with
+\begin{equation}\label{eq:scalar}
+ q_j(t)=\frac1{\sqrt{2\pi}}\int_{\mathbb R}
+ x^j\exp\left(-\frac{x^2}{2}-\frac{t x^4}{4}\right)\dd x,
+ \qquad t>0.
+\end{equation}
+The two moments $q_0,q_2$ satisfy a rational differential system. Its
+horizontal frames form a differential torsor. The Gaussian expansion at
+$t=0$, the quartic expansion at infinity, and Taylor expansions at ordinary
+points are local realizations of this system. The formal local
+classification is complete in this specified category; it is not a
+classification of arbitrary differential extension fields.
+
+There is also a second, useful classification. Suppose that the Wick
+coefficients are used to reconstruct a positive integral of the form
+$\int(1+\lambda s)^{-\beta}\dd\rho(s)$. Which orders $\beta$ are possible,
+and which gives the best bounds? For the normalized Hermitian quartic
+partition function of size $M$, the answer is $\beta\ge M^2/4$.
+The minimal order gives stronger moment bounds than every larger order,
+at the same number of input coefficients and at every positive coupling.
+Here ``best'' is an extremal statement within a stated class of positive
+representations, rather than a claim about all numerical algorithms.
+
+The ingredients have substantial precedents. Picard--Vessiot torsors and
+formal local differential equations are standard \cite{Singer}.
+Comparison torsors for periods are treated by Brown \cite{Brown};
+exponential integrals belong to the framework of Fres\'an and Jossen
+\cite{FresanJossen}. Wick expansions and moment determinants are standard
+matrix-model tools \cite{EKR}, and the quartic weight has a well-developed
+orthogonal-polynomial and Painlev\'e theory \cite{ClarksonJordaan}.
+Generalized positive-kernel approximants already appear in Savit's
+work on lattice theories \cite[Appendix B]{Savit}.
+Generalized Stieltjes classes and their exact orders are studied by Sokal
+and by Karp--Prilepkina \cite{Sokal,KarpPrilepkina}; positive quadrature
+bounds are classical \cite{Gautschi,LRW}. We give elementary proofs of the
+specific representation and order comparison used here.
+
+Fiol, Gij\'on and Lejarza Alonso recently proved convergence of rational
+Schwinger--Dyson approximants for all scalar quartic correlation functions
+\cite{FGL}. Their introduction asks about other even potentials and about
+products of Pad\'e approximants. Our sextic corollary addresses convergence
+by a different construction: positive quadrature of reweighted Wick
+moments. It does not identify the truncations of the sextic
+Schwinger--Dyson hierarchy or prove that they are products of Pad\'e
+approximants.
+
+The graph-theoretic motivation comes from the local Whitehead chain and
+its stationary measure, weighted by inverse automorphism orders \cite{Kolpakov}.
+The present paper keeps that motivation separate from the analysis of
+the integral. In particular, a restriction to some graphs is not
+automatically a specialization of a period torsor, nor does it automatically
+bound the error in an integral.
+
+\section{The differential torsor}\label{sec:torsor}
+For a rapid-decay contour $\gamma$, put
+$m_j^\gamma=\int_\gamma x^j e^{-x^2/2-tx^4/4}\dd x$.
+Integration by parts and differentiation give
+\begin{equation}\label{eq:ibp}
+ t m_{j+4}=(j+1)m_j-m_{j+2},\qquad
+ (m_j)'=-\tfrac14m_{j+4}.
+\end{equation}
+Thus the even moments form a rank-two system
+\begin{equation}\label{eq:connection}
+ v'=A(t)v,\qquad
+ A(t)=\begin{pmatrix}-1/(4t)&1/(4t)\\
+ 1/(4t^2)&-(1+3t)/(4t^2)\end{pmatrix},\qquad
+ v=\begin{pmatrix}m_0\\m_2\end{pmatrix}.
+\end{equation}
+Equivalently,
+\begin{equation}\label{eq:scalarODE}
+ 16t^2 y''+(32t+4)y'+3y=0,\qquad m_2=4t y'+y.
+\end{equation}
+The full quartic twisted de Rham system also has an odd-moment part.
+Throughout, the torsor refers to the even-moment subsystem
+\eqref{eq:connection}, generated by $\dd x,x^2\dd x$.
+
+Let $K=\overline{\Q}(t)$, with derivation $D=\mathrm d/\mathrm dt$.
+The coordinate algebra
+\begin{equation}\label{eq:torsoralgebra}
+ \mathcal R=K[y_{11},y_{12},y_{21},y_{22},\det(Y)^{-1}],
+ \qquad DY=AY,
+\end{equation}
+is the frame torsor with its differential structure. Explicitly, for a
+differential extension $F/K$, its horizontal points are
+\[
+ \mathcal T^D(F)=\{Y\in\GL_2(F):DY=AY\}.
+\]
+If this set has a point, it has a free transitive right action of
+$\GL_2(F^D)$. Indeed,
+$D(Y_1^{-1}Y_2)=0$ for any two horizontal frames. This is the torsor
+property: two frames differ by one uniquely determined constant matrix.
+The underlying algebraic $\GL_2$-torsor is trivial. The differential
+structure and the selected period point carry the information.
+
+\begin{proposition}\label{prop:galois}
+The differential Galois group of \eqref{eq:connection} over $K$ is
+$\GL_2$. In particular, \eqref{eq:torsoralgebra} is its Picard--Vessiot
+torsor algebra.
+\end{proposition}
+\begin{proof}
+Set $z=1/(8t)$ and $y=t^{-1/2}e^z f(z)$. Equation
+\eqref{eq:scalarODE} becomes the modified Bessel equation of order
+$1/4$. The Bessel group at this order is $\SL_2$
+\cite[Example 1.3.32]{Singer}; replacing its variable by $iz$ gives the
+modified equation. The algebraic gauge and exponential scalar twist do
+not change its projective group, which is consequently $\operatorname{PGL}_2$.
+On the other hand,
+\begin{equation}\label{eq:wronskian}
+ D\log\det Y=\Tr A=-\frac1t-\frac1{4t^2},\qquad
+ \det Y=c\,t^{-1}e^{1/(4t)}.
+\end{equation}
+This determinant has group $\mathbb G_m$: no nonzero power of the
+exponential is algebraic over $K$. The identity component of the full
+group has projective image $\operatorname{PGL}_2$. A connected
+three-dimensional subgroup with that projective image would have finite
+scalar kernel, and hence no nontrivial character to $\mathbb G_m$.
+The determinant image rules this out. The group therefore has dimension
+four and equals $\GL_2$. The Picard--Vessiot torsor theorem
+\cite[Proposition 1.3.20]{Singer} now identifies its algebra with
+\eqref{eq:torsoralgebra}.
+\end{proof}
+
+For $t>0$, the contours $\mathbb R$ and $i\mathbb R$, oriented upwards,
+give a period frame
+\begin{equation}\label{eq:periodmatrix}
+ P=\begin{pmatrix}m_0^{\mathbb R}&m_0^{i\mathbb R}\\
+ m_2^{\mathbb R}&m_2^{i\mathbb R}\end{pmatrix}.
+\end{equation}
+These two columns will be seen to be independent below. They are points
+over a complex analytic differential field; the gamma values in their
+comparison matrix require extension of the constant field.
+This differential torsor is not being identified with a full arithmetic
+motivic comparison torsor at a fixed value of $t$. That would require
+additional realization data and an arithmetic construction.
+
+\section{Classification of the local realizations}\label{sec:local}
+We allow completions at places of $K$, finite algebraic ramification,
+and formal changes of basis. We also record when an exponential extension
+is necessary. These operations give the following exhaustive list in
+this local category.
+
+\begin{theorem}\label{thm:local}
+For \eqref{eq:connection} the local possibilities are as follows.
+\begin{enumerate}
+\item Every finite $a\ne0$ is ordinary. There is a unique horizontal frame
+$U_a=I+O(t-a)$ over $\overline{\Q}[[t-a]]$.
+\item At $t=0$, the formal scalar solutions have exponential factors
+$1$ and $e^{1/(4t)}$. A full frame exists over
+$\overline{\Q}((t))(e^{1/(4t)})$, but over no finite algebraic extension
+of $\overline{\Q}((t))$.
+\item At $t=\infty$, the equation is regular singular with scalar
+exponents $1/4,3/4$ in $w=1/t$. A full frame exists over
+$\overline{\Q}((w^{1/4}))$. In a cover $w=s^e$, it exists over
+$\overline{\Q}((s))$ if and only if $4\mid e$.
+\end{enumerate}
+The analytic problem at zero also needs sector and Stokes information.
+\end{theorem}
+\begin{proof}
+The first assertion follows by substituting $U_a=\sum_{n\ge0}U_n(t-a)^n$
+in \eqref{eq:connection}. If $A=\sum A_j(t-a)^j$, then
+\begin{equation}\label{eq:Taylor}
+ (n+1)U_{n+1}=\sum_{j=0}^n A_jU_{n-j},\qquad U_0=I.
+\end{equation}
+At zero put
+\begin{equation}\label{eq:weak}
+ \widehat q(t)=\sum_{n\ge0}(-t)^n a_n,\qquad
+ a_n=\frac{(4n-1)!!}{4^n n!}
+     =\frac{4^n(1/4)_n(3/4)_n}{n!}.
+\end{equation}
+Direct substitution gives the two scalar solutions
+$\widehat q(t)$ and $e^{1/(4t)}\widehat q(-t)$.
+Applying $4tD+1$ to form their second components gives a frame of
+determinant $-t^{-1}e^{1/(4t)}$. Its exponential determinant cannot
+belong to any algebraic Laurent extension: its logarithmic derivative
+has a double pole, whereas that of an algebraic Puiseux series has at
+most a simple pole. This also proves the claimed obstruction.
+
+At infinity, substituting $y=w^\rho(1+O(w))$ in
+\eqref{eq:scalarODE} gives $(4\rho-1)(4\rho-3)=0$.
+The exponents differ by a noninteger, so there are two logarithm-free
+Frobenius series. Their fractional parts require ramification divisible
+by four. This proves necessity and sufficiency. The explicit frame below
+also proves sufficiency. These are instances of the usual formal local
+classification \cite[Section 1.4]{Singer}.
+\end{proof}
+
+The coefficients in \eqref{eq:weak} count pairings of $4n$ Gaussian
+half-edges, divided by the quartic vertex and exponential factors.
+They do not select all contours. For the real contour the series is
+asymptotic, and Taylor's integral remainder gives
+\begin{equation}\label{eq:weakbound}
+ \left|q_0(t)-\sum_{n=0}^K(-t)^n a_n\right|
+ \le t^{K+1}a_{K+1}.
+\end{equation}
+Even partial sums are upper bounds, and odd partial sums are lower bounds.
+The terms eventually increase at every $t>0$.
+
+At infinity, scaling $x=t^{-1/4}y$ gives the convergent series
+\begin{align}\label{eq:strong}
+ q_0(t)&=\frac{t^{-1/4}}{2\sqrt\pi}
+ \sum_{n\ge0}\frac{(-t^{-1/2})^n}{n!}\Gamma(n/2+1/4),\\
+ q_2(t)&=\frac{t^{-3/4}}{\sqrt\pi}
+ \sum_{n\ge0}\frac{(-t^{-1/2})^n}{n!}\Gamma(n/2+3/4).
+ \nonumber
+\end{align}
+The sums are entire in $t^{-1/2}$. Dominated convergence follows from
+$e^{-y^4/4+C y^2}$ on each compact parameter set. Truncating either
+sum after degree $K$ has absolute remainder at most its positive
+degree-$(K+1)$ term, including the displayed prefactor.
+
+For completeness, let
+\[
+ A_0={}_1F_1(1/4;1/2;1/(4t)),\quad
+ B_0={}_1F_1(3/4;3/2;1/(4t)),
+\]
+and let $C_0,D_0$ have parameters $(5/4;3/2)$ and $(3/4;1/2)$,
+respectively, at the same argument. A rational-coefficient local frame is
+\begin{equation}\label{eq:infinityframe}
+ Y_\infty=\begin{pmatrix}
+ t^{-1/4}A_0&t^{-3/4}B_0\\
+ -\tfrac12t^{-5/4}C_0&-2t^{-3/4}D_0
+ \end{pmatrix},\qquad
+ \det Y_\infty=-2t^{-1}e^{1/(4t)}.
+\end{equation}
+The actual period frame is
+\begin{equation}\label{eq:comparison}
+ P=\frac1{\sqrt2}Y_\infty
+ \begin{pmatrix}\Gamma(1/4)&i\Gamma(1/4)\\
+ -\Gamma(3/4)&i\Gamma(3/4)\end{pmatrix}.
+\end{equation}
+In particular, $\det P=-2\sqrt2\pi i\,t^{-1}e^{1/(4t)}$.
+The rational local frame and the contour-dependent comparison constants
+have distinct roles.
+
+The strong coefficients have a weighted combinatorial encoding, rather
+than the same Wick interpretation. For example,
+$4^n(1/4)_n=\prod_{j<n}(4j+1)$ counts histories of increasing plane
+5-ary trees: insertion at one free leaf replaces it by five, increasing
+the number of available leaves by four. The product
+$\prod_{j<n}(4j+3)$ starts with three ordered leaves. The factorials and
+powers in ${}_1F_1$ supply the weights. Equation \eqref{eq:Taylor}
+likewise expands into finite weighted compositions of rational matrices.
+These descriptions show exactly how different combinatorial series can
+come from the same differential object.
+
+\section{All finite Hermitian matrix sizes}\label{sec:matrix}
+Let $\mathcal H_M$ be the real Euclidean space of Hermitian matrices,
+with inner product $\Tr(XY)$. Its dimension is $d=M^2$. Define
+\begin{equation}\label{eq:matrix}
+ Z_M(\lambda)=
+ \frac{\int_{\mathcal H_M}e^{-M\Tr(X^2)/2-M\lambda\Tr(X^4)/4}\dd X}
+ {\int_{\mathcal H_M}e^{-M\Tr(X^2)/2}\dd X},\qquad\lambda>0.
+\end{equation}
+The eigenvalue determinant formula \cite[Section 5.1]{EKR}, followed by
+$x\mapsto x/\sqrt M$, gives
+\begin{equation}\label{eq:Hankel}
+ Z_M(\lambda)=\frac{\det[q_{i+j}(\lambda/M)]_{0\le i,j<M}}
+ {\prod_{j=0}^{M-1}j!}.
+\end{equation}
+Here odd moments vanish. The denominator is the Gaussian moment
+determinant. By \eqref{eq:ibp}, every entry is a rational linear
+combination of $q_0,q_2$. Thus $Z_M$ is a nonzero homogeneous polynomial
+of degree $M$ in the same two periods, after the rational pullback
+$t=\lambda/M$.
+
+\begin{proposition}\label{prop:minimalODE}
+The minimal homogeneous linear differential equation for $Z_M$ over
+$\overline{\Q}(\lambda)$ has order exactly $M+1$.
+The associated module is $\Sym^M$ of the rank-two quartic module.
+Its formal exponential factors at zero are
+$e^{j/(4t)}$, $0\le j\le M$.
+\end{proposition}
+\begin{proof}
+Homogeneous monomials of degree $M$ in $q_0,q_2$ span a differential
+module of rank $M+1$. The two periods are algebraically independent
+over $K$ by Proposition~\ref{prop:galois}: after extending constants to
+$\C$ the group is still $\GL_2$, and a first column of its generic
+frame has no polynomial relation. Thus the indicated monomials
+are linearly independent. The representation $\Sym^M$ of $\GL_2$ is
+irreducible in characteristic zero. Consequently the differential
+submodule generated by the nonzero polynomial \eqref{eq:Hankel} is the
+whole module, so its cyclic equation has order $M+1$. The exponential
+factors follow by taking the symmetric power of the two formal factors
+at zero.
+\end{proof}
+
+At size two, for example, $Z_2(\lambda)=q_0(\lambda/2)q_2(\lambda/2)$,
+and elimination gives
+\begin{equation}\label{eq:M2ODE}
+ \begin{split}
+ 8\lambda^4 Z_2'''+4\lambda^2(16\lambda+3)Z_2''
+ +2(55\lambda^2+18\lambda+2)Z_2'
+ +3(10\lambda+3)Z_2=0.
+ \end{split}
+\end{equation}
+This has been checked symbolically against the symmetric-square system.
+The determinant and holonomic methods are consistent with, and do not
+replace, the established Painlev\'e description of quartic weights
+\cite{ClarksonJordaan}.
+
+Write $Z_M\sim\sum_{n\ge0}(-\lambda)^n w_{M,n}$.
+With Gaussian covariance
+$\E[X_{ij}X_{kl}]=M^{-1}\delta_{il}\delta_{jk}$, Wick's rule yields
+\begin{equation}\label{eq:Wickmatrix}
+ w_{M,n}=\frac1{4^n n!}\sum_{\alpha}M^{F(\sigma\alpha)-n}.
+\end{equation}
+Here $\sigma$ is a product of $n$ specified 4-cycles, $\alpha$ runs over
+pairings of their $4n$ darts, and $F$ counts permutation cycles. The sum
+includes disconnected diagrams. In particular,
+$w_{M,0}=1$ and $w_{M,1}=(2M^2+1)/4$.
+Connected diagrams instead describe $\log Z_M$.
+
+This matters when choosing restrictions. Retaining a genus range changes
+the coefficients in \eqref{eq:Wickmatrix}; it need not retain all moment
+positivity conditions used below. Likewise, Tanasa's multi-matrix
+schemes retain color, strand and insertion conditions
+\cite{Tanasa,BNT}. Such conditions must be imposed before a graph sum
+is identified with a particular integral. A formal interaction which
+is not positive cannot be assigned the positivity bounds of this paper.
+
+\section{Classification by positive kernel order}\label{sec:positive}
+The next theorem gives a second precise meaning to the choice of a
+restriction. It concerns a class of positive coefficient realizations
+and resummations, not a literal base change of fields.
+
+\begin{definition}
+A normalized positive generalized Stieltjes representation of order
+$\beta>0$ is
+\begin{equation}\label{eq:Sbeta}
+ f(\lambda)=\int_{[0,\infty)}(1+\lambda s)^{-\beta}\dd\rho_\beta(s),
+ \qquad\rho_\beta([0,\infty))=1.
+\end{equation}
+Its exact order is the infimum of admissible $\beta$.
+\end{definition}
+This is the normalized convention for generalized Stieltjes functions
+\cite{Sokal,KarpPrilepkina,KarpHypergeometric}. If all moments exist, its unsigned
+asymptotic coefficients and representing moments satisfy
+\begin{equation}\label{eq:reweight}
+ f(\lambda)\sim\sum_{n\ge0}(-\lambda)^n w_n,
+ \qquad \mu_{\beta,n}:=\int s^n\dd\rho_\beta(s)
+                  =\frac{n!w_n}{(\beta)_n}.
+\end{equation}
+Thus a choice of order prescribes a particular reweighting of the
+same combinatorial coefficients.
+
+\begin{theorem}\label{thm:exactorder}
+Let $Q$ be a strictly positive homogeneous polynomial of degree $2m$ on
+$\mathbb R^d\setminus\{0\}$, with $m\ge2$, and let $X$ be a standard
+Gaussian vector. For
+$f_Q(\lambda)=\E e^{-\lambda Q(X)}$, the admissible orders in
+\eqref{eq:Sbeta} are exactly
+\[
+ \beta\in[d/(2m),\infty).
+\]
+Put $a=d/(2m)$. A representing random variable at the minimal order is
+\begin{equation}\label{eq:rho}
+ T=(2m)^m Q(\Omega)\prod_{j=1}^{m-1}G_{a+j/m},
+\end{equation}
+where $\Omega$ is uniform on the unit sphere and the $G_b$ are
+independent gamma variables of shape $b$ and scale one, independent of
+$\Omega$. For every $\beta>a$, a representing variable is
+$T B$, with independent $B\sim\operatorname{Beta}(a,\beta-a)$.
+\end{theorem}
+\begin{proof}
+Write $X=R\Omega$. Then $S=R^2/2$ has the gamma law of shape $d/2=ma$,
+independently of $\Omega$. Gamma multiplication gives the identity in law
+\begin{equation}\label{eq:gammaproduct}
+ S^m\ \stackrel{\mathrm{law}}=\ m^m\prod_{j=0}^{m-1}G_{a+j/m}.
+\end{equation}
+For rigor, this identity follows from the gamma multiplication formula
+at imaginary Mellin arguments, hence from equality of the characteristic
+functions of the logarithms. It does not assume that positive integer
+moments determine the law. Since
+$Q(X)=2^m S^m Q(\Omega)$, conditioning on the gamma variable $G_a$
+proves $f_Q=\E(1+\lambda T)^{-a}$.
+
+Euler's beta identity gives
+\begin{equation}\label{eq:betainclusion}
+ (1+\lambda s)^{-a}
+   =\E_B(1+\lambda sB)^{-\beta},\qquad \beta>a,
+\end{equation}
+which proves inclusion in every larger order. This is the positive
+probability form of the usual inclusion of Stieltjes classes
+\cite[Theorem 3]{KarpPrilepkina}.
+
+Finally, scaling $X=\lambda^{-1/(2m)}Y$ gives
+\begin{equation}\label{eq:strongasymptotic}
+ \lambda^a f_Q(\lambda)\longrightarrow
+ c_Q=(2\pi)^{-d/2}\int_{\mathbb R^d}e^{-Q(Y)}\dd Y\in(0,\infty).
+\end{equation}
+Strict positivity on the sphere justifies dominated convergence and
+finiteness. If a representation of order $\beta<a$ existed, monotone
+convergence would give
+$\lambda^\beta f_Q(\lambda)\to\int s^{-\beta}\dd\rho_\beta(s)>0$,
+possibly infinite. This contradicts \eqref{eq:strongasymptotic}.
+\end{proof}
+
+\begin{corollary}\label{cor:matrixorder}
+The exact order for \eqref{eq:matrix} is $M^2/4$. It is an ordinary
+Stieltjes function if and only if $M=1$ or $M=2$. Its minimal-order
+representing variable is
+\begin{equation}\label{eq:matrixrho}
+ T_M=\frac4M\Tr(\Omega^4)G_{(M^2+2)/4},
+ \qquad\Tr(\Omega^2)=1.
+\end{equation}
+\end{corollary}
+\begin{proof}
+Set $Y=\sqrt M X$ in \eqref{eq:matrix} and apply the theorem to
+$Q(Y)=\Tr(Y^4)/(4M)$ on its $M^2$ real coordinates. On the unit sphere,
+$1/M\le\Tr(\Omega^4)\le1$.
+\end{proof}
+
+Already this classification excludes a tempting approximation argument:
+at size three, ordinary Stieltjes--Pad\'e convergence cannot be invoked
+for $Z_3$. The obstruction is its decay $\lambda^{-9/4}$, rather than
+a failure of complete monotonicity. The generalized positive
+representation remains available.
+
+\section{Choosing the strongest positive moment restriction}\label{sec:best}
+Fix an admissible order $\beta$ and suppose that the coefficients
+$w_0,\ldots,w_{2n}$ are known. From \eqref{eq:reweight} construct the
+$n$-node Gauss rule for $\rho_\beta$, denoted $G_{\beta,n}$, and the
+$(n+1)$-node left Gauss--Radau rule $R_{\beta,n}$ with fixed node zero.
+The latter's nonzero nodes are the Gauss nodes for $s\dd\rho_\beta(s)$.
+Apply both rules to $h_\beta(s)=(1+\lambda s)^{-\beta}$ and write
+$L_{\beta,n}=G_{\beta,n}(h_\beta)$ and
+$U_{\beta,n}=R_{\beta,n}(h_\beta)$.
+Assume the relevant Hankel moment matrices are positive definite; the
+measures in Theorem~\ref{thm:exactorder} have this property.
+
+\begin{lemma}\label{lem:extremal}
+For every $\lambda>0$,
+\[
+ L_{\beta,n}\le f(\lambda)\le U_{\beta,n}.
+\]
+Moreover, $L_{\beta,n}$ is the smallest possible value of
+$\int h_\beta\dd\nu$ over positive measures sharing moments through
+degree $2n-1$, and $U_{\beta,n}$ is the largest possible value over
+those sharing moments through degree $2n$.
+\end{lemma}
+\begin{proof}
+Hermite interpolation at the Gauss nodes, with multiplicity two, has
+degree at most $2n-1$. Its remainder has the sign of
+$h_\beta^{(2n)}>0$ times the square of the nodal polynomial.
+It therefore lies below $h_\beta$ on $[0,\infty)$.
+Integrating against any measure with the prescribed moments gives
+the lower bound. The discrete Gauss measure has those moments and
+attains equality, proving the extremal assertion.
+
+For Radau interpolation use the simple node zero and double nonzero
+nodes. The remainder has the sign of
+$s h_\beta^{(2n+1)}<0$ times a square, so the interpolant is an upper
+bound. The discrete Radau measure matches moments through degree $2n$
+and attains it. All integrals exist since the interpolants have the
+specified degrees. This is the classical sign mechanism for positive
+quadrature bounds \cite{Gautschi,LRW}.
+\end{proof}
+
+\begin{theorem}[Order selection]\label{thm:selection}
+Suppose that $f$ has a representation of order $a>0$ with all moments
+finite. For $a\le\beta_1<\beta_2$, form the moments at each order from
+the same coefficients $w_j$ by \eqref{eq:reweight}. Then
+\begin{equation}\label{eq:dominance}
+ L_{\beta_2,n}\le L_{\beta_1,n}\le f(\lambda)
+ \le U_{\beta_1,n}\le U_{\beta_2,n},\qquad\lambda>0.
+\end{equation}
+Hence the smallest admissible order gives the strongest bounds in
+this hierarchy, at each truncation and each positive coupling.
+\end{theorem}
+\begin{proof}
+For any positive measure $\nu_1$ with the prescribed order-$\beta_1$
+moments through degree $k$, let $\nu_2$ be the law of $SB$ where
+$S\sim\nu_1$ and
+$B\sim\operatorname{Beta}(\beta_1,\beta_2-\beta_1)$ independently.
+Its moments are
+\[
+ \int s^j\dd\nu_2=\frac{(\beta_1)_j}{(\beta_2)_j}
+                   \frac{j!w_j}{(\beta_1)_j}
+                 =\frac{j!w_j}{(\beta_2)_j},\qquad j\le k.
+\]
+The beta identity \eqref{eq:betainclusion} preserves the integral value.
+Thus every value attainable in the order-$\beta_1$ moment class is
+also attainable in the order-$\beta_2$ moment class. Taking infima
+for $k=2n-1$ and suprema for $k=2n$, and applying
+Lemma~\ref{lem:extremal}, proves \eqref{eq:dominance}.
+\end{proof}
+
+This is a uniform selection rule, with no estimated crossover parameter.
+It says that forgetting the beta factorization enlarges the possible
+values compatible with the coefficient data. At order one the rules
+are the familiar Stieltjes Pad\'e bounds $[n-1/n]$ and $[n/n]$
+\cite{Allen}. At nonintegral orders they are
+positive sums of fractional powers, so they need not be rational
+functions of $\lambda$.
+
+\begin{theorem}\label{thm:convergence}
+For the quartic and sextic cases of Theorem~\ref{thm:exactorder}, the
+minimal-order bounds converge monotonically to $f_Q(\lambda)$ at every
+$\lambda>0$. The same holds at every larger admissible order.
+\end{theorem}
+\begin{proof}
+The random variable $Q(\Omega)$ is bounded. Formula \eqref{eq:rho}
+therefore gives, for a fixed constant $C$, moments bounded by
+\[
+ \mu_{a,n}\le C^n\prod_{j=1}^{m-1}(a+j/m)_n.
+\]
+For $m=2,3$, Stirling's formula implies
+$\mu_{a,n}^{-1/(2n)}\ge c\,n^{-(m-1)/2}$ for all sufficiently large
+$n$. The Stieltjes Carleman series diverges, so the representing measure
+is determinate. At higher order the beta factor is bounded by one and
+does not worsen this estimate.
+
+By the extremal description, increasing $n$ increases the lower bound
+and decreases the upper bound. The discrete Gauss and Radau measures
+are tight since their first moments are fixed. For any fixed moment,+a higher fixed even moment bounds the tails uniformly as $n$ grows;
+thus every weak limit has all the prescribed moments. Determinacy
+forces every such limit to be $\rho_\beta$. Finally, $h_\beta$ is bounded
+and continuous, so both quadratures converge to its integral.
+\end{proof}
+
+\section{A sextic consequence and a limit of the method}\label{sec:sextic}
+Let $X$ be a standard real Gaussian and define
+\[
+ P_{m,k}(\lambda)=\frac{\E[X^{2k}e^{-\lambda X^{2m}/(2m)}]}
+ {(2k-1)!!},\qquad k\ge0,
+\]
+with $(-1)!!=1$. This normalization gives $P_{m,k}(0)=1$.
+Under the $X^{2k}$-weighted Gaussian measure, $X^2/2$ has gamma
+shape $k+1/2$. The proof of Theorem~\ref{thm:exactorder} applies
+unchanged. Its exact order and representing variable are
+\begin{equation}\label{eq:scalarhigher}
+ a_k=\frac{2k+1}{2m},\qquad
+ T_{m,k}=(2m)^{m-1}\prod_{j=1}^{m-1}G_{a_k+j/m}.
+\end{equation}
+All its moments come explicitly from the Wick coefficients
+\begin{equation}\label{eq:scalarhigherwick}
+ w_{m,k,n}=\frac{(2k+2mn-1)!!}
+ {(2k-1)!!(2m)^n n!}.
+\end{equation}
+
+\begin{corollary}\label{cor:sextic}
+For the scalar sextic model ($m=3$), every normalized even correlation
+function admits convergent, certified bounds at all positive couplings:
+\begin{equation}\label{eq:ratio}
+ (2k-1)!!\frac{L_{a_k,n}^{(k)}}{U_{a_0,n}^{(0)}}
+ \ \le\ \langle x^{2k}\rangle_\lambda
+ \ \le\ (2k-1)!!\frac{U_{a_k,n}^{(k)}}{L_{a_0,n}^{(0)}}.
+\end{equation}
+The numerator and denominator rules use \eqref{eq:scalarhigherwick}.
+Their endpoints converge to the correlation function.
+\end{corollary}
+\begin{proof}
+Each factor is positive, and the same two-gamma Carleman argument in
+Theorem~\ref{thm:convergence} applies for every fixed $k$.
+Divide the respective bounds and use
+$\langle x^{2k}\rangle=(2k-1)!!P_{3,k}/P_{3,0}$.
+\end{proof}
+
+The corollary supplies a concrete answer to part of the convergence
+question suggested by the even-potential direction in \cite{FGL}.
+Its approximants are generally algebraic functions, rather than the
+rational Schwinger--Dyson approximants studied there. Convergence of
+those particular sextic truncations, and their possible product
+structure, remain separate questions.
+
+There is also a precise reason not to extrapolate this argument to every
+degree. For $m\ge4$, already the scalar minimal-order measure in
+\eqref{eq:scalarhigher} is a product of at least three gamma variables.
+It is moment indeterminate by the product criterion of Lin--Stoyanov
+\cite[Corollary 1]{LinStoyanov}. Thus distinct positive measures share
+all the reweighted Wick moments. The generalized Stieltjes transform
+is injective on finite measures: substitute $\lambda=1/x$, divide the
+result by $x^a$, and write $(x+s)^{-a}$ as a gamma Laplace integral.
+Uniqueness of the two successive Laplace transforms proves the assertion.
+These measures therefore give different functions for some positive
+couplings, despite identical formal expansions.
+
+This obstruction concerns reconstruction from that positive moment class.
+It does not make the original integral ambiguous. The differential
+equation, its analytic conditions, or the full gamma-product law
+\eqref{eq:scalarhigher} can supply information absent from the integer
+moments. In the proposed torsor approach, retaining such information is
+essential: not every useful restriction is equally informative, even
+when all its formal coefficients are known.
+
+Exact relations also strengthen finite bounds in the determinate case.
+For the sextic model, integration by parts gives
+$\langle x^2\rangle+\lambda\langle x^6\rangle=1$.
+An interval $[l_6,u_6]$ for the sixth moment therefore restricts the
+second moment to $[1-\lambda u_6,1-\lambda l_6]$.
+Intersecting this with its independently computed interval retains
+information common to the moments. At $\lambda=10$, the two-node rules
+give $0.0742<\langle x^2\rangle<1.4575$; the intersection improves the
+upper bound to $0.9154$. The archived calculation certifies both
+intervals. This elementary improvement uses an exact equation in addition
+to the separate positive moment representations.
+
+\section{Certified computations and practical choices}\label{sec:computations}
+The accompanying program constructs \eqref{eq:Hankel} with rational
+truncated polynomials to obtain $w_{M,n}$, then forms
+$\mu_{\beta,n}$ by \eqref{eq:reweight}. Exact rational Hankel systems
+give monic orthogonal polynomials. Arb root isolation and positive
+Christoffel weights enclose the quadrature nodes, weights and evaluations.
+The program checks orthogonality and moment matching exactly or with
+certified balls, as appropriate. No fitted integral values enter the
+quadratures.
+
+\begin{table}[ht]
+\centering
+\input{quadrature-table.tex}
+\caption{Minimal-order bounds for $Z_M(1)$. The Gauss rule has $n$ nodes,
+and Radau has $n+1$; moments through degree $2n$ suffice for the pair.
+Displayed endpoints are rounded outward. Widths bound the unrounded
+certified intervals.}\label{tab:quadrature}
+\end{table}
+
+The archived checks cover $1\le M\le4$, $1\le n\le16$,
+$\lambda=1/100,1/10,1,10,100$, and orders
+$a,a+1,a+2$, together with ordinary order one when it is admissible.
+They verify the signs, monotonicity in $n$, and the order dominance in
+Theorem~\ref{thm:selection}. Independent Bessel evaluations, inserted
+in \eqref{eq:Hankel}, lie in every enclosure. The same program checks
+the two independent formulas for sextic representing moments and
+constructs bounds for the partition function and the second, fourth and
+sixth correlations. Independently enclosed convergent strong expansions
+lie in these bounds. These finite tests supplement
+the proofs; they are not the convergence argument.
+
+Positive moment bounds are not always the fastest evaluation. For the
+quartic model we can compare certified Taylor bounds directly.
+At size two let $w_n=w_{2,n}$ and define
+\[
+ B_n=\sum_{j=0}^n
+ \frac{\Gamma(j/2+1/4)\Gamma((n-j)/2+3/4)}{j!(n-j)!}.
+\]
+The two expansions and their degree-$K$ absolute error bounds are
+\begin{align*}
+ Z_2(\lambda)&\sim\sum_{n\ge0}(-\lambda)^n w_n,
+ &\epsilon_{\rm G}&\le\lambda^{K+1}w_{K+1},\\
+ Z_2(\lambda)&=\frac1{\pi\lambda}
+ \sum_{n\ge0}(-\sqrt{2/\lambda})^n B_n,
+ &\epsilon_{\rm Q}&\le\frac{(2/\lambda)^{(K+1)/2}B_{K+1}}{\pi\lambda}.
+\end{align*}
+The second bound follows by expanding the quadratic part under the
+positive product quartic measure, rather than by assuming that alternating
+terms decrease. At an ordinary center $\lambda=1$, Cauchy's estimate on
+$|\lambda-1|=R<1$ gives
+\[
+ \epsilon_{\rm T}\le
+ \frac{(|\lambda-1|/R)^{K+1}}{1-|\lambda-1|/R},
+ \qquad |\lambda-1|<R,
+\]
+because $|Z_M(\lambda)|\le1$ for $\Re\lambda\ge0$.
+The Taylor coefficients use the seed periods at the center.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrr}
+\toprule
+$\lambda$ & Gaussian terms & quartic terms & Taylor terms at $1$\\
+\midrule
+$0.01$ & 10 & 591 & ---\\
+$0.1$ & --- & 91 & ---\\
+$0.9$ & --- & 29 & 11\\
+$1$ & --- & 27 & 1\\
+$1.1$ & --- & 26 & 11\\
+$10$ & --- & 13 & ---\\
+$100$ & --- & 8 & ---\\
+\bottomrule
+\end{tabular}
+\caption{Terms sufficient to certify absolute error below $10^{-10}$
+for $Z_2$, including Arb roundoff. Gaussian sums were searched through
+degree 128, quartic sums through degree 1024. A dash denotes failure of
+that bound in the search or exclusion from the chosen Taylor circle
+$R=0.9$. Seed computation is excluded from the Taylor counts.}
+\label{tab:charts}
+\end{table}
+
+For an actual choice, first fix the available coefficient data and the
+cost to obtain new coefficients or seed periods. Within positive moment
+methods use order $M^2/4$. Then compare its certified interval with
+the weak, strong and ordinary Taylor bounds at the requested precision.
+The narrowest interval at a fixed budget is a reproducible criterion;
+it does not imply minimum running time without including coefficient,
+root-isolation and seed costs. At $\lambda=1$, for instance, a short
+convergent quartic expansion is much more accurate than a 16-node moment
+rule. Moment rules instead give a seed-free method from Wick coefficients
+which extends beyond the rank-two special-function example.
+Rigorous special-function software already changes between expansions
+and continuation methods \cite{Johansson}. Constructive and generalized
+Borel methods provide other established reorganizations of perturbation
+theory \cite{Rivasseau,Mera}. The existence of several quartic expansions
+is not itself a new numerical method.
+
+\section{Arithmetic restrictions and remaining questions}
+The connection has an integral model over
+$\mathbb Z[1/2,t,t^{-1}]$. It can therefore be reduced at any odd prime.
+This is a change of base ring; a homomorphism $\Q\to\mathbb F_p$ does
+not exist. Such a reduction need not admit the characteristic-zero local
+frames.
+
+\begin{proposition}\label{prop:pcurvature}
+With $\nabla=D-A$, the trace of the reduced $p$-curvature is
+\[
+ \Tr\Psi_p=\frac1{4t^{2p}}\ne0\qquad(p\text{ odd}).
+\]
+Consequently the reduced connection has no full horizontal frame over
+$\mathbb F_p((t))$ or $\mathbb F_p((t^{-1/4}))$ with their standard
+derivations.
+\end{proposition}
+\begin{proof}
+For the determinant connection write
+$a=\Tr A=-t^{-1}-(4t^2)^{-1}$. Its $p$-curvature is
+$-(D^{p-1}a+a^p)$. Wilson's identity gives
+$D^{p-1}(-t^{-1})=t^{-p}$; the double-pole term differentiates to
+zero. The simple-pole terms cancel with those of $a^p$, leaving the
+displayed value. Determinants commute with the connection, so this is
+the trace in rank two. In either displayed Laurent field $D^p=0$.
+A full horizontal frame would trivialize the connection and force
+its $p$-curvature to vanish, a contradiction.
+\end{proof}
+
+Finite rational jets can still be reduced whenever their denominators
+are units. The companion computation verifies strong-basis jets through
+degree 24 at $p=53,59,61$, and independently calculates the curvature
+at $p=3,5,7,11$. Prime-field data can reconstruct finite rational
+coefficients with denominator and height bounds; they do not directly
+approximate a real exponential period. A Frobenius or exponential-sum
+realization needs its own comparison theorem.
+
+There are therefore two proved classifications here: the formal local
+types of a specified differential torsor, and the admissible positive
+kernel orders for a specified family of integrals. The second comes
+with a selection theorem and, for quartic and sextic interactions,
+convergence. Neither is a classification of every graph restriction or
+every arithmetic realization.
+
+The next questions are concrete. For constrained multi-matrix models,
+can one compute the needed reweighted moments from finite schemes
+while retaining positivity? Can extra algebraic information in the
+period system sharpen the positive moment bounds, or remove the
+indeterminacy obstruction at higher degree? For sextic models, how do
+the certified quadratures compare with the particular rational
+Schwinger--Dyson truncations, whose convergence is not proved here?
+These questions concern further results, rather than consequences
+already supplied by the word ``torsor.''
+
+\bibliographystyle{abbrvurl}
+\bibliography{integral-torsor}
+\end{document}
