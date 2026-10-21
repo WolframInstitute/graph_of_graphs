@@ -68,8 +68,8 @@ than proposing the CAT(0) geometry of histories as a new theorem.
 
 Our setting is finite and explicit. A history consists of a fixed
 inventory of token-replacement occurrences, with no absence tests or
-other global application conditions. A permutation torsor describes
-birth-to-consumption wiring; a second one describes schedules.
+other global application conditions. Two preserved blocks inside one
+permutation torsor describe birth-to-consumption wiring and schedules.
 Forgetting schedules produces a linear-extension weight, which must
 be distinguished from the graph automorphism weight.
 
@@ -198,7 +198,7 @@ This is the stationary law of the local Whitehead chain
 automorphism orders $12$ and $8$; their $288$ and $432$ configurations
 give probabilities $2/5$ and $3/5$.
 
-\section{Histories as restrictions of a product torsor}
+\section{Histories as restrictions of one permutation torsor}
 
 \subsection{The replacement model}
 A token is a typed ordered tuple of vertex names. Equal tuples may
@@ -218,11 +218,20 @@ These restrictions ensure that incomparable occurrences commute.
 Let $O$ be the disjoint union of the initial tokens and all event
 outputs. Let $I$ be the disjoint union of the final token positions
 and all event inputs. Assume $|O|=|I|=m$ and $|E|=k$.
-Consider
+Form the disjoint unions $A=O\sqcup\{1,\ldots,k\}$ and
+$B=I\sqcup E$, and consider the single permutation torsor
 \begin{equation}\label{eq:historytorsor}
- T_{\rm hist}=\Bij(O,I)\times\Bij(\{1,\ldots,k\},E).
+ T_{\rm hist}=\Bij(A,B).
 \end{equation}
-A point consists of a birth-to-consumption wiring and an event order.
+Forbid wires between the two different kinds of blocks:
+$p_{o,e}=p_{s,i}=0$ for $o\in O$, $e\in E$,
+$s\in\{1,\ldots,k\}$ and $i\in I$.
+The resulting restriction is canonically
+$\Bij(O,I)\times\Bij(\{1,\ldots,k\},E)$.
+Indeed, a block-preserving bijection has exactly these two restrictions,
+and their disjoint union is its unique inverse construction.
+Write $W_{oi}=p_{o,i}$ and $R_{se}=p_{s,e}$.
+A point now consists of a birth-to-consumption wiring and an event order.
 Restrict it by the following conditions:
 \begin{enumerate}
 \item a wire joins equal token types and equal ordered vertex tuples;
@@ -270,14 +279,52 @@ incomparable events preserves execution. Every linear extension is
 therefore a schedule of the same occurrence history.
 \end{proof}
 
-The assertion concerns a fixed finite inventory. All histories within
-a finite budget are covered by finitely many such inventories and
-vertex substitutions up to relabelling. Padding the two bijections
-to fixed sizes and using a selector permutation embeds this family
-into restrictions of one larger product torsor, after quotienting
-the unused selector labels. Arbitrarily large histories require a
-family of budgets. No fixed finite permutation group describes
-unboundedly many occurrences.
+The assertion concerns a fixed finite inventory. A finite budget
+bounds the number of occurrences, tokens and fresh names. With a
+fixed finite rule set and initial state, there are only finitely
+many inventories and vertex substitutions up to relabelling.
+Choose one framing of each inventory. The following construction
+puts their disjoint union inside one torsor without adding a
+multiplicity from unused labels.
+
+\begin{proposition}\label{prop:finiteunion}
+Let $X_j\subseteq\Bij(A_j,B_j)$, $1\le j\le q$, be finitely many
+restrictions given by polynomial equations in permutation coordinates.
+Set $d=\max_j|A_j|$. The disjoint union $\coprod_j X_j$ has an
+explicit presentation as a restriction of a permutation torsor
+on $d+q$ elements. The presentation preserves points and counts
+over every field.
+\end{proposition}
+\begin{proof}
+Choose labels on each $A_j,B_j$ and pad its permutation to $d$
+elements by fixing all added labels. In a torsor on $d+q$ elements,
+require the first $d$ and the last $q$ labels to be preserved as
+blocks. Write $p$ and $s$ for the coordinates on these blocks.
+Index the second block by $\Z/q\Z$ and choose its $q$ distinct cyclic shifts
+$c_j(a)=a+j-1\pmod q$ and set
+\[
+ u_j=\prod_{a\in\Z/q\Z} s_{a,c_j(a)}.
+\]
+Impose $\sum_j u_j=1$. Orthogonality of permutation coordinates
+makes the $u_j$ pairwise orthogonal idempotents, so this selects
+exactly one shift over any field. For every equation $F(p)=0$
+defining the padded $X_j$, impose $u_jF(p)=0$.
+In selector component $j$ the first block therefore belongs exactly
+to the padded $X_j$. Its unused labels are fixed, and its second
+block is the prescribed shift. Each point of $X_j$ has exactly
+one image, and restriction to the first block recovers it.
+This proves the assertion, including preservation of counts.
+\end{proof}
+
+Applied to the framed inventories above, the proposition gives a
+single permutation torsor for all histories within the chosen
+budget. Forgetting frames is a subsequent symmetry quotient;
+it is not needed to remove padding multiplicities. This is an
+encoding of finite histories, not a claim that every rewrite is
+a permutation of observable states: distinct states can have the
+same successor. Arbitrarily large histories require a family of
+budgets. No fixed finite permutation group describes unboundedly
+many occurrences.
 
 \subsection{Schedules change the induced measure}
 Let $\Omega$ be a finite set of acyclic wirings for fixed inventory,

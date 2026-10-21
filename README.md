@@ -14,7 +14,7 @@ intermediates, working notes and exploratory scripts are kept locally.
 | [Quartic period torsor](integral-torsor-paper/integral-torsor.tex) | [PDF](integral-torsor-paper/integral-torsor.pdf) | Local period series, finite matrix integrals and optimal positive moment bounds. |
 | [Outer space](outer-space-paper/outer-space.tex) | [PDF](outer-space-paper/outer-space.pdf) | A proved cubic refinement-transfer identity, Euler observables and a certificate for the known first Morita class. Its topology and Euler formulas are established results; novelty of the transfer remains unestablished. |
 | [Bessel recursion](bessel-recursion-paper/bessel-recursion.tex) | [PDF](bessel-recursion-paper/bessel-recursion.pdf) | Identification of the Broadhurst–Roberts recursion with the inverse de Rham pairing, including resonance, and factorial-scaled integrality. |
-| [Histories and states](history-state-paper/history-states.tex) | [PDF](history-state-paper/history-states.pdf) | Permutation-torsor presentations, schedule weights, a criterion for observable states to inherit the history median, minimal event-bit repairs and confluent systems with nontrivial state topology. |
+| [Histories and states](history-state-paper/history-states.tex) | [PDF](history-state-paper/history-states.pdf) | A single permutation torsor for bounded framed histories, schedule weights, a criterion for observable states to inherit the history median, minimal event-bit repairs and confluent systems with nontrivial state topology. |
 
 The Whitehead manuscript also has a [review layout](rule-a-paper/local-whitehead-chain-review.pdf).
 
