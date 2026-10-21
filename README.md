@@ -2,7 +2,7 @@
 
 This repository contains manuscripts in TeX and PDF, Wolfram notebooks,
 and the code and data needed to reproduce their computations. There are
-seven manuscripts, each with one PDF, and two notebooks.
+eight manuscripts, each with one PDF, and two notebooks.
 
 ## Manuscripts
 
@@ -12,9 +12,10 @@ seven manuscripts, each with one PDF, and two notebooks.
 | [Field dynamics](whitehead-field-dynamics.tex) | [PDF](whitehead-field-dynamics.pdf) | 31 | Pair averaging on evolving cubic graphs, finite consensus schedules and contraction estimates. |
 | [Computational companion](whitehead-field-dynamics-computational-notes.tex) | [PDF](whitehead-field-dynamics-computational-notes.pdf) | 8 | Exact finite calculations accompanying the field-dynamics paper and notebooks. |
 | [Quartic period torsor](integral-torsor-paper/integral-torsor.tex) | [PDF](integral-torsor-paper/integral-torsor.pdf) | 16 | A rank-two period system, its local series and finite Hermitian matrix integrals; classification of positive representations and selection of the strongest moment bounds. |
-| [Outer space](outer-space-paper/outer-space.tex) | [PDF](outer-space-paper/outer-space.pdf) | 8 | Cubic refinement transfer to the Whitehead stationary law, ordinary and virtual Euler observables, and an exact certificate for the known first Morita class. |
+| [Outer space](outer-space-paper/outer-space.tex) | [PDF](outer-space-paper/outer-space.pdf) | 9 | A stochastic reformulation of established forest sums, with full refinement multiplicities, ordinary and virtual Euler observables, and a certificate for the known first Morita class. |
 | [Bessel recursion](bessel-recursion-paper/bessel-recursion.tex) | [PDF](bessel-recursion-paper/bessel-recursion.pdf) | 8 | Identification of the Broadhurst–Roberts recursion with the inverse de Rham pairing, including resonance, and factorial-scaled integrality. |
 | [Histories and states](history-state-paper/history-states.tex) | [PDF](history-state-paper/history-states.pdf) | 11 | Permutation-torsor presentations, schedule weights, a criterion for observations to inherit the history median, event-bit repairs and confluent systems with nontrivial state topology. |
+| [Curvature from causal orders](causal-order-paper/causal-order.tex) | [PDF](causal-order-paper/causal-order.pdf) | 9 | Recovery of latent null ranks from unlabelled two-dimensional orders, optimal curvature estimation for positive smooth densities, and stability under the choice of realizer. |
 
 Page counts refer to the included PDFs.
 
@@ -28,13 +29,21 @@ The scope of the later papers matters:
   positive approximation schemes. Those approximations are not literal
   changes of coefficient field. Its finite matrix-size results do not
   establish estimates uniform in matrix size.
-- The Outer space paper applies a proved refinement identity to established
-  topology and Euler formulas. The Morita class is also known. Priority for
-  the transfer identity remains unestablished, and the identity alone does
-  not give an efficient sampling algorithm.
+- The Outer space paper includes a source-by-source assessment of its
+  relation to earlier work. Its refinement count and counting argument
+  use established methods; its contribution is the explicit cubic-law
+  formulation and finite certificates. The Euler formulas, homology and
+  Morita class are known. No efficient sampling bound is proved.
 - The history paper credits the established event-structure and cubical
   geometry. Its CAT(0) statement concerns occurrence prefixes; the criterion
   for observable states to inherit their median is proved separately.
+- The causal-order paper assumes independent events in a two-dimensional
+  rectangle, known volume, and a density bounded away from zero. It proves
+  matching statistical bounds under those assumptions. Modular
+  decomposition, copula ranks and derivative-estimation rates are
+  established inputs. Priority for the transfer from the intersection
+  order remains under review. A rewriting rule producing the required
+  sampling law and an equation of motion remain separate problems.
 
 Further research drafts remain local while their proofs and priority are
 reviewed.
@@ -74,6 +83,7 @@ To build one paper:
     make outer-space-paper
     make bessel-recursion-paper
     make history-state-paper
+    make causal-order-paper
 
 The full check also needs Lean's lake command and the native nauty bridge.
 With nauty/Traces installed, build the bridge first:
@@ -95,6 +105,7 @@ Individual checks are also available:
     make outer-space-check
     make bessel-recursion-check
     make history-state-check
+    make causal-order-check
 
 The history check compares independent incidence and execution
 enumerations, exhaustively tests 4,890 observation partitions, and checks
@@ -104,6 +115,8 @@ and full connection elimination for 3 through 32 Bessel factors.
 Quartic checks use exact rational arithmetic and Arb enclosures.
 The Outer space checks include orientation signs, refinement
 multiplicities and the cycle/cocycle certificate.
+The causal-order checks enumerate 7,456 two-realizers and independently
+verify the metric curvature, kernel identities and explicit examples.
 
 [Lean sources](lean/GogVerification/Averaging.lean) verify the specified
 finite averaging and permutation identities and consensus schedules over

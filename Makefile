@@ -8,15 +8,15 @@ WOLFRAM_KERNEL ?= /Applications/Wolfram.app/Contents/MacOS/WolframKernel
 	rule-a-paper rule-a-paper-packages integral-torsor integral-torsor-check \
 	outer-space-paper outer-space-check outer-forest-check \
 	bessel-recursion-paper bessel-recursion-check \
-	history-state-paper history-state-check clean
+	history-state-paper history-state-check causal-order-paper causal-order-check clean
 
 all: papers
 
 papers: paper rule-a-paper computational-notes integral-torsor \
-	outer-space-paper bessel-recursion-paper history-state-paper
+	outer-space-paper bessel-recursion-paper history-state-paper causal-order-paper
 
 check: papers lean python-check notebook-data-check integral-torsor-check \
-	outer-space-check bessel-recursion-check history-state-check
+	outer-space-check bessel-recursion-check history-state-check causal-order-check
 
 paper:
 	$(LATEXMK) -pdf -interaction=nonstopmode -halt-on-error whitehead-field-dynamics.tex
@@ -55,6 +55,12 @@ history-state-paper:
 history-state-check:
 	$(MAKE) -C history-state-paper check
 
+causal-order-paper:
+	$(MAKE) -C causal-order-paper all
+
+causal-order-check:
+	$(MAKE) -C causal-order-paper check
+
 outer-forest-check:
 	$(PYTHON) research/outer-forest-complex/check_forested_complex.py --max-rank 4
 	$(PYTHON) research/outer-forest-complex/check_witness.py
@@ -68,7 +74,8 @@ python-check:
 		gog_generate.py gog_ball_growth.py gog_degree_diagnostics.py \
 		gog_edge_model_experiments.py gog_support_feature_analysis.py \
 		scripts/build_small_gog_models.py rule-a-paper/verify_rule_a.py \
-		rule-a-paper/render_rule_a_table.py history-state-paper/check_history_states.py
+		rule-a-paper/render_rule_a_table.py history-state-paper/check_history_states.py \
+		causal-order-paper/check_rank_ambiguity.py causal-order-paper/check_curvature.py
 
 notebook-data-check:
 	$(PYTHON) scripts/build_small_gog_models.py --check
@@ -101,3 +108,4 @@ clean:
 	$(MAKE) -C outer-space-paper clean
 	$(MAKE) -C bessel-recursion-paper clean
 	$(MAKE) -C history-state-paper clean
+	$(MAKE) -C causal-order-paper clean

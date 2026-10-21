@@ -22,7 +22,7 @@
 \small \texttt{akolpakov@uaustin.org}\\[0.75ex]
 \small The Wolfram Institute for Computational Foundations of Science\\
 \small \texttt{akolpakov@wolframinstitute.org}}
-\date{Research draft, 20 October 2026}
+\date{Research draft, 21 October 2026}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -142,7 +142,9 @@ unmarking anticommute. Thus
 \]
 With finite stabilizers treated in characteristic zero, this is the
 forested cubical model computing $H_*(\Out(F_r);\Q)$
-\cite[Section 3.2]{ConantVogtmann}. The presentation by cubic graphs
+\cite[Section 3.2, pp.~1210--1211]{ConantVogtmann};
+see also~\cite[Section 2.1]{BV2023}.
+The presentation by cubic graphs
 modulo IHX arises from a further filtration; it is not the same
 generator list.
 
@@ -169,6 +171,12 @@ would give coefficients one and one. Move multiplicities and cellular
 boundary coefficients therefore require different pairings.
 
 \section{The refinement identity}
+
+The following is the classical count of binary trees with distinct
+leaf labels. It is also the count underlying phylogenetic tree space
+\cite[Sections 1--2]{BHV}: root at one of the $d$ labelled leaves
+to obtain a rooted tree on $d-1$ remaining leaves. We include the
+short induction to fix the labelling convention.
 
 \begin{proposition}\label{prop:trees}
 A trivalent tree with $d$ distinctly labelled incident leaves has
@@ -263,8 +271,10 @@ The oriented quotient chain complex gives
 \[
  e(\Out(F_r))=\sum_{[H]\in\mathcal S_r}\epsilon(H).
 \]
-This is the ordinary rational Euler characteristic. It is generally
-different from the virtual one.
+This is the alternating sum of rational Betti numbers, called the
+ordinary or integral Euler characteristic. It is generally different
+from the virtual Euler characteristic, which is also commonly called
+the rational Euler characteristic.
 
 For clarity, the character form of Burnside's formula reads
 \begin{equation}\label{eq:burnside}
@@ -411,6 +421,45 @@ allow an independent check without trusting a rank or nullspace search.
 This is the known first Morita class: the prism is obtained by
 expanding the vertices of the three-edge theta graph into circles,
 as in \cite[Section 6.1]{Morita}. It is not a new homology class.
+
+\section{Relation to earlier work}
+
+The geometric and enumerative inputs have different roles.
+Outer space and its contractible spine are due to
+Culler--Vogtmann~\cite{CV86}. The cubical forest description and
+the filtered graph-complex description are established models
+\cite{ConantVogtmann}. The tree multiplicity in
+Proposition~\ref{prop:trees} is classical~\cite{BHV}.
+The virtual generating function originates in
+Smillie--Vogtmann~\cite{SmillieVogtmann}; the forest and formal
+Gaussian formulas used here appear in
+Borinsky--Vogtmann~\cite[Section 4]{BVQFT}.
+The ordinary Euler formula~\eqref{eq:burnside} is their
+Theorem~2.1 in~\cite{BV2023}. None is derived as a new invariant
+or generating function here.
+
+Theorem~\ref{thm:transfer} is a direct application of
+orbit--stabilizer, or finite groupoid integration~\cite{Groupoidification},
+to the classical refinement set. Its specific use here is to put
+both Euler observables on the fixed cubic probability space of
+\cite{Kolpakov}, with the correction $R(H)$ and all incidence
+symmetries retained. The proof makes that specialization explicit;
+it does not establish priority for a general refinement principle.
+It also gives neither a new asymptotic Euler formula nor a bound
+on the complexity or autocorrelation of the resulting estimator.
+
+The two-term prism cycle and its integer dual cochain provide
+an independently verifiable certificate in the stated orbit basis.
+The circle expansion is already part of Conant--Vogtmann's
+Morita construction~\cite[Section 6.1]{Morita}, and the nonzero
+class and low-rank homology are known.
+The present finite archives reproduce them; they do not extend
+the ranks reached by later computations~\cite{GVW}.
+The low-rank variance entries concern the particular observables
+$X,Y$ and prove no large-rank claim.
+Thus the paper is a stochastic reformulation with explicit
+proofs and certificates. A stronger contribution would require
+a new structural, computational or variance theorem.
 
 \section{What remains open}
 The refinement identity transfers exact sums, but its usefulness for

@@ -1,0 +1,30 @@
+[
+  {
+    "size": 4,
+    "base_permutations_with_small_proper_intervals": 2,
+    "ordered_two_realizers_checked": 4,
+    "largest_rank_discrepancy": 0,
+    "deterministic_bound": "largest proper common interval minus one"
+  },
+  {
+    "size": 5,
+    "base_permutations_with_small_proper_intervals": 22,
+    "ordered_two_realizers_checked": 60,
+    "largest_rank_discrepancy": 1,
+    "deterministic_bound": "largest proper common interval minus one"
+  },
+  {
+    "size": 6,
+    "base_permutations_with_small_proper_intervals": 154,
+    "ordered_two_realizers_checked": 488,
+    "largest_rank_discrepancy": 1,
+    "deterministic_bound": "largest proper common interval minus one"
+  },
+  {
+    "size": 7,
+    "base_permutations_with_small_proper_intervals": 1662,
+    "ordered_two_realizers_checked": 6904,
+    "largest_rank_discrepancy": 2,
+    "deterministic_bound": "largest proper common interval minus one"
+  }
+]

@@ -1,0 +1,666 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,microtype}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Prob}{\mathbb P}
+\newcommand{\R}{\mathbb R}
+\newcommand{\KL}{\operatorname{KL}}
+\newcommand{\TV}{\operatorname{TV}}
+\newcommand{\Lab}{\operatorname{Lab}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\calC}{\mathcal C}
+\numberwithin{equation}{section}
+\title{Curvature from unlabelled two-dimensional causal orders}
+\author{Alexander Kolpakov\\[0.5ex]
+\small Center for Science, Technology, Engineering, and Mathematics\\
+\small University of Austin, Austin, Texas, United States\\
+\small \texttt{akolpakov@uaustin.org}\\[0.75ex]
+\small The Wolfram Institute for Computational Foundations of Science\\
+\small \texttt{akolpakov@wolframinstitute.org}}
+\date{Research draft, 21 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Consider independent events in a two-dimensional causal rectangle with a
+positive smooth volume density, and retain only their unlabelled causal
+order. We prove that every two-order representation recovers the empirical
+null ranks to within $O(\log n/n)$, up to exchanging the two directions,
+outside an event of probability $O(\log^2 n/n)$.
+The proof combines classical modular decomposition with an empty-rectangle
+argument for densities bounded above and below.
+For a bounded $C^4$ class with fixed volume and uniform null marginals,
+this gives an estimator of scalar curvature at the marginal centre with
+mean squared error $O(n^{-2/5})$. A matching lower bound holds even
+when all event coordinates are observed.
+The permutation restrictions control the ambiguity of the latent
+coordinates; the remaining two quotient frames form a genuine
+two-element torsor. The statistical rate and the modular machinery
+have established antecedents. The contribution addressed here is
+their quantitative transfer to the partial-order observation model.
+\end{abstract}
+
+\section{The observation and the question}
+Let $c$ be a positive density on $[0,1]^2$ with uniform marginals:
+\begin{equation}\label{eq:copula}
+ \int_0^1c(u,v)\,dv=\int_0^1c(u,v)\,du=1.
+\end{equation}
+The metric on the open square is
+\begin{equation}\label{eq:metric}
+ g_c=-2c(u,v)\,du\,dv.
+\end{equation}
+Its volume is one and its chronology is the strict product order.
+Sample $Z_i=(U_i,V_i)$ independently with density $c$, then observe
+only the unlabelled poset
+\[
+ i<_Pj\quad\Longleftrightarrow\quad U_i<U_j,\ V_i<V_j.
+\]
+A causal Hasse diagram supplies the same information after transitive
+closure. Sampling labels, coordinates, an embedding and a null frame
+are not observed.
+
+Uniform marginals calibrate the null coordinates by marginal volume.
+They do not assert that the two coordinates are independent.
+For a physical rectangle of known volume $V$, the normalized model
+has metric $-2Vc\,du\,dv$ and all curvatures below are divided by $V$.
+The rectangle and its volume are part of the model.
+There is no claim of selecting a frame equivariantly in an unbounded
+Lorentz-invariant sprinkling.
+
+The target point is $z_*=(1/2,1/2)$, invariant under exchange of the
+two null directions. The scalar curvature, with the convention used
+throughout these notes, is
+\begin{equation}\label{eq:curvature}
+ R_c(z_*)=\left.
+ \left(\frac{2c_{uv}}{c^2}-\frac{2c_uc_v}{c^3}\right)\right|_{z_*}.
+\end{equation}
+Indeed $\Gamma^u_{uu}=\partial_u\log c$ and
+$\Gamma^v_{vv}=\partial_v\log c$ are the only nonzero Christoffel
+symbols; contracting the Ricci tensor gives
+$R=2c^{-1}\partial_u\partial_v\log c$.
+
+Order-based embedding and curvature recovery are established subjects.
+Two-order models of causal rectangles already underlie
+Brightwell--Henson--Surya~\cite{BHS}, including their discussion of
+correlated null coordinates for a nonconstant conformal factor.
+Henson~\cite{Henson} reconstructs approximate flat embeddings.
+Benincasa--Dowker~\cite{BD} construct order-based curvature operators.
+The copula--permutation correspondence is standard; see
+Gr\"ubel~\cite{Grubel}. Tian~\cite{Tian} studies curvature from paired
+null ranks, explicitly distinguishing those ranks from their partial-order
+intersection. Our question is whether that intersection suffices at the
+same statistical exponent on a full-support smooth class.
+
+\section{The restrictions and their ambiguity}
+For a finite set $V$, the bijections $\Lab(V)=\operatorname{Bij}(V,[n])$
+form an $S_n$-torsor. Pairs of rank bijections form an
+$S_n\times S_n$-torsor. The admissible subset for $P$ is
+\[
+ \mathcal R(P)=\{(r_1,r_2):
+       x<_Py\ \Longleftrightarrow\
+       r_1(x)<r_1(y),\ r_2(x)<r_2(y)\}.
+\]
+This subset is generally not itself a torsor.
+Its members are the ordered two-realizers of $P$.
+The history presentation in~\cite{History} also uses restrictions of
+permutation torsors, there to describe token wirings and schedules.
+Here the restrictions specify latent coordinate orders with a given
+intersection; a causal sampling law is an additional assumption.
+
+Fix one such pair. A common interval is a vertex set consecutive in both
+orders. Let $b$ be the largest size of a proper common interval,
+counting singletons. Relabel the first order increasingly to obtain
+the usual permutation representation.
+
+\begin{lemma}\label{lem:deterministic}
+Suppose $b<n/2$. For any other ordered two-realizer
+$(r'_1,r'_2)$, either directly or after exchanging its two orders,
+\begin{equation}\label{eq:rankbound}
+ \max_{x\in V}\max_{j=1,2}|r'_j(x)-r_j(x)|\le b-1.
+\end{equation}
+After contracting the maximal proper strong modules, exactly two
+ordered quotient realizers remain. Exchange of the two orders acts
+freely and transitively on them.
+\end{lemma}
+\begin{proof}
+We use the classical modular representation of a permutation graph:
+strong modules are precisely strong common intervals in every realizer,
+and all realizers are obtained by composing realizers of the quotient
+graphs in its modular decomposition. Prime quotients have four ordered
+graph realizers, obtained by exchanging the orders and reversing both.
+These facts, including the strong-module assertion, are stated in
+Crespelle--Paul~\cite[Section 2.2, Proposition 1]{CP}.
+
+Apply them to the incomparability graph of $P$.
+The root of its modular decomposition is prime.
+Otherwise its quotient is complete or empty, so the children occur
+monotonically in the two orders. Each child has size at most $b$.
+Remove an end child: the union of the remaining children is a proper
+common interval with size at least $n-b>b$, a contradiction.
+
+Let $B_1,\ldots,B_k$ be the root's children.
+Each is consecutive in both orders of every realizer, and $|B_i|\le b$.
+The prime quotient has four graph realizers.
+Reversing both orders reverses the nonempty comparable relation of
+the quotient poset. It therefore cannot preserve $P$.
+The two remaining quotient realizers exchange the orders.
+After making this global exchange if necessary, the blocks have exactly
+the same order and the same rank ranges in both representations.
+Only ranks within a block can change, by at most $|B_i|-1$.
+This proves~\eqref{eq:rankbound} and the final assertion.
+\end{proof}
+
+The decomposition, recognition and prime-realizer statements are known.
+The lemma records their quantitative consequence for latent sampling ranks.
+It does not claim a new modular decomposition theorem.
+The residual two-element set is a $\mathbb Z/2$-torsor of null frames.
+Fine-scale choices inside modules are additional ambiguities.
+Uniqueness of two-realizers for prime posets is also classical;
+see Pouzet--Zaguia~\cite[Section 7.2]{PZ} for the finite result of
+El-Zahar--Sauer and its extension. The two-element frame ambiguity
+itself is not a novelty claim.
+
+\section{Localization for positive sampling densities}
+Assume for this section that
+\begin{equation}\label{eq:bounds}
+ 0<a\le c\le B<\infty
+\end{equation}
+and that~\eqref{eq:copula} holds. No differentiability is needed yet.
+
+\begin{theorem}\label{thm:localize}
+There are constants $K,C$ depending only on $a,B$ such that, for all
+sufficiently large $n$, the following event has probability at least
+$1-C\log^2n/n$:
+every proper common interval of the sampled ranks has at most
+$K\log n$ elements.
+Consequently every ordered two-realizer of the observed poset agrees
+with the empirical null ranks within $K\log n/n$ after normalization,
+up to one global exchange of axes.
+\end{theorem}
+\begin{proof}
+Set $\tau=A\log n/n$, with a sufficiently large constant $A$ depending
+on $a$. We establish three events.
+
+\emph{Empty rectangles.}
+With failure probability $O(n^{-6})$, every open axis-aligned rectangle
+of area greater than $\tau$ contains a sampled point.
+To prove this, use the uniform grid with
+$\lceil8/\tau\rceil$ subdivisions.
+An empty rectangle of area greater than $\tau$ contains an empty
+grid rectangle of area at least $\tau/2$: moving each of its four
+sides inward by at most one mesh loses area at most $\tau/2$.
+There are $O(\tau^{-4})$ grid rectangles.
+Any specified one of area at least $\tau/2$ is empty with probability
+at most $\exp(-an\tau/2)$.
+A union bound proves the claim when $A$ is large enough.
+
+\emph{Occupancy of short intervals.}
+With failure probability $O(n^{-6})$, every interval of the $u$-axis
+of length at most $4\tau$ contains at most $12n\tau$ sampled
+$U_i$'s.
+Such an interval is contained in one of the $O(\tau^{-1})$ intervals
+$[j\tau,(j+6)\tau]\cap[0,1]$.
+Uniform marginals bound the corresponding binomial mean by $6n\tau$.
+The exponential Markov bound for a binomial variable gives
+$\Prob(X\ge2\mu_0)\le\exp(-\mu_0/3)$ when its mean is at most $\mu_0$.
+Take $\mu_0=6n\tau$ and use another union bound.
+
+\emph{Corner exclusion.}
+With failure probability at most $64Bn\tau^2$, no sample lies in
+one of the four corner squares of side $4\tau$.
+This follows from the density upper bound and a union bound over
+the $n$ points.
+
+On these three events, let $S$ be a proper common interval with at
+least two elements. Write its coordinate bounding rectangle as
+$I\times J$, with widths $s,t$.
+There is no sample in
+$I\times([0,1]\setminus J)$ or in
+$([0,1]\setminus I)\times J$.
+Each set is a union of two rectangles. The empty-rectangle event gives
+\[
+ s(1-t)\le2\tau,\qquad t(1-s)\le2\tau.
+\]
+If one width is at most $1/2$, the other is at most $4\tau$,
+and substituting back gives both widths at most $4\tau$, for
+$\tau\le1/8$.
+If both widths exceed $1/2$, both are at least $1-4\tau$.
+Any sample outside $S$ must then lie outside both $I$ and $J$,
+and therefore in a corner square of side $4\tau$.
+Corner exclusion contradicts properness of $S$.
+Thus both widths are small. The occupancy event gives
+$|S|\le12n\tau=12A\log n$.
+Singletons satisfy the same bound.
+The total failure probability is $O(\log^2n/n)$.
+For large $n$, $12A\log n<n/2$; apply
+Lemma~\ref{lem:deterministic}.
+\end{proof}
+
+For uniform random permutations, substantially sharper common-interval
+results are classical: typically only size-two proper blocks remain.
+See Bouvel--Chauve--Mishna--Rossin~\cite[Theorem 3]{BCMR}
+and the earlier work cited there.
+Theorem~\ref{thm:localize} uses a weaker logarithmic bound uniformly
+over the positive copula class. It does not assume that the
+sample permutation is uniform.
+
+\section{An estimator from the order alone}
+Fix $0<a<1<B$ and $M>0$. Let $\calC$ be the densities satisfying
+\eqref{eq:copula}--\eqref{eq:bounds}, extending as $C^4$ functions
+to the closed square, with
+\[
+ \max_{1\le|\nu|\le4}\|\partial^\nu c\|_\infty\le M.
+\]
+The model is genuinely nonparametric.
+For example $1+\theta\sin(2\pi u)\sin(2\pi v)$ belongs to a suitable
+fixed class for every $|\theta|\le\theta_0<1$.
+
+Uniformly label the observed abstract poset, using its labelling torsor,
+and apply any fixed rule that selects an ordered two-realizer.
+Such a rule can use transitive orientation of the incomparability
+graph, a standard permutation-graph algorithm~\cite{CP}.
+The ranks $(\widehat U_i,\widehat V_i)=(r_1(i)/n,r_2(i)/n)$ are the
+only coordinates used by the estimator.
+Uniform labelling makes its law independent of any presentation
+of the unlabelled input. It is not an assertion that all two-realizers
+are equiprobable under the unknown sampling law.
+
+Choose the even, compactly supported kernel
+\[
+ k(t)=\frac{315}{256}(1-t^2)^4\mathbf1_{\{|t|\le1\}} .
+\]
+It is $C^3$, integrates to one and has zero first moment.
+For $\nu=(r,s)\in\{(0,0),(1,0),(0,1),(1,1)\}$ put
+\begin{equation}\label{eq:kernel}
+ T_\nu=\frac1{nh^{2+|\nu|}}
+       \sum_{i=1}^n
+       k^{(r)}\left(\frac{1/2-\widehat U_i}{h}\right)
+       k^{(s)}\left(\frac{1/2-\widehat V_i}{h}\right).
+\end{equation}
+Project $T_{00}$ onto $[a,B]$ and each other $T_\nu$ onto $[-M,M]$;
+denote the results by $\widetilde T_\nu$.
+Define
+\begin{equation}\label{eq:estimator}
+ \widehat R=\frac{2\widetilde T_{11}}{\widetilde T_{00}^2}
+       -\frac{2\widetilde T_{10}\widetilde T_{01}}
+                         {\widetilde T_{00}^3}.
+\end{equation}
+Exchange of axes leaves~\eqref{eq:estimator} unchanged.
+It is bounded in absolute value by
+$R_{\max}=2M/a^2+2M^2/a^3$.
+
+\begin{theorem}\label{thm:upper}
+With $h=n^{-1/10}$, there is a constant $C=C(a,B,M)$ such that
+\[
+ \sup_{c\in\calC}\E_c|\widehat R-R_c(z_*)|^2\le Cn^{-2/5}
+\]
+for sufficiently large $n$.
+The bound holds for every realizer-selection rule described above.
+\end{theorem}
+\begin{proof}
+Let $E_n$ be the event of Theorem~\ref{thm:localize} and
+$\epsilon_n=K\log n/n$.
+Since~\eqref{eq:estimator} is invariant under exchanging axes,
+we may align the selected ranks with the true empirical ranks on $E_n$.
+Writing $F_{U,n},F_{V,n}$ for their empirical distribution functions,
+set
+\[
+ \Delta_n=\max(\|F_{U,n}-\operatorname{id}\|_\infty,
+                    \|F_{V,n}-\operatorname{id}\|_\infty).
+\]
+The uniform marginals and the Dvoretzky--Kiefer--Wolfowitz inequality
+\cite{Massart} give
+\begin{equation}\label{eq:dkw}
+ \Prob(\Delta_n>t)\le4e^{-2nt^2},\qquad
+ \E\Delta_n^4\le C/n^2.
+\end{equation}
+Dependence of $U_i$ and $V_i$ within a point does not affect either
+one-dimensional empirical distribution bound.
+On $E_n$, the aligned estimated coordinates satisfy
+\begin{equation}\label{eq:coordinate}
+ \max_i\|(\widehat U_i,\widehat V_i)-(U_i,V_i)\|_\infty
+       \le\Delta_n+\epsilon_n.
+\end{equation}
+
+Let $T_\nu^0$ be~\eqref{eq:kernel} evaluated at the true sample
+coordinates. Integration by parts, a symmetric-kernel Taylor expansion,
+and $|\nu|\le2$ give
+\begin{equation}\label{eq:oracle}
+ |\E T_\nu^0-\partial^\nu c(z_*)|\le Ch^2,\qquad
+ \operatorname{Var}(T_\nu^0)\le C/(nh^{2+2|\nu|}).
+\end{equation}
+The first bound uses derivatives of $c$ up to order $|\nu|+2\le4$.
+For the second, the kernel is bounded by $Ch^{-2-|\nu|}$
+and supported on a square of probability at most $4Bh^2$.
+
+For large $n$, $\epsilon_n\le h/2$.
+Restrict first to $\Delta_n\le h/2$.
+Let $N_h$ count the true points in the square of radius $2h$ about
+$z_*$.
+A summand can change in~\eqref{eq:kernel} only if its true point lies
+in this square. The bounded derivative of the scaled kernel and
+\eqref{eq:coordinate} imply
+\begin{equation}\label{eq:perturb}
+ |T_\nu-T_\nu^0|
+   \le Ch^{-3-|\nu|}(\Delta_n+\epsilon_n)N_h/n
+                  \quad\text{on }E_n\cap\{\Delta_n\le h/2\}.
+\end{equation}
+Here $N_h$ is binomial with success probability at most $16Bh^2$.
+When $nh^2\ge1$, expanding its second and fourth moments yields
+\[
+ \E(N_h/n)^2\le Ch^4,\qquad \E(N_h/n)^4\le Ch^8.
+\]
+Cauchy--Schwarz and~\eqref{eq:dkw} give
+\[
+ \E\{\Delta_n^2(N_h/n)^2\}\le Ch^4/n .
+\]
+These bounds do not assume independence of $N_h$ and $\Delta_n$.
+Squaring~\eqref{eq:perturb}, with $|\nu|\le2$, gives
+\[
+ \E\bigl[|T_\nu-T_\nu^0|^2;
+              E_n,\Delta_n\le h/2\bigr]
+       \le C h^{-6}(n^{-1}+\epsilon_n^2).
+\]
+
+The true $c$ and its derivatives belong to the projection intervals,
+so projecting cannot increase their estimation errors.
+The map in~\eqref{eq:estimator} is Lipschitz on the product of these
+intervals. On the complementary event its squared error is at most
+$4R_{\max}^2$.
+Combining the preceding bounds gives
+\[
+ \E|\widehat R-R_c(z_*)|^2
+ \le C\left\{h^4+\frac1{nh^6}
+          +\frac{\log^2n}{n^2h^6}
+          +\frac{\log^2n}{n}+e^{-nh^2/2}\right\}.
+\]
+For $h=n^{-1/10}$ the first two terms are $n^{-2/5}$;
+all the others are smaller for sufficiently large $n$.
+\end{proof}
+
+\begin{corollary}\label{cor:choice}
+Let $\widehat R,\widehat R'$ use the same kernel, bandwidth
+$h=n^{-1/10}$ and projection intervals, but any two possibly
+randomized rules for selecting the two-realizer of the same input.
+Under any coupling of these selections,
+\[
+ \sup_{c\in\calC}\E_c|\widehat R-\widehat R'|^2
+       \le C\log^2n/n .
+\]
+Thus the choice between admissible realizers contributes a smaller
+order than the minimax estimation error.
+\end{corollary}
+\begin{proof}
+On $E_n$, align each pair with the true empirical ranks by its
+global axis exchange. The resulting pairs differ by at most
+$2\epsilon_n$ pointwise. On $\{\Delta_n\le h/2\}$ the argument
+of~\eqref{eq:perturb} therefore gives
+\[
+ |T_\nu-T'_\nu|\le
+       C h^{-3-|\nu|}\epsilon_n N_h/n .
+\]
+The binomial second-moment bound gives squared expectation at most
+$C\epsilon_n^2h^{-6}$. Projection is nonexpansive and the curvature
+map is Lipschitz on the projection intervals.
+On the complement both scalar estimators are bounded by $R_{\max}$.
+Hence their squared difference has expectation at most
+\[
+ C\{\epsilon_n^2h^{-6}+\log^2n/n+e^{-nh^2/2}\}.
+\]
+Substitution proves the claim. Every step is uniform in the
+selection rules and their auxiliary randomness.
+\end{proof}
+
+\section{A matching information bound}
+\begin{theorem}\label{thm:lower}
+There is $c_0>0$ such that
+\[
+ \inf_{\widehat S}\sup_{c\in\calC}
+       \E_c|\widehat S-R_c(z_*)|^2\ge c_0n^{-2/5}
+\]
+for sufficiently large $n$, even if $\widehat S$ observes all point
+coordinates. Thus the unlabelled-order experiment attains the
+full-coordinate minimax exponent.
+\end{theorem}
+\begin{proof}
+Let $q$ be a smooth odd function supported in $(-1,1)$ with
+$q'(0)\ne0$. For a small fixed $\gamma>0$ set
+\[
+ c_h(u,v)=1+\gamma h^4
+          q((u-1/2)/h)q((v-1/2)/h).
+\]
+The integral of $q$ is zero, so both marginals remain exactly one.
+For $h<1/2$ and sufficiently small $\gamma$, $c_h$ and the flat
+density belong to $\calC$. Derivatives of order $j\le4$ are
+bounded by a constant times $\gamma h^{4-j}$.
+At $z_*$, the density equals one, both first derivatives vanish,
+and $(c_h)_{uv}=\gamma h^2q'(0)^2$.
+Thus the curvature difference is $2\gamma h^2q'(0)^2$.
+
+For one full coordinate observation,
+\[
+ \KL(c_h\,du\,dv\|du\,dv)
+ =\int(c_h\log c_h-c_h+1)\,du\,dv\le C\gamma^2h^{10}.
+\]
+For $n$ independent observations, the bound is $Cn\gamma^2h^{10}$.
+Take $h=n^{-1/10}$ and $\gamma$ small enough that Pinsker's
+inequality bounds total variation by $1/2$.
+The nearest-curvature test associated with any estimator has sum
+of testing errors at least $1/2$.
+If the curvature difference is $d_h$, a classification error forces
+squared estimation error at least $d_h^2/4$.
+The larger of the two risks is therefore at least $d_h^2/16$,
+of order $n^{-2/5}$.
+Forgetting coordinates or labels cannot improve this testing bound.
+\end{proof}
+
+The exponent is the classical two-dimensional second-derivative
+estimation exponent. The content here is its attainment from the
+partial order rather than from supplied coordinates or paired ranks.
+It is not a new density-estimation rate.
+
+\begin{corollary}\label{cor:holder}
+Replace the $C^4$ assumption by bounded derivatives through order two,
+with each second derivative H\"older continuous of exponent
+$0<\alpha\le1$ and seminorm at most $M$.
+For this class, curvature at $z_*$ can be estimated from the
+unlabelled order with minimax mean squared error of order
+\[
+ n^{-2\alpha/(6+2\alpha)}.
+\]
+The corresponding expected absolute error has minimax order
+$n^{-\alpha/(6+2\alpha)}$.
+\end{corollary}
+\begin{proof}
+The localization theorem is unchanged.
+In~\eqref{eq:oracle} the bias is bounded by $Ch^\alpha$:
+for the mixed derivative use its H\"older continuity directly,
+and for the lower derivatives use the same symmetric Taylor expansion.
+The perturbation and variance terms are unchanged.
+Choose $h=n^{-1/(6+2\alpha)}$.
+The term $\log^2n/n$ remains smaller than the resulting squared risk.
+For the lower bound replace $h^4$ in $c_h-1$ by $h^{2+\alpha}$.
+This preserves the H\"older bound and both marginals.
+The curvature separation is of order $h^\alpha$ and the $n$-sample
+relative entropy is at most $Cn h^{6+2\alpha}$.
+The same two-point test proves the squared-risk lower bound.
+Cauchy--Schwarz gives the absolute-error upper bound; the
+nearest-curvature test gives its matching lower bound.
+\end{proof}
+
+This is the exponent reported for the paired-rank experiment in
+Tian's abstract~\cite{Tian}. Corollary~\ref{cor:holder} observes only
+the intersection order. This comparison concerns the estimation
+rate in the stated positive class, not finite-sample equivalence
+of the two observation models.
+
+\section{Example, torsor role, and remaining work}
+For the Farlie--Gumbel--Morgenstern density
+\[
+ c_\theta(u,v)=1+\theta(1-2u)(1-2v),\qquad |\theta|\le\theta_0<1,
+\]
+the central curvature is $8\theta$.
+This classical dependence family~\cite{Farlie} has comparable-pair
+probability $1/2+\theta/9$. Indeed its lower-left cumulative
+distribution is $uv\{1+\theta(1-u)(1-v)\}$, and comparability has
+probability twice the integral of this function against $c_\theta$.
+Expanding the integral gives the stated value.
+Uniformly label an unlabelled sample of $2m$ events and pair the labels.
+The $m$ comparability indicators $Y_j$ are then independent Bernoulli
+variables with this parameter. Consequently
+\[
+ \widehat R_{\rm pair}
+     =72\left(m^{-1}\sum_{j=1}^mY_j-\tfrac12\right)
+\]
+is unbiased for central curvature, with mean squared error at most
+$1296/m$. This is a parametric worked example, not a new copula
+or a general reconstruction method. Theorem~\ref{thm:upper} also applies
+to nonparametric perturbations and to asymmetric positive copulas.
+There is no requirement that a finite list of pair frequencies
+identify the density.
+
+For an asymmetric worked example, put
+\[
+ f(x)=1-2x,\qquad p(x)=6x^2-6x+1,
+\]
+and take
+\[
+ c(u,v)=1+\theta\{f(u)f(v)
+             +\lambda f(u)p(v)+\mu p(u)f(v)\}.
+\]
+Both $f$ and $p$ have zero integral and absolute value at most one.
+Thus the marginals are uniform, and
+$|\theta|(1+|\lambda|+|\mu|)<1$ ensures positivity.
+At the marginal centre the density is one, its first derivatives
+are $\theta\lambda,\theta\mu$, and its mixed derivative is $4\theta$.
+Consequently
+\[
+ R_c(z_*)=8\theta-2\theta^2\lambda\mu .
+\]
+For $(\theta,\lambda,\mu)=(2/5,3/10,1/2)$ the density lies between
+$7/25$ and $43/25$, and the curvature is $394/125$.
+The order-only estimator applies without knowing these parameters
+or assuming this polynomial family.
+Exchanging the axes interchanges $\lambda,\mu$ and preserves the target.
+
+The torsor has two precise uses. Uniform labelling gives an invariant
+randomized observation procedure. Restricting the product of the two
+labelling torsors defines the admissible coordinate pairs.
+Their modular quotient leaves a genuine two-element torsor; curvature
+descends under its axis exchange. The proof also controls the fine
+ambiguity left inside modules. Calling the whole realizer fibre a
+torsor would be false.
+
+Positivity throughout the rectangle is substantive.
+With disconnected or vanishing-density support, large common blocks
+can persist, and coordinate choices inside those blocks need not
+agree up to one global axis exchange.
+The theorem does not cover that case, noisy causal comparisons,
+higher order dimension, or arbitrary rewrite ensembles.
+
+Wolfram's discussion of causal coordinates~\cite[Section 5.14]{Wolfram}
+motivates the question of extracting geometry from an event order.
+The present result supplies a rigorous reconstruction protocol under
+specified sampling hypotheses. It does not derive those hypotheses
+from a rewriting rule or derive an equation of motion.
+Two-dimensional Einstein dynamics is not claimed.
+
+The strongest candidate contribution is the transfer from partial
+orders to curvature estimation through localization of all realizers.
+The relevant combinatorial structure is classical~\cite{CP,BBFGP,BCMR},
+as are copula ranks~\cite{Grubel} and statistical derivative estimation.
+Tian's recent preprint~\cite{Tian} is especially close; its abstract was
+consulted, but the full text was unavailable during this audit.
+Ghosh~\cite{Ghosh} also reports finite causal-set sampling and
+identifiability results; only the repository description was accessible.
+These comparisons must be completed before claiming publication priority.
+
+\subsection*{Reproduction}
+The exact checker \path{check_rank_ambiguity.py} enumerates all
+ordered two-realizers for the $1\,840$ base permutations of sizes four
+through seven that satisfy the deterministic interval hypothesis.
+All $7\,456$ realizers obey the bound in
+Lemma~\ref{lem:deterministic}.
+The separate checker \path{check_curvature.py} checks the kernel's normalization and
+boundary jets, the asymmetric example's marginals, and its curvature
+directly from the metric. These finite checks supplement the proofs;
+they do not test an asymptotic rate by simulation.
+Run \texttt{make causal-order-paper} and
+\texttt{make causal-order-check} from the repository root.
+The exact outputs are included beside the source.
+
+\begin{thebibliography}{99}
+\raggedright
+\bibitem{CP}
+C. Crespelle and C. Paul,
+\emph{Fully dynamic algorithm for recognition and modular decomposition
+of permutation graphs}, Algorithmica \textbf{58} (2010), 405--432.
+\href{https://webusers.i3s.unice.fr/~ccrespelle/publications/J02_DynPermu_long.pdf}{Author's full version}.
+\bibitem{BBFGP}
+F. Bassino, M. Bouvel, V. F\'eray, L. Gerin and A. Pierrot,
+\emph{Dense and nondense limits for uniform random intersection graphs},
+\href{https://arxiv.org/abs/2402.06394}{arXiv:2402.06394}.
+\bibitem{BCMR}
+M. Bouvel, C. Chauve, M. Mishna and D. Rossin,
+\emph{Average-case analysis of perfect sorting by reversals},
+\href{https://www.cecm.sfu.ca/~cchauve/Publications/DMAA_CPM09.pdf}{Author's full version}, Theorem 3.
+\bibitem{Grubel}
+R. Gr\"ubel, \emph{Ranks, copulas, and permutons},
+Metrika \textbf{87} (2024), 155--182,
+\href{https://doi.org/10.1007/s00184-023-00908-2}{doi:10.1007/s00184-023-00908-2}.
+\bibitem{Massart}
+P. Massart, \emph{The tight constant in the Dvoretzky--Kiefer--Wolfowitz
+inequality}, Annals of Probability \textbf{18} (1990), 1269--1283,
+\href{https://doi.org/10.1214/aop/1176990746}{doi:10.1214/aop/1176990746}.
+\bibitem{Henson}
+J. Henson, \emph{Constructing an interval of Minkowski space from a
+causal set}, Classical and Quantum Gravity \textbf{23} (2006), L29--L35,
+\href{https://arxiv.org/abs/gr-qc/0601069}{arXiv:gr-qc/0601069}.
+\bibitem{BHS}
+G. Brightwell, J. Henson and S. Surya,
+\emph{A 2D model of causal set quantum gravity: the emergence of the continuum},
+Classical and Quantum Gravity \textbf{25} (2008), 105025,
+\href{https://arxiv.org/abs/0706.0375}{arXiv:0706.0375}.
+\bibitem{PZ}
+M. Pouzet and I. Zaguia,
+\emph{Hereditary classes of ordered sets of width at most two},
+\href{https://arxiv.org/abs/2112.02633}{arXiv:2112.02633}, Section 7.2.
+\bibitem{BD}
+D. M. T. Benincasa and F. Dowker,
+\emph{The scalar curvature of a causal set},
+Physical Review Letters \textbf{104} (2010), 181301,
+\href{https://arxiv.org/abs/1001.2725}{arXiv:1001.2725}.
+\bibitem{Farlie}
+D. J. G. Farlie, \emph{The performance of some correlation
+coefficients for a general bivariate distribution},
+Biometrika \textbf{47} (1960), 307--323,
+\href{https://doi.org/10.1093/biomet/47.3-4.307}{doi:10.1093/biomet/47.3-4.307}.
+\bibitem{History}
+A. Kolpakov, \emph{Causal histories, observable states, and cubical
+geometry}, accompanying research manuscript, 2026,
+\href{https://github.com/WolframInstitute/graph_of_graphs/tree/main/history-state-paper}{repository source and PDF}.
+\bibitem{Tian}
+C. Tian, \emph{Recovering Lorentzian curvature from finite volumes
+and paired ranks}, preprint posted 16 September 2026,
+\href{https://ssrn.com/abstract=7472426}{SSRN 7472426}.
+Abstract-only comparison.
+\bibitem{Ghosh}
+A. Ghosh, \emph{Sample-complexity bounds and an exact bulk-sector
+channel obstruction for curvature estimation on finite causal sets},
+11 August 2026,
+\href{https://zenodo.org/records/21931074}{Zenodo, version 4}.
+Repository-description-only comparison; the earlier version is
+\href{https://doi.org/10.5281/zenodo.21894198}{doi:10.5281/zenodo.21894198}.
+\bibitem{Wolfram}
+S. Wolfram, \emph{A Class of Models with the Potential to Represent
+Fundamental Physics}, 2020,
+\href{https://www.wolframphysics.org/technical-introduction/the-updating-process-for-string-substitution-systems/foliations-and-coordinates-on-causal-graphs/}{Section 5.14}.
+\end{thebibliography}
+\end{document}

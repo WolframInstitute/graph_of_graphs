@@ -1,0 +1,27 @@
+{
+  "kernel_mass": "1",
+  "kernel_first_moment": "0",
+  "zero_kernel_boundary_jets": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "asymmetric_density_marginals": [
+    "1",
+    "1"
+  ],
+  "curvature_checked_from_metric": true,
+  "asymmetric_central_curvature": "-2*theta*(lambda*mu*theta - 4)",
+  "FGM_comparability_probability": "theta/9 + 1/2",
+  "odd_bump_zero_boundary_jets": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "odd_bump_derivative_at_centre": "1",
+  "odd_bump_squared_integral": "524288/22309287",
+  "alternative_squared_L2_distance": "gamma^2 h^10 (524288/22309287)^2"
+}
