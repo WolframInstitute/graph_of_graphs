@@ -9,9 +9,9 @@ ANCILLARY := anc/README.md anc/gog_generate.py anc/verify_rule_a.py \
 	anc/build_nauty_bridge.py anc/gog_nauty_bridge.c \
 	anc/render_rule_a_table.py anc/$(TABLE_JSON)
 
-.PHONY: all figures table arxiv review packages clean
+.PHONY: all figures table arxiv packages clean
 
-all: arxiv review
+all: arxiv
 
 figures: $(FIGURE_PDF)
 
@@ -27,10 +27,6 @@ arxiv: $(TABLE_TEX) $(FIGURE_PDF)
 	$(LATEXMK) -pdf -interaction=nonstopmode -halt-on-error \
 		local-whitehead-chain.tex
 
-review: $(TABLE_TEX) $(FIGURE_PDF)
-	$(LATEXMK) -pdf -interaction=nonstopmode -halt-on-error \
-		-jobname=local-whitehead-chain-review local-whitehead-chain-review.tex
-
 packages: all
 	mkdir -p dist/arxiv/anc
 	cp local-whitehead-chain.tex local-whitehead-chain.bib \
@@ -44,11 +40,7 @@ packages: all
 		local-whitehead-chain.bbl $(TABLE_TEX) $(FIGURE_PDF) \
 		$(ANCILLARY)
 	tar -czf dist/local-whitehead-chain-code.tar.gz -C dist/arxiv $(ANCILLARY)
-	cp local-whitehead-chain-review.pdf \
-		dist/local-whitehead-chain-review.pdf
 
 clean:
 	$(LATEXMK) -c local-whitehead-chain.tex
-	$(LATEXMK) -c -jobname=local-whitehead-chain-review \
-		local-whitehead-chain-review.tex
 	$(LATEXMK) -c $(FIGURE_TEX)

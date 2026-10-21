@@ -10,12 +10,6 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage[capitalise,noabbrev]{cleveref}
 
-% Define \REVIEWCOPY in a wrapper to produce a line-numbered, double-spaced copy.
-\ifdefined\REVIEWCOPY
-  \usepackage[mathlines,switch]{lineno}
-  \usepackage{setspace}
-\fi
-
 \newcommand{\C}{\mathcal G}
 \newcommand{\E}{\mathbb E}
 \newcommand{\Pp}{\mathbb P}
@@ -58,14 +52,7 @@
 \date{}
 
 \begin{document}
-\ifdefined\REVIEWCOPY
-  \doublespacing
-\fi
 \maketitle
-
-\ifdefined\REVIEWCOPY
-  \linenumbers
-\fi
 
 \begin{abstract}
 We study the random walk on the graph of connected cubic multigraphs under

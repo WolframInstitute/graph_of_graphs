@@ -2,8 +2,7 @@
 
 This repository contains manuscripts in TeX and PDF, Wolfram notebooks,
 and the code and data needed to reproduce their computations. There are
-seven manuscripts, eight manuscript PDFs and two notebooks. The extra
-PDF is a review layout of the Whitehead paper.
+seven manuscripts, each with one PDF, and two notebooks.
 
 ## Manuscripts
 
@@ -17,10 +16,7 @@ PDF is a review layout of the Whitehead paper.
 | [Bessel recursion](bessel-recursion-paper/bessel-recursion.tex) | [PDF](bessel-recursion-paper/bessel-recursion.pdf) | 8 | Identification of the Broadhurst–Roberts recursion with the inverse de Rham pairing, including resonance, and factorial-scaled integrality. |
 | [Histories and states](history-state-paper/history-states.tex) | [PDF](history-state-paper/history-states.pdf) | 11 | Permutation-torsor presentations, schedule weights, a criterion for observations to inherit the history median, event-bit repairs and confluent systems with nontrivial state topology. |
 
-The Whitehead [review source](rule-a-paper/local-whitehead-chain-review.tex)
-builds a [29-page review PDF](rule-a-paper/local-whitehead-chain-review.pdf)
-from the same manuscript. It is an alternate layout, so the table counts
-that paper once. Page counts above refer to the included PDFs.
+Page counts refer to the included PDFs.
 
 The local Whitehead paper is the starting point. Its stationary law also
 appears in the Outer space paper. The field-dynamics paper and computational
@@ -190,7 +186,7 @@ scripts/notebook_report_outputs.wls with WolframKernel.
 
     make rule-a-paper-packages
 
-This builds the Whitehead figures and both paper layouts, then writes the
+This builds the Whitehead figures and manuscript, then writes the
 arXiv source and code archives under rule-a-paper/dist/. Submission archives,
 LaTeX intermediates, downloaded reference copies and working research notes
 remain local. The repository retains manuscript sources and PDFs,

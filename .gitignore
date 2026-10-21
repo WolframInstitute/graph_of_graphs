@@ -29,7 +29,6 @@ gog_nauty_bridge.so
 !/whitehead-field-dynamics.pdf
 !/whitehead-field-dynamics-computational-notes.pdf
 !/rule-a-paper/local-whitehead-chain.pdf
-!/rule-a-paper/local-whitehead-chain-review.pdf
 !/integral-torsor-paper/integral-torsor.pdf
 !/outer-space-paper/outer-space.pdf
 !/bessel-recursion-paper/bessel-recursion.pdf
@@ -48,7 +47,6 @@ artifacts/
 
 # Rebuildable journal/arXiv upload bundles.
 rule-a-paper/dist/
-rule-a-paper/local-whitehead-chain-review.bbl
 
 # Set-aside research and preliminary problem tests stay local.
 .research-archive/
