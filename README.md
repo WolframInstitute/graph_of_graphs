@@ -1,20 +1,22 @@
 # Whitehead moves, periods and rewrite histories
 
-This repository contains TeX manuscripts, Wolfram notebooks, and the code
-and data needed to reproduce their computations. Generated PDFs, working
-notes and exploratory scripts are kept locally.
+This repository contains manuscripts in TeX and PDF, Wolfram notebooks,
+and the code and data needed to reproduce their computations. LaTeX
+intermediates, working notes and exploratory scripts are kept locally.
 
 ## Manuscripts
 
-| Source | Contents |
-|---|---|
-| [Local Whitehead chain](rule-a-paper/local-whitehead-chain.tex) | Stationary distribution, spectral bounds, exact bridge conductance and mixing lower bounds for the local walk on cubic multigraphs. |
-| [Field dynamics](whitehead-field-dynamics.tex) | Pair averaging on evolving cubic graphs, finite consensus schedules and contraction estimates. |
-| [Computational companion](whitehead-field-dynamics-computational-notes.tex) | Worked finite calculations accompanying the field-dynamics manuscript and notebooks. |
-| [Quartic period torsor](integral-torsor-paper/integral-torsor.tex) | Local period series, finite matrix integrals and optimal positive moment bounds. |
-| [Outer space](outer-space-paper/outer-space.tex) | A proved cubic refinement-transfer identity, Euler observables and a certificate for the known first Morita class. Its topology and Euler formulas are established results; novelty of the transfer remains unestablished. |
-| [Bessel recursion](bessel-recursion-paper/bessel-recursion.tex) | Identification of the Broadhurst–Roberts recursion with the inverse de Rham pairing, including resonance, and factorial-scaled integrality. |
-| [Histories and states](history-state-paper/history-states.tex) | Permutation-torsor presentations, schedule weights, a criterion for observable states to inherit the history median, minimal event-bit repairs and confluent systems with nontrivial state topology. |
+| Source | PDF | Contents |
+|---|---|---|
+| [Local Whitehead chain](rule-a-paper/local-whitehead-chain.tex) | [PDF](rule-a-paper/local-whitehead-chain.pdf) | Stationary distribution, spectral bounds, exact bridge conductance and mixing lower bounds for the local walk on cubic multigraphs. |
+| [Field dynamics](whitehead-field-dynamics.tex) | [PDF](whitehead-field-dynamics.pdf) | Pair averaging on evolving cubic graphs, finite consensus schedules and contraction estimates. |
+| [Computational companion](whitehead-field-dynamics-computational-notes.tex) | [PDF](whitehead-field-dynamics-computational-notes.pdf) | Worked finite calculations accompanying the field-dynamics manuscript and notebooks. |
+| [Quartic period torsor](integral-torsor-paper/integral-torsor.tex) | [PDF](integral-torsor-paper/integral-torsor.pdf) | Local period series, finite matrix integrals and optimal positive moment bounds. |
+| [Outer space](outer-space-paper/outer-space.tex) | [PDF](outer-space-paper/outer-space.pdf) | A proved cubic refinement-transfer identity, Euler observables and a certificate for the known first Morita class. Its topology and Euler formulas are established results; novelty of the transfer remains unestablished. |
+| [Bessel recursion](bessel-recursion-paper/bessel-recursion.tex) | [PDF](bessel-recursion-paper/bessel-recursion.pdf) | Identification of the Broadhurst–Roberts recursion with the inverse de Rham pairing, including resonance, and factorial-scaled integrality. |
+| [Histories and states](history-state-paper/history-states.tex) | [PDF](history-state-paper/history-states.pdf) | Permutation-torsor presentations, schedule weights, a criterion for observable states to inherit the history median, minimal event-bit repairs and confluent systems with nontrivial state topology. |
+
+The Whitehead manuscript also has a [review layout](rule-a-paper/local-whitehead-chain-review.pdf).
 
 The history paper gives full finite proofs and credits the established
 event-structure, median-algebra and cubical geometry. Its CAT(0) statement
@@ -24,7 +26,8 @@ a separate argument.
 Each manuscript has a build target. The research papers have their own
 folders. Bibliographies and figure sources are included; figures for the
 history paper and the Outer space prism are drawn directly in TeX.
-Paper PDFs are build outputs.
+The manuscript PDFs are included; intermediate files and generated figure
+PDFs are excluded from tracking.
 
 ## Build and reproduce
 
@@ -149,7 +152,7 @@ notebook changes.
     make rule-a-paper-packages
 
 This builds the Whitehead figures and both paper layouts, then writes the
-arXiv source and code archives under rule-a-paper/dist/. Build products,
-downloaded reference copies and working research notes are excluded from
-tracking. The published history is filtered to retain manuscript sources,
-notebooks and reproducibility dependencies.
+arXiv source and code archives under rule-a-paper/dist/. Submission archives,
+LaTeX intermediates, downloaded reference copies and working research notes
+are excluded from tracking. The published history retains manuscript sources
+and PDFs, notebooks and reproducibility dependencies.

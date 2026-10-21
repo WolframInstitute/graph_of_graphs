@@ -4,18 +4,36 @@ __pycache__/
 gog_nauty_bridge.dylib
 gog_nauty_bridge.so
 
-# Manuscript build products remain local.
+# LaTeX intermediates, generated figures and other build products remain local.
 *.aux
 *.bbl
+*.bcf
 *.blg
+*.dvi
 *.fdb_latexmk
 *.fls
+*.lof
 *.log
+*.lot
 *.out
 *.pdf
 *.png
+*.run.xml
 *.svg
+*.synctex
 *.synctex.gz
+*.toc
+*.xdv
+
+# Publish the manuscript PDFs alongside their TeX sources.
+!/whitehead-field-dynamics.pdf
+!/whitehead-field-dynamics-computational-notes.pdf
+!/rule-a-paper/local-whitehead-chain.pdf
+!/rule-a-paper/local-whitehead-chain-review.pdf
+!/integral-torsor-paper/integral-torsor.pdf
+!/outer-space-paper/outer-space.pdf
+!/bessel-recursion-paper/bessel-recursion.pdf
+!/history-state-paper/history-states.pdf
 
 # Former documentation and source copies remain local.
 /docs/
