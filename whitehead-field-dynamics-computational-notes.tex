@@ -91,8 +91,7 @@ short transcript.  It records the local pair-averaging calculation, complete gra
 models through $N=8$, two rules for choosing the next graph type, an exact
 71-state diffusion calculation, one seeded 48-step path, and finite consensus
 products for $K_4$ and $Q_3$.  Exact rational arithmetic is used until a
-decimal display is requested.  This is a computational companion, not a
-replacement for the proofs in the full manuscript.
+decimal display is requested. The proofs are given in the full manuscript.
 \end{abstract}
 
 \section{What is being computed}
@@ -119,12 +118,12 @@ Three computational objects must be kept separate.
   unlabelled move, a \emph{settlement permutation} is the relabelling that
   identifies the result with the stored representative of its graph type; the
   same permutation acts on the field coordinates.
-  \item Rule A keeps every local \emph{outcome slot}.  A cubic graph has
-  $3N/2$ edges and two resolutions per edge, hence $3N$ slots.  Different
-  slots leading to the same graph type retain their multiplicity.  A slot
+  \item Rule A keeps every local move. A cubic graph has
+  $3N/2$ edges and two resolutions per edge, hence $3N$ moves.  Different
+  moves leading to the same graph type retain their multiplicity.  A move
   returning to the current type is a \emph{holding event}.
-  \item Rule B gives one of the $3N$ equally weighted slots to each distinct
-  adjacent graph type and assigns every unused slot to staying put.  Its
+  \item Rule B assigns probability $1/(3N)$ to each distinct adjacent
+  graph type and the remaining probability to staying put. Its
   \emph{jump chain}, denoted \texttt{"BJump"}, is the conditional chain given
   that the graph type changes.  Removing holds changes path probabilities and
   elapsed time.
@@ -136,8 +135,7 @@ larger data sets can be generated separately.
 
 \section{Notebook map}
 
-The executable companion is deliberately shorter than the paper.  Its
-computational sections have the following roles.
+The computational sections of the executable companion are:
 
 \begin{center}
 \small
@@ -252,7 +250,7 @@ GogAvailableSizes[]
 For each bundled size, the next query records
 \[
   \{N,\ \text{number of classes},\ \text{GoG edges},\
-      \text{total Rule-A slots}\}.
+      \text{total Rule-A moves}\}.
 \]
 
 \mathematicacells{resource summary}
@@ -272,7 +270,7 @@ Table[
 \end{lstlisting}
 
 The class counts $2,5,17,71$ agree with the corresponding terms of OEIS
-A005967.  The last column also passes the independent slot check
+A005967.  The last column satisfies the independent count
 \[
   \#\text{classes}\times 3N:\qquad
   2\cdot6=12,\quad5\cdot12=60,\quad17\cdot18=306,\quad

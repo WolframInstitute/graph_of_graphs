@@ -80,7 +80,7 @@ partition function of size $M$, the answer is $\beta\ge M^2/4$.
 The minimal order gives stronger moment bounds than every larger order,
 at the same number of input coefficients and at every positive coupling.
 Here ``best'' is an extremal statement within a stated class of positive
-representations, rather than a claim about all numerical algorithms.
+representations, for fixed input moments.
 
 The ingredients have substantial precedents. Picard--Vessiot torsors and
 formal local differential equations are standard \cite{Singer}.
@@ -922,11 +922,11 @@ rule. Moment rules instead give a seed-free method from Wick coefficients
 which extends beyond the rank-two special-function example.
 Rigorous special-function software already changes between expansions
 and continuation methods \cite{Johansson}. Constructive and generalized
-Borel methods provide other established reorganizations of perturbation
-theory \cite{Rivasseau,Mera}. The existence of several quartic expansions
-is not itself a new numerical method.
+Borel methods provide other reorganizations of perturbation
+theory \cite{Rivasseau,Mera}. Our comparison theorem selects the
+strongest positive moment bounds from the same coefficient data.
 
-\section{Arithmetic restrictions and remaining questions}
+\section{Arithmetic restrictions}
 The connection has an integral model over
 $\mathbb Z[1/2,t,t^{-1}]$. It can therefore be reduced at any odd prime.
 This is a change of base ring; a homomorphism $\Q\to\mathbb F_p$ does
@@ -961,23 +961,6 @@ at $p=3,5,7,11$. Prime-field data can reconstruct finite rational
 coefficients with denominator and height bounds; they do not directly
 approximate a real exponential period. A Frobenius or exponential-sum
 realization needs its own comparison theorem.
-
-There are therefore two proved classifications here: the formal local
-types of a specified differential torsor, and the admissible positive
-kernel orders for a specified family of integrals. The second comes
-with a selection theorem and, for quartic and sextic interactions,
-convergence. Neither is a classification of every graph restriction or
-every arithmetic realization.
-
-The next questions are concrete. For constrained multi-matrix models,
-can one compute the needed reweighted moments from finite schemes
-while retaining positivity? Can extra algebraic information in the
-period system sharpen the positive moment bounds, or remove the
-indeterminacy obstruction at higher degree? For sextic models, how do
-the certified quadratures compare with the particular rational
-Schwinger--Dyson truncations, whose convergence is not proved here?
-These questions concern further results, rather than consequences
-already supplied by the word ``torsor.''
 
 \bibliographystyle{abbrvurl}
 \bibliography{integral-torsor}

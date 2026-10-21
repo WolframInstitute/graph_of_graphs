@@ -35,11 +35,8 @@ Applying this identity to the established forest formulas gives distinct
 observables for the ordinary and virtual Euler characteristics of
 $\Out(F_r)$. We explain the orientation and stabilizer data required by
 the forested chain complex, and give exact low-rank checks, variances,
-and a two-term representative of the known first Morita class.
-The transfer does not give an efficient sampling algorithm: the present
-observables sum forests, and their stationary variances omit
-autocorrelation. The topology and Euler formulas used here are known;
-the purpose is to relate them precisely to the cubic walk.
+and a two-term representative of the first Morita class with an integer
+dual cocycle certifying its nonvanishing.
 \end{abstract}
 
 \section{Introduction}
@@ -84,13 +81,12 @@ Each subset of parallel edges is counted separately in the inner sum.
 Loops cannot belong to a forest.
 \end{theorem}
 
-The proof is an orbit--stabilizer count, an instance of the established
-groupoid-cardinality principle \cite{Groupoidification}.
-The identity is useful because
-the right side uses a single fixed cubic state space while retaining
-all stable strata. We make no priority claim for the underlying
-refinement count. The following sections apply it to established
-topological formulas and make the associated finite checks reproducible.
+The proof counts the fibres of the refinement map by
+orbit--stabilizer \cite{Groupoidification}, using the classical
+labelled-tree multiplicity \cite{BHV}. The identity expresses sums over
+all stable strata on a single fixed cubic state space. We apply it
+to the ordinary and virtual Euler characteristics and give exact
+finite checks of the resulting observables.
 
 Culler--Vogtmann introduced Outer space in \cite{CV86}.
 Conant--Vogtmann describe the relevant forested graph complexes in
@@ -98,9 +94,10 @@ Conant--Vogtmann describe the relevant forested graph complexes in
 with Smillie--Vogtmann \cite{SmillieVogtmann}; Borinsky--Vogtmann develop
 its asymptotics and formal-integral description in
 \cite{BV2020,BVQFT}. The ordinary Euler characteristic and its generating
-function are treated separately in \cite{BV2023}. None of these formulas,
-or the low-rank homology groups reported below, is proposed as a new
-topological invariant.
+function are treated separately in \cite{BV2023}. Here we recover these
+Euler characteristics through cubic refinement transfer. The prism
+certificate gives a direct verification of the first Morita class
+in the oriented forest basis of this paper.
 
 \section{Cubic chambers and forested cells}
 
@@ -418,71 +415,15 @@ The attached certificate verifies
 for an integer cochain $\phi$ with 18 nonzero terms. Thus $z$ is
 not a boundary. The serialized graphs, edge orders and coefficients
 allow an independent check without trusting a rank or nullspace search.
-This is the known first Morita class: the prism is obtained by
+This represents the first Morita class: the prism is obtained by
 expanding the vertices of the three-edge theta graph into circles,
-as in \cite[Section 6.1]{Morita}. It is not a new homology class.
+as in \cite[Section 6.1]{Morita}. The two-term cycle and its 18-term
+dual cochain form an independently verifiable certificate for this
+class. The homology dimensions above agree with the known computations
+summarized in~\cite{GVW}; general nonvanishing of the Morita classes
+is proved in~\cite{KMP}.
 
-\section{Relation to earlier work}
-
-The geometric and enumerative inputs have different roles.
-Outer space and its contractible spine are due to
-Culler--Vogtmann~\cite{CV86}. The cubical forest description and
-the filtered graph-complex description are established models
-\cite{ConantVogtmann}. The tree multiplicity in
-Proposition~\ref{prop:trees} is classical~\cite{BHV}.
-The virtual generating function originates in
-Smillie--Vogtmann~\cite{SmillieVogtmann}; the forest and formal
-Gaussian formulas used here appear in
-Borinsky--Vogtmann~\cite[Section 4]{BVQFT}.
-The ordinary Euler formula~\eqref{eq:burnside} is their
-Theorem~2.1 in~\cite{BV2023}. None is derived as a new invariant
-or generating function here.
-
-Theorem~\ref{thm:transfer} is a direct application of
-orbit--stabilizer, or finite groupoid integration~\cite{Groupoidification},
-to the classical refinement set. Its specific use here is to put
-both Euler observables on the fixed cubic probability space of
-\cite{Kolpakov}, with the correction $R(H)$ and all incidence
-symmetries retained. The proof makes that specialization explicit;
-it does not establish priority for a general refinement principle.
-It also gives neither a new asymptotic Euler formula nor a bound
-on the complexity or autocorrelation of the resulting estimator.
-
-The two-term prism cycle and its integer dual cochain provide
-an independently verifiable certificate in the stated orbit basis.
-The circle expansion is already part of Conant--Vogtmann's
-Morita construction~\cite[Section 6.1]{Morita}, and the nonzero
-class and low-rank homology are known.
-The present finite archives reproduce them; they do not extend
-the ranks reached by later computations~\cite{GVW}.
-The low-rank variance entries concern the particular observables
-$X,Y$ and prove no large-rank claim.
-Thus the paper is a stochastic reformulation with explicit
-proofs and certificates. A stronger contribution would require
-a new structural, computational or variance theorem.
-
-\section{What remains open}
-The refinement identity transfers exact sums, but its usefulness for
-large rank depends on the cost and variance of the resulting observable.
-A useful next result would control one of those quantities, or replace
-the forest sum by a cheaper estimator with a proved error bound.
-
-For homology, restricting to three-edge-connected graphs substantially
-reduces the finite complexes. Grego--V{\'i}tek--Willwacher
-\cite[Appendix A]{GVW} distinguish the full differential from the
-contracting differential. Their Conjecture 8 states that contracting
-homology in the three-edge-connected complex is concentrated in excess
-zero, and is checked there through rank seven. Our smaller computations
-do not extend that range. A general contraction argument must control
-separating pairs created by refinements; an argument for unrestricted
-vertex expansions does not automatically preserve three-edge-connectivity.
-
-The general nonvanishing of Morita classes is no longer an open
-target: see Kupers--Miller--Patzt \cite{KMP}. The present two-term
-certificate concerns a known low-rank class. These questions are
-independent of the quartic period torsor and its series realizations.
-
-\subsection*{Reproduction}
+\section{Reproduction}
 The accompanying repository contains the source, exact archives and
 standalone checks in \path{research/outer-forest-complex}.
 The commands \texttt{make outer-space-paper} and

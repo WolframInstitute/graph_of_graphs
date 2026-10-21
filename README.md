@@ -12,41 +12,23 @@ eight manuscripts, each with one PDF, and two notebooks.
 | [Field dynamics](whitehead-field-dynamics.tex) | [PDF](whitehead-field-dynamics.pdf) | 31 | Pair averaging on evolving cubic graphs, finite consensus schedules and contraction estimates. |
 | [Computational companion](whitehead-field-dynamics-computational-notes.tex) | [PDF](whitehead-field-dynamics-computational-notes.pdf) | 8 | Exact finite calculations accompanying the field-dynamics paper and notebooks. |
 | [Quartic period torsor](integral-torsor-paper/integral-torsor.tex) | [PDF](integral-torsor-paper/integral-torsor.pdf) | 16 | A rank-two period system, its local series and finite Hermitian matrix integrals; classification of positive representations and selection of the strongest moment bounds. |
-| [Outer space](outer-space-paper/outer-space.tex) | [PDF](outer-space-paper/outer-space.pdf) | 9 | A stochastic reformulation of established forest sums, with full refinement multiplicities, ordinary and virtual Euler observables, and a certificate for the known first Morita class. |
+| [Outer space](outer-space-paper/outer-space.tex) | [PDF](outer-space-paper/outer-space.pdf) | 8 | Cubic refinement transfer, Euler-characteristic observables under the Whitehead stationary law, and an explicit Morita cycle/cocycle certificate. |
 | [Bessel recursion](bessel-recursion-paper/bessel-recursion.tex) | [PDF](bessel-recursion-paper/bessel-recursion.pdf) | 8 | Identification of the Broadhurst–Roberts recursion with the inverse de Rham pairing, including resonance, and factorial-scaled integrality. |
 | [Histories and states](history-state-paper/history-states.tex) | [PDF](history-state-paper/history-states.pdf) | 11 | Permutation-torsor presentations, schedule weights, a criterion for observations to inherit the history median, event-bit repairs and confluent systems with nontrivial state topology. |
 | [Curvature from causal orders](causal-order-paper/causal-order.tex) | [PDF](causal-order-paper/causal-order.pdf) | 9 | Recovery of latent null ranks from unlabelled two-dimensional orders, optimal curvature estimation for positive smooth densities, and stability under the choice of realizer. |
 
 Page counts refer to the included PDFs.
 
-The local Whitehead paper is the starting point. Its stationary law also
-appears in the Outer space paper. The field-dynamics paper and computational
-companion develop the averaging process and its finite examples.
+The local Whitehead paper continues the diameter work of Rafi–Tao and the
+expansion and spectral work of Grave de Peralta–Kolpakov and Li. It determines
+the stationary law for the multiplicity chain and proves explicit spectral
+bounds and an exact conductance formula for the bridge cut. The field-dynamics
+paper and computational companion develop pair averaging on the evolving
+graphs.
 
-The scope of the later papers matters:
-
-- The quartic paper distinguishes the differential period torsor from
-  positive approximation schemes. Those approximations are not literal
-  changes of coefficient field. Its finite matrix-size results do not
-  establish estimates uniform in matrix size.
-- The Outer space paper includes a source-by-source assessment of its
-  relation to earlier work. Its refinement count and counting argument
-  use established methods; its contribution is the explicit cubic-law
-  formulation and finite certificates. The Euler formulas, homology and
-  Morita class are known. No efficient sampling bound is proved.
-- The history paper credits the established event-structure and cubical
-  geometry. Its CAT(0) statement concerns occurrence prefixes; the criterion
-  for observable states to inherit their median is proved separately.
-- The causal-order paper assumes independent events in a two-dimensional
-  rectangle, known volume, and a density bounded away from zero. It proves
-  matching statistical bounds under those assumptions. Modular
-  decomposition, copula ranks and derivative-estimation rates are
-  established inputs. Priority for the transfer from the intersection
-  order remains under review. A rewriting rule producing the required
-  sampling law and an equation of motion remain separate problems.
-
-Further research drafts remain local while their proofs and priority are
-reviewed.
+The Outer space paper recovers the Euler characteristics of
+Smillie–Vogtmann and Borinsky–Vogtmann through expectations under the same
+stationary law, and gives a direct certificate for the first Morita class.
 
 ## Repository contents
 

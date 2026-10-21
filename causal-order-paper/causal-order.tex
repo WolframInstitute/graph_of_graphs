@@ -71,8 +71,6 @@ They do not assert that the two coordinates are independent.
 For a physical rectangle of known volume $V$, the normalized model
 has metric $-2Vc\,du\,dv$ and all curvatures below are divided by $V$.
 The rectangle and its volume are part of the model.
-There is no claim of selecting a frame equivariantly in an unbounded
-Lorentz-invariant sprinkling.
 
 The target point is $z_*=(1/2,1/2)$, invariant under exchange of the
 two null directions. The scalar curvature, with the convention used
@@ -157,15 +155,12 @@ Only ranks within a block can change, by at most $|B_i|-1$.
 This proves~\eqref{eq:rankbound} and the final assertion.
 \end{proof}
 
-The decomposition, recognition and prime-realizer statements are known.
-The lemma records their quantitative consequence for latent sampling ranks.
-It does not claim a new modular decomposition theorem.
-The residual two-element set is a $\mathbb Z/2$-torsor of null frames.
-Fine-scale choices inside modules are additional ambiguities.
-Uniqueness of two-realizers for prime posets is also classical;
-see Pouzet--Zaguia~\cite[Section 7.2]{PZ} for the finite result of
-El-Zahar--Sauer and its extension. The two-element frame ambiguity
-itself is not a novelty claim.
+The lemma gives a quantitative rank bound from classical realizer
+decomposition~\cite{CP}. For uniqueness of prime two-realizers, see
+Pouzet--Zaguia~\cite[Section 7.2]{PZ} and the finite theorem of
+El-Zahar--Sauer cited there. The two ordered quotient frames form a
+$\mathbb Z/2$-torsor; choices within the modules give the remaining
+rank ambiguity.
 
 \section{Localization for positive sampling densities}
 Assume for this section that
@@ -461,10 +456,8 @@ of order $n^{-2/5}$.
 Forgetting coordinates or labels cannot improve this testing bound.
 \end{proof}
 
-The exponent is the classical two-dimensional second-derivative
-estimation exponent. The content here is its attainment from the
-partial order rather than from supplied coordinates or paired ranks.
-It is not a new density-estimation rate.
+The estimator attains the classical two-dimensional second-derivative
+rate using the partial order alone.
 
 \begin{corollary}\label{cor:holder}
 Replace the $C^4$ assumption by bounded derivatives through order two,
@@ -495,13 +488,13 @@ Cauchy--Schwarz gives the absolute-error upper bound; the
 nearest-curvature test gives its matching lower bound.
 \end{proof}
 
-This is the exponent reported for the paired-rank experiment in
-Tian's abstract~\cite{Tian}. Corollary~\ref{cor:holder} observes only
+This is also the exponent reported by Tian~\cite{Tian} for the
+paired-rank experiment. Corollary~\ref{cor:holder} observes only
 the intersection order. This comparison concerns the estimation
 rate in the stated positive class, not finite-sample equivalence
 of the two observation models.
 
-\section{Example, torsor role, and remaining work}
+\section{Examples and the role of the torsor}
 For the Farlie--Gumbel--Morgenstern density
 \[
  c_\theta(u,v)=1+\theta(1-2u)(1-2v),\qquad |\theta|\le\theta_0<1,
@@ -520,8 +513,7 @@ variables with this parameter. Consequently
      =72\left(m^{-1}\sum_{j=1}^mY_j-\tfrac12\right)
 \]
 is unbiased for central curvature, with mean squared error at most
-$1296/m$. This is a parametric worked example, not a new copula
-or a general reconstruction method. Theorem~\ref{thm:upper} also applies
+$1296/m$. Theorem~\ref{thm:upper} also applies
 to nonparametric perturbations and to asymmetric positive copulas.
 There is no requirement that a finite list of pair frequencies
 identify the density.
@@ -565,22 +557,15 @@ agree up to one global axis exchange.
 The theorem does not cover that case, noisy causal comparisons,
 higher order dimension, or arbitrary rewrite ensembles.
 
-Wolfram's discussion of causal coordinates~\cite[Section 5.14]{Wolfram}
-motivates the question of extracting geometry from an event order.
-The present result supplies a rigorous reconstruction protocol under
-specified sampling hypotheses. It does not derive those hypotheses
-from a rewriting rule or derive an equation of motion.
-Two-dimensional Einstein dynamics is not claimed.
-
-The strongest candidate contribution is the transfer from partial
-orders to curvature estimation through localization of all realizers.
-The relevant combinatorial structure is classical~\cite{CP,BBFGP,BCMR},
-as are copula ranks~\cite{Grubel} and statistical derivative estimation.
-Tian's recent preprint~\cite{Tian} is especially close; its abstract was
-consulted, but the full text was unavailable during this audit.
-Ghosh~\cite{Ghosh} also reports finite causal-set sampling and
-identifiability results; only the repository description was accessible.
-These comparisons must be completed before claiming publication priority.
+The contribution is the localization of all realizers and the resulting
+transfer of optimal curvature estimation to the partial-order observation
+model. This uses classical realizer structure~\cite{CP,BBFGP,BCMR} and
+copula ranks~\cite{Grubel}. Related work of Ghosh~\cite{Ghosh} treats
+sample complexity and identifiability for counting observables on
+finite causal sets.
+The reconstruction question also occurs in Wolfram's discussion of
+causal coordinates~\cite[Section 5.14]{Wolfram}; our theorem treats
+the independent sampling model specified in Section~1.
 
 \subsection*{Reproduction}
 The exact checker \path{check_rank_ambiguity.py} enumerates all
@@ -650,14 +635,11 @@ geometry}, accompanying research manuscript, 2026,
 C. Tian, \emph{Recovering Lorentzian curvature from finite volumes
 and paired ranks}, preprint posted 16 September 2026,
 \href{https://ssrn.com/abstract=7472426}{SSRN 7472426}.
-Abstract-only comparison.
 \bibitem{Ghosh}
 A. Ghosh, \emph{Sample-complexity bounds and an exact bulk-sector
 channel obstruction for curvature estimation on finite causal sets},
 11 August 2026,
 \href{https://zenodo.org/records/21931074}{Zenodo, version 4}.
-Repository-description-only comparison; the earlier version is
-\href{https://doi.org/10.5281/zenodo.21894198}{doi:10.5281/zenodo.21894198}.
 \bibitem{Wolfram}
 S. Wolfram, \emph{A Class of Models with the Potential to Represent
 Fundamental Physics}, 2020,

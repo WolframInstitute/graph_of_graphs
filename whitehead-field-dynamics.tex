@@ -69,8 +69,8 @@ then decreases by exactly $(f_i-f_j)^2/2$.  Identifying an unlabelled target
 with a chosen representative only permutes the field coordinates and does not
 change this identity.
 
-For the local-first walk, called Rule A, every one of the $3N$ edge-resolution
-slots is equally likely.  We prove that its stationary distribution is the
+For the local-first walk, called Rule A, each of the $3N$ moves indexed
+by an edge and a resolution is equally likely. Its stationary distribution is the
 connected cubic configuration model projected to unlabelled graph classes.
 For every adapted sequence of connected carriers, the logarithm of the largest
 possible nonconstant-field norm, divided by the number of steps, is at most
@@ -85,19 +85,16 @@ For Rule B, each distinct nonself quotient neighbour receives probability
 $1/(3N)$ and the unused probability is assigned to holding.  This fixed clock
 is symmetric, has the uniform class law as its stationary distribution, and
 its operator $I-P_B$ equals the simple-support Laplacian divided by $3N$.  It
-avoids normalizing by the uncontrolled number of neighbours.  A Rule-B field
+uses a clock independent of the number of neighbours. A Rule-B field
 process additionally requires a choice of concrete move above each quotient
 transition.  Once all
 such moves receive positive probability, the fields with zero one-step
 variance loss are exactly those that are constant on each component of the
-carrier formed by active edges.  It remains open to prove a positive lower
-bound for $\lambda_2(L_{\rm supp})$ and to determine the long-time contraction
-of any specified Rule-B field lift.
+carrier formed by active edges.
 
 On the persistent labelled process, exact finite-time consensus occurs at
 $N=2,4,8$.  Complete unlabelled enumeration through $N=14$ checks the finite
-counts, spectra, bridge cut, and Rule-B zero-contraction classes without
-promoting those finite observations to asymptotic theorems.
+counts, spectra, bridge cut, and Rule-B zero-contraction classes.
 \end{abstract}
 
 \section{Introduction and contributions}
@@ -109,8 +106,8 @@ two to the degree. In addition to the carrier graph itself, there are three
 graph-of-graphs conventions on this material. Li's labelled simple graph has
 fixed-labelled cubic graphs as vertices and collapses repeated moves to the
 same labelled target.  Grave de Peralta--Kolpakov's directed multigraph has
-unlabelled classes $[G]$ as vertices and retains one directed slot for each
-unlabelled Whitehead resolution, including multiplicity and self-slots.
+unlabelled classes $[G]$ as vertices and retains one directed edge for each
+unlabelled Whitehead move, including multiplicities and moves that leave the class unchanged.
 Finally, the unlabelled simple-support graph has the same class vertices but
 collapses all positive nonself multiplicities to one undirected edge. We use
 $\G_N$ only when the accompanying text specifies the edge convention; every
@@ -126,15 +123,14 @@ The four state-and-clock conventions used below are summarized as follows.
     &\text{Rule A or specified Rule B}\\
 \text{labelled simple GoG}&G\text{ on }[N]&\text{distinct labelled targets}
     &\text{degree-proportional}\\
-\text{GDPK multiplicity chain}&[G]&3N\text{ resolution slots}
+\text{GDPK multiplicity chain}&[G]&3N\text{ resolution moves}
     &\pi_A\propto c(G)/|\Aut_v(G)|\\
 \text{unlabelled simple support}&[G]&\text{one tick per distinct target}
     &\text{fixed }3N\text{ clock; uniform law}.
 \end{array}
 \]
 }
-The number of vertices of this GoG is not an unknown experimental count.  If
-$N=2n$, then
+For $N=2n$, the number of unlabelled graph classes is
 \[
     |V(\G_N)|=a(n),
 \]
@@ -144,8 +140,8 @@ first values are
 \[
     2,5,17,71,388,2592,21096,\ldots
 \]
-for $N=2,4,6,8,10,12,14,\ldots$.  Thus enumeration code has a hard external
-sanity check before any field dynamics is studied.
+for $N=2,4,6,8,10,12,14,\ldots$. These values provide an independent
+check of the enumeration.
 
 The papers of Grave de Peralta--Kolpakov and Li establish substantial
 large-scale structure.  Grave de Peralta--Kolpakov prove that the
@@ -155,8 +151,11 @@ moves has increasingly many bounded Laplacian eigenvalues, using many local
 cycle bottlenecks \cite{li}.  These results concern ordinary functions on the
 vertex set of $\G_N$.
 
-Here the moving object is different.  Over a cubic graph $G=(V,E)$ we place a
-scalar field
+The local-chain stationary law and base spectral estimates are treated
+in~\cite{local-whitehead}. Here we study pair averaging along the
+evolving graph, prove field-contraction estimates and finite consensus
+schedules, and quantify the effect of forgetting move multiplicities.
+Over a cubic graph $G=(V,E)$ we place a scalar field
 \[
     f:V\to\R.
 \]
@@ -188,7 +187,7 @@ The conclusions are grouped by the state space and by the random rule.
     persistent labelled process, explicit averaging words give exact
     finite-time consensus at $N=2,4,8$.
     \item For Li's fixed-labelled simple graph, we keep separate the walk that
-    chooses a distinct neighbour, the walk with a uniform $6N$-slot clock, and
+    chooses a distinct neighbour, the walk with $6N$ equally likely clock ticks, and
     the walk that retains move multiplicity.  We prove that at least
     $N(N-3)/2$ nonconstant eigenvalues of the combinatorial Laplacian stay
     bounded, compute fixed-radius ball growth, and obtain linear lower bounds
@@ -231,7 +230,7 @@ the two other pairings:
 On a fixed labelled vertex set, each of these two unordered pairings has two
 assignments to the labelled central vertices $u,v$.  Thus there are four
 labelled moves per non-loop edge, as in Li's labelled graph, but only two
-unlabelled resolution slots per edge, as in Grave de Peralta--Kolpakov.  For a
+unlabelled resolution moves per edge, as in Grave de Peralta--Kolpakov.  For a
 cubic graph on $N$ vertices the corresponding raw counts are $6N$ and $3N$.
 If $e$ is a loop, we use the convention of \cite{gdp-kolpakov}: the Whitehead
 move is trivial.  In the half-edge model this convention is natural because the
@@ -274,7 +273,7 @@ natural rule if the physics is local in the current cubic graph.
 
 \begin{definition}[Rule B: fixed support clock]
 Start at an unlabelled class $G$.  For every distinct nonself class $H$ that
-can be reached by at least one Rule-A slot, assign one of the $3N$ clock ticks
+can be reached by at least one Rule-A move, assign one of the $3N$ clock ticks
 to the transition $G\to H$.  Assign the remaining $3N-q(G)$ ticks to holding
 at $G$, where
 \[
@@ -311,10 +310,10 @@ step is therefore governed by a weighted Laplacian rather than the ordinary
 Laplacian of $G$.
 
 This distinction controls both the base transition law and the field
-operator.  Rule A is local first: every formal edge-resolution slot in the
+operator.  Rule A is local first: every formal edge-resolution move in the
 current cubic graph is equally likely, so every edge object is equally likely
 to be averaged.  Rule B retains only one tick for each distinct target.  If ten
-Rule-A slots land in one quotient neighbour and one slot lands in another,
+Rule-A moves land in one quotient neighbour and one move lands in another,
 Rule B gives each target one tick and converts the other nine ticks into
 holding.  A lift rule then distributes a target's single tick among its
 concrete realizations.
@@ -354,7 +353,7 @@ $i$, let $m_{ij}$ be the number of edges between $i<j$, and put
 \]
 Let $\Aut_v(G)$ denote the vertex-permutation automorphism group.  If
 $m_{GH}$ is the number of the $3N$ compressed Grave
-de Peralta--Kolpakov slots from a representative of $[G]$ to the class $[H]$,
+de Peralta--Kolpakov moves from a representative of $[G]$ to the class $[H]$,
 then
 \[
     \frac{c(G)}{|\Aut_v(G)|}m_{GH}
@@ -384,7 +383,7 @@ loop, permutations of loops at a vertex, and permutations of parallel edges.
 An unlabelled class has $N!/|\Aut_v(G)|$ labelled adjacency realizations.
 
 On fully labelled half-edge configurations, retain the four endpoint-oriented
-moves at a non-loop edge (and four duplicate holding slots at a loop).  Each
+moves at a non-loop edge (and four copies of the identity at a loop).  Each
 move has a unique reverse, so uniform measure on configurations is reversible.
 The four oriented moves collapse in pairs to the two unlabelled resolutions
 recorded by $m_{GH}$.  Lumping the reversible configuration chain by
@@ -394,8 +393,7 @@ the connected component is legitimate.
 \end{proof}
 
 \begin{remark}
-Thus stationarity is not a free assumption, and there is no third unknown
-Rule-A graph distribution: its carrier marginal is the configuration model.
+The Rule-A carrier marginal is therefore the connected configuration model.
 The weights $c(G)$ are essential when loops and parallel edges occur.  Already
 for $N=2$, the triple-edge class and the class with one joining edge and one
 loop at each endpoint have equal vertex-automorphism orders but stationary
@@ -1441,7 +1439,7 @@ endpoint, and the two connected sides are then joined by those two edges and
 $e$.  Each of these three cross edges lies on a cycle using the other two and
 paths inside $A,C$; cycles internal to either side are unchanged or repaired
 through $e$.  Thus both compressed resolutions are bridgeless.  A class in
-$B_1$ has exactly two exiting slots, while a class with more than one bridge
+$B_1$ has exactly two exiting moves, while a class with more than one bridge
 has none.  Averaging under $\pi_A$ proves the exact flow formula.
 
 It remains to determine the masses.  In the unconditioned configuration
@@ -1508,7 +1506,7 @@ $N\le14$; the preceding proposition proves only its asymptotic consequence.
 
 This is a genuine reversible Markov-conductance consequence.  It is distinct
 from GDPK's directed outer-conductance, whose volume is cardinality times the
-constant outgoing slot count.
+constant outgoing move count.
 
 \begin{proposition}[Increasingly many vanishing Rule-A eigenvalues]
 For every fixed $k$, the $k$th eigenvalue of the reversible normalized
@@ -1528,7 +1526,7 @@ an asymptotically nonsingular Gram matrix.
 
 If a carrier contains a chosen $j$-cycle, a one-step move which destroys the
 last such cycle must be performed on or within bounded distance of that cycle.
-Only $O_j(1)$ of the $3N$ compressed slots can do this.  The Rule-A Dirichlet
+Only $O_j(1)$ of the $3N$ compressed moves can do this.  The Rule-A Dirichlet
 energy of its centered indicator is therefore $O_j(N^{-1})$.  Cauchy--Schwarz
 gives the same order for cross energies.  The min--max principle on the span of
 these indicators and the constant function gives the result.
@@ -1611,14 +1609,14 @@ three base graphs also admit sharper, mutually incompatible conclusions.
 \subsection{The GDPK multiplicity chain}
 
 \begin{theorem}[Spectral interval, Perron root, and history entropy]
-Let $M_N=(m_{GH})$ be the $3N$-slot adjacency matrix and
+Let $M_N=(m_{GH})$ be the $3N$-move adjacency matrix and
 $P_A=M_N/(3N)$.  Then
 \[
     \Spec(P_A)\subset[-1/2,1],
     \qquad \rho(M_N)=3N.
 \]
 In particular $M_N$ is real-diagonalizable, and from every source class the
-number of concrete length-$t$ slot histories is exactly $(3N)^t$.
+number of concrete length-$t$ move histories is exactly $(3N)^t$.
 Furthermore the stationary entropy rate of the class-valued chain is
 \[
  h_N=\log(3N)-\Delta_N,
@@ -1640,7 +1638,7 @@ restricting to class-invariant functions proves the spectral interval.  The
 row sum of $M_N$ is exactly $3N$, proving the Perron and history claims.  The
 entropy formula follows by expanding the entropy of the row probabilities
 $m_{GH}/(3N)$; $\Delta_N$ is precisely the conditional entropy of the chosen
-slot given source and target classes.  Finally,
+move given source and target classes.  Finally,
 $m\log m\le m(m-1)=2\binom m2$ for every positive integer $m$, which proves
 the collision bound.
 \end{proof}
@@ -1664,7 +1662,7 @@ also $\alpha_{\rm LS}\le2/(3N)+o(N^{-1})$.
 \end{theorem}
 
 \begin{proof}
-A state with $k$ loops has exactly $2k$ compressed slots that destroy one
+A state with $k$ loops has exactly $2k$ compressed moves that destroy one
 loop.  No move changes loop count by more than one when $N\ge4$.  Detailed
 balance supplies the reverse aggregate flow and gives the displayed form.
 Under $\pi_A$, $L$ tends to $\operatorname{Pois}(1)$.  Applying min--max to
@@ -1688,23 +1686,23 @@ natural walks have different stationary laws:
  \text{walk}&\text{stationary law}\\ \hline
  \text{simple neighbour}&d(G)/\sum_Hd(H)\\
  \text{uniform clock }I-L(\Gamma_{\rm lab})/(6N)&\text{uniform on }\Omega_N^{\rm lab}\\
- \text{four-slot multiplicity}&c(G)/\sum_Hc(H).
+ \text{four-move multiplicity}&c(G)/\sum_Hc(H).
  \end{array}
 \]
-Denote the uniform law by $U_N$ and the four-slot stationary law by
-$\pi_{\rm slot}$.
+Denote the uniform law by $U_N$ and the multiplicity stationary law by
+$\pi_{\rm move}$.
 
 For connected $N>2$, put $L(G)=$ number of loops and $D(G)=$ number of
 doubled vertex pairs.  Triple edges cannot occur, and exactly
 \[
     c(G)=\frac{6^N}{2^{L(G)+D(G)}}.
 \]
-Under the slot law, $(L,D)$ tends to two independent
+Under the multiplicity law, $(L,D)$ tends to two independent
 $\operatorname{Pois}(1)$ variables; exponential tilting shows that under the
 uniform adjacency law it tends to two independent
 $\operatorname{Pois}(2)$ variables.  Hence
 \[
- \norm{\pi_{\rm slot}-U_N}_{\rm TV}
+ \norm{\pi_{\rm move}-U_N}_{\rm TV}
  \longrightarrow
  \norm{\operatorname{Pois}(1)^{\otimes2}
        -\operatorname{Pois}(2)^{\otimes2}}_{\rm TV}
@@ -1718,7 +1716,7 @@ $O(N^{-1})$ apart.
 
 More precisely, let $P_U=I-L(\Gamma_{\rm lab})/(6N)$, let $P_{\rm simp}$ be
 the simple-neighbour kernel, and let $K(G,H)$ be the multiplicity among the
-$6N$ labelled slots.  Put $P_{\rm slot}(G,H)=K(G,H)/(6N)$.  With
+$6N$ labelled moves.  Put $P_{\rm move}(G,H)=K(G,H)/(6N)$.  With
 $k_0(G)=K(G,G)$,
 \[
  \delta(G)=k_0(G)+\sum_{H\ne G:K(G,H)>0}(K(G,H)-1),
@@ -1727,7 +1725,7 @@ and direct summation gives
 \[
  \norm{P_{\rm simp}(G,\cdot)-P_U(G,\cdot)}_{\rm TV}
    =\frac{\delta(G)}{6N},\qquad
- \norm{P_{\rm slot}(G,\cdot)-P_U(G,\cdot)}_{\rm TV}
+ \norm{P_{\rm move}(G,\cdot)-P_U(G,\cdot)}_{\rm TV}
    \le\frac{\delta(G)}{6N}.
 \]
 These local estimates do not imply close stationary laws because the
@@ -1764,7 +1762,7 @@ $\dim W_N$ gives
  \E_{U_N}F_a^2=\left(\frac3N+O(N^{-2})\right)\norm{a}^2.
 \]
 Each raw move changes only four pair coordinates.  Summing the resulting
-squared increments over slots and taking the trace on $W_N$ gives simple-edge
+squared increments over moves and taking the trace on $W_N$ gives simple-edge
 Dirichlet energy $O(N^{-1})\norm{a}^2$; invariance again makes the same bound
 uniform over $a\in W_N$.  Its quotient by the covariance is $O(1)$, while the
 uniform-clock normalization contributes an additional factor $(6N)^{-1}$.
@@ -1796,9 +1794,9 @@ are vertex-disjoint.  Standard fixed-subgraph counting in the cubic
 configuration model \cite{janson-random-graphs}, followed by the exact
 loop/double-edge exponential tilt
 to $U_N$, preserves these fixed-radius moment bounds and shows that the
-expected number of non-good raw slots is
+expected number of non-good raw moves is
 $O_R(1)$.  Once fewer than $R$ separated supports have been chosen, only
-$O_R(1)$ of the $6N$ next raw slots meet one of them.  Hence the expected number
+$O_R(1)$ of the $6N$ next raw moves meet one of them.  Hence the expected number
 of ordered separated good words is
 \[
  (6N)^R+O_R(N^{R-1}),
@@ -1811,7 +1809,7 @@ components; within each, the unchanged central edge is the unique diagonal.
 Thus the source--endpoint pair recovers the $R$ selected moves and their
 resolutions.  Exactly the $R!$ orders of those commuting moves have the same
 endpoint.  Words with repeated or intersecting supports, or with a non-good
-slot, have expected count $O_R(N^{R-1})$, because one free $O(N)$ choice is
+move, have expected count $O_R(N^{R-1})$, because one free $O(N)$ choice is
 lost.  Words of length less than $R$ have the same lower order.  Dividing the
 good ordered count by $R!$ proves the expectation estimate, and Markov's
 inequality applied to the exceptional-word count gives the in-probability
@@ -1890,14 +1888,14 @@ Rule A.  Put
  C_1^+(G)=\sum_{H\ne G}\binom{m_{GH}}2.
 \]
 Here $C_1^+(G)$ is the number of unordered pairs of distinct nonself Rule-A
-slots that have the same target class.  If Rule A is conditioned on making a
+moves that have the same target class.  If Rule A is conditioned on making a
 nonself move, its row differs from the Rule-B jump row by exactly
 \[
  \chi^2(p_A^+\Vert J_B(G,\cdot))
  =\frac{q(G)(M_+(G)+2C_1^+(G))}{M_+(G)^2}-1.
 \]
 This equation says concretely what is lost when repeated Rule-A targets are
-collapsed: the discrepancy is determined by the number of pairs of slots that
+collapsed: the discrepancy is determined by the number of pairs of moves that
 collide at the same target.
 
 If $C_1(G)=\sum_H\binom{m_{GH}}2$ includes the self target, Cauchy--Schwarz
@@ -1986,7 +1984,7 @@ which is equivalent to constancy on each active component.  Intersecting this
 kernel with $\one^\perp$ removes one dimension.
 \end{proof}
 
-Finally, multiplicities and self-slots do not change reachability.  Hence the
+Finally, multiplicities and self-moves do not change reachability.  Hence the
 simple support has exactly the GDPK support metric and inherits its
 $\Theta(N\log N)$ diameter order \cite{rafi-tao}, even though its path counts
 and random-walk times differ.
@@ -1997,10 +1995,10 @@ The finite statements in this section are computational evidence, not
 asymptotic theorems.  Cubic multigraphs were encoded by coloured incidence
 graphs and canonically labelled with nauty/Traces \cite{mckay-nauty}.
 Enumeration is complete through $N=14$: the class counts agree with
-A005967, and every source has exactly $3N$ compressed resolution slots.
+A005967, and every source has exactly $3N$ compressed resolution moves.
 \[
 \begin{array}{c|r|r}
-N&\text{unlabelled classes}&\text{compressed slots}\\ \hline
+N&\text{unlabelled classes}&\text{compressed moves}\\ \hline
 2&2&12\\
 4&5&60\\
 6&17&306\\
@@ -2127,10 +2125,10 @@ Labelled-degree and automorphism checks are implemented in
 \path{gog\_degree\_diagnostics.py}.  Exact commands, conventions, and
 numerical limitations are recorded in \path{README.md}.
 
-\section{Lean Verification Boundary}
+\section{Formal verification of finite identities}
 
-A self-contained Lean~4 project in \texttt{lean/} kernel-checks the exact
-finite algebra that is actually formalized.  It uses exact rational arithmetic
+A self-contained Lean~4 project in \texttt{lean/} checks the finite
+averaging and permutation identities. It uses exact rational arithmetic
 and the standard library only; the project source contains no \texttt{sorry},
 \texttt{admit}, or project-declared \texttt{axiom}.  Representative
 \texttt{\#print axioms} checks report only Lean's foundational principles
@@ -2153,17 +2151,12 @@ checked declarations include:
     \item concrete $2\times2$ identities $A^2=A$, $A\one=\one$, and agreement
     between matrix and coordinate pair averaging.
 \end{itemize}
-From the \texttt{lean/} directory, \texttt{lake build} checks the project.
-The declarations are in \path{lean/GogVerification/Averaging.lean}.
+Run \texttt{lake build} from the \path{lean/} directory to check the project.
+See \path{lean/GogVerification/Averaging.lean} for the declarations.
 
-This is deliberately not advertised as a formalization of the whole paper.
-Lean does not presently check the Whitehead graph or its quotient, construct
-settlements, prove their coherence, or address stabilizer holonomy.  Nor does
-it check the configuration counts, the representation-theoretic argument,
-random-graph inputs, asymptotics, or Lyapunov and mixing theorems.  The dyadic
-result is a concrete three-state obstruction rather than a classification of
-finite consensus protocols.  The formal layer certifies only the finite
-averaging identities on which several of those arguments rely.
+The formal verification covers the finite averaging and permutation
+identities listed above. The graph, asymptotic and probabilistic arguments
+are proved in the manuscript; the enumeration is checked separately in Python.
 
 \section{Open Problems}
 
@@ -2207,6 +2200,12 @@ groups as finite gauge stabilizers.
 \end{question}
 
 \begin{thebibliography}{12}
+
+\bibitem{local-whitehead}
+Alexander Kolpakov,
+The Local Whitehead-Move Chain on Cubic Multigraphs,
+research manuscript, 2026.
+\url{https://github.com/WolframInstitute/graph_of_graphs/tree/main/rule-a-paper}
 
 \bibitem{gdp-kolpakov}
 Laura Grave de Peralta and Alexander Kolpakov,

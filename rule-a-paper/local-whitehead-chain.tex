@@ -97,32 +97,33 @@ multigraph can be used as the dual graph of a pants decomposition of a closed
 surface of genus $g$: put one vertex in each pair of pants and one edge across
 each glued cuff.  The surface retains gluing data that the abstract graph
 forgets.  Hatcher describes the corresponding complex of pants decompositions
-\cite{Hatcher1999}; Rafi and Tao relate Whitehead moves on trivalent graphs to
-the geometry of moduli space \cite{RafiTao2013}.
+\cite{Hatcher1999}. Rafi and Tao determine the asymptotic diameter for
+single and simultaneous Whitehead moves and relate these metrics to the
+geometry of moduli space \cite{RafiTao2013}.
 
-Grave de Peralta and Kolpakov proved that this directed graph is connected
-and that its outer conductance tends to zero as the number of vertices tends
-to infinity \cite{GraveDePeraltaKolpakov2024}.  Their conductance is defined
-using outgoing-edge volume.  Each vertex has $3N$ outgoing edges, counted
-with multiplicity, so this volume is proportional to the number of classes
-in a set.  Li studies the Laplacians of the simple labelled and unlabelled
-graphs obtained by identifying repeated edges \cite{Li2024}.
+The expansion question raised by Rafi was answered by Grave de Peralta
+and Kolpakov \cite{GraveDePeraltaKolpakov2024}: they used the cut between
+bridged and bridgeless graphs to prove that outer conductance tends to
+zero. Their outgoing-edge volume assigns the same weight to every class,
+since each class has $3N$ outgoing moves. Li subsequently proved that
+increasingly many eigenvalues of the simple labelled and unlabelled
+graph Laplacians remain bounded \cite{Li2024}.
 
 Here we consider the random walk that chooses an edge of the cubic graph and
 one of its two Whitehead moves uniformly.  Its transition matrix is obtained
 by dividing the directed adjacency matrix by $3N$.  Although each move is
 reversible, the numbers of moves between two isomorphism classes need not
 agree in the two directions.  In particular, the uniform distribution on
-classes need not be stationary.  We determine the stationary distribution
-and use it to study conductance, the spectrum, and convergence to equilibrium.
+classes need not be stationary.
 
-The stationary distribution is obtained by lifting the walk to labelled
-half-edge configurations, where each move is a symmetric exchange.  The
-spectral estimates follow from two local calculations.  Fixing the chosen
-edge gives a walk on the Johnson graph $J(4,2)$, while counting the moves that
-remove a loop gives a Dirichlet-form identity for functions of the number of
-loops.  For the conductance estimate, we show that the only moves from a
-bridged graph to a bridgeless graph are the two moves on its unique bridge.
+Our results determine the stationary law and give explicit spectral and
+conductance bounds for this multiplicity chain. The proof lifts the walk
+to labelled half-edge configurations, where each move is a symmetric
+exchange. Conditioning on the chosen edge gives a Johnson-graph operator
+on $J(4,2)$; counting loop removals gives an exact Dirichlet form and
+Charlier-polynomial test spaces. We also give a cycle-based proof of the
+bridge-crossing rule from \cite{GraveDePeraltaKolpakov2024} and compute
+the stationary flow across that cut.
 
 More precisely, let $m_{ii}$ count the loops at vertex $i$, let $m_{ij}$ count
 the edges between distinct vertices $i$ and $j$, and let $\Aut_v(G)$ be the
@@ -834,8 +835,9 @@ The conductance of the cut between bridged and bridgeless graphs is
        {\min\{\pi_N(\mathcal B_N),\pi_N(\mathcal B_0)\}}.
 \]
 
-We first determine which Whitehead moves cross this cut.  Recall that an edge
-is a bridge if and only if it lies on no cycle.
+The bridge-crossing description underlies the bottleneck argument of
+\cite[Section~3]{GraveDePeraltaKolpakov2024}. We give a proof using
+the criterion that an edge is a bridge if and only if it lies on no cycle.
 
 \begin{lemma}[Whitehead moves and bridges]\label{lem:bridge-surgery}
 Let $G'$ be obtained from $G$ by resolving an edge $e$.
