@@ -1,33 +1,64 @@
 # Whitehead moves, periods and rewrite histories
 
 This repository contains manuscripts in TeX and PDF, Wolfram notebooks,
-and the code and data needed to reproduce their computations. LaTeX
-intermediates, working notes and exploratory scripts are kept locally.
+and the code and data needed to reproduce their computations. There are
+seven manuscripts, eight manuscript PDFs and two notebooks. The extra
+PDF is a review layout of the Whitehead paper.
 
 ## Manuscripts
 
-| Source | PDF | Contents |
-|---|---|---|
-| [Local Whitehead chain](rule-a-paper/local-whitehead-chain.tex) | [PDF](rule-a-paper/local-whitehead-chain.pdf) | Stationary distribution, spectral bounds, exact bridge conductance and mixing lower bounds for the local walk on cubic multigraphs. |
-| [Field dynamics](whitehead-field-dynamics.tex) | [PDF](whitehead-field-dynamics.pdf) | Pair averaging on evolving cubic graphs, finite consensus schedules and contraction estimates. |
-| [Computational companion](whitehead-field-dynamics-computational-notes.tex) | [PDF](whitehead-field-dynamics-computational-notes.pdf) | Worked finite calculations accompanying the field-dynamics manuscript and notebooks. |
-| [Quartic period torsor](integral-torsor-paper/integral-torsor.tex) | [PDF](integral-torsor-paper/integral-torsor.pdf) | Local period series, finite matrix integrals and optimal positive moment bounds. |
-| [Outer space](outer-space-paper/outer-space.tex) | [PDF](outer-space-paper/outer-space.pdf) | A proved cubic refinement-transfer identity, Euler observables and a certificate for the known first Morita class. Its topology and Euler formulas are established results; novelty of the transfer remains unestablished. |
-| [Bessel recursion](bessel-recursion-paper/bessel-recursion.tex) | [PDF](bessel-recursion-paper/bessel-recursion.pdf) | Identification of the Broadhurst–Roberts recursion with the inverse de Rham pairing, including resonance, and factorial-scaled integrality. |
-| [Histories and states](history-state-paper/history-states.tex) | [PDF](history-state-paper/history-states.pdf) | A single permutation torsor for bounded framed histories, schedule weights, a criterion for observable states to inherit the history median, minimal event-bit repairs and confluent systems with nontrivial state topology. |
+| Source | PDF | Pages | Results |
+|---|---|---:|---|
+| [Local Whitehead chain](rule-a-paper/local-whitehead-chain.tex) | [PDF](rule-a-paper/local-whitehead-chain.pdf) | 20 | The stationary law of the local walk on cubic multigraphs, spectral bounds, exact loop and bridge formulas, and mixing lower bounds. |
+| [Field dynamics](whitehead-field-dynamics.tex) | [PDF](whitehead-field-dynamics.pdf) | 31 | Pair averaging on evolving cubic graphs, finite consensus schedules and contraction estimates. |
+| [Computational companion](whitehead-field-dynamics-computational-notes.tex) | [PDF](whitehead-field-dynamics-computational-notes.pdf) | 8 | Exact finite calculations accompanying the field-dynamics paper and notebooks. |
+| [Quartic period torsor](integral-torsor-paper/integral-torsor.tex) | [PDF](integral-torsor-paper/integral-torsor.pdf) | 16 | A rank-two period system, its local series and finite Hermitian matrix integrals; classification of positive representations and selection of the strongest moment bounds. |
+| [Outer space](outer-space-paper/outer-space.tex) | [PDF](outer-space-paper/outer-space.pdf) | 8 | Cubic refinement transfer to the Whitehead stationary law, ordinary and virtual Euler observables, and an exact certificate for the known first Morita class. |
+| [Bessel recursion](bessel-recursion-paper/bessel-recursion.tex) | [PDF](bessel-recursion-paper/bessel-recursion.pdf) | 8 | Identification of the Broadhurst–Roberts recursion with the inverse de Rham pairing, including resonance, and factorial-scaled integrality. |
+| [Histories and states](history-state-paper/history-states.tex) | [PDF](history-state-paper/history-states.pdf) | 11 | Permutation-torsor presentations, schedule weights, a criterion for observations to inherit the history median, event-bit repairs and confluent systems with nontrivial state topology. |
 
-The Whitehead manuscript also has a [review layout](rule-a-paper/local-whitehead-chain-review.pdf).
+The Whitehead [review source](rule-a-paper/local-whitehead-chain-review.tex)
+builds a [29-page review PDF](rule-a-paper/local-whitehead-chain-review.pdf)
+from the same manuscript. It is an alternate layout, so the table counts
+that paper once. Page counts above refer to the included PDFs.
 
-The history paper gives full finite proofs and credits the established
-event-structure, median-algebra and cubical geometry. Its CAT(0) statement
-concerns occurrence prefixes. Identifying equal observable states requires
-a separate argument.
+The local Whitehead paper is the starting point. Its stationary law also
+appears in the Outer space paper. The field-dynamics paper and computational
+companion develop the averaging process and its finite examples.
 
-Each manuscript has a build target. The research papers have their own
-folders. Bibliographies and figure sources are included; figures for the
-history paper and the Outer space prism are drawn directly in TeX.
-The manuscript PDFs are included; intermediate files and generated figure
-PDFs are excluded from tracking.
+The scope of the later papers matters:
+
+- The quartic paper distinguishes the differential period torsor from
+  positive approximation schemes. Those approximations are not literal
+  changes of coefficient field. Its finite matrix-size results do not
+  establish estimates uniform in matrix size.
+- The Outer space paper applies a proved refinement identity to established
+  topology and Euler formulas. The Morita class is also known. Priority for
+  the transfer identity remains unestablished, and the identity alone does
+  not give an efficient sampling algorithm.
+- The history paper credits the established event-structure and cubical
+  geometry. Its CAT(0) statement concerns occurrence prefixes; the criterion
+  for observable states to inherit their median is proved separately.
+
+Further research drafts remain local while their proofs and priority are
+reviewed.
+
+## Repository contents
+
+Each manuscript has a build target. The later papers have separate folders;
+the field-dynamics paper and its companion retain their original root paths.
+Bibliographies, TeX figures and table sources are included.
+
+The Python files at the root enumerate Whitehead moves and analyse the
+resulting chains. Paper-specific checks and their exact data live beside
+the manuscripts or under research/. The scripts/ directory builds and
+checks the notebooks and their bundled models. Wolfram/ contains the local
+Wolfram package; lean/ contains the finite algebraic verification.
+
+Manuscript PDFs and both notebooks are tracked. LaTeX intermediates,
+generated figure PDFs, submission archives, reference downloads, reasoning
+notes and exploratory scripts remain local. README.md is the repository
+guide and the only tracked Markdown file.
 
 ## Build and reproduce
 
@@ -40,15 +71,21 @@ in [requirements-repro.txt](requirements-repro.txt):
 
 To build one paper:
 
+    make paper
+    make computational-notes
     make rule-a-paper
     make integral-torsor
     make outer-space-paper
     make bessel-recursion-paper
     make history-state-paper
 
-The full non-notebook check builds the manuscripts, checks the Lean
-identities and small-model resource, and runs the paper-specific exact
-computations:
+The full check also needs Lean's lake command and the native nauty bridge.
+With nauty/Traces installed, build the bridge first:
+
+    python3 build_nauty_bridge.py
+
+Then build the manuscripts, check the Lean identities and small-model
+resource, and run the paper-specific exact computations:
 
     make check
 
@@ -63,7 +100,7 @@ Individual checks are also available:
     make bessel-recursion-check
     make history-state-check
 
-The last command compares independent incidence and execution
+The history check compares independent incidence and execution
 enumerations, exhaustively tests 4,890 observation partitions, and checks
 the additive criteria, repair sets and confluent counterexamples.
 The Bessel checker compares the literal recursion, differential operator
@@ -146,6 +183,8 @@ WOLFRAM_KERNEL=/path/to/WolframKernel to make when needed.
 The scripts under scripts/ build the notebooks, reproduce their text
 outputs and check their evaluations; edit those sources for future
 notebook changes.
+For the computational companion's deterministic text transcript, run
+scripts/notebook_report_outputs.wls with WolframKernel.
 
 ## Submission bundles
 
@@ -154,5 +193,5 @@ notebook changes.
 This builds the Whitehead figures and both paper layouts, then writes the
 arXiv source and code archives under rule-a-paper/dist/. Submission archives,
 LaTeX intermediates, downloaded reference copies and working research notes
-are excluded from tracking. The published history retains manuscript sources
-and PDFs, notebooks and reproducibility dependencies.
+remain local. The repository retains manuscript sources and PDFs,
+notebooks and reproducibility dependencies.
